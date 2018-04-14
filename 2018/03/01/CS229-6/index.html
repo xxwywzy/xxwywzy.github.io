@@ -100,16 +100,16 @@
 
 
   <meta name="description" content="朴素贝叶斯算法 在高斯判别分析中，特征向量是连续的、实数值向量。现在我们要谈谈一个不同的生成学习算法，其中x是离散的向量。 让我们以识别垃圾邮件为例，这类问题被称为文本分类问题。 假设我们有一个训练集（已经标记好了是否为垃圾邮件的邮件集合），我们首先需要构建表示一封邮件的特征向量。 我们通过如下方式表示特征向量：其长度为词表的长度（词表为所有可能出现的词的集合，一般通过训练集生成），如果这封邮件包">
-<meta name="keywords" content="CS229">
+<meta name="keywords" content="CS229,机器学习">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CS229学习笔记之六：朴素贝叶斯">
-<meta property="og:url" content="http://yoursite.com/2018/03/01/CS229-1/index.html">
+<meta property="og:url" content="http://yoursite.com/2018/03/01/CS229-6/index.html">
 <meta property="og:site_name" content="xxwywzy&#39;s Blog">
 <meta property="og:description" content="朴素贝叶斯算法 在高斯判别分析中，特征向量是连续的、实数值向量。现在我们要谈谈一个不同的生成学习算法，其中x是离散的向量。 让我们以识别垃圾邮件为例，这类问题被称为文本分类问题。 假设我们有一个训练集（已经标记好了是否为垃圾邮件的邮件集合），我们首先需要构建表示一封邮件的特征向量。 我们通过如下方式表示特征向量：其长度为词表的长度（词表为所有可能出现的词的集合，一般通过训练集生成），如果这封邮件包">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/cs229-6-1.png">
 <meta property="og:image" content="http://yoursite.com/images/cs229-6-2.png">
-<meta property="og:updated_time" content="2018-04-14T13:30:17.878Z">
+<meta property="og:updated_time" content="2018-04-14T13:43:05.574Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS229学习笔记之六：朴素贝叶斯">
 <meta name="twitter:description" content="朴素贝叶斯算法 在高斯判别分析中，特征向量是连续的、实数值向量。现在我们要谈谈一个不同的生成学习算法，其中x是离散的向量。 让我们以识别垃圾邮件为例，这类问题被称为文本分类问题。 假设我们有一个训练集（已经标记好了是否为垃圾邮件的邮件集合），我们首先需要构建表示一封邮件的特征向量。 我们通过如下方式表示特征向量：其长度为词表的长度（词表为所有可能出现的词的集合，一般通过训练集生成），如果这封邮件包">
@@ -120,7 +120,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/03/01/CS229-1/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/03/01/CS229-6/"/>
 
 
 
@@ -294,7 +294,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/01/CS229-1/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/01/CS229-6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Zheyu Wang">
@@ -339,6 +339,24 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/课程笔记/" itemprop="url" rel="index"><span itemprop="name">课程笔记</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -511,6 +529,8 @@ p(y=1 \mid x) &amp;= \frac {(\prod_{i=1}^n p(x_i \mid y=1))p(y=1)}{(\prod_{i=1}^
           
             <a href="/tags/CS229/" rel="tag"># CS229</a>
           
+            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
+          
         </div>
       
 
@@ -518,22 +538,6 @@ p(y=1 \mid x) &amp;= \frac {(\prod_{i=1}^n p(x_i \mid y=1))p(y=1)}{(\prod_{i=1}^
       
       
 
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2018/02/28/hello-world/" rel="next" title="Hello World">
-                <i class="fa fa-chevron-left"></i> Hello World
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-          </div>
-        </div>
       
 
       
@@ -608,26 +612,41 @@ p(y=1 \mid x) &amp;= \frac {(\prod_{i=1}^n p(x_i \mid y=1))p(y=1)}{(\prod_{i=1}^
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-count">1</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
               
 
               
-
-              
                 
                 
-                <div class="site-state-item site-state-tags">
-                  
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
                     
                     
                       
                     
                     <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
                     <span class="site-state-item-name">标签</span>
-                  
+                  </a>
                 </div>
               
             </nav>
