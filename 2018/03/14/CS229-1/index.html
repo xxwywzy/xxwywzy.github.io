@@ -107,7 +107,7 @@
 <meta property="og:site_name" content="xxwywzy&#39;s Blog">
 <meta property="og:description" content="本系列笔记是斯坦福大学公开课CS229的学习记录，参考资源为课堂视频与讲义，以及网络上一些已有的学习笔记。本篇博客为第一篇学习笔记，主要内容包括线性回归、梯度下降以及标准方程。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-04-14T14:49:20.702Z">
+<meta property="og:updated_time" content="2018-04-14T15:26:23.868Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS229学习笔记之一：线性回归与梯度下降">
 <meta name="twitter:description" content="本系列笔记是斯坦福大学公开课CS229的学习记录，参考资源为课堂视频与讲义，以及网络上一些已有的学习笔记。本篇博客为第一篇学习笔记，主要内容包括线性回归、梯度下降以及标准方程。">
@@ -385,10 +385,10 @@
         <p>本系列笔记是斯坦福大学公开课<a href="http://cs229.stanford.edu/syllabus.html" target="_blank" rel="noopener">CS229</a>的学习记录，参考资源为课堂视频与讲义，以及网络上一些已有的学习笔记。本篇博客为第一篇学习笔记，主要内容包括线性回归、梯度下降以及标准方程。</p>
 <a id="more"></a>
 <h3 id="相关定义">相关定义</h3>
-<p>$ x^{(i)} $ : 输入特征</p>
-<p>$ y^{(i)} $ : 输出（目标）变量</p>
-<p>$ (x^{(i)}, y^{(i)}) $ : 训练样例</p>
-<p>$ {(x^{(i)}, y^{(i)}); i=1,\ldots,m} $ : 训练集</p>
+<p><span class="math inline">\(x^{(i)}\)</span> : 输入特征</p>
+<p><span class="math inline">\(y^{(i)}\)</span> : 输出（目标）变量</p>
+<p><span class="math inline">\((x^{(i)}, y^{(i)})\)</span> : 训练样例</p>
+<p><span class="math inline">\(\{(x^{(i)},y^{(i)}); i=1,\ldots,m\}\)</span> : 训练集</p>
 <p><strong>注意</strong>：<span class="math inline">\((i)\)</span> 仅表示索引，与指数无关</p>
 <p><strong>监督学习</strong>：给定一个训练集（已标注），去学习一个假设函数h，用以尽量精确地预测每个x对应的y</p>
 <p>根据目标变量是否连续，可以将监督学习分为两类：</p>
@@ -450,7 +450,7 @@ J(\theta) = \frac 1 2 \sum_{i=1}^m \left(h_\theta(x^{(i)})-y^{(i)}\right)^2
 <p><strong>随机梯度下降的优化</strong>：小批量梯度下降（mini-batch），利用矩阵并行运算，一次处理小批量的样本点，有时可以比随机梯度下降速度更快。</p>
 <p>Say b=10, m=1000.<br>
 Repeat<span class="math inline">\(\;\)</span>{<br>
-<span class="math inline">\(\quad\)</span> for i=1,11,21,31,…, 991<span class="math inline">\(\;\)</span>{ <span class="math display">\[
+<span class="math inline">\(\quad\)</span> for i=1,11,21,31,…, 991,<span class="math inline">\(\;\)</span>{ <span class="math display">\[
 \theta_j := \theta_j+\alpha\frac 1 {10}\sum_{k=i}^{i+9}\left(y^{(k)}-h_\theta(x^{(k)})\right)x^{(k)}_j\qquad\mbox{(for every j)}
 \]</span> <span class="math inline">\(\quad\)</span> }<br>
 }</p>
