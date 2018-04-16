@@ -99,32 +99,29 @@
 
 
 
-  <meta name="description" content="本篇博客为CS229第五篇学习笔记，主要内容包括生成学习算法以及高斯判别分析。">
-<meta name="keywords" content="CS229,机器学习,判别高斯分析">
+  <meta name="description" content="16年写的一篇老文，放在博客里收藏一下~">
+<meta name="keywords" content="神秘海域4">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CS229学习笔记之五：生成学习算法">
-<meta property="og:url" content="http://yoursite.com/2018/04/01/CS229-5/index.html">
+<meta property="og:title" content="A thief‘s end —— 神秘海域4通关感想">
+<meta property="og:url" content="http://yoursite.com/2018/04/16/uncharted4/index.html">
 <meta property="og:site_name" content="xxwywzy&#39;s Blog">
-<meta property="og:description" content="本篇博客为CS229第五篇学习笔记，主要内容包括生成学习算法以及高斯判别分析。">
+<meta property="og:description" content="16年写的一篇老文，放在博客里收藏一下~">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/images/cs229-5-1.png">
-<meta property="og:image" content="http://yoursite.com/images/cs229-5-2.png">
-<meta property="og:image" content="http://yoursite.com/images/cs229-5-3.png">
-<meta property="og:image" content="http://yoursite.com/images/cs229-5-4.png">
-<meta property="og:image" content="http://yoursite.com/images/cs229-5-5.png">
-<meta property="og:image" content="http://yoursite.com/images/cs229-5-6.png">
-<meta property="og:updated_time" content="2018-04-16T09:49:25.723Z">
+<meta property="og:image" content="http://yoursite.com/images/uncharted-1.jpg">
+<meta property="og:image" content="http://yoursite.com/images/uncharted-2.jpg">
+<meta property="og:image" content="http://yoursite.com/images/uncharted-3.jpg">
+<meta property="og:updated_time" content="2018-04-16T10:11:04.927Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CS229学习笔记之五：生成学习算法">
-<meta name="twitter:description" content="本篇博客为CS229第五篇学习笔记，主要内容包括生成学习算法以及高斯判别分析。">
-<meta name="twitter:image" content="http://yoursite.com/images/cs229-5-1.png">
+<meta name="twitter:title" content="A thief‘s end —— 神秘海域4通关感想">
+<meta name="twitter:description" content="16年写的一篇老文，放在博客里收藏一下~">
+<meta name="twitter:image" content="http://yoursite.com/images/uncharted-1.jpg">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/04/01/CS229-5/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/04/16/uncharted4/"/>
 
 
 
@@ -134,7 +131,7 @@
   };
 </script>
 
-  <title>CS229学习笔记之五：生成学习算法 | xxwywzy's Blog</title>
+  <title>A thief‘s end —— 神秘海域4通关感想 | xxwywzy's Blog</title>
   
 
 
@@ -298,7 +295,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/01/CS229-5/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/16/uncharted4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Zheyu Wang">
@@ -315,7 +312,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">CS229学习笔记之五：生成学习算法
+          <h1 class="post-title" itemprop="name headline">A thief‘s end —— 神秘海域4通关感想
               
             
           </h1>
@@ -334,7 +331,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-01T09:45:48+08:00">2018-04-01</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-16T17:52:39+08:00">2018-04-16</time>
             
 
             
@@ -355,7 +352,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/课程笔记/" itemprop="url" rel="index"><span itemprop="name">课程笔记</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/游戏评测/" itemprop="url" rel="index"><span itemprop="name">游戏评测</span></a></span>
 
                 
                 
@@ -389,118 +386,22 @@
       
 
       
-        <p>本篇博客为CS229第五篇学习笔记，主要内容包括生成学习算法以及高斯判别分析。</p>
+        <p><img src="/images/uncharted-1.jpg" width="75%" height="75%"></p>
+<p>16年写的一篇老文，放在博客里收藏一下~</p>
 <a id="more"></a>
-<h3 id="生成学习算法">生成学习算法</h3>
-<p>到目前为止，我们讨论的学习算法都是直接对 <span class="math inline">\(p(y\mid x;\theta)\)</span> 建模，即对于给定的x，y的条件分布，例如之前提到的逻辑回归。这里我们将讨论一种不同类型的学习算法。</p>
-<p>学习算法可以分为两种，一种是尝试去直接学习得到 <span class="math inline">\(p(y \mid x)\)</span>（例如逻辑回归），或者尝试去学习直接将输入映射到0或1的方法（例如感知器算法），这种算法被称为<strong>判别学习算法</strong>；而另外一种学习算法被称为<strong>生成学习算法</strong>，这种算法会尝试对 <span class="math inline">\(p(x\mid y)\)</span>（以及 <span class="math inline">\(p(y)\)</span> ）建模。</p>
-<p>当我们为 <span class="math inline">\(p(y)\)</span> (被称为<strong>class priors</strong>) 和 <span class="math inline">\(p(x\mid y)\)</span> 建模后，我们的算法会使用<strong>贝叶斯定理</strong>来计算给定x后y的后验概率： <span class="math display">\[
-p(y\mid x) = \frac {p(x\mid y)p(y)} {p(x)}
-\]</span></p>
-<p>这里，分母可以通过 <span class="math inline">\(p(x) = p(x\mid y=1)p(y=1) + p(x\mid y=0)p(y=0)\)</span> 来得到，注意到对于分类问题，我们需要对每种y的情况<strong>分别进行建模</strong>。当有一个新的x时，计算每个y的后验概率，并取概率最大的那个y。而由于只需要比较大小，<span class="math inline">\(p(x)\)</span> 对于大家都是一样的，所以可以忽略分母，得到下式： <span class="math display">\[
-\begin{align*}
-\arg\max_{y} p(y\mid x) &amp;= \arg\max_{y} \frac {p(x\mid y)p(y)} {p(x)}\\ &amp;= \arg\max_{y}  p(x\mid y)p(y) 
-\end{align*}
-\]</span></p>
-<h3 id="高斯判别分析">高斯判别分析</h3>
-<p>我们学习的第一个生成学习算法叫<strong>高斯判别分析</strong>，在这个模型中，我们会假设 <span class="math inline">\(p(x \mid y)\)</span> 属于多元正态分布，在介绍GDA之前，首先简单介绍一下多元正态分布的属性。</p>
-<h4 id="多元正态分布">多元正态分布</h4>
-<p>多元正态分布是在n维空间中的，其参数有： <strong>均值向量</strong>：<span class="math inline">\(\mu \in \mathbb{R}^{n}\)</span> <strong>协方差矩阵</strong>：<span class="math inline">\(\Sigma \in \mathbb{R}^{n \times n}\)</span>，<span class="math inline">\(\Sigma \ge 0\)</span> 对称且为半正定（所有特征值均不小于零）。 分布记作 <span class="math inline">\({\cal N} (\mu,\Sigma)\)</span> ，概率密度公式为： <span class="math display">\[
-p(x;\mu, \Sigma) = \frac {1} {(2\pi)^{n/2} |\Sigma |^{1/2}} \exp \left(- \frac{1} {2} (x-\mu)^{T}\Sigma^{-1}(x-\mu)\right)
-\]</span> 上述等式中，<span class="math inline">\(|\Sigma|\)</span> 表示 <span class="math inline">\(\Sigma\)</span> 的行列式。 对于一个属于多元正态分布 <span class="math inline">\({\cal N} (\mu,\Sigma)\)</span> 的随机变量 <span class="math inline">\(X\)</span>，根据期望与方差的计算公式可以得到： <span class="math display">\[
-\begin{align*}
-E[X] &amp;= \int_x xp(x; \mu, \Sigma)dx \\
-&amp;=\mu \\
-Cov(X) &amp;= E[(Z - E[Z])(Z - E[Z])^T] \\
-&amp;= \Sigma
-\end{align*}
-\]</span></p>
-<p>下面给出一些正态（高斯）分布的密概率度图像（二元）：</p>
-<p><img src="/images/cs229-5-1.png" width="70%" height="70%"></p>
-<p>左边的图显示的分布均值为0（<span class="math inline">\(2\times1\)</span>的向量），协方差矩阵为 <span class="math inline">\(I\)</span> （<span class="math inline">\(2 \times 2\)</span>的单位矩阵），这样的正态分布又被称为<strong>标准正态分布</strong>。中间的图显示的分布均值为0且 <span class="math inline">\(\Sigma = 0.6 I\)</span> ；而右边的图显示的分布 <span class="math inline">\(\Sigma = 2 I\)</span>，可以看到随着 <span class="math inline">\(\Sigma\)</span> 的变大，分布变得越来越“展开”，看起来就像变得越来越“扁”.</p>
-<p>让我们来看看更多的例子。</p>
-<p><img src="/images/cs229-5-2.png" width="70%" height="70%"></p>
-<p>上图表示的分布均值均为0，对应的协方差矩阵为： <span class="math display">\[
-\Sigma =\left[ \begin{array}{cc}
-1 &amp; 0 \\
-0 &amp; 1 
-\end{array} 
-\right ]; 
-\Sigma =\left[ \begin{array}{cc}
-1 &amp; 0.5 \\
-0.5 &amp; 1 
-\end{array} 
-\right ]; 
-\Sigma =\left[ \begin{array}{cc}
-1 &amp; 0.8 \\
-0.8 &amp; 1 
-\end{array} 
-\right ]
-\]</span></p>
-<p>左边的图就是标准正态分布，而可以看到随着非对角线上数值的增大，分布在45度方向上压缩的幅度越大。通过下面的轮廓图可以更清楚地展现这个特点。</p>
-<p><img src="/images/cs229-5-3.png" width="70%" height="70%"></p>
-<p>下面是最后一组例子（改变 <span class="math inline">\(\Sigma\)</span> 的值）</p>
-<p><img src="/images/cs229-5-4.png" width="70%" height="70%"></p>
-<p>上图对应的协方差为： <span class="math display">\[
-\Sigma =\left[ \begin{array}{cc}
-1 &amp; -0.5 \\
--0.5 &amp; 1 
-\end{array} 
-\right ]; 
-\Sigma =\left[ \begin{array}{cc}
-1 &amp; -0.8 \\
--0.8 &amp; 1 
-\end{array} 
-\right ]; 
-\Sigma =\left[ \begin{array}{cc}
-3 &amp; 0.8 \\
-0.8 &amp; 1 
-\end{array} 
-\right ]
-\]</span></p>
-<p>从左图和中图可以看到，随着元素值的减小（绝对值变大），分布在相反的方向上“压缩”得越明显。最后，右图中我们改变了对角线上的元素值，分布变得更趋近于椭圆。</p>
-<p>在最后一组例子中，令 <span class="math inline">\(\Sigma = I\)</span>，通过改变 <span class="math inline">\(\mu\)</span> ，我们可以移动分布的中心（均值）。</p>
-<p><img src="/images/cs229-5-5.png" width="70%" height="70%"></p>
-<p>总而言之，多元正态分布与正态分布一样是钟型的曲线，参数 <span class="math inline">\(\mu\)</span> 会影响分布的位置（平移），而 <span class="math inline">\(\Sigma\)</span> 会影响分布的形状。</p>
-<h4 id="高斯判别分析模型">高斯判别分析模型</h4>
-<p>对于一个分类问题，输入变量 x 是连续随机变量，我们可以使用高斯判别分析（GDA）模型，对 <span class="math inline">\(p(x \mid y)\)</span> 使用多元正态分布建模，模型如下： <span class="math display">\[
-\begin{align*}
-y &amp;\sim \text{Bernoulli} (\phi) \\
-x\mid y=0 &amp;\sim \cal{N} (\mu_0, \Sigma) \\
-x\mid y=1 &amp;\sim \cal{N} (\mu_1, \Sigma) \\
-\end{align*}
-\]</span> 其分布如下： <span class="math display">\[
-\begin{align*}
-p(y) &amp;= \phi^y(1-\phi)^{1-y} \\
-p(x\mid y=0) &amp;= \frac{1}{(2\pi)^{n/2}|\Sigma|^{1/2}}\exp\left(-\frac 1 2 (x-\mu_0)^T\Sigma^{-1}(x-\mu_0)\right) \\
-p(x\mid y=1) &amp;= \frac{1}{(2\pi)^{n/2}|\Sigma|^{1/2}}\exp\left(-\frac 1 2 (x-\mu_1)^T\Sigma^{-1}(x-\mu_1)\right) 
-\end{align*}
-\]</span></p>
-<p>这里模型的参数包括 <span class="math inline">\(\phi, \Sigma, \mu_0, \mu_1\)</span>，注意两个分布共享同一个协方差矩阵。数据的对数似然函数如下：</p>
-<p><span class="math display">\[
-\begin{align*}
-\ell(\phi,\mu_0, \mu_1,\Sigma) &amp;= \log \prod_{i=1}^mp(x^{(i)},y^{(i)};\phi,\mu_0\mu_1,\Sigma) \\
-&amp;=  \log \prod_{i=1}^mp(x^{(i)} \mid y^{(i)};\mu_0,\mu_1,\Sigma) p(y^{(i)};\phi)
-\end{align*}
-\]</span> 通过最大化 <span class="math inline">\(\ell\)</span>，得到参数的极大似然估计为： <span class="math display">\[
-\begin{align*}
-\phi &amp;= \frac 1 m \sum_{i=1}^m 1\{y^{(i)} =  1\} \\
-\mu_0 &amp;= \frac{\sum_{i=1}^m 1\{y^{(i)}=0\}x^{(i)}}{\sum_{i=1}^m 1\{y^{(i)}=0\}} \\
-\mu_1 &amp;= \frac{\sum_{i=1}^m 1\{y^{(i)}=1\}x^{(i)}}{\sum_{i=1}^m 1\{y^{(i)}=1\}} \\
-\Sigma &amp;= \frac 1 m \sum_{i=1}^m (x^{(i)}-\mu_{y^{(i)}})(x^{(i)}-\mu_{y^{(i)}})^T
-\end{align*}
-\]</span> 用图形来表示，该算法可以表示为下图：</p>
-<p><img src="/images/cs229-5-6.png" width="50%" height="50%"></p>
-<p>图中展示的是训练集，求得的高斯分布以及拟合至数据中，将数据分为了两类，注意两个高斯分布的形状与方向相同，因为它们共享同一个协方差矩阵，但是它们的均值不同。此外图中的直线表示决策边界：<span class="math inline">\(p(y=1|x) = 0.5\)</span>，在该边界的一侧，我们预测 y=1 是最可能的输出，在另一侧，则预测 y=0。</p>
-<h4 id="高斯判别分析与逻辑回归">高斯判别分析与逻辑回归</h4>
-<p>高斯判别分析与逻辑回归之间有着有趣的关系。如果我们将 <span class="math inline">\(p(y=1 \mid x; \phi,\mu_0,\mu_1, \Sigma)\)</span>表示为 x 的函数，可以得到：</p>
-<p><span class="math display">\[
-p(y=1 \mid x;\phi,\Sigma,\mu_0,\mu_1) = \frac 1 {1+\exp(-\theta^T x)}
-\]</span></p>
-<p>这与逻辑回归的形式完全相同。但一般来说，对于相同的数据集两种算法会给出不同的边界，究竟哪一个更好呢？</p>
-<p><strong>如果 <span class="math inline">\(p(x\mid y)\)</span> 属于多元高斯分布（共享 <span class="math inline">\(\Sigma\)</span>），那么 <span class="math inline">\(p(y\mid x)\)</span> 一定是逻辑函数。但是反之则不成立。</strong>这一结论表明高斯判别分析相较于逻辑回归提出了<em>更强</em> 的假设。如果这些假设都是正确的，那么高斯判别分析得到的结果会更好，是更好的模型。特别地，当 <span class="math inline">\(p(x\mid y)\)</span> 属于多元高斯分布（共享 <span class="math inline">\(\Sigma\)</span>），GDA是<strong>渐近有效</strong>的。这说明在数据量比较有限的情况下，没有算法能比GDA的表现更好。因此，在这种情况下，GDA相比逻辑回归是一个更好的算法，即使对于较少的训练集，也可以取得更好的效果。</p>
-<p>相反，因为进行了更弱的假设，所以逻辑回归有更好的<em>鲁棒性</em>，对于错误的模型假设不那么敏感。有很多不同的假设会导致 <span class="math inline">\(p(y\mid x)\)</span> 是逻辑函数的形式，比如泊松分布。但是如果我们对于这样的数据使用 GDA，那么结果会变得不可预测。</p>
-<p>总结：GDA进行了更强的模型假设并且数据有效性更高（需要更少的数据来学习），但其前提条件是模型假设正确或近似正确。 逻辑回归进行较弱的假设，对于模型假设偏离的鲁棒性更好。特别地，如果数据集实际上不是高斯分布，那么在数据有限的情况下，逻辑回归一般会表现得比GDA更好。因此，实际中使用逻辑回归的情况比GDA多得多。</p>
+<p><a href="https://weibo.com/ttarticle/p/show?id=2309403980574992809626" target="_blank" rel="noopener">原文地址</a></p>
+<p>断断续续地玩了15个小时后，终于在今天通关了神秘海域4的单人剧情部分。</p>
+<p>作为系列的最后一作与PS4独占作品，我对神秘海域4是充满了期待的。然而在通关后，说实话，神秘海域4并没有带给我过多的惊喜，更多的是一种中规中矩的感觉，缺少了当初神秘海域2带给我的那种震撼。不过对于一款系列作品的终结篇来说，相比于带给玩家更大的震撼，在游戏的各个方面较前作取得进步并给予玩家一个合理或者圆满的结局也许更加重要。从这个层面上看，可以说神秘海域4是一款优秀的系列终结篇。</p>
+<h3 id="画面">画面</h3>
+<p>在画面上，毋庸置疑神秘海域4做到了目前游戏的最强画面，虽然游戏引擎可能不是最优秀的，但凭借强大的美工以及对细节的无微不至，展现在玩家眼前的是一幅幅绝美的风景，其中令我印象最深的是马达加斯加的场景，在对比度极强的色彩烘托下的一望无际的平原上驾驶吉普车驰骋，让人有一种身临其境的感觉。不仅仅在场景刻画上，神海4对于人物的表现也十分的真实，主要体现在人物表情的刻画上，每当剧情中给到人物脸部特写时，其表情的变化都是极为丰富且真实的，通过表情就可以清晰地感受到人物当前的心理活动。如果硬要给画面挑一些美中不足的地方，那就是在某些场景下的光影效果并没有那么的惊艳，对一些物体阴影的处理略显粗糙。</p>
+<p><img src="/images/uncharted-2.jpg" width="75%" height="75%"></p>
+<h3 id="游戏性">游戏性</h3>
+<p>在游戏性上，由于游戏类型（动作解谜冒险）的限制，神秘海域系列一向是以一周目为最佳游戏体验的，除去奖杯要素，似乎并没有动力来支撑玩家去游玩行神海4的多周目单人流程。不过随着多人模式的加入，相信游戏的耐玩性会得到大大的提高（前提是你的网要足够好，而我的网则不行）。然而在神海4的一周目体验中，在游戏性方面还是存在着一些不尽如人意的地方：由于增加了冒险要素，导致本作的攀爬部分较前作有所增加，但攀爬模式的单一化与高重复性让人不免觉得乏味。本作在攀爬上增加了两个元素：绳索以及滑坡，虽然它们的加入让攀爬系统看上去更加丰富，但在实际游戏过程中，这两个元素的过多使用以及一些十分不合理的攀爬手段还是让人有种不想继续玩下去的冲动。当然，神海4一周目的游戏体验总体来说还是相当好的，只要你有一点点耐心在攀爬的过程中坚持下去，便能体验到一段波澜壮阔的冒险旅程。</p>
+<p><img src="/images/uncharted-3.jpg" width="75%" height="75%"></p>
+<h3 id="关于结局">关于结局</h3>
+<p>作为系列的最终作，神海4的结局是平淡且美好的：内森和艾琳娜买下了内森工作的打捞公司，并于几年后生下了女儿凯西，一家人幸福快乐地过着平凡的生活。这样的结局虽然没有什么震撼力，但确实是系列玩家最想看到的happy ending，同时也向玩家传达了一个想法，在故事的最后，没有轰轰烈烈，只有简单与平凡。</p>
+<p>虽然内森·德雷克的故事结束了，但相信神秘海域系列还将继续下去。</p>
+<p><strong>冒险不会终结</strong>。​​​​</p>
 
       
     </div>
@@ -521,11 +422,7 @@ p(y=1 \mid x;\phi,\Sigma,\mu_0,\mu_1) = \frac 1 {1+\exp(-\theta^T x)}
       
         <div class="post-tags">
           
-            <a href="/tags/CS229/" rel="tag"># CS229</a>
-          
-            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
-          
-            <a href="/tags/判别高斯分析/" rel="tag"># 判别高斯分析</a>
+            <a href="/tags/神秘海域4/" rel="tag"># 神秘海域4</a>
           
         </div>
       
@@ -538,8 +435,8 @@ p(y=1 \mid x;\phi,\Sigma,\mu_0,\mu_1) = \frac 1 {1+\exp(-\theta^T x)}
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/03/22/CS229-4/" rel="next" title="CS229学习笔记之四：广义线性模型">
-                <i class="fa fa-chevron-left"></i> CS229学习笔记之四：广义线性模型
+              <a href="/2018/04/16/CS229-7/" rel="next" title="CS229学习笔记之七：支持向量机">
+                <i class="fa fa-chevron-left"></i> CS229学习笔记之七：支持向量机
               </a>
             
           </div>
@@ -547,10 +444,6 @@ p(y=1 \mid x;\phi,\Sigma,\mu_0,\mu_1) = \frac 1 {1+\exp(-\theta^T x)}
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/04/14/CS229-6/" rel="prev" title="CS229学习笔记之六：朴素贝叶斯">
-                CS229学习笔记之六：朴素贝叶斯 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -736,7 +629,7 @@ p(y=1 \mid x;\phi,\Sigma,\mu_0,\mu_1) = \frac 1 {1+\exp(-\theta^T x)}
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#生成学习算法"><span class="nav-number">1.</span> <span class="nav-text">生成学习算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#高斯判别分析"><span class="nav-number">2.</span> <span class="nav-text">高斯判别分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#多元正态分布"><span class="nav-number">2.1.</span> <span class="nav-text">多元正态分布</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#高斯判别分析模型"><span class="nav-number">2.2.</span> <span class="nav-text">高斯判别分析模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#高斯判别分析与逻辑回归"><span class="nav-number">2.3.</span> <span class="nav-text">高斯判别分析与逻辑回归</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#画面"><span class="nav-number">1.</span> <span class="nav-text">画面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#游戏性"><span class="nav-number">2.</span> <span class="nav-text">游戏性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于结局"><span class="nav-number">3.</span> <span class="nav-text">关于结局</span></a></li></ol></div>
             
 
           </div>
