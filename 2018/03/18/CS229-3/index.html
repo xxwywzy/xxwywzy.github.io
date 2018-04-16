@@ -99,28 +99,28 @@
 
 
 
-  <meta name="description" content="本篇博客为CS229第六篇学习笔记，主要内容包括朴素贝叶斯算法、拉普拉斯平滑以及文本分类的事件模型。">
+  <meta name="description" content="本篇博客为CS229第三篇学习笔记，主要内容包括逻辑回归、感知器学习算法以及牛顿方法。">
 <meta name="keywords" content="CS229,机器学习">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CS229学习笔记之六：朴素贝叶斯">
-<meta property="og:url" content="http://yoursite.com/2018/04/14/CS229-6/index.html">
+<meta property="og:title" content="CS229学习笔记之三：分类问题与逻辑回归">
+<meta property="og:url" content="http://yoursite.com/2018/03/18/CS229-3/index.html">
 <meta property="og:site_name" content="xxwywzy&#39;s Blog">
-<meta property="og:description" content="本篇博客为CS229第六篇学习笔记，主要内容包括朴素贝叶斯算法、拉普拉斯平滑以及文本分类的事件模型。">
+<meta property="og:description" content="本篇博客为CS229第三篇学习笔记，主要内容包括逻辑回归、感知器学习算法以及牛顿方法。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/images/cs229-6-1.png">
-<meta property="og:image" content="http://yoursite.com/images/cs229-6-2.png">
-<meta property="og:updated_time" content="2018-04-14T14:07:41.875Z">
+<meta property="og:image" content="http://yoursite.com/images/cs229-3-1.png">
+<meta property="og:image" content="http://yoursite.com/images/cs229-3-2.png">
+<meta property="og:updated_time" content="2018-04-16T02:06:27.825Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CS229学习笔记之六：朴素贝叶斯">
-<meta name="twitter:description" content="本篇博客为CS229第六篇学习笔记，主要内容包括朴素贝叶斯算法、拉普拉斯平滑以及文本分类的事件模型。">
-<meta name="twitter:image" content="http://yoursite.com/images/cs229-6-1.png">
+<meta name="twitter:title" content="CS229学习笔记之三：分类问题与逻辑回归">
+<meta name="twitter:description" content="本篇博客为CS229第三篇学习笔记，主要内容包括逻辑回归、感知器学习算法以及牛顿方法。">
+<meta name="twitter:image" content="http://yoursite.com/images/cs229-3-1.png">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/04/14/CS229-6/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/03/18/CS229-3/"/>
 
 
 
@@ -130,7 +130,7 @@
   };
 </script>
 
-  <title>CS229学习笔记之六：朴素贝叶斯 | xxwywzy's Blog</title>
+  <title>CS229学习笔记之三：分类问题与逻辑回归 | xxwywzy's Blog</title>
   
 
 
@@ -294,7 +294,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/14/CS229-6/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/18/CS229-3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Zheyu Wang">
@@ -311,7 +311,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">CS229学习笔记之六：朴素贝叶斯
+          <h1 class="post-title" itemprop="name headline">CS229学习笔记之三：分类问题与逻辑回归
               
             
           </h1>
@@ -330,7 +330,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-14T11:12:48+08:00">2018-04-14</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-18T09:45:38+08:00">2018-03-18</time>
             
 
             
@@ -385,130 +385,82 @@
       
 
       
-        <p>本篇博客为CS229第六篇学习笔记，主要内容包括朴素贝叶斯算法、拉普拉斯平滑以及文本分类的事件模型。</p>
+        <p>本篇博客为CS229第三篇学习笔记，主要内容包括逻辑回归、感知器学习算法以及牛顿方法。</p>
 <a id="more"></a>
-<h3 id="朴素贝叶斯算法">朴素贝叶斯算法</h3>
-<p>在高斯判别分析中，特征向量是连续的、实数值向量。现在我们要谈谈一个不同的生成学习算法，其中x是离散的向量。</p>
-<p>让我们以识别垃圾邮件为例，这类问题被称为<strong>文本分类</strong>问题。</p>
-<p>假设我们有一个训练集（已经标记好了是否为垃圾邮件的邮件集合），我们首先需要构建表示一封邮件的特征向量。</p>
-<p>我们通过如下方式表示特征向量：其长度为词表的长度（词表为所有可能出现的词的集合，一般通过训练集生成），如果这封邮件包含了第 i 个词，<span class="math inline">\(x_i = 1\)</span>，否则 <span class="math inline">\(x_i = 0\)</span>。下图为一个简单的例子：</p>
-<p><img src="/images/cs229-6-1.png" width="25%" height="25%"></p>
-<p>选择好特征向量后，我们需要来构建生成模型，但考虑到x是一个高维向量，因此如果直接对 <span class="math inline">\(p(x\mid y)\)</span> 建模，那么会得到一个参数向量的维数极高的多项分布，使计算过于复杂。</p>
-<p>因此，我们需要做一个强力的假设，假设给定 y 时， 每一个$x_i $是条件独立的。这个假设被称为<strong>朴素贝叶斯假设</strong>，其引出的算法被称为<strong>朴素贝叶斯分类器</strong>。（注意是条件独立而不是独立，即仅在给定 y 的情况下独立）</p>
-<p>现在我们有（以50000维度为例）：</p>
+<p>之前我们讨论的是<strong>回归问题</strong>，即输出是连续值，现在我们来讨论输出是离散值的<strong>分类问题</strong>。首先，我们专注于<strong>二元分类</strong>问题，即输出 <span class="math inline">\(y\)</span> 只能取 <span class="math inline">\(0\)</span> 和 <span class="math inline">\(1\)</span> 两个值。</p>
+<h3 id="逻辑回归">逻辑回归</h3>
+<p>如果将线性回归模型直接应用于分类问题，会产生取值不在 0 和 1 之间的问题，所以我们引入<strong>逻辑回归模型</strong>：</p>
 <p><span class="math display">\[
+h_{\theta}(x) = g(\theta^Tx) = \frac 1 {1+e^{-\theta^Tx}}
+\]</span> 其中 <span class="math display">\[
+g(z) = \frac 1 {1+e^{-z}}
+\]</span> 被称为<strong>逻辑函数</strong>或 <strong>S 型函数</strong>，其图像如下：</p>
+<p><img src="/images/cs229-3-1.png" width="45%" height="45%"></p>
+<p>可以看到，当<span class="math inline">\(z \to +\infty\)</span>时<span class="math inline">\(g(z)\)</span>趋向于 <span class="math inline">\(1\)</span>， 当<span class="math inline">\(z \to -\infty\)</span>时<span class="math inline">\(g(z)\)</span>趋向于 <span class="math inline">\(0\)</span>，即<span class="math inline">\(g(z)\)</span>的值域为<span class="math inline">\((0,1)\)</span>，至于为什么要选择这个函数，在之后会作出解释。</p>
+<p>首先给出一个关于 S 型函数求导的有用性质： <span class="math display">\[
 \begin{align*}
-p(x_1,\ldots,x_{50000}\mid y) &amp;=  
-p(x_1 \mid y) p(x_2 \mid y,x_1)p(x_3 \mid y,x_1,x_2)\cdots p(x_{50000} \mid y,x_1, \ldots, x_{49999})\\
-&amp;=p(x_1 \mid y)p(x_2 \mid y) p(x_3 \mid y)\cdot p(x_{50000} \mid y)\\
-&amp;= \prod_{i=1}^np(x^{(i)}\mid y)
+g\prime (z) &amp;= \frac d {dz} \frac 1 {1+e^{-z}} \\
+&amp;= \frac 1 {(1+e^{-z})^2} (e^{-z}) \\
+&amp;= \frac 1 {1+e^{-z}} \cdot \left( 1- \frac 1 {1+e^{-z}}\right) \\
+&amp;= g(z)(1-g(z))
+\end{align*}
+\]</span> 确定了模型之后，我们需要找到合适的 <span class="math inline">\(\theta\)</span> 的值。这里采用之前使用的<strong>最大似然法</strong>来选择参数。（假设函数可以直接看作概率分布）</p>
+<p>首先，二元分类符合<strong>伯努利分布</strong>，我们假设： <span class="math display">\[
+\begin{align*}
+P(y=1 \mid x ;\theta) &amp;= h_{\theta}(x)\\
+P(y=0 \mid x ;\theta)  &amp;= 1-h_{\theta}(x)
+\end{align*}
+\]</span> 将上面的公式合二为一，得到： <span class="math display">\[
+P(y \mid x ; \theta) = (h_{\theta}(x))^y(1-h_{\theta}(x))^{1-y}
+\]</span> 假定 <span class="math inline">\(m\)</span> 个样本之间相互独立，我们可以得到 <span class="math inline">\(\theta\)</span> 的似然函数如下： <span class="math display">\[
+\begin{align*}
+L(\theta) &amp;= p(\vec y \mid X; \theta) \\
+&amp;= \prod_{i=1}^m p(y^{(i)} \mid x^{(i)};\theta) \\
+&amp;= \prod_{i=1}^m  \left(h_{\theta}(x^{(i)})\right)^{y^{(i)}}\left(1-h_{\theta}(x^{(i)})\right)^{1-y^{(i)} }
+\end{align*}
+\]</span> 与之前类似，为了计算方便，我们使用对数似然函数来进行最大化分析： <span class="math display">\[
+\begin{align*}
+\ell(\theta) &amp;= \log L(\theta) \\
+&amp;= \sum_{i=1}^m y^{(i)}\log h(x^{(i)})+(1-y^{(i)} )\log (1-h(x^{(i)}))
+\end{align*}
+\]</span> 下面要做的是找到<span class="math inline">\(\theta\)</span>使得<span class="math inline">\(\ell(θ)\)</span>最大，由于这里是找最大值而非最小值，所以使用<strong>梯度上升</strong>（gradient ascent），更新规则是<span class="math inline">\(\theta := \theta +\alpha \nabla_\theta \ell(\theta)\)</span>，对于随机梯度上升（每次只考虑一个样本），求导过程如下： <span class="math display">\[
+\begin{align*}
+\frac{\partial}{\partial \theta_j}\ell(\theta) &amp;= \left(y \frac 1 {g(\theta^Tx)}-(1-y)\frac 1 {1-g(\theta^Tx)}\right)\frac{\partial}{\partial \theta_j}g(\theta^Tx)\\
+&amp;= \left(y \frac 1 {g(\theta^Tx)}-(1-y)\frac 1 {1-g(\theta^Tx)}\right)g(\theta^Tx)(1-g(\theta^Tx))\frac{\partial}{\partial \theta_j}\theta^Tx \\
+&amp;= \left(y(1-g(\theta^Tx))-(1-y)g(\theta^Tx)\right)x_j\\
+&amp;= \left(y-h_\theta(x)\right)x_j
 \end{align*}
 \]</span></p>
-<p>第一个等式来自于概率的基本性质，第二个等式则使用了朴素贝叶斯假设。即使这个假设在现实中不一定成立，但其实际的效果还是不错的。</p>
-<p>模型包含了以下三个参数：</p>
+<p>在计算过程中使用到了 S 型函数的求导性质。综上所述，我们得到随机梯度上升的更新规则是：</p>
 <p><span class="math display">\[
+\theta_j := \theta_j +\alpha\left(y^{(i)}-h_\theta(x^{(i)})\right)x^{(i)}_j
+\]</span></p>
+<p>这个公式和线性回归中梯度下降的公式表面上看是一样的，但实际上两者的<span class="math inline">\(h_\theta(x)\)</span>有所不同。关于更加深层次的讨论，请参看之后的 GLM 模型章节。</p>
+<h3 id="感知器学习算法">感知器学习算法</h3>
+<p>这里谈感知器，好像有些离题，但感知机的函数定义如下： <span class="math display">\[
+g(z)=\left\{
 \begin{align*}
-\phi_{i|y=1} &amp;= p(x_i = 1 \mid y=1) \\
-\phi_{i|y=0} &amp;= p(x_i = 1 \mid y=0) \\
-\phi_y &amp;= p(y = 1 )
+&amp; 1 \quad \text{if} \;\text{z} \ge 0\\
+&amp; 0 \quad  \text{if} \;\text{z} &lt; 0
 \end{align*}
-\]</span></p>
-<p>和之前一样，给定一个训练集 <span class="math inline">\(\{(x^{(i)},y^{(i)}); i=1,\dots,m\}\)</span>，我们可以写出如下的联合似然函数（具体的形式参见生成学习算法）：</p>
-<p><span class="math display">\[
-\mathcal{L} (\phi_y,\phi_{i|y=0},\phi_{i|y=1}) = \prod_{i=1}^m p(x^{(i)},y^{(i)})
-\]</span></p>
-<p>对这个联合似然函数进行最大似然分析，得到的参数值如下：</p>
-<p><span class="math display">\[
-\begin{align*}
-\phi_{j|y=1} &amp;= \frac{\sum_{i=1}^m 1\{x_j^{(i)}=1 \wedge y^{(i)}=1\}}{\sum_{i=1}^m 1\{y^{(i)}=1\}}\\
-\phi_{j|y=0} &amp;= \frac{\sum_{i=1}^m 1\{x_j^{(i)}=1 \wedge y^{(i)}=0\}}{\sum_{i=1}^m 1\{y^{(i)}=0\}} \\
-\phi_y &amp;= \frac {\sum_{i=1}^m 1\{y^{(i)} = 1\}}{m}
-\end{align*}
-\]</span></p>
-<p>这些结果的得出是很自然的，从概率的角度也可以很好地解释。</p>
-<p>得到了这些参数之后，为了对一个新的输入x进行预测，我们可以计算：</p>
-<p><span class="math display">\[
-\begin{align*}
-p(y=1 \mid x) &amp;= \frac{p(x\mid y=1)p(y=1)}{p(x)} \\
-&amp;= \frac {(\prod_{i=1}^n p(x_i \mid y=1))p(y=1)}{(\prod_{i=1}^n p(x_i \mid y=1))p(y=1)+(\prod_{i=1}^n p(x_i \mid y=0))p(y=0)}
-\end{align*}
-\]</span></p>
-<p>然后选择具有更高后验概率的类作为输出。（这里的n指字典的维数，需要先把x转换为统一长度的向量）</p>
-<p>在之前的例子中，输入的每一维特征都是是二元的，其对应的分布是伯努利分布，而当特征是多元时，其对应的分布应该用多项式分布建模。</p>
-<p><img src="/images/cs229-6-2.png" width="60%" height="60%"></p>
-<p>实际上，即便一些原始的输入数据是连续值，我们可以通过一个映射表将连续值映射为离散值，然后运用朴素贝叶斯方法进行建模。当原始，连续值的数据不能很好的用多元正态分布进行建模时，将其离散化再使用朴素贝叶斯建模往往会取得更好的效果。（现在还有高斯离散贝叶斯算法）</p>
-<h3 id="拉普拉斯平滑">拉普拉斯平滑</h3>
-<p>之前描述的朴素贝叶斯算法有很多的应用，但是其当前的形式仍存在一个问题，让我们讨论一下如何解决这个问题。</p>
-<p>在垃圾邮件分类问题中，如果词典中存在一个词，而这个词在训练集中从未出现过时，其最大似然分析得出的参数 <span class="math inline">\(\phi_{35000|y}\)</span> 将会是</p>
-<p><span class="math display">\[
-\begin{align*}
-\phi_{35000|y=1} &amp;= \frac{\sum_{i=1}^m 1\{x_{35000}^{(i)}=1 \wedge y^{(i)}=1\}}{\sum_{i=1}^m 1\{y^{(i)}=1\}} =0 \\
-\phi_{35000|y=0} &amp;= \frac{\sum_{i=1}^m 1\{x_{35000}^{(i)}=1 \wedge y^{(i)}=0\}}{\sum_{i=1}^m 1\{y^{(i)}=0\}} = 0 \\
-\end{align*}
-\]</span></p>
-<p>因此，当我们尝试去预测含有该词的邮件是否为垃圾邮件时，后验概率的计算结果将变为：</p>
-<p><span class="math display">\[
-\begin{align*}
-p(y=1 \mid x) &amp;= \frac {(\prod_{i=1}^n p(x_i \mid y=1))p(y=1)}{(\prod_{i=1}^n p(x_i \mid y=1))p(y=1)+(\prod_{i=1}^n p(x_i \mid y=0))p(y=0)} \\
-&amp;= \frac 0 0
-\end{align*}
-\]</span></p>
-<p>这会导致我们无法进行预测。更一般的来看，如果你在有限的训练集上没有看到过某个事件，就认为其发生的概率为0，这在统计学上是不合理的。</p>
-<p>现在假设我们要分析一个多项式随机变量 z 的均值，取值为 <span class="math inline">\(\{1,\dots,k\}\)</span>，我们可以分析 <span class="math inline">\(\phi_i=p(z=i)\)</span>，给定一个独立的观察集 <span class="math inline">\(\{z^{(1)},\dots,z^{(m)}\}\)</span>，最大似然估计的结果为：</p>
-<p><span class="math display">\[
-\phi_j = \frac {\sum_{i=1}^m 1\{z^{(i)}=j\}}{m}
-\]</span></p>
-<p>如果我们用这个公式来进行最大似然估计，那么有一些 <span class="math inline">\(\phi_i\)</span> 的值可能为0（如果未在观察集中出现），为了避免这个问题，我们可以使用<strong>拉普拉斯平滑</strong>，其形式为：</p>
-<p><span class="math display">\[
-\phi_j = \frac {\sum_{i=1}^m 1\{z^{(i)}=j\}+1}{m+k}
-\]</span></p>
-<p>分子加1，分母加k，这样可以保证 <span class="math inline">\(\sum_{j=1}^m \phi_j=1\)</span>（概率之和为1），同时保证了对所有的取值， <span class="math inline">\(\phi_j \neq 0\)</span>，从而解决了之前的问题。实验证明，在大部分情况下，拉普拉斯平滑可以给出一个最优的估计。</p>
-<p>对于朴素贝叶斯分类器，使用拉普拉斯平滑，可以得到如下公式：</p>
-<p><span class="math display">\[
-\begin{align*}
-\phi_{j|y=1} &amp;= \frac{\sum_{i=1}^m 1\{x_j^{(i)}=1 \wedge y^{(i)}=1\}+1}{\sum_{i=1}^m 1\{y^{(i)}=1\}+2}\\
-\phi_{j|y=0} &amp;= \frac{\sum_{i=1}^m 1\{x_j^{(i)}=1 \wedge y^{(i)}=0\}+1}{\sum_{i=1}^m 1\{y^{(i)}=0\}+2} 
-\end{align*}
-\]</span></p>
-<p>因为x的取值有两种，所以分子加1，分母加2。</p>
-<p>（在实际中，一般不需要对 <span class="math inline">\(\phi_y\)</span> 进行拉普拉斯平滑。）</p>
-<h3 id="文本分类的事件模型">文本分类的事件模型</h3>
-<p>让我们再探讨一个专门用于文本分类的模型来结束生成学习算法。虽然朴素贝叶斯对许多分类问题有很好的效果，但是对于文本分类，还有存在着一个效果更棒的相关模型。</p>
-<p>在文本分类领域，之前我们使用的朴素贝叶斯模型被称为<strong>多元伯努利事件模型</strong>。现在我们将使用一个不同的模型，叫作<strong>多项式事件模型</strong>。</p>
-<p>我们将使用与之前不同的方式来表示一封邮件。令 <span class="math inline">\(x_i\)</span> 表示邮件中的第i个词语，则其取值范围为 <span class="math inline">\(\{1,\ldots,|V|\}\)</span>，<span class="math inline">\(|V|\)</span> 是词表（词典）的大小。 一封含有 n 个词语的邮件现在将被表示为一个长度为 n 的向量 <span class="math inline">\((x+1,x_2,\ldots,x_n)\)</span> ，注意 n 会随邮件的不同而变化。</p>
-<p>该模型的参数为：</p>
-<p><span class="math display">\[
-\begin{align*}
-\phi_{i|y=1} &amp;= p(x_j = i \mid y=1)\\
-\phi_{i|y=0} &amp;= p(x_j = i \mid y=0)\\
-\phi_y &amp;= p(y)
-\end{align*}
-\]</span></p>
-<p>注意：我们假设 $p(x_jy) $ 对所有的 <span class="math inline">\(j\)</span>（邮件中词语的位置）都是一样的。</p>
-<p>如果给定一个训练集 <span class="math inline">\(\{(x^{(i)},y^{(i)}); i=1,\ldots,m\} \;\text{where} \;x^{(i)} = (x_1^{(i)},x_2^{(i)},\dots,x_{n_i}^{(i)})\)</span>，这里 <span class="math inline">\(n_i\)</span> 表示第 <span class="math inline">\(i\)</span> 个训练样本的词数，那么数据的似然函数可以表示为：</p>
-<p><span class="math display">\[
-\begin{align*}
-\mathcal{L} (\phi_y,\phi_{i|y=0},\phi_{i|y=1}) &amp;= \prod_{i=1}^m p(x^{(i)},y^{(i)}) \\
-&amp;= \prod_{i=1}^m \left(\prod_{j=1}^{n_i} p(x_j^{(i)}\mid y;\phi_{i|y=0},\phi_{i|y=1}) \right) p(y^{(i)};\phi_y)
-\end{align*}
-\]</span></p>
-<p>最大似然估计得出的结果如下：</p>
-<p><span class="math display">\[
-\begin{align*}
-\phi_{k|y=1} &amp;= \frac{\sum_{i=1}^m\sum_{j=1}^{n_i}1\{x_j^{(i)}=k \wedge y^{(i)}=1\}}{\sum_{i=1}^m 1\{y^{(i)}=1\}n_i} \\
-\phi_{k|y=0} &amp;= \frac{\sum_{i=1}^m\sum_{j=1}^{n_i} 1\{x_j^{(i)}=k \wedge y^{(i)}=0\}}{\sum_{i=1}^m 1\{y^{(i)}=0\}n_i} \\
-\phi_y &amp;= \frac {\sum_{i=1}^m 1\{y^{(i)} = 1\}}{m}
-\end{align*}
-\]</span></p>
-<p>可以看到，这里在考虑字典中索引为k的词时，会把在每个文本中出现的次数相加，所以该模型相比于之前的模型，不仅仅考虑是否出现，还考虑了出现的次数。</p>
-<p>如果有要应用拉普拉斯平滑，可以在分子加1，分母加 <span class="math inline">\(|V|\)</span>，得到：</p>
-<p><span class="math display">\[
-\begin{align*}
-\phi_{k|y=1} &amp;= \frac{\sum_{i=1}^m\sum_{j=1}^{n_i}1\{x_j^{(i)}=k \wedge y^{(i)}=1\}+1}{\sum_{i=1}^m 1\{y^{(i)}=1\}n_i+|V|} \\
-\phi_{k|y=0} &amp;= \frac{\sum_{i=1}^m\sum_{j=1}^{n_i} 1\{x_j^{(i)}=k \wedge y^{(i)}=0\}+1}{\sum_{i=1}^m 1\{y^{(i)}=0\}n_i+|V|} 
-\end{align*}
-\]</span></p>
-<p>虽然朴素贝叶斯不是最好的分类算法，但因为其易于实现，所以非常适合作为你的第一个尝试。</p>
+\right.
+\]</span> 可以看到它是逻辑回归的s型函数的简化形式，逻辑函数是连续的在 [0,1] 区间上，而感知器直接非0则1。如果我们令<span class="math inline">\(h_\theta(x)=g(\theta^Tx)\)</span>，得到如下的更新规则： <span class="math display">\[
+\theta_j := \theta_j +\alpha\left(y^{(i)}-h_\theta(x^{(i)})\right)x^{(i)}_j
+\]</span> 即<strong>感知器学习算法</strong>。</p>
+<p>19世纪60年代，感知器被看作是大脑工作中独立神经元的粗糙的模型，由于简单，会用作后面介绍的学习理论的起点。虽然直观看上去，感知器和之前看到的逻辑回归或线性回归很像，但是其实是非常不一样的算法。 因为，对于感知器，很难赋予一种有意义的概率解释，或使用最大似然估计算法来进行推导。</p>
+<h3 id="牛顿方法">牛顿方法</h3>
+<p>下面我们介绍另外一种算法来求解<span class="math inline">\(\ell (\theta)\)</span>的最大值，称为<strong>牛顿方法</strong>。</p>
+<p>我们通过如下的几张图来理解牛顿方法：</p>
+<p><img src="/images/cs229-3-2.png" width="70%" height="70%"></p>
+<p>对于梯度下降，每次只是在梯度方向上下降一小步（取决于学习速率），而牛顿方法是一直下降到导数（切线）和<span class="math inline">\(\theta\)</span>轴交界的那个<span class="math inline">\(\theta\)</span>。因此牛顿方法的更新规则是： <span class="math display">\[
+\theta := \theta - \frac {f(\theta)} {f&#39; (\theta)}
+\]</span> 下面我们将牛顿方法应用于逻辑回归，我们需要找到<span class="math inline">\(\ell (\theta)\)</span>的最大值，即<span class="math inline">\(\ell &#39;(\theta)=0\)</span>，因此令<span class="math inline">\(f(\theta)=\ell &#39;(\theta)\)</span>，我们可以得到逻辑回归的牛顿方法更新公式： <span class="math display">\[
+\theta := \theta - \frac {\ell &#39;(\theta)} {\ell &#39;&#39; (\theta)}
+\]</span> 而对于<span class="math inline">\(\theta\)</span>为向量的情况，牛顿方法的多维形式如下（又被称为<strong>牛顿-拉夫逊方法</strong>）： <span class="math display">\[
+\theta := \theta - H^{-1} \nabla_\theta \ell(\theta)
+\]</span> 其中<span class="math inline">\(\ \nabla_\theta \ell(\theta)\)</span>是<span class="math inline">\(\ell(\theta)\)</span>对于每个<span class="math inline">\(\theta_i\)</span>的偏导数构成的向量，<span class="math inline">\(H\)</span>是一个<span class="math inline">\((n+1)\times (n+1)\)</span>的矩阵（包括截距项），称为 <strong>海森矩阵</strong>，其中的每一项定义为： <span class="math display">\[
+H_{ij}=\frac {\partial^2 \ell(\theta)} {\partial \theta_i \partial \theta_j}
+\]</span> 和（批量）梯度下降相比，牛顿方法会带来更快的收敛速度和更少的迭代次数。虽然每次迭代由于要计算<span class="math inline">\(H^{-1}\)</span>，导致计算量较大，但对于参数数量不是特别大的情况，总的来说它还是更快的。将牛顿方法用于求解逻辑回归的对数似然函数最大值，也被称为<strong>费雪评分</strong>。</p>
 
       
     </div>
@@ -544,8 +496,8 @@ p(y=1 \mid x) &amp;= \frac {(\prod_{i=1}^n p(x_i \mid y=1))p(y=1)}{(\prod_{i=1}^
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/04/01/CS229-5/" rel="next" title="CS229学习笔记之五：生成学习算法">
-                <i class="fa fa-chevron-left"></i> CS229学习笔记之五：生成学习算法
+              <a href="/2018/03/15/CS229-2/" rel="next" title="CS229学习笔记之二：概率解释与局部加权线性回归">
+                <i class="fa fa-chevron-left"></i> CS229学习笔记之二：概率解释与局部加权线性回归
               </a>
             
           </div>
@@ -554,8 +506,8 @@ p(y=1 \mid x) &amp;= \frac {(\prod_{i=1}^n p(x_i \mid y=1))p(y=1)}{(\prod_{i=1}^
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/04/16/CS229-7/" rel="prev" title="CS229学习笔记之七：支持向量机">
-                CS229学习笔记之七：支持向量机 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/03/22/CS229-4/" rel="prev" title="CS229学习笔记之四：广义线性模型">
+                CS229学习笔记之四：广义线性模型 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -726,7 +678,7 @@ p(y=1 \mid x) &amp;= \frac {(\prod_{i=1}^n p(x_i \mid y=1))p(y=1)}{(\prod_{i=1}^
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#朴素贝叶斯算法"><span class="nav-number">1.</span> <span class="nav-text">朴素贝叶斯算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#拉普拉斯平滑"><span class="nav-number">2.</span> <span class="nav-text">拉普拉斯平滑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文本分类的事件模型"><span class="nav-number">3.</span> <span class="nav-text">文本分类的事件模型</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#逻辑回归"><span class="nav-number">1.</span> <span class="nav-text">逻辑回归</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#感知器学习算法"><span class="nav-number">2.</span> <span class="nav-text">感知器学习算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#牛顿方法"><span class="nav-number">3.</span> <span class="nav-text">牛顿方法</span></a></li></ol></div>
             
 
           </div>
