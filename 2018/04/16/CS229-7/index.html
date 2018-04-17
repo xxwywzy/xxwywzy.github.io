@@ -110,7 +110,7 @@
 <meta property="og:image" content="http://yoursite.com/images/cs229-7-1.png">
 <meta property="og:image" content="http://yoursite.com/images/cs229-7-2.png">
 <meta property="og:image" content="http://yoursite.com/images/cs229-7-3.png">
-<meta property="og:updated_time" content="2018-04-16T02:44:26.018Z">
+<meta property="og:updated_time" content="2018-04-17T07:58:40.123Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS229学习笔记之七：支持向量机">
 <meta name="twitter:description" content="本篇博客为CS229第七篇学习笔记，主要内容为对支持向量机算法的系统介绍。">
@@ -615,7 +615,18 @@ w^Tx+b &amp; = {\left(\sum_{i=1}^m\alpha_iy^{(i)}x^{(i)}\right)}^Tx+b \\ &amp; =
 <p>通过上式我们发现，现在新来一个数据，我们只需要计算它与训练样本的内积即可。并且通过前面的 KKT 对偶互补条件我们知道，只有除了支持向量的那些样本，都有 <span class="math inline">\(\alpha_i = 0\)</span>，所以，我们只需要将新样本与支持向量进行内积即可进行预测。</p>
 <p>通过求解优化问题的对偶形式，我们对要解决的问题的结构有了更为深入的理解，并且还根据输入特征向量之间的内积来表示整个算法。 在下一节中，我们将充分利用这些内容，对我们的分类问题使用<strong>核方法</strong>。 最终得到的算法，就是<strong>支持向量机</strong>，其将能够在非常高的维度空间中进行有效地学习。</p>
 <h3 id="核">核</h3>
-<p>未完待续~</p>
+<p>在之前的线性回归模型中，我们探讨了使用多项式回归来解决房价预测问题：给定输入 <span class="math inline">\(x\)</span> 为房屋面积，考虑使用 <span class="math inline">\(x,x^2,x^3\)</span> 作为特征来进行回归。这里给出如下定义：将原始的输入值称为<strong>属性（attributes）</strong>，在房价预测问题中即为 <span class="math inline">\(x\)</span> ，将其映射到的新的输入数据集称为<strong>特征（features）</strong>，在房价预测问题中即为 <span class="math inline">\(x,x^2,x^3\)</span> 。我们使用 <span class="math inline">\(\phi\)</span> 来表示这种将属性映射为特征的<strong>特征映射</strong>，对于房价预测问题：</p>
+<p><span class="math display">\[
+\phi(x) = \begin{bmatrix}  x \\ x^2 \\ x^3 \end{bmatrix}
+\]</span></p>
+<p>在 SVM 中，我们希望使用某些特征 <span class="math inline">\(\phi(x)\)</span> 来替代原始的输入属性 <span class="math inline">\(x\)</span> 来进行学习。为了做到这一点，我们只需要简单地在原来的算法中将所有的 <span class="math inline">\(x\)</span> 替换为 <span class="math inline">\(\phi(x)\)</span> 就行了。</p>
+<p>而我们知道，SVM 可以表示为内积 <span class="math inline">\(\langle x,z\rangle\)</span> 的形式，这代表我们可以将所有的内积替换为 <span class="math inline">\(\langle \phi(x),\phi(z)\rangle\)</span>。特别地，给定一个特征映射 <span class="math inline">\(\phi4\)</span>，我们定义相应的<strong>核（Kernel）</strong>为：</p>
+<p><span class="math display">\[
+K(x,z) = \phi(x)^T\phi(z)
+\]</span></p>
+<p>这样对于算法中所有的内积 <span class="math inline">\(\langle x,z\rangle\)</span>，我们可以使用 <span class="math inline">\(K(x,z)\)</span> 进行替换。</p>
+<p>现在，给定一个映射 <span class="math inline">\(\phi\)</span>，我们可以通过找出 <span class="math inline">\(\phi(x)\)</span> 和 <span class="math inline">\(\phi(z)\)</span> 并计算其内积来得出 <span class="math inline">\(K(x,z)\)</span>，然而有趣的是，直接计算 <span class="math inline">\(K(x,z)\)</span> 的代价有时会比较低，即便 <span class="math inline">\(\phi(x)\)</span> 本身可能是一个非常高维的向量，计算起来代价较高。在这种情况下，我们可以在 <span class="math inline">\(\phi\)</span> 给出的高维特征空间中执行 SVM 算法（解决低维空间中线性不可分的情况），并且不用去计算 <span class="math inline">\(\phi(x)\)</span> 的具体值。</p>
+<p>让我们看一个具体的例子。</p>
 
       
     </div>
