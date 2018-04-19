@@ -110,7 +110,7 @@
 <meta property="og:image" content="http://yoursite.com/images/cs229-7-1.png">
 <meta property="og:image" content="http://yoursite.com/images/cs229-7-2.png">
 <meta property="og:image" content="http://yoursite.com/images/cs229-7-3.png">
-<meta property="og:updated_time" content="2018-04-17T07:58:40.123Z">
+<meta property="og:updated_time" content="2018-04-19T12:42:33.401Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS229学习笔记之七：支持向量机">
 <meta name="twitter:description" content="本篇博客为CS229第七篇学习笔记，主要内容为对支持向量机算法的系统介绍。">
@@ -626,7 +626,23 @@ K(x,z) = \phi(x)^T\phi(z)
 \]</span></p>
 <p>这样对于算法中所有的内积 <span class="math inline">\(\langle x,z\rangle\)</span>，我们可以使用 <span class="math inline">\(K(x,z)\)</span> 进行替换。</p>
 <p>现在，给定一个映射 <span class="math inline">\(\phi\)</span>，我们可以通过找出 <span class="math inline">\(\phi(x)\)</span> 和 <span class="math inline">\(\phi(z)\)</span> 并计算其内积来得出 <span class="math inline">\(K(x,z)\)</span>，然而有趣的是，直接计算 <span class="math inline">\(K(x,z)\)</span> 的代价有时会比较低，即便 <span class="math inline">\(\phi(x)\)</span> 本身可能是一个非常高维的向量，计算起来代价较高。在这种情况下，我们可以在 <span class="math inline">\(\phi\)</span> 给出的高维特征空间中执行 SVM 算法（解决低维空间中线性不可分的情况），并且不用去计算 <span class="math inline">\(\phi(x)\)</span> 的具体值。</p>
-<p>让我们看一个具体的例子。</p>
+<p>让我们看一个例子。假设 <span class="math inline">\(x,z \in \mathbb{R}^n\)</span>，对于下面的核：</p>
+<p><span class="math display">\[
+K(x,z)=(x^Tz)^2
+\]</span></p>
+<p>我们可以将其改写为：</p>
+<p><span class="math display">\[
+\begin{align*}
+K(x,z) &amp;= \left(\sum_{i=1}^nx_iz_i\right)\left(\sum_{i=1}^nx_iz_i\right) \\
+&amp;= \sum_{i=1}^n\sum_{j=1}^nx_ix_jz_iz_j \\
+&amp;= \sum_{i,j=1}^n(x_ix_j)(z_iz_j)
+\end{align*}
+\]</span></p>
+<p>这样我们就有 <span class="math inline">\(K(x,z) = \phi(x)^T\phi(z)\)</span>，其中特征映射 <span class="math inline">\(\phi\)</span> 如下所示（假设 n = 3）：</p>
+<p><span class="math display">\[
+\phi(x) = \begin{bmatrix}  x _1x_1\\ x _1x_2 \\ x _1x_3 \\ x _2x_1  \\ x _2x_2  \\ x _2x_3  \\ x _3x_1  \\ x _3x_2  \\ x _3x_3\end{bmatrix}.
+\]</span></p>
+<p>在这个例子中，直接计算 <span class="math inline">\(K(x,z)\)</span> 需要的时间复杂度仅为 <span class="math inline">\(O(n)\)</span>，而计算 <span class="math inline">\(\phi(x)\)</span> 需要的时间复杂度为 <span class="math inline">\(O(n^2)\)</span>，而映射后特征内积和原始特征的内积平方是等价的，因此使用恰当的核可以大大缩短计算时间。</p>
 
       
     </div>
