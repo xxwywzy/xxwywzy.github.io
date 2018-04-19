@@ -110,7 +110,7 @@
 <meta property="og:image" content="http://yoursite.com/images/cs229-7-1.png">
 <meta property="og:image" content="http://yoursite.com/images/cs229-7-2.png">
 <meta property="og:image" content="http://yoursite.com/images/cs229-7-3.png">
-<meta property="og:updated_time" content="2018-04-19T12:43:27.427Z">
+<meta property="og:updated_time" content="2018-04-19T12:52:00.075Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS229学习笔记之七：支持向量机">
 <meta name="twitter:description" content="本篇博客为CS229第七篇学习笔记，主要内容为对支持向量机算法的系统介绍。">
@@ -642,7 +642,19 @@ K(x,z) &amp;= \left(\sum_{i=1}^nx_iz_i\right)\left(\sum_{i=1}^nx_iz_i\right) \\
 <p><span class="math display">\[
 \phi(x) = \begin{bmatrix}  x _1x_1\\ x _1x_2 \\ x _1x_3 \\ x _2x_1  \\ x _2x_2  \\ x _2x_3  \\ x _3x_1  \\ x _3x_2  \\ x _3x_3\end{bmatrix}.
 \]</span></p>
-<p>在这个例子中，直接计算 <span class="math inline">\(K(x,z)\)</span> 需要的时间复杂度仅为 <span class="math inline">\(O(n)\)</span>，而计算 <span class="math inline">\(\phi(x)\)</span> 需要的时间复杂度为 <span class="math inline">\(O(n^2)\)</span>，而映射后特征内积和原始特征的内积平方是等价的，因此使用恰当的核可以大大缩短计算时间。</p>
+<p>在这个例子中，直接计算 <span class="math inline">\(K(x,z)\)</span> 需要的时间复杂度仅为 <span class="math inline">\(O(n)\)</span>，而计算 <span class="math inline">\(\phi(x)\)</span> 需要的时间复杂度为 <span class="math inline">\(O(n^2)\)</span>。实际上映射后特征内积和原始特征的内积平方是等价的，因此使用恰当的核可以大大缩短计算时间。</p>
+<p>让我们再来看另外一个核：</p>
+<p><span class="math display">\[
+\begin{align*}
+K(x,z) &amp;= (x^Tz + c)^2 \\
+&amp;= \sum_{i,j=1}^n(x_ix_j)(z_iz_j) + \sum_{i=1}^n(\sqrt{2c}x_i)(\sqrt{2c}z_i) + c^2.
+\end{align*}
+\]</span></p>
+<p>其对应如下的特征映射（n = 3）：</p>
+<p><span class="math display">\[
+\phi(x) = \begin{bmatrix}  x_1x_1\\ x_1x_2 \\  x_1x_3 \\ x_2x_1  \\ x_2x_2  \\ x_2x_3  \\ x_3x_1  \\ x_3x_2  \\ x_3x_3  \\ \sqrt{2c}x_1 \\ \sqrt{2c}x_2 \\ \sqrt{2c}x_3 \\ c\end{bmatrix},
+\]</span></p>
+<p>其中参数 c 控制 <span class="math inline">\(x_i\)</span> （一阶项）和 <span class="math inline">\(x_ix_j\)</span> （二阶项）之间的相对权重。</p>
 
       
     </div>
