@@ -110,7 +110,7 @@
 <meta property="og:image" content="http://yoursite.com/images/cs229-7-1.png">
 <meta property="og:image" content="http://yoursite.com/images/cs229-7-2.png">
 <meta property="og:image" content="http://yoursite.com/images/cs229-7-3.png">
-<meta property="og:updated_time" content="2018-04-19T14:46:03.033Z">
+<meta property="og:updated_time" content="2018-04-21T14:13:44.955Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS229学习笔记之七：支持向量机">
 <meta name="twitter:description" content="本篇博客为CS229第七篇学习笔记，主要内容为对支持向量机算法的系统介绍。">
@@ -660,6 +660,7 @@ K(x,z) &amp;= (x^Tz + c)^2 \\
 K(x,z)=(x^Tz+c)^d
 \]</span></p>
 <p>其将 n 维的原始输入属性映射到 <span class="math inline">\({ {n+d} \choose d }\)</span> 维的特征空间。特征向量中每个元素都是最高为 d 阶的变量的组合。如果计算 <span class="math inline">\(\phi\)</span> 的话，需要 <span class="math inline">\(O(n^d)\)</span> 的时间复杂度，而直接计算 <span class="math inline">\(K(x,z)\)</span> 依旧只需要 <span class="math inline">\(O(n)\)</span> 的时间复杂度，这进一步体现了核函数降低计算量的好处。</p>
+<h4 id="关于多项式核的维数问题">关于多项式核的维数问题</h4>
 <p>这里对一个困扰了我一天的问题做一个记录。在上一段中，我们知道 <span class="math inline">\(K(x,z)=(x^Tz+c)^d\)</span> 对应的特征空间的维数为 <span class="math inline">\({ {n+d} \choose d }\)</span>，然而在第二个例子中，核 <span class="math inline">\(K(x,z) = (x^Tz + c)^2\)</span> 对应的特征空间为 <strong>13</strong> 维，但根据公式，其特征空间维数应为：</p>
 <p><span class="math display">\[
 \begin{align*}
@@ -680,7 +681,29 @@ K(x,z) &amp;= (x^Tz + c)^2 \\
 \phi(x) = \begin{bmatrix}  x_1x_1\\ x_2x_2 \\  x_3x_3 \\ \sqrt2x_2x_1  \\ \sqrt2x_3x_1  \\ \sqrt2x_3x_2   \\ \sqrt{2c}x_1 \\ \sqrt{2c}x_2 \\ \sqrt{2c}x_3 \\ c\end{bmatrix}.
 \]</span></p>
 <p>原来如此。这里再做一些延伸：<span class="math inline">\(K(x,z)=(x^Tz+c)^d\)</span> 被称为<strong><a href="https://en.wikipedia.org/wiki/Polynomial_kernel" target="_blank" rel="noopener">多项式核</a>（Polynomial kernel）</strong>，关于其特征空间的维数公式的<a href="http://www.cs.cmu.edu/~ninamf/ML11/lect1020.pdf" target="_blank" rel="noopener">证明</a>如下：</p>
-<p>待更新。</p>
+<p><strong>命题</strong>：多项式核对应的特征空间维数为 <span class="math inline">\({ {n+d} \choose d }\)</span>。</p>
+<p><strong>证明</strong>：我们使用数学归纳法进行证明。</p>
+<p>第一步：对于 <span class="math inline">\(n = 1\)</span>，易知维数为 <span class="math inline">\(d + 1\)</span>，而对于 <span class="math inline">\(d = 1\)</span>，易知维数为 <span class="math inline">\(n + 1\)</span>，满足命题。</p>
+<p>第二步：对于 <span class="math inline">\(K(x,z)=(x^Tz+c)^d\)</span>，其特征向量的每个元素都是最高为 d 阶的变量的组合，即 <span class="math inline">\(x_1^{i_1}x_1^{i_2}\cdots x_n^{i_n}\)</span>，其中 <span class="math inline">\(i_j \in N\)</span> 且 <span class="math inline">\(\sum_{j=1}^ni_j \le d\)</span>。我们可以将这些元素分为两类，一类是包含因子 <span class="math inline">\(x_1\)</span> 的（至少一个），一类是不包含因子 <span class="math inline">\(x_1\)</span> 的（即 <span class="math inline">\(i_1\)</span> = 0）。对于第一类元素，其相当于将阶数 d 缩小了一阶（可以理解为固定一个因子不变，则可变的部分与之前相比就减少了一阶），因此这部分元素的数目为 <span class="math inline">\(f(n,d-1)\)</span>。（假设其元素数目为 n 与 d 的某种函数）对于第二类元素，其相当于将原始属性的维数 n 缩小了一维（去掉了一个因子），因此这部分元素的数目为 <span class="math inline">\(f(n-1,d)\)</span>，综上我们有：</p>
+<p><span class="math display">\[
+f(n,d) = f(n-1,d) + f(n, d-1)
+\]</span></p>
+<p>第三步：假设 <span class="math inline">\(n = n-1\)</span> 和 <span class="math inline">\(d = d-1\)</span> 的时候命题成立，则：</p>
+<p><span class="math display">\[
+\begin{align*}
+f(n-1,d) &amp;= { {n-1+d} \choose d } \\
+f(n,d-1) &amp;= { {n+d-1} \choose d-1 } 
+\end{align*}
+\]</span></p>
+<p>那么根据组合数的定义，我们有：</p>
+<p><span class="math display">\[
+\begin{align*}
+f(n,d) &amp;= f(n-1,d) + f(n, d-1) \\
+&amp;=  { {n-1+d} \choose d } + { {n+d-1} \choose d-1 }  \\
+&amp;= { {n+d} \choose d }
+\end{align*}
+\]</span></p>
+<p>满足命题，因此原命题对于任意的 n 和 d 均成立。</p>
 <p>好的，终于可以回到正题了。</p>
 
       
@@ -917,7 +940,7 @@ K(x,z) &amp;= (x^Tz + c)^2 \\
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#间隔直观描述"><span class="nav-number">1.</span> <span class="nav-text">间隔：直观描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#符号变换"><span class="nav-number">2.</span> <span class="nav-text">符号变换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数间隔与几何间隔"><span class="nav-number">3.</span> <span class="nav-text">函数间隔与几何间隔</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最优间隔分类器"><span class="nav-number">4.</span> <span class="nav-text">最优间隔分类器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#拉格朗日对偶性"><span class="nav-number">5.</span> <span class="nav-text">拉格朗日对偶性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最优间隔分类器的求解"><span class="nav-number">6.</span> <span class="nav-text">最优间隔分类器的求解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#核"><span class="nav-number">7.</span> <span class="nav-text">核</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#间隔直观描述"><span class="nav-number">1.</span> <span class="nav-text">间隔：直观描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#符号变换"><span class="nav-number">2.</span> <span class="nav-text">符号变换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数间隔与几何间隔"><span class="nav-number">3.</span> <span class="nav-text">函数间隔与几何间隔</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最优间隔分类器"><span class="nav-number">4.</span> <span class="nav-text">最优间隔分类器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#拉格朗日对偶性"><span class="nav-number">5.</span> <span class="nav-text">拉格朗日对偶性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最优间隔分类器的求解"><span class="nav-number">6.</span> <span class="nav-text">最优间隔分类器的求解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#核"><span class="nav-number">7.</span> <span class="nav-text">核</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#关于多项式核的维数问题"><span class="nav-number">7.1.</span> <span class="nav-text">关于多项式核的维数问题</span></a></li></ol></li></ol></div>
             
 
           </div>
