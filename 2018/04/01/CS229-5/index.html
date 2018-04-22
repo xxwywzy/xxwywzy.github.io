@@ -1042,11 +1042,11 @@ p(y=1 \mid x;\phi,\Sigma,\mu_0,\mu_1) = \frac 1 {1+\exp(-\theta^T x)}
             counter.fetchWhenSave(true);
             counter.increment("time");
             
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text(counter.get('time'));
+            
             counter.save(null, {
               success: function(counter) {
-                
-                  var $element = $(document.getElementById(url));
-                  $element.find('.leancloud-visitors-count').text(counter.get('time'));
                 
               },
               error: function(counter, error) {
