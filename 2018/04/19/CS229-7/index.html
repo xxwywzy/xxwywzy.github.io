@@ -114,7 +114,7 @@
 <meta property="og:image" content="http://yoursite.com/images/cs229-7-1.png">
 <meta property="og:image" content="http://yoursite.com/images/cs229-7-2.png">
 <meta property="og:image" content="http://yoursite.com/images/cs229-7-3.png">
-<meta property="og:updated_time" content="2018-04-22T13:59:41.239Z">
+<meta property="og:updated_time" content="2018-04-22T14:05:23.728Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS229学习笔记之七：支持向量机">
 <meta name="twitter:description" content="本篇博客为CS229第七篇学习笔记，主要内容为对支持向量机算法的系统介绍。">
@@ -763,7 +763,7 @@ z^TKz &amp;= \sum_i\sum_j z_iK_{ij}z_j\\
 \]</span></p>
 <p>因为 z 是任意的，所以 <span class="math inline">\(K\)</span> 是一个<strong>半正定矩阵（positive semi-definite）</strong>。</p>
 <p>综上所述，我们证明了如果 <span class="math inline">\(K\)</span> 是一个合法的核，则其对应的核矩阵 <span class="math inline">\(K \in \mathbb{R}^{m \times m}\)</span> 是对称半正定矩阵。其实，这不仅是一个必要条件，也是一个充分条件。<strong>Mercer 定理</strong> 指出：给定一个函数 <span class="math inline">\(K\)</span> : <span class="math inline">\(\mathbb{R}^n \times \mathbb{R}^n \to \mathbb{R}\)</span> ，则 <span class="math inline">\(K\)</span> 为合法核（又称为 Mercer 核）的充要条件为对于任意的有限数据集 <span class="math inline">\(\lbrace x^{(1)},…,x^{(m)}\rbrace, (m\lt\infty)\)</span>，其对应的核矩阵为对称半正定矩阵。</p>
-<p>对于核来说，其不仅仅只存在于 SVM 中，对于任意的算法，只要计算时出现了内积，都可以用核函数替代，从而提高在高维数据上的性能，比如感知器算法，代入后可发展为核感知器算法。这就是我们所说的<strong>“核技法”（kernel trick）</strong>。</p>
+<p>对于核来说，其不仅仅只存在于 SVM 中，对于任意的算法，只要计算时出现了内积，都可以用核函数替代，从而提高在高维数据上的性能，比如感知器算法，代入后可发展为核感知器算法。这就是所谓的<strong>“核技法”（kernel trick）</strong>。</p>
 
       
     </div>
