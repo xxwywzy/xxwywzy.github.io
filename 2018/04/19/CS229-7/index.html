@@ -114,7 +114,7 @@
 <meta property="og:image" content="http://yoursite.com/images/cs229-7-1.png">
 <meta property="og:image" content="http://yoursite.com/images/cs229-7-2.png">
 <meta property="og:image" content="http://yoursite.com/images/cs229-7-3.png">
-<meta property="og:updated_time" content="2018-04-22T07:45:39.663Z">
+<meta property="og:updated_time" content="2018-04-22T13:59:41.239Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS229学习笔记之七：支持向量机">
 <meta name="twitter:description" content="本篇博客为CS229第七篇学习笔记，主要内容为对支持向量机算法的系统介绍。">
@@ -659,7 +659,7 @@ w^Tx+b &amp; = {\left(\sum_{i=1}^m\alpha_iy^{(i)}x^{(i)}\right)}^Tx+b \\ &amp; =
 \phi(x) = \begin{bmatrix}  x \\ x^2 \\ x^3 \end{bmatrix}
 \]</span></p>
 <p>在 SVM 中，我们希望使用某些特征 <span class="math inline">\(\phi(x)\)</span> 来替代原始的输入属性 <span class="math inline">\(x\)</span> 来进行学习。为了做到这一点，我们只需要简单地在原来的算法中将所有的 <span class="math inline">\(x\)</span> 替换为 <span class="math inline">\(\phi(x)\)</span> 就行了。</p>
-<p>而我们知道，SVM 可以表示为内积 <span class="math inline">\(\langle x,z\rangle\)</span> 的形式，这代表我们可以将所有的内积替换为 <span class="math inline">\(\langle \phi(x),\phi(z)\rangle\)</span>。特别地，给定一个特征映射 <span class="math inline">\(\phi4\)</span>，我们定义相应的<strong>核（Kernel）</strong>为：</p>
+<p>而我们知道，SVM 可以表示为内积 <span class="math inline">\(\langle x,z\rangle\)</span> 的形式，这代表我们可以将所有的内积替换为 <span class="math inline">\(\langle \phi(x),\phi(z)\rangle\)</span>。特别地，给定一个特征映射 <span class="math inline">\(\phi\)</span>，我们定义相应的<strong>核（Kernel）</strong>为：</p>
 <p><span class="math display">\[
 K(x,z) = \phi(x)^T\phi(z)
 \]</span></p>
@@ -743,7 +743,27 @@ f(n,d) &amp;= f(n-1,d) + f(n, d-1) \\
 \end{align*}
 \]</span></p>
 <p>满足命题，因此原命题对于任意的 n 和 d 均成立。</p>
-<p>好的，终于可以回到正题了。</p>
+<p>好的，终于可以回到正题了。从直观上来看，如果 <span class="math inline">\(\phi(x)\)</span> 和 <span class="math inline">\(\phi(z)\)</span> 在空间中很接近，那么内积值 <span class="math inline">\(K(x,z) = \phi(x)^T\phi(z)\)</span> 就会很大，反正则会很小，这意味着我们可以将 <span class="math inline">\(K(x,z)\)</span> 看做是度量 <span class="math inline">\(\phi(x)\)</span> 和 <span class="math inline">\(\phi(z)\)</span> 之间相似度的函数，也即度量 <span class="math inline">\(x\)</span> 和 <span class="math inline">\(z\)</span> 之间的相似度。（实际上这一观点并不一定正确）</p>
+<p>根据以上观点，我们会考虑选择能够度量 <span class="math inline">\(x\)</span> 和 <span class="math inline">\(z\)</span> 之间的相似度的函数作为核函数，例如：</p>
+<p><span class="math display">\[
+K(x,z) = \exp\left(-\frac{||x-z||^2}{2\sigma^2}\right).
+\]</span></p>
+<p>这看上去是一个合理的核函数，它能够度量 <span class="math inline">\(x\)</span> 和 <span class="math inline">\(z\)</span> 之间的相似度，当 <span class="math inline">\(x\)</span> 和 <span class="math inline">\(z\)</span> 比较接近时，该函数趋向于 1 ，当 <span class="math inline">\(x\)</span> 和 <span class="math inline">\(z\)</span> 比较远离时，函数趋向于 0 。那么这个核函数究竟是否合法呢？答案是肯定的（这个核函数被称为<strong>高斯核函数</strong>，其对应的特征空间为无暇维）。一般来说，给定一个函数 <span class="math inline">\(K\)</span> ，我们如何判断它是否为一个合法的核函数呢？这个问题等价于判断 <span class="math inline">\(K\)</span> 是否可以拆分成映射函数的内积，如果可以拆分，那么 <span class="math inline">\(K\)</span> 就是一个合法的核函数。</p>
+<p>下面让我们来解决这个问题。假设 <span class="math inline">\(K\)</span> 是一个合法的核，其对应的特征映射为 <span class="math inline">\(\phi\)</span> ，现在给定一个含有 m 个样本的有限数据集 <span class="math inline">\(\{x^{(1)},\ldots,x^{(m)}\}\)</span>，定义一个 m*m 的矩阵 <span class="math inline">\(K\)</span> ，其中 <span class="math inline">\(K_{ij} = K(x^{(i)},x^{(j)})\)</span> ，这个矩阵被称为<strong>核矩阵</strong>。注意这里 <span class="math inline">\(K\)</span> 既代表核函数，又代表核矩阵。</p>
+<p>对于核矩阵，有几个性质。首先，<span class="math inline">\(K_{ij} = K(x^{(i)},x^{(j)}) = \phi(x^{(i)})^T\phi(x^{(j)}) = \phi(x^{(j)})^T\phi(x^{(i)}) = K_{ji}\)</span> ，因此 <span class="math inline">\(K\)</span> 是一个<strong>对称</strong>矩阵。其次，令 <span class="math inline">\(\phi_k(x)\)</span> 表示向量 <span class="math inline">\(\phi(x)\)</span> 的第 k 维分量，我们可以发现对于任意的 m 维向量 z ，有：</p>
+<p><span class="math display">\[
+\begin{align*}
+z^TKz &amp;= \sum_i\sum_j z_iK_{ij}z_j\\
+&amp;= \sum_i\sum_j z_i\phi(x^{(i)})^T\phi(x^{(j)})z_j  \\
+&amp; =\sum_i\sum_j z_i\sum_k\phi_k(x^{(i)})\phi_k(x^{(j)})z_j \\
+&amp; =\sum_k\sum_i\sum_j z_i\phi_k(x^{(i)})\phi_k(x^{(j)})z_j \\
+&amp; = \sum_k \left(\sum_i z_i\phi_k(x^{(i)})\right)^2 \\
+&amp; \ge 0.
+\end{align*}
+\]</span></p>
+<p>因为 z 是任意的，所以 <span class="math inline">\(K\)</span> 是一个<strong>半正定矩阵（positive semi-definite）</strong>。</p>
+<p>综上所述，我们证明了如果 <span class="math inline">\(K\)</span> 是一个合法的核，则其对应的核矩阵 <span class="math inline">\(K \in \mathbb{R}^{m \times m}\)</span> 是对称半正定矩阵。其实，这不仅是一个必要条件，也是一个充分条件。<strong>Mercer 定理</strong> 指出：给定一个函数 <span class="math inline">\(K\)</span> : <span class="math inline">\(\mathbb{R}^n \times \mathbb{R}^n \to \mathbb{R}\)</span> ，则 <span class="math inline">\(K\)</span> 为合法核（又称为 Mercer 核）的充要条件为对于任意的有限数据集 <span class="math inline">\(\lbrace x^{(1)},…,x^{(m)}\rbrace, (m\lt\infty)\)</span>，其对应的核矩阵为对称半正定矩阵。</p>
+<p>对于核来说，其不仅仅只存在于 SVM 中，对于任意的算法，只要计算时出现了内积，都可以用核函数替代，从而提高在高维数据上的性能，比如感知器算法，代入后可发展为核感知器算法。这就是我们所说的<strong>“核技法”（kernel trick）</strong>。</p>
 
       
     </div>
