@@ -110,14 +110,15 @@
 <meta property="og:site_name" content="xxwywzy&#39;s Blog">
 <meta property="og:description" content="本篇博客为CS229第七篇学习笔记，主要内容为对支持向量机算法的系统介绍。">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/cs229-7-0.png">
 <meta property="og:image" content="http://yoursite.com/images/cs229-7-1.png">
 <meta property="og:image" content="http://yoursite.com/images/cs229-7-2.png">
 <meta property="og:image" content="http://yoursite.com/images/cs229-7-3.png">
-<meta property="og:updated_time" content="2018-04-21T14:13:44.955Z">
+<meta property="og:updated_time" content="2018-04-22T07:45:39.663Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS229学习笔记之七：支持向量机">
 <meta name="twitter:description" content="本篇博客为CS229第七篇学习笔记，主要内容为对支持向量机算法的系统介绍。">
-<meta name="twitter:image" content="http://yoursite.com/images/cs229-7-1.png">
+<meta name="twitter:image" content="http://yoursite.com/images/cs229-7-0.png">
 
 
 
@@ -423,7 +424,8 @@
       
 
       
-        <p>本篇博客为CS229第七篇学习笔记，主要内容为对支持向量机算法的系统介绍。</p>
+        <p><img src="/images/cs229-7-0.png" width="75%" height="75%"></p>
+<p>本篇博客为CS229第七篇学习笔记，主要内容为对支持向量机算法的系统介绍。</p>
 <a id="more"></a>
 <p>支持向量机（Support Vector Machines）被认为是最好的监督学习算法之一。这里先简要说明一下理解SVM的必要的几个部分（本段引用自<a href="http://blog.csdn.net/stdcoutzyx/article/details/9774135" target="_blank" rel="noopener">张雨石的博客</a>）：首先是函数间隔和几何间隔，由它们引出最优间隔分类器；为了多快好地解决最优间隔分类器问题，使用了拉格朗日对偶性性质，于是，先要理解原始优化问题与对偶问题及它们在什么条件下最优解等价，然后写出最优间隔分类器的对偶形式；通过对最优间隔分类器对偶问题求解，发现求解时目标函数存在内积形式的计算，据此引入了核技法；引入核技法后就得到了完完全全的 SVM 求解问题，使用序列最小化算法（SMO）进行求解。</p>
 <h3 id="间隔直观描述">间隔：直观描述</h3>
