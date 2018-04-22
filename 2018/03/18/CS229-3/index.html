@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.1.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png?v=6.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=6.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png?v=6.1.0">
+
+
+  <link rel="mask-icon" href="/images/favicon.png?v=6.1.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.1.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本篇博客为CS229第三篇学习笔记，主要内容包括逻辑回归、感知器学习算法以及牛顿方法。">
+<meta name="keywords" content="CS229,机器学习,逻辑回归">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CS229学习笔记之三：分类问题与逻辑回归">
+<meta property="og:url" content="http://yoursite.com/2018/03/18/CS229-3/index.html">
+<meta property="og:site_name" content="xxwywzy&#39;s Blog">
+<meta property="og:description" content="本篇博客为CS229第三篇学习笔记，主要内容包括逻辑回归、感知器学习算法以及牛顿方法。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/cs229-3-1.png">
+<meta property="og:image" content="http://yoursite.com/images/cs229-3-2.png">
+<meta property="og:updated_time" content="2018-04-16T09:48:22.664Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CS229学习笔记之三：分类问题与逻辑回归">
+<meta name="twitter:description" content="本篇博客为CS229第三篇学习笔记，主要内容包括逻辑回归、感知器学习算法以及牛顿方法。">
+<meta name="twitter:image" content="http://yoursite.com/images/cs229-3-1.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/03/18/CS229-3/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>CS229学习笔记之三：分类问题与逻辑回归 | xxwywzy's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xxwywzy's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Long may the sunshine</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/18/CS229-3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zheyu Wang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xxwywzy's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">CS229学习笔记之三：分类问题与逻辑回归
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+                
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-18T09:45:38+08:00">2018-03-18</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/课程笔记/" itemprop="url" rel="index"><span itemprop="name">课程笔记</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/03/18/CS229-3/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/03/18/CS229-3/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/03/18/CS229-3/" class="leancloud_visitors" data-flag-title="CS229学习笔记之三：分类问题与逻辑回归">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本篇博客为CS229第三篇学习笔记，主要内容包括逻辑回归、感知器学习算法以及牛顿方法。</p>
+<a id="more"></a>
+<p>之前我们讨论的是<strong>回归问题</strong>，即输出是连续值，现在我们来讨论输出是离散值的<strong>分类问题</strong>。首先，我们专注于<strong>二元分类</strong>问题，即输出 <span class="math inline">\(y\)</span> 只能取 <span class="math inline">\(0\)</span> 和 <span class="math inline">\(1\)</span> 两个值。</p>
+<h3 id="逻辑回归">逻辑回归</h3>
+<p>如果将线性回归模型直接应用于分类问题，会产生取值不在 0 和 1 之间的问题，所以我们引入<strong>逻辑回归模型</strong>：</p>
+<p><span class="math display">\[
+h_{\theta}(x) = g(\theta^Tx) = \frac 1 {1+e^{-\theta^Tx}}
+\]</span> 其中 <span class="math display">\[
+g(z) = \frac 1 {1+e^{-z}}
+\]</span> 被称为<strong>逻辑函数</strong>或 <strong>S 型函数</strong>，其图像如下：</p>
+<p><img src="/images/cs229-3-1.png" width="45%" height="45%"></p>
+<p>可以看到，当<span class="math inline">\(z \to +\infty\)</span>时<span class="math inline">\(g(z)\)</span>趋向于 <span class="math inline">\(1\)</span>， 当<span class="math inline">\(z \to -\infty\)</span>时<span class="math inline">\(g(z)\)</span>趋向于 <span class="math inline">\(0\)</span>，即<span class="math inline">\(g(z)\)</span>的值域为<span class="math inline">\((0,1)\)</span>，至于为什么要选择这个函数，在之后会作出解释。</p>
+<p>首先给出一个关于 S 型函数求导的有用性质： <span class="math display">\[
+\begin{align*}
+g\prime (z) &amp;= \frac d {dz} \frac 1 {1+e^{-z}} \\
+&amp;= \frac 1 {(1+e^{-z})^2} (e^{-z}) \\
+&amp;= \frac 1 {1+e^{-z}} \cdot \left( 1- \frac 1 {1+e^{-z}}\right) \\
+&amp;= g(z)(1-g(z))
+\end{align*}
+\]</span> 确定了模型之后，我们需要找到合适的 <span class="math inline">\(\theta\)</span> 的值。这里采用之前使用的<strong>最大似然法</strong>来选择参数。（假设函数可以直接看作概率分布）</p>
+<p>首先，二元分类符合<strong>伯努利分布</strong>，我们假设： <span class="math display">\[
+\begin{align*}
+P(y=1 \mid x ;\theta) &amp;= h_{\theta}(x)\\
+P(y=0 \mid x ;\theta)  &amp;= 1-h_{\theta}(x)
+\end{align*}
+\]</span> 将上面的公式合二为一，得到： <span class="math display">\[
+P(y \mid x ; \theta) = (h_{\theta}(x))^y(1-h_{\theta}(x))^{1-y}
+\]</span> 假定 <span class="math inline">\(m\)</span> 个样本之间相互独立，我们可以得到 <span class="math inline">\(\theta\)</span> 的似然函数如下： <span class="math display">\[
+\begin{align*}
+L(\theta) &amp;= p(\vec y \mid X; \theta) \\
+&amp;= \prod_{i=1}^m p(y^{(i)} \mid x^{(i)};\theta) \\
+&amp;= \prod_{i=1}^m  \left(h_{\theta}(x^{(i)})\right)^{y^{(i)}}\left(1-h_{\theta}(x^{(i)})\right)^{1-y^{(i)} }
+\end{align*}
+\]</span> 与之前类似，为了计算方便，我们使用对数似然函数来进行最大化分析： <span class="math display">\[
+\begin{align*}
+\ell(\theta) &amp;= \log L(\theta) \\
+&amp;= \sum_{i=1}^m y^{(i)}\log h(x^{(i)})+(1-y^{(i)} )\log (1-h(x^{(i)}))
+\end{align*}
+\]</span> 下面要做的是找到<span class="math inline">\(\theta\)</span>使得<span class="math inline">\(\ell(θ)\)</span>最大，由于这里是找最大值而非最小值，所以使用<strong>梯度上升</strong>（gradient ascent），更新规则是<span class="math inline">\(\theta := \theta +\alpha \nabla_\theta \ell(\theta)\)</span>，对于随机梯度上升（每次只考虑一个样本），求导过程如下： <span class="math display">\[
+\begin{align*}
+\frac{\partial}{\partial \theta_j}\ell(\theta) &amp;= \left(y \frac 1 {g(\theta^Tx)}-(1-y)\frac 1 {1-g(\theta^Tx)}\right)\frac{\partial}{\partial \theta_j}g(\theta^Tx)\\
+&amp;= \left(y \frac 1 {g(\theta^Tx)}-(1-y)\frac 1 {1-g(\theta^Tx)}\right)g(\theta^Tx)(1-g(\theta^Tx))\frac{\partial}{\partial \theta_j}\theta^Tx \\
+&amp;= \left(y(1-g(\theta^Tx))-(1-y)g(\theta^Tx)\right)x_j\\
+&amp;= \left(y-h_\theta(x)\right)x_j
+\end{align*}
+\]</span></p>
+<p>在计算过程中使用到了 S 型函数的求导性质。综上所述，我们得到随机梯度上升的更新规则是：</p>
+<p><span class="math display">\[
+\theta_j := \theta_j +\alpha\left(y^{(i)}-h_\theta(x^{(i)})\right)x^{(i)}_j
+\]</span></p>
+<p>这个公式和线性回归中梯度下降的公式表面上看是一样的，但实际上两者的<span class="math inline">\(h_\theta(x)\)</span>有所不同。关于更加深层次的讨论，请参看之后的 GLM 模型章节。</p>
+<h3 id="感知器学习算法">感知器学习算法</h3>
+<p>这里谈感知器，好像有些离题，但感知机的函数定义如下： <span class="math display">\[
+g(z)=\left\{
+\begin{align*}
+&amp; 1 \quad \text{if} \;\text{z} \ge 0\\
+&amp; 0 \quad  \text{if} \;\text{z} &lt; 0
+\end{align*}
+\right.
+\]</span> 可以看到它是逻辑回归的s型函数的简化形式，逻辑函数是连续的在 [0,1] 区间上，而感知器直接非0则1。如果我们令<span class="math inline">\(h_\theta(x)=g(\theta^Tx)\)</span>，得到如下的更新规则： <span class="math display">\[
+\theta_j := \theta_j +\alpha\left(y^{(i)}-h_\theta(x^{(i)})\right)x^{(i)}_j
+\]</span> 即<strong>感知器学习算法</strong>。</p>
+<p>19世纪60年代，感知器被看作是大脑工作中独立神经元的粗糙的模型，由于简单，会用作后面介绍的学习理论的起点。虽然直观看上去，感知器和之前看到的逻辑回归或线性回归很像，但是其实是非常不一样的算法。 因为，对于感知器，很难赋予一种有意义的概率解释，或使用最大似然估计算法来进行推导。</p>
+<h3 id="牛顿方法">牛顿方法</h3>
+<p>下面我们介绍另外一种算法来求解<span class="math inline">\(\ell (\theta)\)</span>的最大值，称为<strong>牛顿方法</strong>。</p>
+<p>我们通过如下的几张图来理解牛顿方法：</p>
+<p><img src="/images/cs229-3-2.png" width="70%" height="70%"></p>
+<p>对于梯度下降，每次只是在梯度方向上下降一小步（取决于学习速率），而牛顿方法是一直下降到导数（切线）和<span class="math inline">\(\theta\)</span>轴交界的那个<span class="math inline">\(\theta\)</span>。因此牛顿方法的更新规则是： <span class="math display">\[
+\theta := \theta - \frac {f(\theta)} {f&#39; (\theta)}
+\]</span> 下面我们将牛顿方法应用于逻辑回归，我们需要找到<span class="math inline">\(\ell (\theta)\)</span>的最大值，即<span class="math inline">\(\ell &#39;(\theta)=0\)</span>，因此令<span class="math inline">\(f(\theta)=\ell &#39;(\theta)\)</span>，我们可以得到逻辑回归的牛顿方法更新公式： <span class="math display">\[
+\theta := \theta - \frac {\ell &#39;(\theta)} {\ell &#39;&#39; (\theta)}
+\]</span> 而对于<span class="math inline">\(\theta\)</span>为向量的情况，牛顿方法的多维形式如下（又被称为<strong>牛顿-拉夫逊方法</strong>）： <span class="math display">\[
+\theta := \theta - H^{-1} \nabla_\theta \ell(\theta)
+\]</span> 其中<span class="math inline">\(\ \nabla_\theta \ell(\theta)\)</span>是<span class="math inline">\(\ell(\theta)\)</span>对于每个<span class="math inline">\(\theta_i\)</span>的偏导数构成的向量，<span class="math inline">\(H\)</span>是一个<span class="math inline">\((n+1)\times (n+1)\)</span>的矩阵（包括截距项），称为 <strong>海森矩阵</strong>，其中的每一项定义为： <span class="math display">\[
+H_{ij}=\frac {\partial^2 \ell(\theta)} {\partial \theta_i \partial \theta_j}
+\]</span> 和（批量）梯度下降相比，牛顿方法会带来更快的收敛速度和更少的迭代次数。虽然每次迭代由于要计算<span class="math inline">\(H^{-1}\)</span>，导致计算量较大，但对于参数数量不是特别大的情况，总的来说它还是更快的。将牛顿方法用于求解逻辑回归的对数似然函数最大值，也被称为<strong>费雪评分</strong>。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CS229/" rel="tag"># CS229</a>
+          
+            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
+          
+            <a href="/tags/逻辑回归/" rel="tag"># 逻辑回归</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/15/CS229-2/" rel="next" title="CS229学习笔记之二：概率解释与局部加权线性回归">
+                <i class="fa fa-chevron-left"></i> CS229学习笔记之二：概率解释与局部加权线性回归
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/22/CS229-4/" rel="prev" title="CS229学习笔记之四：广义线性模型">
+                CS229学习笔记之四：广义线性模型 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Zheyu Wang" />
+            
+              <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+              <p class="site-description motion-element" itemprop="description">今でもあなたはわたしの光</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/xxwywzy" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/xxwywzy" target="_blank" title="Twitter"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/xxwywzy" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://instagram.com/xxwywzy" target="_blank" title="Instagram"><i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#逻辑回归"><span class="nav-number">1.</span> <span class="nav-text">逻辑回归</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#感知器学习算法"><span class="nav-number">2.</span> <span class="nav-text">感知器学习算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#牛顿方法"><span class="nav-number">3.</span> <span class="nav-text">牛顿方法</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.5.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.1.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.1.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  
+  
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(function (item) {
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz',
+        appKey: 'IxP5URFEhxow4TfWyVNiowbH',
+        placeholder: '请在这里评论=￣ω￣=',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz", "IxP5URFEhxow4TfWyVNiowbH");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            
+            counter.save(null, {
+              success: function(counter) {
+                
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(counter.get('time'));
+                
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            
+              var newcounter = new Counter();
+              /* Set ACL */
+              var acl = new AV.ACL();
+              acl.setPublicReadAccess(true);
+              acl.setPublicWriteAccess(true);
+              newcounter.setACL(acl);
+              /* End Set ACL */
+              newcounter.set("title", title);
+              newcounter.set("url", url);
+              newcounter.set("time", 1);
+              newcounter.save(null, {
+                success: function(newcounter) {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+                },
+                error: function(newcounter, error) {
+                  console.log('Failed to create');
+                }
+              });
+            
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

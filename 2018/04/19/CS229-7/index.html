@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.1.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png?v=6.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=6.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png?v=6.1.0">
+
+
+  <link rel="mask-icon" href="/images/favicon.png?v=6.1.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.1.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本篇博客为CS229第七篇学习笔记，主要内容为对支持向量机算法的系统介绍。">
+<meta name="keywords" content="CS229,机器学习,支持向量机">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CS229学习笔记之七：支持向量机">
+<meta property="og:url" content="http://yoursite.com/2018/04/19/CS229-7/index.html">
+<meta property="og:site_name" content="xxwywzy&#39;s Blog">
+<meta property="og:description" content="本篇博客为CS229第七篇学习笔记，主要内容为对支持向量机算法的系统介绍。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/cs229-7-1.png">
+<meta property="og:image" content="http://yoursite.com/images/cs229-7-2.png">
+<meta property="og:image" content="http://yoursite.com/images/cs229-7-3.png">
+<meta property="og:updated_time" content="2018-04-21T14:13:44.955Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CS229学习笔记之七：支持向量机">
+<meta name="twitter:description" content="本篇博客为CS229第七篇学习笔记，主要内容为对支持向量机算法的系统介绍。">
+<meta name="twitter:image" content="http://yoursite.com/images/cs229-7-1.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/04/19/CS229-7/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>CS229学习笔记之七：支持向量机 | xxwywzy's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xxwywzy's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Long may the sunshine</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/19/CS229-7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zheyu Wang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xxwywzy's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">CS229学习笔记之七：支持向量机
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+                
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-19T20:43:02+08:00">2018-04-19</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/课程笔记/" itemprop="url" rel="index"><span itemprop="name">课程笔记</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/04/19/CS229-7/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/04/19/CS229-7/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/04/19/CS229-7/" class="leancloud_visitors" data-flag-title="CS229学习笔记之七：支持向量机">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本篇博客为CS229第七篇学习笔记，主要内容为对支持向量机算法的系统介绍。</p>
+<a id="more"></a>
+<p>支持向量机（Support Vector Machines）被认为是最好的监督学习算法之一。这里先简要说明一下理解SVM的必要的几个部分（本段引用自<a href="http://blog.csdn.net/stdcoutzyx/article/details/9774135" target="_blank" rel="noopener">张雨石的博客</a>）：首先是函数间隔和几何间隔，由它们引出最优间隔分类器；为了多快好地解决最优间隔分类器问题，使用了拉格朗日对偶性性质，于是，先要理解原始优化问题与对偶问题及它们在什么条件下最优解等价，然后写出最优间隔分类器的对偶形式；通过对最优间隔分类器对偶问题求解，发现求解时目标函数存在内积形式的计算，据此引入了核技法；引入核技法后就得到了完完全全的 SVM 求解问题，使用序列最小化算法（SMO）进行求解。</p>
+<h3 id="间隔直观描述">间隔：直观描述</h3>
+<p>我们将通过对<strong>间隔</strong>的讨论来开启关于支持向量机的故事。这一部分将给出关于间隔以及预测“置信度”的一个直观描述，正式的概念将于第三部分提出。</p>
+<p>对于逻辑回归来说，概率 <span class="math inline">\(p(y=1 \mid x;\theta)\)</span> 由函数 $h_{}(x) = g(^Tx) $给出，预测结果为：</p>
+<p><span class="math display">\[
+\text{predict} \quad  “1” \quad \text{iff} \quad \theta^Tx\ge0, \\ \text{predict} \quad  “0”  \quad  \text{iff}  \quad  \theta^Tx\lt0.
+\]</span></p>
+<p>其中 iff 表示当且仅当。对于一个正训练样本（y=1）来说，如果 <span class="math inline">\(\theta^Tx\)</span> 越大，则 <span class="math inline">\(h_\theta(x)=p(y=1|x;w,b)\)</span> 越接近1，因此我们可以非常“确信”该样本的标签为1，以此类推，我们有：</p>
+<p><span class="math display">\[
+\text{If} \quad \theta^Tx\gg0,\quad \text{very “confident” that} \quad y=1, \\  \text{If} \quad \theta^Tx\ll0,\quad \text{very “confident” that} \quad y=0.
+\]</span></p>
+<p>给定一个训练集，如果我们可以找到这样的 <span class="math inline">\(\theta\)</span>，满足上面的条件，那么对所有的训练样本来说，分类的置信度将很高，这看起来是一个不错的目标。之后我们将用<strong>函数间隔</strong>来对这一描述进行定义。</p>
+<p>接下来我们将换一个角度来描述间隔。观察下面这幅图，x 代表正训练样本，o 代表负训练样本，决策边界由 <span class="math inline">\(\theta^Tx=0\)</span> 给出（又被称为<strong>分离超平面</strong>），有三个点以 A, B 和 C 标注。</p>
+<p><img src="/images/cs229-7-1.png" width="45%" height="45%"></p>
+<p>可以看到，点 A 距离决策边界很远，因此如果要进行预测，我们非常“确信”其标签为1。而对于点 C ，由于其离决策边界太近，所以我们不能非常确定其标签为1，只要决策边界发生一点点变化，就可能导致对 C 的预测结果发生改变。而 B 的预测置信度介于 A 和 C 之间。</p>
+<p>因此，给定一个训练集，我们希望能找到一条决策边界，使我们对所有训练样本的预测时正确且置信度高的，即要求所有样本都远离决策边界。之后我们将用<strong>几何间隔</strong>来对这一描述进行定义。</p>
+<p>注：在前几部分的讨论中，我们默认数据是线性可分的。（之后会讨论线性不可分的情况）</p>
+<h3 id="符号变换">符号变换</h3>
+<p>为了更好地说明 SVM，我们将修改一些之前定义过的符号：</p>
+<ol type="1">
+<li>在逻辑回归中，我们使用 0,1 来表示两个类，现在将改用 -1,+1 ，即 <span class="math inline">\(y \in \{-1,+1\}\)</span>；</li>
+<li>在逻辑回归中，我们使用向量 <span class="math inline">\(\theta\)</span> 作为参数，现在我们将使用参数 <span class="math inline">\(\omega\)</span> 和 <span class="math inline">\(b\)</span>，即 <span class="math inline">\(h_{w,b}(x)=g(w^Tx+b)\)</span>，其中 <span class="math inline">\(\omega\)</span> 相当于 <span class="math inline">\({\begin{bmatrix} \theta_1 \ldots \theta_n \end{bmatrix}}^T\)</span>，<span class="math inline">\(b\)</span> 相当于 <span class="math inline">\(\theta_0\)</span>；</li>
+<li>在逻辑回归中，我们的 g 是 sigmoid 函数，现在改为： <span class="math display">\[
+g(z)=\begin{cases} 1, \quad z\ge0 \\ -1, \quad \text{otherwise} \end{cases}
+\]</span></li>
+</ol>
+<p>注意：现在我们的分类器会直接预测 1 或 -1（类似感知器算法），而不是先输出中间态：y 为 1 的概率。</p>
+<h3 id="函数间隔与几何间隔">函数间隔与几何间隔</h3>
+<p>下面让我们对函数间隔与几何间隔进行正式的定义。</p>
+<p>给定一个训练样本 <span class="math inline">\((x^{(i)},y^{(i)})\)</span>，我们定义它到超平面 <span class="math inline">\((\omega,b)\)</span> 的<strong>函数间隔</strong>为：</p>
+<p><span class="math display">\[
+\hat{\gamma}^{(i)}=y^{(i)}(w^Tx^{(i)}+b).
+\]</span></p>
+<p>为了使预测的置信度更高，我们希望函数间隔越大越好，即：</p>
+<p><span class="math display">\[
+\text{if} \quad y^{(i)}=1, \text{want} \quad w^Tx^{(i)}+b\gg0, \\ \text{if} \quad y^{(i)}=-1, \text{want} \quad w^Tx^{(i)}+b\ll0.
+\]</span></p>
+<p>易知，如果 <span class="math inline">\(y^{(i)}(w^Tx^{(i)}+b)&gt;0\)</span> ，则表示对该样本的预测正确 。</p>
+<p>然而，对于一个给定输出为 g （取值为 <span class="math inline">\(\{-1,1\}\)</span>）的线性分类器，函数间隔的性质导致其对于预测置信度的测量并不可信。这个性质就是我们可以在不改变超平面的情况下，通过成比例地增加 <span class="math inline">\(w,b\)</span>，使得函数间隔任意大。这样预测的结果就仅与符号相关，而不取决于大小，从而失去了对置信度的测量。为了解决这个问题，我们需要对 g 进行归一化（即几何间隔）。</p>
+<p>给定一个训练集 <span class="math inline">\(S = \{(x^{(i)},y^{(i)});i=1,\ldots,m\}\)</span>，我们定义 S 到超平面 <span class="math inline">\((w,b)\)</span> 的<strong>函数间隔</strong>为所有训练样本的函数间隔中的最小值，即：</p>
+<p><span class="math display">\[
+\hat{\gamma}=\min_{i=1,\ldots,m}\hat{\gamma}^{(i)}.
+\]</span></p>
+<p>接下来，让我们讨论<strong>几何间隔</strong>。观察下面的图片：</p>
+<p><img src="/images/cs229-7-2.png" width="45%" height="45%"></p>
+<p>对于超平面 <span class="math inline">\(w^Tx+b = 0\)</span>，其法向量为 <span class="math inline">\(w\)</span>（证明略） ，点 A 表示某个输入为 <span class="math inline">\(x^{(i)}\)</span> 的训练样本，标签为 <span class="math inline">\(y^{(i)} = 1\)</span>，其到决策边界的距离为 <span class="math inline">\(\gamma^{(i)}\)</span>，即线段AB的长度。</p>
+<p>现在，我们需要求解出 <span class="math inline">\(\gamma^{(i)}\)</span> 的值。由于BA方向即为法向量，其单位向量为 <span class="math inline">\(\frac{w}{||w||}\)</span>，因此点 B 可以通过下式计算：</p>
+<p><span class="math display">\[
+x^{(i)}-\gamma^{(i)}\cdot\frac{w}{\Vert w\Vert}.
+\]</span></p>
+<p>而点 B 又位于决策边界上，即满足 <span class="math inline">\(w^Tx+b = 0\)</span>，因此有：</p>
+<p><span class="math display">\[
+w^T(x^{(i)}-\gamma^{(i)}\cdot\frac{w}{\Vert w\Vert})+b=0.
+\]</span></p>
+<p>解得：</p>
+<p><span class="math display">\[
+\gamma^{(i)}=\frac{w^Tx^{(i)}+b}{\Vert w\Vert}=(\frac{w}{\Vert w\Vert})^Tx^{(i)}+\frac{b}{\Vert w\Vert}.
+\]</span></p>
+<p>这是基于正训练样本得出的结果，一般来说，对于一个训练样本 <span class="math inline">\((x^{(i)},y^{(i)})\)</span>，其到超平面 <span class="math inline">\((w,b)\)</span> 的几何间隔为：</p>
+<p><span class="math display">\[
+\gamma^{(i)}=y^{(i)}\left(\left(\frac{w}{\Vert  w\Vert}\right)^Tx^{(i)}+\frac{b}{\Vert  w\Vert}\right).
+\]</span></p>
+<p>可以发现当 <span class="math inline">\(\Vert w\Vert = 1\)</span> 时，几何间隔即为函数间隔。此外，对于几何间隔来说，等比例地改变参数，几何间隔不会发生任何改变，因为 $w$ 也会随之变化。这个性质可以让我们任意地改变参数的值，而不对决策边界造成实质性的影响（方便进行数学上的变换）。</p>
+<p>最后，给定一个训练集 <span class="math inline">\(S = \{(x^{(i)},y^{(i)});i=1,\ldots,m\}\)</span>，与之前类似，我们定义 S 到超平面 <span class="math inline">\((w,b)\)</span> 的<strong>几何间隔</strong>为所有训练样本的几何间隔中的最小值，即：</p>
+<p><span class="math display">\[
+\gamma=\min_{i=1,\ldots,m}\gamma^{(i)}.
+\]</span></p>
+<h3 id="最优间隔分类器">最优间隔分类器</h3>
+<p>给定一个训练集，我们希望能找到一个超平面，使正样本与负样本之间的“间距”（几何距离）尽量大，这样预测的可信度会更高。</p>
+<p>需要再次强调的是，我们假设训练集是线性可分的，即能够使用超平面将正样本和负样本分割开来。那么如何找到具有最大几何间隔的超平面呢？我们可以将其描述为如下的优化问题：</p>
+<p><span class="math display">\[
+\begin{align*} 
+\max_{\gamma,\omega,b} &amp;\quad \gamma \\ \text{s.t.} &amp;\quad y^{(i)}(w^Tx^{(i)}+ b)\ge\gamma, \; i=1,2,…,m \\ &amp;\quad 
+\Vert w \Vert = 1.
+\end{align*}
+\]</span></p>
+<p>其中，<span class="math inline">\(\Vert w \Vert = 1\)</span> 保证了函数间隔与几何间隔相同，该优化问题的含义是通过改变 <span class="math inline">\(w,b\)</span>，在保证训练集中的所有点到超平面的几何距离都大于 <span class="math inline">\(\gamma\)</span> 的情况下，寻找一个最大的 <span class="math inline">\(\gamma\)</span> 值（即找到训练集到超平面几何距离的最大值）。</p>
+<p>但是，上述问题不易求解，因为约束条件 <span class="math inline">\(\Vert w \Vert = 1\)</span> 是非凸性约束，最优解容易达到局部最优，且其形式不能使用标准优化软件进行求解，所以，我们对该问题进行转换，得到：</p>
+<p><span class="math display">\[
+\begin{align*} 
+\max_{\hat{\gamma},w,b} &amp;\quad \frac{\hat{\gamma}}{\Vert w \Vert} \\ \text{s.t.} &amp;\quad y^{(i)}(w^Tx^{(i)}+ b)\ge \hat{\gamma}, \; i=1,2,…,m
+\end{align*}
+\]</span></p>
+<p>现在，我们需要在保证训练集中的所有点到超平面的函数距离都大于 <span class="math inline">\(\hat{\gamma}\)</span> 的情况下， 最大化 <span class="math inline">\(\frac{\hat{\gamma}}{\Vert w \Vert}\)</span>。因为函数间隔与几何间隔之间的关系为 <span class="math inline">\(\gamma = \hat{\gamma} / \Vert w \Vert\)</span>，所以该优化问题与之前的等价。虽然非凸性约束已经去除，但是目标函数 <span class="math inline">\(\frac{\hat{\gamma}}{\Vert w \Vert}\)</span> 是非凸的，我们仍然无法直接使用软件进行求解。</p>
+<p>我们需要继续修改优化问题的形式。之前我们曾提到，通过成比例地改变 <span class="math inline">\(w,b\)</span>，可以使得函数间隔变成任意的大小，而不改变超平面本身；因此，对于上述约束条件，我们可以通过缩放 <span class="math inline">\(w,b\)</span>，使得 <span class="math display">\[
+\hat{\gamma} = 1.
+\]</span></p>
+<p>这样，我们的目标函数就变为 <span class="math inline">\(\frac{1}{\Vert w \Vert}\)</span>，因为最大化 $ $ 等价于最小化 <span class="math inline">\(\Vert w \Vert^2\)</span>，所以我们得到了如下的优化问题：</p>
+<p><span class="math display">\[
+\begin{align*} 
+\min_{w,a,b} &amp;\quad \frac{1}{2}\Vert w \Vert^2 \\ \text{s.t.} &amp;\quad y^{(i)}(w^Tx^{(i)}+ b)\ge 1, \; i=1,2,…,m
+\end{align*}
+\]</span></p>
+<p>这样我们的问题就转化成了在线性约束下的二次规划问题，可以使用专业软件来求解这个优化问题，从而得到<strong>最优间隔分类器</strong>。</p>
+<p>下面，我们要讨论一下拉格朗日对偶，其可以帮助我们推导出上述优化问题的对偶形式，从而更快地进行求解，同时还能够引出核函数，实现在超高维度空间中的求解。</p>
+<h3 id="拉格朗日对偶性">拉格朗日对偶性</h3>
+<p>对于如下形式的优化问题：</p>
+<p><span class="math display">\[
+\begin{align*} 
+\min_{w} &amp;\quad f(w) \\ \text{s.t.} &amp;\quad h_i(w)=0, \; i=1,2,…,l
+\end{align*}
+\]</span></p>
+<p>我们构造<strong>拉格朗日方程</strong>：</p>
+<p><span class="math display">\[
+\mathcal{L}(w,\beta)=f(w)+\sum_{i=1}^l\beta_ih_i(w)
+\]</span></p>
+<p>其中，<span class="math inline">\(\beta_i\)</span> 是<strong>拉格朗日乘子</strong>。我们队拉格朗日方程求偏导数，将偏导数设为0，求得的值就是原问题的解了。</p>
+<p><span class="math display">\[
+ \frac{\partial\mathcal{L}}{\partial w_i}  = 0;\;\frac{\partial\mathcal{L}}{\partial \beta_i} = 0
+\]</span></p>
+<p>下面我们将通过约束条件，介绍更为广义的拉格朗日方程。在约束条件中添加不等式约束后，我们得到如下问题，称之为<strong>原始</strong>优化问题：</p>
+<p><span class="math display">\[
+\begin{align*} 
+\min_{w} &amp;\quad f(w) \\ \text{s.t.} &amp;\quad g_i(w)\le 0, \; i=1,2,…,k \\&amp;\quad h_i(w)=0, \; i=1,2,…,l
+\end{align*}
+\]</span></p>
+<p>该问题对应的<strong>广义拉格朗日方程</strong>是：</p>
+<p><span class="math display">\[
+\mathcal{L}(w,\alpha,\beta)=f(w)+\sum_{i=1}^k\alpha_ig_i(w)+\sum_{i=1}^l\beta_ih_i(w).
+\]</span></p>
+<p>其中，<span class="math inline">\(\alpha_i\)</span> 和 <span class="math inline">\(\beta_i\)</span> 是拉格朗日乘子。现在我们定义：</p>
+<p><span class="math display">\[
+\theta_{\mathcal{P}}(w)=\operatorname*\max_{\alpha,\beta:\alpha_i\geq 0}\mathcal{L}(w,\alpha,\beta).
+\]</span></p>
+<p>其中，下标 “<span class="math inline">\(\mathcal{P}\)</span>” 代表原始，可以发现，在给定 <span class="math inline">\(w\)</span> 时，如果 <span class="math inline">\(w\)</span> 不满足所有约束条件，比如 <span class="math inline">\(g_i(w) &gt;0\)</span> 或 <span class="math inline">\(h_i(w) \ne 0\)</span> ，那么总可以找到相应的 <span class="math inline">\(\alpha,\beta\)</span>，使得： <span class="math display">\[
+\begin{align*}
+\theta_{\mathcal{P}}(w) &amp;=\operatorname*\max_{\alpha,\beta:\alpha_i\geq 0}f(w)+\sum_{i=1}^k\alpha_ig_i(w)+\sum_{i=1}^l\beta_ih_i(w) 
+\\&amp;= \infty
+\end{align*}
+\]</span></p>
+<p>而当约束满足时，<span class="math inline">\(\theta_{\mathcal{P}}(w)=f(w)\)</span>，因此我们有：</p>
+<p><span class="math display">\[
+\theta_{\mathcal{P}}=\begin{cases}f(w) &amp; w\text{ 满足原始问题的约束} \\ \\ \infty &amp;\text{其他}\end{cases}
+\]</span></p>
+<p>因此，如果考虑最小化：</p>
+<p><span class="math display">\[
+\min_{w}\theta_{\mathcal{P}}(w)=\min_{w}\max_{\alpha,\beta:\alpha_i\geq 0}\mathcal{L}(w,\alpha,\beta)
+\]</span></p>
+<p>那么它与原始优化问题是等价的，即有相同的解。这样一来我们就把原始优化问题表示成了广义拉格朗日函数的极小极大问题。为了后面使用方便，我们定义原始问题取得最优解时的函数值：</p>
+<p><span class="math display">\[
+p^\ast=\min_w\theta_{\mathcal{p}}(w)
+\]</span> 称为原始问题的值。</p>
+<p>现在，我们来看一下另外一个问题： <span class="math display">\[
+\theta_{\mathcal{D}}(\alpha,\beta)=\min_{w}\mathcal{L}(w,\alpha,\beta)
+\]</span> 其中，下标 “<span class="math inline">\(\mathcal{D}\)</span>” 代表对偶，注意在 <span class="math inline">\(\theta_{\mathcal{P}}\)</span> 的定义中我们是最大化关于 <span class="math inline">\(\alpha,\beta\)</span> 的函数，而这里我们是最小化关于 <span class="math inline">\(w\)</span> 的函数。</p>
+<p>现在我们可以提出<strong>对偶</strong>优化问题：</p>
+<p><span class="math display">\[
+\max_{\alpha,\beta:\alpha_i\ge0}\theta_{\mathcal{D}}(\alpha,\beta)=\max_{\alpha,\beta:\alpha_i\ge0}\min_{w}\mathcal{L}(w,\alpha,\beta)
+\]</span></p>
+<p>其与原始问题基本相同，唯一的区别就在于 min 和 max 的顺序不同，类似地，我们定义：<span class="math inline">\(d^{\ast}=\max_{\alpha,\beta:\alpha_i\ge0}\theta_{\mathcal{D}}(\alpha,\beta)\)</span> 为对偶问题的值。</p>
+<p>那么原始问题和对偶问题有什么关联呢？易证明对于任意函数都有 <span class="math inline">\(minmax\le maxmin\)</span>，所以我们可以得到：</p>
+<p><span class="math display">\[
+d^{\ast}=\max_{\alpha,\beta:\alpha_i\ge0}\min_{w}\mathcal{L}(w,\alpha,\beta)\le\min_{w}\max_{\alpha,\beta:\alpha_i\geq 0}\mathcal{L}(w,\alpha,\beta)=p^{\ast}
+\]</span></p>
+<p>而在某些条件下，我们将有：</p>
+<p><span class="math display">\[
+d^{\ast} = p^{\ast}
+\]</span></p>
+<p>这样我们就可以通过求解对偶问题来得到原始问题的解。</p>
+<p>这些条件是： <span class="math inline">\(f\)</span> 和 <span class="math inline">\(g_i\)</span> 是凸函数（Hessian矩阵半正定）；<span class="math inline">\(h_i\)</span> 是仿射函数（允许截距存在的线性函数）；不等式约束 <span class="math inline">\(g_i\)</span> 是严格可执行的（Slater条件），即存在 <span class="math inline">\(w\)</span> 使得对于所有的 <span class="math inline">\(i\)</span> 都有 <span class="math inline">\(g_i(w)&lt;0\)</span> .</p>
+<p>在上述条件成立的情况下，一定存在<span class="math inline">\(w^{\ast},\alpha^{\ast},\beta^{\ast}\)</span>，使得 $w^{} $ 是原始问题的解，<span class="math inline">\(\alpha^{\ast},\beta^{\ast}\)</span> 是对偶问题的解，并且有<span class="math inline">\(p^{\ast}=d^{\ast}=\mathcal{L}(w^{\ast}, {\alpha}^{\ast}, {\beta}^{\ast})\)</span>，同时 <span class="math inline">\(w^{\ast},\alpha^{\ast},\beta^{\ast}\)</span>需要满足<strong>KKT条件(Karush-Kuhn-Tucker conditions)</strong>：</p>
+<p><span class="math display">\[
+\begin{align*}
+\frac\partial{\partial w_i} \mathcal{L}(w^{\ast}, {\alpha}^{\ast}, {\beta}^{\ast}) &amp;= 0,\quad i=1,\ldots,n \tag{3} \\
+\frac\partial{\partial \beta_i} \mathcal{L}(w^{\ast}, {\alpha}^{\ast}, {\beta}^{\ast}) &amp;= 0,\quad i=1,\ldots,l \tag{4} \\
+\alpha_i^{\ast}g_i(w^{\ast}) &amp;= 0,\quad i=1,\ldots,k \tag{5} \\
+g_i(w^{\ast}) &amp;\le 0,\quad i=1,\ldots,k \tag{6} \\
+\alpha_i^{\ast} &amp;\ge 0,\quad i=1,\ldots,k \tag{7} \\
+\end{align*}
+\]</span></p>
+<p>因此，如果存在满足KKT条件的<span class="math inline">\(w^{\ast},\alpha^{\ast},\beta^{\ast}\)</span>，那么它一定是原始问题和对偶问题的解。（单独的KKT条件只是强对偶的必要条件，只有当满足之前的假设时，KKT条件才是强对偶的<a href="http://matafight.github.io/2015/05/13/KKT%E6%9D%A1%E4%BB%B6%E4%B8%8E%E6%8B%89%E6%A0%BC%E6%9C%97%E6%97%A5%E5%AF%B9%E5%81%B6%E6%80%A7/" target="_blank" rel="noopener">充要条件</a>）</p>
+<p>对于 (5) 式，我们称之为 <strong>KKT 对偶互补条件</strong>，这个条件表明如果 <span class="math inline">\(\alpha^{\ast}&gt;0\)</span> ，那么就有 <span class="math inline">\(g_i(w^\ast)=0\)</span>。即该约束被激活（达到临界条件），这个条件将展示出在SVM中，只有一些支持向量点会起作用，在之后的SMO算法的收敛验证中也会用到这个条件。</p>
+<h3 id="最优间隔分类器的求解">最优间隔分类器的求解</h3>
+<p>之前，我们给出了如下的求解最优间隔分类器的（原始）优化问题：</p>
+<p><span class="math display">\[
+\begin{align*} 
+\min_{w,a,b} &amp;\quad \frac{1}{2}\Vert w \Vert^2 \\ \text{s.t.} &amp;\quad y^{(i)}(w^Tx^{(i)}+ b)\ge 1, \; i=1,2,…,m
+\end{align*}
+\]</span></p>
+<p>我们可以将约束表示为： <span class="math display">\[
+g_i(w) = -y^{(i)}(w^Tx^{(i)}+b) +1 \le 0.
+\]</span></p>
+<p>注意到：从KKT对偶互补条件可以得出，只有当函数间隔等于1时，才有 <span class="math inline">\(\alpha_i&gt;0\)</span>，而函数间隔等于1对应着距离分隔超平面最近的点，即下图中虚线穿过的三个点：</p>
+<p><img src="/images/cs229-7-3.png" width="45%" height="45%"></p>
+<p>只有这三个点对应的 <span class="math inline">\(\alpha_i\)</span> 在优化问题的解中不为0，这些点也被称为<strong>支持向量</strong>，其数量远小于训练集。</p>
+<p>接着往下来，我们已经给出了原始问题的对偶形式，那么一个关键思路就是，我们将尝试把算法表示为仅包含输入空间中的点的内积的形式 <span class="math inline">\(\langle x^{(i)},x^{(j)} \rangle\)</span>（可以理解为<span class="math inline">\((x^{(i)})^Tx^{(j)}\)</span>），当使用核技巧的时候，这将十分重要。</p>
+<p>让我们构建该优化问题的拉格朗日方程： <span class="math display">\[
+\mathcal{L}(w, b, \alpha)=\frac12||w||^2-\sum_{i=1}^m\alpha_i[y^{(i)}(w^Tx^{(i)}+b)-1].   \tag{8}
+\]</span></p>
+<p>注意：这里只有不等式约束，没有等式约束，所以拉格朗日乘子只有 <span class="math inline">\(\alpha\)</span>，没有 <span class="math inline">\(\beta\)</span>.</p>
+<p>让我们找出该问题的对偶形式，即：</p>
+<p><span class="math display">\[
+d^\ast=\mathop\max_{\alpha:\alpha_i\ge0}\theta_\mathcal{D}(\alpha)=\mathop\max_{\alpha:\alpha_i\ge0}\mathop\min_{w,b}\mathcal{L}(w,b,\alpha).
+\]</span></p>
+<p>首先，求 <span class="math inline">\(\mathcal{L}(w,b,\alpha)\)</span> 关于 <span class="math inline">\(w,b\)</span> 的最小值，令偏导为0：</p>
+<p><span class="math display">\[
+\frac{\partial\mathcal{L}}{\partial w}=w-\sum_{i=1}^m\alpha_iy^{(i)}x^{(i)}=0, \\ \frac{\partial\mathcal{L}}{\partial b}=0-\sum_{i=1}^m\alpha_iy^{(i)}=0.
+\]</span></p>
+<p>可得：</p>
+<p><span class="math display">\[
+w=\sum_{i=1}^m\alpha_iy^{(i)}x^{(i)}, \\ \sum_{i=1}^m\alpha_iy^{(i)}=0.
+\]</span></p>
+<p>将以上结果代入拉格朗日方程，得到：</p>
+<p><span class="math display">\[
+\begin{align*}  \mathop\min_{w,b}\mathcal{L}(w,b,\alpha)  &amp;= \sum_{i=1}^m\alpha_i  - \frac12\sum_{i,j=1}^my^{(i)}y^{(j)}\alpha_i\alpha_j(x^{(i)})^Tx^{(j)}\\ &amp; = \sum_{i=1}^m\alpha_i  - \frac12\sum_{i,j=1}^my^{(i)}y^{(j)}\alpha_i\alpha_j\langle x^{(i)},x^{(j)} \rangle\end{align*}
+\]</span></p>
+<p>于是，我们可以得到如下的对偶优化问题：</p>
+<p><span class="math display">\[
+\begin{align*} 
+\max_{\alpha} &amp;\quad W(\alpha) = \sum_{i=1}^m\alpha_i  - \frac12\sum_{i,j=1}^my^{(i)}y^{(j)}\alpha_i\alpha_j\langle x^{(i)},x^{(j)} \rangle \\ \text{s.t.} &amp;\quad \alpha \ge 0, \; i=1,2,…,m \\
+&amp; \quad \sum_{i=1}^m\alpha_iy^{(i)}=0,
+\end{align*}
+\]</span></p>
+<p>可以证明该优化问题满足 <span class="math inline">\(p^\ast = d^\ast\)</span> 的前提条件与KKT条件，因此，我们可以通过求解对偶问题的解得到原始问题的解，求得 <span class="math inline">\(\alpha\)</span> 之后，我们可以通过下面的公式求出 <span class="math inline">\(w,b\)</span> ：</p>
+<p><span class="math display">\[
+w^\ast =\sum_{i=1}^m\alpha_i^\ast y^{(i)}x^{(i)} \\
+b^\ast = - \frac {\max_{i:y^{(i)}=-1}{w^\ast}^T{x^{(i)}}+\min_{i:y^{(i)}=1}{w^\ast}^T{x^{(i)}}}{2}.
+\]</span></p>
+<p>当求出所有的参数后，我们就可以通过计算 <span class="math inline">\(w^Tx+b\)</span> 来进行分类了，当其大于 0 时预测<span class="math inline">\(y=1\)</span>，公式如下：</p>
+<p><span class="math display">\[
+\begin{align*} 
+w^Tx+b &amp; = {\left(\sum_{i=1}^m\alpha_iy^{(i)}x^{(i)}\right)}^Tx+b \\ &amp; = \sum_i^m\alpha_iy^{(i)}\langle x^{(i)},x \rangle +b.
+\end{align*}
+\]</span></p>
+<p>通过上式我们发现，现在新来一个数据，我们只需要计算它与训练样本的内积即可。并且通过前面的 KKT 对偶互补条件我们知道，只有除了支持向量的那些样本，都有 <span class="math inline">\(\alpha_i = 0\)</span>，所以，我们只需要将新样本与支持向量进行内积即可进行预测。</p>
+<p>通过求解优化问题的对偶形式，我们对要解决的问题的结构有了更为深入的理解，并且还根据输入特征向量之间的内积来表示整个算法。 在下一节中，我们将充分利用这些内容，对我们的分类问题使用<strong>核方法</strong>。 最终得到的算法，就是<strong>支持向量机</strong>，其将能够在非常高的维度空间中进行有效地学习。</p>
+<h3 id="核">核</h3>
+<p>在之前的线性回归模型中，我们探讨了使用多项式回归来解决房价预测问题：给定输入 <span class="math inline">\(x\)</span> 为房屋面积，考虑使用 <span class="math inline">\(x,x^2,x^3\)</span> 作为特征来进行回归。这里给出如下定义：将原始的输入值称为<strong>属性（attributes）</strong>，在房价预测问题中即为 <span class="math inline">\(x\)</span> ，将其映射到的新的输入数据集称为<strong>特征（features）</strong>，在房价预测问题中即为 <span class="math inline">\(x,x^2,x^3\)</span> 。我们使用 <span class="math inline">\(\phi\)</span> 来表示这种将属性映射为特征的<strong>特征映射</strong>，对于房价预测问题：</p>
+<p><span class="math display">\[
+\phi(x) = \begin{bmatrix}  x \\ x^2 \\ x^3 \end{bmatrix}
+\]</span></p>
+<p>在 SVM 中，我们希望使用某些特征 <span class="math inline">\(\phi(x)\)</span> 来替代原始的输入属性 <span class="math inline">\(x\)</span> 来进行学习。为了做到这一点，我们只需要简单地在原来的算法中将所有的 <span class="math inline">\(x\)</span> 替换为 <span class="math inline">\(\phi(x)\)</span> 就行了。</p>
+<p>而我们知道，SVM 可以表示为内积 <span class="math inline">\(\langle x,z\rangle\)</span> 的形式，这代表我们可以将所有的内积替换为 <span class="math inline">\(\langle \phi(x),\phi(z)\rangle\)</span>。特别地，给定一个特征映射 <span class="math inline">\(\phi4\)</span>，我们定义相应的<strong>核（Kernel）</strong>为：</p>
+<p><span class="math display">\[
+K(x,z) = \phi(x)^T\phi(z)
+\]</span></p>
+<p>这样对于算法中所有的内积 <span class="math inline">\(\langle x,z\rangle\)</span>，我们可以使用 <span class="math inline">\(K(x,z)\)</span> 进行替换。</p>
+<p>现在，给定一个映射 <span class="math inline">\(\phi\)</span>，我们可以通过找出 <span class="math inline">\(\phi(x)\)</span> 和 <span class="math inline">\(\phi(z)\)</span> 并计算其内积来得出 <span class="math inline">\(K(x,z)\)</span>，然而有趣的是，直接计算 <span class="math inline">\(K(x,z)\)</span> 的代价有时会比较低，即便 <span class="math inline">\(\phi(x)\)</span> 本身可能是一个非常高维的向量，计算起来代价较高。在这种情况下，我们可以在 <span class="math inline">\(\phi\)</span> 给出的高维特征空间中执行 SVM 算法（解决低维空间中线性不可分的情况），并且不用去计算 <span class="math inline">\(\phi(x)\)</span> 的具体值。</p>
+<p>让我们看一个例子。假设 <span class="math inline">\(x,z \in \mathbb{R}^n\)</span>，对于下面的核：</p>
+<p><span class="math display">\[
+K(x,z)=(x^Tz)^2
+\]</span></p>
+<p>我们可以将其改写为：</p>
+<p><span class="math display">\[
+\begin{align*}
+K(x,z) &amp;= \left(\sum_{i=1}^nx_iz_i\right)\left(\sum_{i=1}^nx_iz_i\right) \\
+&amp;= \sum_{i=1}^n\sum_{j=1}^nx_ix_jz_iz_j \\
+&amp;= \sum_{i,j=1}^n(x_ix_j)(z_iz_j)
+\end{align*}
+\]</span></p>
+<p>这样我们就有 <span class="math inline">\(K(x,z) = \phi(x)^T\phi(z)\)</span>，其中特征映射 <span class="math inline">\(\phi\)</span> 如下所示（假设 n = 3）：</p>
+<p><span class="math display">\[
+\phi(x) = \begin{bmatrix}  x _1x_1\\ x _1x_2 \\ x _1x_3 \\ x _2x_1  \\ x _2x_2  \\ x _2x_3  \\ x _3x_1  \\ x _3x_2  \\ x _3x_3\end{bmatrix}.
+\]</span></p>
+<p>在这个例子中，直接计算 <span class="math inline">\(K(x,z)\)</span> 需要的时间复杂度仅为 <span class="math inline">\(O(n)\)</span>，而计算 <span class="math inline">\(\phi(x)\)</span> 需要的时间复杂度为 <span class="math inline">\(O(n^2)\)</span>。实际上映射后特征内积和原始特征的内积平方是等价的，因此使用恰当的核可以大大缩短计算时间。</p>
+<p>让我们再来看另外一个核：</p>
+<p><span class="math display">\[
+\begin{align*}
+K(x,z) &amp;= (x^Tz + c)^2 \\
+&amp;= \sum_{i,j=1}^n(x_ix_j)(z_iz_j) + \sum_{i=1}^n(\sqrt{2c}x_i)(\sqrt{2c}z_i) + c^2.
+\end{align*}
+\]</span></p>
+<p>其对应如下的特征映射（n = 3）：</p>
+<p><span class="math display">\[
+\phi(x) = \begin{bmatrix}  x_1x_1\\ x_1x_2 \\  x_1x_3 \\ x_2x_1  \\ x_2x_2  \\ x_2x_3  \\ x_3x_1  \\ x_3x_2  \\ x_3x_3  \\ \sqrt{2c}x_1 \\ \sqrt{2c}x_2 \\ \sqrt{2c}x_3 \\ c\end{bmatrix},
+\]</span></p>
+<p>其中参数 c 控制 <span class="math inline">\(x_i\)</span> （一阶项）和 <span class="math inline">\(x_ix_j\)</span> （二阶项）之间的相对权重。</p>
+<p>更广泛的来说，我们有：</p>
+<p><span class="math display">\[
+K(x,z)=(x^Tz+c)^d
+\]</span></p>
+<p>其将 n 维的原始输入属性映射到 <span class="math inline">\({ {n+d} \choose d }\)</span> 维的特征空间。特征向量中每个元素都是最高为 d 阶的变量的组合。如果计算 <span class="math inline">\(\phi\)</span> 的话，需要 <span class="math inline">\(O(n^d)\)</span> 的时间复杂度，而直接计算 <span class="math inline">\(K(x,z)\)</span> 依旧只需要 <span class="math inline">\(O(n)\)</span> 的时间复杂度，这进一步体现了核函数降低计算量的好处。</p>
+<h4 id="关于多项式核的维数问题">关于多项式核的维数问题</h4>
+<p>这里对一个困扰了我一天的问题做一个记录。在上一段中，我们知道 <span class="math inline">\(K(x,z)=(x^Tz+c)^d\)</span> 对应的特征空间的维数为 <span class="math inline">\({ {n+d} \choose d }\)</span>，然而在第二个例子中，核 <span class="math inline">\(K(x,z) = (x^Tz + c)^2\)</span> 对应的特征空间为 <strong>13</strong> 维，但根据公式，其特征空间维数应为：</p>
+<p><span class="math display">\[
+\begin{align*}
+{ {n+d} \choose d } &amp;= { {3+2} \choose 2 } \\
+&amp;= { 5 \choose 2 } \\
+&amp;= 10
+\end{align*}
+\]</span></p>
+<p>出现了矛盾！经过两个小时的思考，终于发现了问题所在。其实，<span class="math inline">\(K(x,z) = (x^Tz + c)^2\)</span> 可以对应不同的特征空间，如果要符合公式，应该将 <span class="math inline">\(K(x,z)\)</span> 按照如下的形式改写：</p>
+<p><span class="math display">\[
+\begin{align*}
+K(x,z) &amp;= (x^Tz + c)^2 \\
+&amp;= \sum_{i=1}^n(x_i^2)(z_i^2) + \sum_{i=2}^n\sum_{j=1}^{i-1}(\sqrt{2}x_ix_j)(\sqrt{2}z_iz_j) + \sum_{i=1}^n(\sqrt{2c}x_i)(\sqrt{2c}z_i) + c^2.
+\end{align*}
+\]</span></p>
+<p>这样，其对应的特征映射为：</p>
+<p><span class="math display">\[
+\phi(x) = \begin{bmatrix}  x_1x_1\\ x_2x_2 \\  x_3x_3 \\ \sqrt2x_2x_1  \\ \sqrt2x_3x_1  \\ \sqrt2x_3x_2   \\ \sqrt{2c}x_1 \\ \sqrt{2c}x_2 \\ \sqrt{2c}x_3 \\ c\end{bmatrix}.
+\]</span></p>
+<p>原来如此。这里再做一些延伸：<span class="math inline">\(K(x,z)=(x^Tz+c)^d\)</span> 被称为<strong><a href="https://en.wikipedia.org/wiki/Polynomial_kernel" target="_blank" rel="noopener">多项式核</a>（Polynomial kernel）</strong>，关于其特征空间的维数公式的<a href="http://www.cs.cmu.edu/~ninamf/ML11/lect1020.pdf" target="_blank" rel="noopener">证明</a>如下：</p>
+<p><strong>命题</strong>：多项式核对应的特征空间维数为 <span class="math inline">\({ {n+d} \choose d }\)</span>。</p>
+<p><strong>证明</strong>：我们使用数学归纳法进行证明。</p>
+<p>第一步：对于 <span class="math inline">\(n = 1\)</span>，易知维数为 <span class="math inline">\(d + 1\)</span>，而对于 <span class="math inline">\(d = 1\)</span>，易知维数为 <span class="math inline">\(n + 1\)</span>，满足命题。</p>
+<p>第二步：对于 <span class="math inline">\(K(x,z)=(x^Tz+c)^d\)</span>，其特征向量的每个元素都是最高为 d 阶的变量的组合，即 <span class="math inline">\(x_1^{i_1}x_1^{i_2}\cdots x_n^{i_n}\)</span>，其中 <span class="math inline">\(i_j \in N\)</span> 且 <span class="math inline">\(\sum_{j=1}^ni_j \le d\)</span>。我们可以将这些元素分为两类，一类是包含因子 <span class="math inline">\(x_1\)</span> 的（至少一个），一类是不包含因子 <span class="math inline">\(x_1\)</span> 的（即 <span class="math inline">\(i_1\)</span> = 0）。对于第一类元素，其相当于将阶数 d 缩小了一阶（可以理解为固定一个因子不变，则可变的部分与之前相比就减少了一阶），因此这部分元素的数目为 <span class="math inline">\(f(n,d-1)\)</span>。（假设其元素数目为 n 与 d 的某种函数）对于第二类元素，其相当于将原始属性的维数 n 缩小了一维（去掉了一个因子），因此这部分元素的数目为 <span class="math inline">\(f(n-1,d)\)</span>，综上我们有：</p>
+<p><span class="math display">\[
+f(n,d) = f(n-1,d) + f(n, d-1)
+\]</span></p>
+<p>第三步：假设 <span class="math inline">\(n = n-1\)</span> 和 <span class="math inline">\(d = d-1\)</span> 的时候命题成立，则：</p>
+<p><span class="math display">\[
+\begin{align*}
+f(n-1,d) &amp;= { {n-1+d} \choose d } \\
+f(n,d-1) &amp;= { {n+d-1} \choose d-1 } 
+\end{align*}
+\]</span></p>
+<p>那么根据组合数的定义，我们有：</p>
+<p><span class="math display">\[
+\begin{align*}
+f(n,d) &amp;= f(n-1,d) + f(n, d-1) \\
+&amp;=  { {n-1+d} \choose d } + { {n+d-1} \choose d-1 }  \\
+&amp;= { {n+d} \choose d }
+\end{align*}
+\]</span></p>
+<p>满足命题，因此原命题对于任意的 n 和 d 均成立。</p>
+<p>好的，终于可以回到正题了。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CS229/" rel="tag"># CS229</a>
+          
+            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
+          
+            <a href="/tags/支持向量机/" rel="tag"># 支持向量机</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/17/zelda/" rel="next" title="记日本亚马逊《塞尔达传说：荒野之息》的一条回评">
+                <i class="fa fa-chevron-left"></i> 记日本亚马逊《塞尔达传说：荒野之息》的一条回评
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/22/game-engine-1/" rel="prev" title="《游戏引擎架构》读书笔记之一：导论">
+                《游戏引擎架构》读书笔记之一：导论 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Zheyu Wang" />
+            
+              <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+              <p class="site-description motion-element" itemprop="description">今でもあなたはわたしの光</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/xxwywzy" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/xxwywzy" target="_blank" title="Twitter"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/xxwywzy" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://instagram.com/xxwywzy" target="_blank" title="Instagram"><i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#间隔直观描述"><span class="nav-number">1.</span> <span class="nav-text">间隔：直观描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#符号变换"><span class="nav-number">2.</span> <span class="nav-text">符号变换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数间隔与几何间隔"><span class="nav-number">3.</span> <span class="nav-text">函数间隔与几何间隔</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最优间隔分类器"><span class="nav-number">4.</span> <span class="nav-text">最优间隔分类器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#拉格朗日对偶性"><span class="nav-number">5.</span> <span class="nav-text">拉格朗日对偶性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最优间隔分类器的求解"><span class="nav-number">6.</span> <span class="nav-text">最优间隔分类器的求解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#核"><span class="nav-number">7.</span> <span class="nav-text">核</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#关于多项式核的维数问题"><span class="nav-number">7.1.</span> <span class="nav-text">关于多项式核的维数问题</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.5.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.1.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.1.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  
+  
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(function (item) {
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz',
+        appKey: 'IxP5URFEhxow4TfWyVNiowbH',
+        placeholder: '请在这里评论=￣ω￣=',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz", "IxP5URFEhxow4TfWyVNiowbH");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            
+            counter.save(null, {
+              success: function(counter) {
+                
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(counter.get('time'));
+                
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            
+              var newcounter = new Counter();
+              /* Set ACL */
+              var acl = new AV.ACL();
+              acl.setPublicReadAccess(true);
+              acl.setPublicWriteAccess(true);
+              newcounter.setACL(acl);
+              /* End Set ACL */
+              newcounter.set("title", title);
+              newcounter.set("url", url);
+              newcounter.set("time", 1);
+              newcounter.save(null, {
+                success: function(newcounter) {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+                },
+                error: function(newcounter, error) {
+                  console.log('Failed to create');
+                }
+              });
+            
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
