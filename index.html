@@ -290,6 +290,182 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/22/game-engine-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zheyu Wang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xxwywzy's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/22/game-engine-1/" itemprop="url">
+                  游戏引擎架构学习笔记之一：导论
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+                
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-22T10:31:18+08:00">2018-04-22</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/游戏开发/" itemprop="url" rel="index"><span itemprop="name">游戏开发</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="典型游戏团队的结构">1.1 典型游戏团队的结构</h3>
+<p>游戏工作室通常由5个基本专业领域的人员构成，包括<strong>工程师、艺术家、游戏设计师、制作人及其他管理/支持人员</strong>。</p>
+<h4 id="工程师">1.1.1 工程师</h4>
+<p>工程师设计并实现软件，使游戏及工具得以运行。有时候，工程师分为两类：<strong>运行时</strong>程序员和<strong>工具</strong>程序员。运行时程序员制作引擎和游戏本身；工具程序员制作离线工具，供整个团队使用，以提供团队的工作效率。运行时/工具两方面的工程师都各有专长。资深工程师有时候会被赋予技术领导的角色，如首席工程师、技术总监、首席技术官等。</p>
+<h4 id="艺术家">1.1.2 艺术家</h4>
+<p>艺术家肩负制作游戏中所有视听内容的重任，而这些内容的品质能够决定游戏成败。下面来了解一下艺术家的不同分工。</p>
+<ul>
+<li><strong>概念艺术家</strong> 通过素描或绘画，让团队了解游戏的预设最终面貌。概念艺术家的工作始于游戏开发的概念阶段，一般会在项目的整个生命周期里继续担任美术指导。</li>
+<li><strong>三维建模师</strong> 为游戏世界的所有事物制作三维几何模型。这类人员通常会再细分为两类：前景建模师及背景建模师。由于人物建模与其他物体或场景的建模在技术及工作方式上有很大分别，所以有的公司还有独立的角色建模师。</li>
+<li><strong>纹理艺术家</strong> 制作称为纹理的二维影像。这些纹理用来贴附于三维模型之上，以增加模型的细节及真实感。</li>
+<li><strong>灯光师</strong> 布置游戏世界的静态和动态光源，并通过颜色、亮度、光源方向等设定，加强每个场景的美感及情感。</li>
+<li><strong>动画师</strong> 为游戏中的角色及物体加入动作。如同动画电影制作，在游戏制作过程中，动画师充当演员。</li>
+<li><strong>动画捕捉演员</strong> 提供一些原始的动作数据，这些数据经由动画师整理后，置于游戏中。</li>
+<li><strong>音效设计师</strong> 与工程师紧密合作，制作并混合游戏中的音效及音乐。</li>
+<li><strong>配音演员</strong> 为游戏角色配音。</li>
+<li><strong>作曲家</strong> 为游戏创作音乐。</li>
+</ul>
+<p>如同工程师，资深艺术家有时候会成为团队的领导。一些游戏有一位或多位艺术总监，他们是资深的艺术家，负责把控整个游戏的艺术风格，并维持所有团队成员作品的一致性。</p>
+<h4 id="游戏设计师">1.1.3 游戏设计师</h4>
+<p>游戏设计师负责设计玩家体验的互动部分，这部分一般称为<strong>游戏性</strong>。不同种类的游戏设计师，从事不同细致程度的工作。有些游戏团队会聘请一位或多位<strong>作家</strong>。如同其他游戏专业领域，有些资深游戏设计师也会负责管理团队。</p>
+<h4 id="制作人">1.1.4 制作人</h4>
+<p>在不同的工作室里，制作人的角色不尽相同。有些游戏公司，制作人负责管理时间表，并同时承担人力资源经理的职责。有些游戏公司里，制作人主要做资深游戏设计师的工作。还有些游戏工作室，要求制作人作为开发团队和商业部门之间的联系人。有些工作室甚至是完全没有制作人。</p>
+<h4 id="其他工作人员">1.1.5 其他工作人员</h4>
+<p>游戏开发团队通常需要一支非常重要的支持团队，包括工作室的行政管理团队、市场策划团队（或一个与市场研究公司联系的团队，与发行商相关）、行政人员及IT部门。</p>
+<p>####1.1.6 发行商及工作室 游戏的市场策划、制造及分销，通常由发行商负责，而非开发游戏的工作室本身。发行商通常是大企业，如艺电、THQ、维旺迪、索尼、任天堂等。很多游戏工作室并不隶属于个别发行商，这些工作室把他们制作的游戏，卖给出最好条件的发行商，还有一些工作室让单一发行商独家代理他们的游戏。<strong>第一方开发商</strong>是指游戏工作室直接隶属于游戏主机生产商（索尼、任天堂、微软）。这些工作室独家为母公司的游戏硬件制作游戏。</p>
+<h3 id="游戏是什么">1.2 游戏是什么</h3>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/19/CS229-7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1719,7 +1895,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-count">10</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1738,7 +1914,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">3</span>
+                      
+                    
+                    <span class="site-state-item-count">4</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1771,7 +1949,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">10</span>
+                      
+                    
+                    <span class="site-state-item-count">11</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -2009,6 +2189,8 @@
 
   
   
+    
+      
     
       
     
