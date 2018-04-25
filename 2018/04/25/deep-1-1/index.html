@@ -102,28 +102,21 @@
 
 
 
-  <meta name="description" content="本篇博客为CS229第二篇学习笔记，主要内容包括线性回归模型的概率解释和局部加权线性回归。">
-<meta name="keywords" content="CS229,机器学习,线性回归">
-<meta property="og:type" content="article">
-<meta property="og:title" content="CS229学习笔记之二：线性回归的概率解释">
-<meta property="og:url" content="http://yoursite.com/2018/03/15/CS229-2/index.html">
+  <meta property="og:type" content="article">
+<meta property="og:title" content="deep-1">
+<meta property="og:url" content="http://yoursite.com/2018/04/25/deep-1-1/index.html">
 <meta property="og:site_name" content="xxwywzy&#39;s Blog">
-<meta property="og:description" content="本篇博客为CS229第二篇学习笔记，主要内容包括线性回归模型的概率解释和局部加权线性回归。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/images/cs229-2-0.png">
-<meta property="og:image" content="http://yoursite.com/images/cs229-2-1.png">
-<meta property="og:updated_time" content="2018-04-22T07:55:21.073Z">
+<meta property="og:updated_time" content="2018-04-25T15:09:11.672Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CS229学习笔记之二：线性回归的概率解释">
-<meta name="twitter:description" content="本篇博客为CS229第二篇学习笔记，主要内容包括线性回归模型的概率解释和局部加权线性回归。">
-<meta name="twitter:image" content="http://yoursite.com/images/cs229-2-0.png">
+<meta name="twitter:title" content="deep-1">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/03/15/CS229-2/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/04/25/deep-1-1/"/>
 
 
 
@@ -133,7 +126,7 @@
   };
 </script>
 
-  <title>CS229学习笔记之二：线性回归的概率解释 | xxwywzy's Blog</title>
+  <title>deep-1 | xxwywzy's Blog</title>
   
 
 
@@ -307,7 +300,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/15/CS229-2/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/25/deep-1-1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Zheyu Wang">
@@ -324,7 +317,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">CS229学习笔记之二：线性回归的概率解释
+          <h1 class="post-title" itemprop="name headline">deep-1
               
             
           </h1>
@@ -349,30 +342,12 @@
                 
               
 
-              <time title="创建时间：2018-03-15 22:11:30" itemprop="dateCreated datePublished" datetime="2018-03-15T22:11:30+08:00">2018-03-15</time>
+              <time title="创建时间：2018-04-25 23:09:11" itemprop="dateCreated datePublished" datetime="2018-04-25T23:09:11+08:00">2018-04-25</time>
             
 
             
           </span>
 
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/课程笔记/" itemprop="url" rel="index"><span itemprop="name">课程笔记</span></a></span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -382,8 +357,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/03/15/CS229-2/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/03/15/CS229-2/" itemprop="commentCount"></span>
+                <a href="/2018/04/25/deep-1-1/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/04/25/deep-1-1/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -391,7 +366,7 @@
 
           
           
-             <span id="/2018/03/15/CS229-2/" class="leancloud_visitors" data-flag-title="CS229学习笔记之二：线性回归的概率解释">
+             <span id="/2018/04/25/deep-1-1/" class="leancloud_visitors" data-flag-title="deep-1">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -422,65 +397,7 @@
       
 
       
-        <p><img src="/images/cs229-2-0.png" width="75%" height="75%"></p>
-<p>本篇博客为CS229第二篇学习笔记，主要内容包括线性回归模型的概率解释和局部加权线性回归。</p>
-<a id="more"></a>
-<h3 id="线性回归模型的概率解释">线性回归模型的概率解释</h3>
-<p>在线性回归中，为什么要选择最小二乘函数作为代价函数？我们可以用概率模型来对其进行解释。</p>
-<h4 id="概率模型">概率模型</h4>
-<p>假设真实值与输入之间满足如下等式： <span class="math display">\[
-y^{(i)} = \theta^Tx^{(i)}+\epsilon^{(i)}
-\]</span> 其中<span class="math inline">\(\epsilon^{(i)}\)</span>是误差项，表示没有被建模的因素或是随机噪声。进一步假设误差项是独立同分布的，那么根据中心极限定理，大量相互独立的随机变量之和是符合正态分布（可以理解为大量独立随机变量的大部分误差会相互抵消），即<span class="math inline">\(\epsilon^{(i)}\sim {\cal N} (0,\sigma^2)\)</span>，那么有： <span class="math display">\[
-p(\epsilon^{(i)}) = \frac{1}{\sqrt{2\pi}\sigma}\text{exp}\left(-\frac{(\epsilon^{(i)})^2}{2\sigma^2}\right)
-\]</span> 因为误差的概率和预测出真实值的概率是一样的，因此： <span class="math display">\[
-p(y^{(i)} \,\rvert \,x^{(i)};\theta ) = \frac{1}{\sqrt{2\pi}\sigma}\text{exp}\left(-\frac{(y^{(i)} - \theta^Tx^{(i)})^2}{2\sigma^2}\right)
-\]</span> 注意，这里<span class="math inline">\(p(y^{(i)} \,\rvert \,x^{(i)};\theta )\)</span>不同于<span class="math inline">\(p(y^{(i)} \,\rvert \,x^{(i)},\theta )\)</span>，这里指给定<span class="math inline">\(x^{(i)}\)</span>，以<span class="math inline">\(\theta\)</span>为参数的<span class="math inline">\(y^{(i)}\)</span>的分布，因为对于训练集，<span class="math inline">\(\theta\)</span>是客观存在的，只是当前还不确定，所以有 <span class="math display">\[
-y^{(i)} \,\rvert \,x^{(i)};\theta\sim {\cal N }(\theta^Tx^{(i)},\sigma^2)
-\]</span> 即真实值应该是以预测值为中心的一个正态分布。</p>
-<h4 id="似然函数">似然函数</h4>
-<p>给定训练集<span class="math inline">\({X}\)</span>和参数<span class="math inline">\(\theta\)</span>，预测结果等于真实结果的概率，将其看作<span class="math inline">\(\theta\)</span>的函数，可以理解为<span class="math inline">\(\theta\)</span>为真实<span class="math inline">\(\theta\)</span>的可能性（似然性），即： <span class="math display">\[
-L(\theta)=L(\theta;X,\vec y)=p(\vec y  \,\rvert\, X;\theta)
-\]</span> 因为假设<span class="math inline">\(\epsilon^{(i)}\)</span>是独立的（即给定<span class="math inline">\(x^{(i)}\)</span>，<span class="math inline">\(y^{(i)}\)</span>也是独立的），所以有： <span class="math display">\[
-\begin{align*}
-L(\theta) &amp;= \prod_{i=1}^m p(y^{(i)}\,\lvert\,x^{(i)};\theta)\\
-&amp;=\prod_{i=1}^m  \frac{1}{\sqrt{2\pi}\sigma}\text{exp}\left(-\frac{(y^{(i)} - \theta^Tx^{(i)})^2}{2\sigma^2}\right)
-\end{align*}
-\]</span> 现在，我们可以通过<strong>最大似然法</strong>，即找出使<span class="math inline">\(L(\theta)\)</span>最大的那个<span class="math inline">\(\theta\)</span>，作为对参数<span class="math inline">\(\theta\)</span>的最佳取值。</p>
-<p>实际应用中，为了简化计算，通常不直接求似然函数的最大值，而是采用<strong>对数似然</strong>函数： <span class="math display">\[
-\begin{align*}
-\ell(\theta) &amp;= \text{log}L(\theta)\\
-&amp;= \text{log}\prod_{i=1}^m \frac{1}{\sqrt{2\pi}\sigma}\text{exp}\left(-\frac{(y^{(i)} - \theta^Tx^{(i)})^2}{2\sigma^2}\right)\\
-&amp;= \sum_{i=1}^m\text{log}\frac{1}{\sqrt{2\pi}\sigma}\text{exp}\left(-\frac{(y^{(i)} - \theta^Tx^{(i)})^2}{2\sigma^2}\right)\\
-&amp;=m\text{log}\frac{1}{\sqrt{2\pi}\sigma}-\frac{1}{\sigma^2} \cdot \frac 1 2 \sum_{i=1}^m(y^{(i)} - \theta^Tx^{(i)})^2
-\end{align*}
-\]</span> 因此，最大化<span class="math inline">\(l(\theta)\)</span>就是最小化： <span class="math display">\[
- \frac 1 2 \sum_{i=1}^m(y^{(i)} - \theta^Tx^{(i)})^2
-\]</span> 而这正是我们之前提出的<strong>最小二乘代价函数</strong>！</p>
-<p>注意点：</p>
-<ul>
-<li>概率解释只是对最小二乘法的一种合理解释，其实还有其他的解释方法</li>
-<li><span class="math inline">\(\theta\)</span>的选择并不依赖于<span class="math inline">\(\sigma^2\)</span>，即使它是未知的</li>
-</ul>
-<h3 id="局部加权线性回归">局部加权线性回归</h3>
-<h4 id="欠拟合与过拟合">欠拟合与过拟合</h4>
-<p>对于传统的线性回归，特征的选择极为重要，对于下面三幅图，我们称第一幅图的模型是<strong>欠拟合</strong>，第三幅图的模型则是<strong>过拟合</strong>。</p>
-<p><img src="/images/cs229-2-1.png" width="75%" height="75%"></p>
-<p>可以看出，找到一个全局的线性模型去拟合整个训练集，并不是一件简单的事情，往往会引起欠拟合或是过拟合的发生，对于这种情况之后会给出解决方案，而这里我们提出了另外一种思路，即<strong>局部线性加权回归</strong>，这种方案可以使特征的选择的重要性降低。</p>
-<h4 id="算法思路">算法思路</h4>
-<p>局部线性加权回归的思路是并不去拟合整个训练集来产生全局的模型，而是在每次预测时，只去拟合给定输入x附近的一小段训练集，无论全局训练集是怎样的一条分布曲线，在局部小段数据上，都可以用线性去逼近。具体步骤如下： <span class="math display">\[
-\begin{align*}
-1.\,&amp; \text{Fit} \;\theta\;\text{to minimize}\;\sum_i\omega^{(i)}(y^{(i)} - \theta^Tx^{(i)})^2\\
-2.\,&amp; \text{Output} \;\theta^Tx
-\end{align*}
-\]</span> 这里<span class="math inline">\(\omega^{(i)}\)</span>是非负<strong>权重</strong>，一般取为 <span class="math display">\[
-\omega^{(i)}=exp\left(-\frac{(x^{(i)}-x)^2}{2\tau^2}\right)
-\]</span>（当x为向量时表达式有所不同）</p>
-<p>可以看出，离给定输入越近的样本点权重越大，拟合程度越高。</p>
-<p>注意：<span class="math inline">\(\omega^{(i)}\)</span>的定义与高斯分布类似，但并没有关系，分布曲线同为钟型。<span class="math inline">\(\tau\)</span>称为<strong>带宽参数</strong>，用来控制钟型曲线的顶峰下降速度，即权重变化的快慢，需要根据具体情况作出调整。</p>
-<h4 id="参数与非参数">参数与非参数</h4>
-<p>局部加权线性回归本质上是一种<strong>非参数学习算法</strong>，而传统的线性回归是一种<strong>参数学习算法</strong>。</p>
-<p>两者的区别在于参数学习算法有一组有限的、固定的参数，一旦完成拟合，只需要保存下参数值做预测，而不需要保存完整的训练集；而非参数学习算法由于参数不固定，所以需要保存完整的训练集来进行预测，而不仅仅是保存参数。</p>
-<p><strong>非参数</strong>导致的结果：为了表达假设h而保存的数据将随着训练集的大小而线性增长。</p>
+        
 
       
     </div>
@@ -499,16 +416,6 @@ L(\theta) &amp;= \prod_{i=1}^m p(y^{(i)}\,\lvert\,x^{(i)};\theta)\\
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/CS229/" rel="tag"># CS229</a>
-          
-            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
-          
-            <a href="/tags/线性回归/" rel="tag"># 线性回归</a>
-          
-        </div>
-      
 
       
       
@@ -518,8 +425,8 @@ L(\theta) &amp;= \prod_{i=1}^m p(y^{(i)}\,\lvert\,x^{(i)};\theta)\\
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/03/14/CS229-1/" rel="next" title="CS229学习笔记之一：线性回归">
-                <i class="fa fa-chevron-left"></i> CS229学习笔记之一：线性回归
+              <a href="/2018/04/25/deep-1/" rel="next" title="deeplearning.ai 学习笔记：第一周">
+                <i class="fa fa-chevron-left"></i> deeplearning.ai 学习笔记：第一周
               </a>
             
           </div>
@@ -527,10 +434,6 @@ L(\theta) &amp;= \prod_{i=1}^m p(y^{(i)}\,\lvert\,x^{(i)};\theta)\\
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/03/18/CS229-3/" rel="prev" title="CS229学习笔记之三：逻辑回归">
-                CS229学习笔记之三：逻辑回归 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -582,17 +485,8 @@ L(\theta) &amp;= \prod_{i=1}^m p(y^{(i)}\,\lvert\,x^{(i)};\theta)\\
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -723,22 +617,6 @@ L(\theta) &amp;= \prod_{i=1}^m p(y^{(i)}\,\lvert\,x^{(i)};\theta)\\
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#线性回归模型的概率解释"><span class="nav-number">1.</span> <span class="nav-text">线性回归模型的概率解释</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#概率模型"><span class="nav-number">1.1.</span> <span class="nav-text">概率模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#似然函数"><span class="nav-number">1.2.</span> <span class="nav-text">似然函数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#局部加权线性回归"><span class="nav-number">2.</span> <span class="nav-text">局部加权线性回归</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#欠拟合与过拟合"><span class="nav-number">2.1.</span> <span class="nav-text">欠拟合与过拟合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#算法思路"><span class="nav-number">2.2.</span> <span class="nav-text">算法思路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参数与非参数"><span class="nav-number">2.3.</span> <span class="nav-text">参数与非参数</span></a></li></ol></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
