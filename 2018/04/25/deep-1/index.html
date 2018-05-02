@@ -112,8 +112,10 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/deep-1-0.jpg">
 <meta property="og:image" content="http://yoursite.com/images/deep-1-1.png">
+<meta property="og:image" content="http://yoursite.com/images/deep-1-2.png">
+<meta property="og:image" content="http://yoursite.com/images/deep-1-3.png">
 <meta property="og:image" content="http://yoursite.com/images/deep-1.jpg">
-<meta property="og:updated_time" content="2018-04-30T15:07:44.369Z">
+<meta property="og:updated_time" content="2018-05-02T14:49:36.043Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="deeplearning.ai 第一周学习笔记：深度学习引言">
 <meta name="twitter:description" content="本系列笔记是 Coursera 在线课程 deeplearning.ai 的学习笔记，主要是对自己在听课过程中所记笔记的整理，同时参考网络上已有的学习笔记对文字进行了重新组织，提高可读性。本篇博客为第一周的学习笔记，主题是：深度学习引言。">
@@ -432,7 +434,7 @@
 <blockquote>
 <p>我认为<strong>AI是最新的电力</strong>，大约在一百年前，我们社会的电气化改变了每个主要行业，从交通运输行业到制造业、医疗保健、通讯等方面，我认为如今我们见到了AI明显的令人惊讶的能量，带来了同样巨大的转变。显然，AI的各个分支中，发展最为迅速的就是深度学习。因此现在，深度学习是在科技世界中广受欢迎的一种技巧。</p>
 </blockquote>
-<p><img src="/images/deep-1-1.png" width="45%" height="5%""></p>
+<p><img src="/images/deep-1-1.png" width="45%" height="45%""></p>
 <p>通过以下五门课程，你将获取并且掌握深度学习的基本技能。</p>
 <ol type="1">
 <li>神经网络和深度学习（Neural Networks and Deep Learning）</li>
@@ -442,6 +444,16 @@
 <li>序列模型（Sequence Models）</li>
 </ol>
 <h4 id="什么是神经网络what-is-a-neural-network">什么是神经网络？（What is a Neural Network）</h4>
+<p>深度学习这个术语一般是指训练多层神经网络的过程，那么神经网络究竟是什么呢？在这个视频中，将会直观地对神经网络进行介绍。</p>
+<p>让我们以房价预测为例。假设你有一个数据集，包含了房屋的面积与价格，你可能会想要用线性回归去拟合一条直线，来根据房屋面积预测房价，然而你也许会得到这样一条线：</p>
+<p><img src="/images/deep-1-2.png" width="75%" height="75%""></p>
+<p>可以看到，为了保证价格不会为负，我们将直线弯曲了一点，让它最终在零结束。这条粗的蓝线就是你的最终函数，用于根据房屋面积预测价格。</p>
+<p>以上函数实际上就是一个最简单的神经网络。我们把房屋的面积作为神经网络的输入 <span class="math inline">\(x\)</span> ，通过一个节点，最终输出了价格 <span class="math inline">\(y\)</span> ，这个节点就是一个单独的神经元。</p>
+<p>上述函数被称为 <strong>ReLU</strong> 激活函数，它的全称是 <strong>Rectified Linear Unit</strong> ，在有关神经网络的文献中，你会经常看到这个函数。</p>
+<p>现在，假定我们拥有更多的输入特征，如房屋面积、卧室数量、邮政编码、富裕程度等，我们应该如何来基于这些特征预测房屋面积？</p>
+<p>我们可以基于神经元构建一个神经网络，如下图所示。输入为之前所提到的四个特征，输出为房屋面积，将神经元进行堆叠，我们就得到了一个稍大一点的神经网络，只需要提供简单的特征 <span class="math inline">\(x\)</span> 与 对应的 <span class="math inline">\(y\)</span> ，便可以通过训练神经网络找到从 <span class="math inline">\(x\)</span> 到 <span class="math inline">\(y\)</span> 的精准映射函数。</p>
+<p><img src="/images/deep-1-3.png" width="75%" height="75%""></p>
+<p>处于中间的神经元被称为<strong>隐藏单元</strong>，在一个神经元网络中，隐藏单元与每个输入特征均存在着联系。</p>
 <p><img src="/images/deep-1.jpg" width="100%" height="100%"></p>
 
       
