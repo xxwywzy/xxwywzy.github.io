@@ -114,8 +114,13 @@
 <meta property="og:image" content="http://yoursite.com/images/deep-1-1.png">
 <meta property="og:image" content="http://yoursite.com/images/deep-1-2.png">
 <meta property="og:image" content="http://yoursite.com/images/deep-1-3.png">
+<meta property="og:image" content="http://yoursite.com/images/deep-1-4.png">
+<meta property="og:image" content="http://yoursite.com/images/deep-1-5.png">
+<meta property="og:image" content="http://yoursite.com/images/deep-1-6.png">
+<meta property="og:image" content="http://yoursite.com/images/deep-1-7.png">
+<meta property="og:image" content="http://yoursite.com/images/deep-1-8.png">
 <meta property="og:image" content="http://yoursite.com/images/deep-1.jpg">
-<meta property="og:updated_time" content="2018-05-02T14:49:36.043Z">
+<meta property="og:updated_time" content="2018-05-05T14:42:29.913Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="deeplearning.ai 第一周学习笔记：深度学习引言">
 <meta name="twitter:description" content="本系列笔记是 Coursera 在线课程 deeplearning.ai 的学习笔记，主要是对自己在听课过程中所记笔记的整理，同时参考网络上已有的学习笔记对文字进行了重新组织，提高可读性。本篇博客为第一周的学习笔记，主题是：深度学习引言。">
@@ -451,10 +456,37 @@
 <p>以上函数实际上就是一个最简单的神经网络。我们把房屋的面积作为神经网络的输入 <span class="math inline">\(x\)</span> ，通过一个节点，最终输出了价格 <span class="math inline">\(y\)</span> ，这个节点就是一个单独的神经元。</p>
 <p>上述函数被称为 <strong>ReLU</strong> 激活函数，它的全称是 <strong>Rectified Linear Unit</strong> ，在有关神经网络的文献中，你会经常看到这个函数。</p>
 <p>现在，假定我们拥有更多的输入特征，如房屋面积、卧室数量、邮政编码、富裕程度等，我们应该如何来基于这些特征预测房屋面积？</p>
-<p>我们可以基于神经元构建一个神经网络，如下图所示。输入为之前所提到的四个特征，输出为房屋面积，将神经元进行堆叠，我们就得到了一个稍大一点的神经网络，只需要提供简单的特征 <span class="math inline">\(x\)</span> 与 对应的 <span class="math inline">\(y\)</span> ，便可以通过训练神经网络找到从 <span class="math inline">\(x\)</span> 到 <span class="math inline">\(y\)</span> 的精准映射函数。</p>
+<p>我们可以基于神经元构建一个神经网络，如下图所示。输入为之前所提到的四个特征，输出为房屋面积，将神经元进行堆叠，我们就得到了一个稍大一点的神经网络，只需要提供简单的特征 <span class="math inline">\(x\)</span> 与对应的 <span class="math inline">\(y\)</span> ，便可以通过训练神经网络找到从 <span class="math inline">\(x\)</span> 到 <span class="math inline">\(y\)</span> 的精准映射函数。</p>
 <p><img src="/images/deep-1-3.png" width="75%" height="75%""></p>
 <p>处于中间的神经元被称为<strong>隐藏单元</strong>，在一个神经元网络中，隐藏单元与每个输入特征均存在着联系。</p>
+<h4 id="神经网络的监督学习supervised-learning-with-neural-networks">神经网络的监督学习（Supervised Learning with Neural Networks）</h4>
+<p>我们知道，机器学习大体上可以分为两类：<strong>监督学习</strong>和<strong>无监督学习</strong>。而在深度学习领域，目前为止几乎所有的经济价值都是由基于监督学习的神经网络所创造的。</p>
+<p>监督学习即数据集是包含输出的，我们要做的就是学习一个函数来从输入 <span class="math inline">\(x\)</span> 映射到输出 <span class="math inline">\(y\)</span>。下图列举了一些监督学习式神经网络的应用领域。</p>
+<p><img src="/images/deep-1-4.png" width="75%" height="75%""></p>
+<p>对于不同的应用领域，我们需要不同类型的神经网络，对于房价预测和在线广告等应用，采用的是相对标准的神经网络，而对于图像领域的应用，常常使用<strong>卷积神经网络（CNN</strong>），而对于序列数据，例如音频、语言等，常常使用<strong>循环神经网络（RNN）</strong>（注意不要与递归神经网络混淆），下图给出了三种网络结构的示意图。</p>
+<p><img src="/images/deep-1-5.png" width="75%" height="75%""></p>
+<p>此外，监督学习所处理的数据可以分为结构化与非结构化两种。结构化数据，即数据以类似关系型数据库的表结构的形式展示；而非结构化数据是指音平、图像或文本等特征没有直接展示的数据，如下图所示。</p>
+<p><img src="/images/deep-1-6.png" width="75%" height="75%""></p>
+<p>从历史经验来看，与结构化数据相比，让计算机理解非结构化数据更加困难。而随着神经网络与深度学习的兴起，计算机现在能够更好地解释非结构化的数据了，例如语音识别、图像识别、自然语言处理等领域。当然，我们也不能忽略基于结构化数据的神经网络所创造的巨大经济价值。</p>
+<h4 id="为什么深度学习会兴起why-is-deep-learning-taking-off">为什么深度学习会兴起？（Why is Deep Learning taking off?）</h4>
+<p>深度学习兴起的原因主要有三点：</p>
+<ul>
+<li>信息化社会带来的数据量的巨大提升</li>
+<li>硬件更新带来更快的计算速度</li>
+<li>神经网络算法的不断发展</li>
+</ul>
+<p><img src="/images/deep-1-7.png" width="75%" height="75%""></p>
+<p>上图表明了如果想要获得更好的表现，需要考虑以下两点：</p>
+<ol type="1">
+<li>训练一个规模更大的神经网络</li>
+<li>拥有更大规模的已标注数据</li>
+</ol>
+<p>而计算速度是实现上述表现的基础。近些年来，CPU 与 GPU 的提升为我们带来了更强大的计算能力，同时，算法方面的创新也使得神经网络能够运行的更快，例如将 <strong>sigmoid</strong> 函数替换为 <strong>ReLU</strong> 函数，使得<strong>梯度下降</strong>算法获得了巨大的提升。</p>
+<p><img src="/images/deep-1-8.png" width="50%" height="50%""></p>
+<p>另一方面，训练神经网络是一个不断迭代的过程，如图所示。现如今，更快的计算速度可以帮助我们来更快地进行迭代，从而更快地开发出新的算法。</p>
+<p>最后，用一张图概括一下本周的内容：（图片取自Twitter）</p>
 <p><img src="/images/deep-1.jpg" width="100%" height="100%"></p>
+<p>第一周 END</p>
 
       
     </div>
@@ -701,7 +733,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#欢迎welcome"><span class="nav-number">1.</span> <span class="nav-text">欢迎（Welcome）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#什么是神经网络what-is-a-neural-network"><span class="nav-number">2.</span> <span class="nav-text">什么是神经网络？（What is a Neural Network）</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#欢迎welcome"><span class="nav-number">1.</span> <span class="nav-text">欢迎（Welcome）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#什么是神经网络what-is-a-neural-network"><span class="nav-number">2.</span> <span class="nav-text">什么是神经网络？（What is a Neural Network）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#神经网络的监督学习supervised-learning-with-neural-networks"><span class="nav-number">3.</span> <span class="nav-text">神经网络的监督学习（Supervised Learning with Neural Networks）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#为什么深度学习会兴起why-is-deep-learning-taking-off"><span class="nav-number">4.</span> <span class="nav-text">为什么深度学习会兴起？（Why is Deep Learning taking off?）</span></a></li></ol></div>
             
 
           </div>
