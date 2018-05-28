@@ -110,13 +110,13 @@
 <meta property="og:site_name" content="xxwywzy&#39;s Blog">
 <meta property="og:description" content="本篇博客为CS229第二篇学习笔记，主要内容包括线性回归模型的概率解释和局部加权线性回归。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/images/cs229-2-0.jpg">
-<meta property="og:image" content="http://yoursite.com/images/cs229-2-1.png">
-<meta property="og:updated_time" content="2018-05-20T15:28:28.311Z">
+<meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-133419.jpg">
+<meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-133438.png">
+<meta property="og:updated_time" content="2018-05-28T13:35:43.810Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS229学习笔记之二：线性回归的概率解释">
 <meta name="twitter:description" content="本篇博客为CS229第二篇学习笔记，主要内容包括线性回归模型的概率解释和局部加权线性回归。">
-<meta name="twitter:image" content="http://yoursite.com/images/cs229-2-0.jpg">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2018-05-28-133419.jpg">
 
 
 
@@ -422,7 +422,7 @@
       
 
       
-        <p><img src="/images/cs229-2-0.jpg" width="75%" height="75%"></p>
+        <p><img src="http://media.zjubiomedit.com/2018-05-28-133419.jpg" width="75%" height="75%"></p>
 <p>本篇博客为CS229第二篇学习笔记，主要内容包括线性回归模型的概率解释和局部加权线性回归。</p>
 <a id="more"></a>
 <h3 id="线性回归模型的概率解释">线性回归模型的概率解释</h3>
@@ -464,7 +464,7 @@ L(\theta) &amp;= \prod_{i=1}^m p(y^{(i)}\,\lvert\,x^{(i)};\theta)\\
 <h3 id="局部加权线性回归">局部加权线性回归</h3>
 <h4 id="欠拟合与过拟合">欠拟合与过拟合</h4>
 <p>对于传统的线性回归，特征的选择极为重要，对于下面三幅图，我们称第一幅图的模型是<strong>欠拟合</strong>，第三幅图的模型则是<strong>过拟合</strong>。</p>
-<p><img src="/images/cs229-2-1.png" width="75%" height="75%"></p>
+<p><img src="http://media.zjubiomedit.com/2018-05-28-133438.png" width="75%" height="75%"></p>
 <p>可以看出，找到一个全局的线性模型去拟合整个训练集，并不是一件简单的事情，往往会引起欠拟合或是过拟合的发生，对于这种情况之后会给出解决方案，而这里我们提出了另外一种思路，即<strong>局部线性加权回归</strong>，这种方案可以使特征的选择的重要性降低。</p>
 <h4 id="算法思路">算法思路</h4>
 <p>局部线性加权回归的思路是并不去拟合整个训练集来产生全局的模型，而是在每次预测时，只去拟合给定输入x附近的一小段训练集，无论全局训练集是怎样的一条分布曲线，在局部小段数据上，都可以用线性去逼近。具体步骤如下： <span class="math display">\[
@@ -472,9 +472,11 @@ L(\theta) &amp;= \prod_{i=1}^m p(y^{(i)}\,\lvert\,x^{(i)};\theta)\\
 1.\,&amp; \text{Fit} \;\theta\;\text{to minimize}\;\sum_i\omega^{(i)}(y^{(i)} - \theta^Tx^{(i)})^2\\
 2.\,&amp; \text{Output} \;\theta^Tx
 \end{align*}
-\]</span> 这里<span class="math inline">\(\omega^{(i)}\)</span>是非负<strong>权重</strong>，一般取为 <span class="math display">\[
+\]</span></p>
+<p>这里<span class="math inline">\(\omega^{(i)}\)</span>是非负<strong>权重</strong>，一般取为</p>
+<p><span class="math display">\[
 \omega^{(i)}=exp\left(-\frac{(x^{(i)}-x)^2}{2\tau^2}\right)
-\]</span>（当x为向量时表达式有所不同）</p>
+\]</span> （当x为向量时表达式有所不同）</p>
 <p>可以看出，离给定输入越近的样本点权重越大，拟合程度越高。</p>
 <p>注意：<span class="math inline">\(\omega^{(i)}\)</span>的定义与高斯分布类似，但并没有关系，分布曲线同为钟型。<span class="math inline">\(\tau\)</span>称为<strong>带宽参数</strong>，用来控制钟型曲线的顶峰下降速度，即权重变化的快慢，需要根据具体情况作出调整。</p>
 <h4 id="参数与非参数">参数与非参数</h4>
@@ -611,7 +613,7 @@ L(\theta) &amp;= \prod_{i=1}^m p(y^{(i)}\,\lvert\,x^{(i)};\theta)\\
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-count">17</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -683,7 +685,9 @@ L(\theta) &amp;= \prod_{i=1}^m p(y^{(i)}\,\lvert\,x^{(i)};\theta)\\
                     
                       
                     
-                    <span class="site-state-item-count">17</span>
+                      
+                    
+                    <span class="site-state-item-count">18</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

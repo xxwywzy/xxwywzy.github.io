@@ -110,18 +110,18 @@
 <meta property="og:site_name" content="xxwywzy&#39;s Blog">
 <meta property="og:description" content="本篇博客为CS229第五篇学习笔记，主要内容包括生成学习算法以及高斯判别分析。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/images/cs229-5-0.jpg">
-<meta property="og:image" content="http://yoursite.com/images/cs229-5-1.png">
-<meta property="og:image" content="http://yoursite.com/images/cs229-5-2.png">
-<meta property="og:image" content="http://yoursite.com/images/cs229-5-3.png">
-<meta property="og:image" content="http://yoursite.com/images/cs229-5-4.png">
-<meta property="og:image" content="http://yoursite.com/images/cs229-5-5.png">
-<meta property="og:image" content="http://yoursite.com/images/cs229-5-6.png">
-<meta property="og:updated_time" content="2018-05-20T15:28:49.329Z">
+<meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-133656.jpg">
+<meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-133705.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-133711.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-133717.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-133724.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-133731.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-134230.png">
+<meta property="og:updated_time" content="2018-05-28T13:42:36.345Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS229学习笔记之五：生成学习算法">
 <meta name="twitter:description" content="本篇博客为CS229第五篇学习笔记，主要内容包括生成学习算法以及高斯判别分析。">
-<meta name="twitter:image" content="http://yoursite.com/images/cs229-5-0.jpg">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2018-05-28-133656.jpg">
 
 
 
@@ -427,7 +427,7 @@
       
 
       
-        <p><img src="/images/cs229-5-0.jpg" width="75%" height="75%"></p>
+        <p><img src="http://media.zjubiomedit.com/2018-05-28-133656.jpg" width="75%" height="75%"></p>
 <p>本篇博客为CS229第五篇学习笔记，主要内容包括生成学习算法以及高斯判别分析。</p>
 <a id="more"></a>
 <h3 id="生成学习算法">生成学习算法</h3>
@@ -455,10 +455,10 @@ Cov(X) &amp;= E[(Z - E[Z])(Z - E[Z])^T] \\
 \end{align*}
 \]</span></p>
 <p>下面给出一些正态（高斯）分布的密概率度图像（二元）：</p>
-<p><img src="/images/cs229-5-1.png" width="70%" height="70%"></p>
+<p><img src="http://media.zjubiomedit.com/2018-05-28-133705.png" width="70%" height="70%"></p>
 <p>左边的图显示的分布均值为0（<span class="math inline">\(2\times1\)</span>的向量），协方差矩阵为 <span class="math inline">\(I\)</span> （<span class="math inline">\(2 \times 2\)</span>的单位矩阵），这样的正态分布又被称为<strong>标准正态分布</strong>。中间的图显示的分布均值为0且 <span class="math inline">\(\Sigma = 0.6 I\)</span> ；而右边的图显示的分布 <span class="math inline">\(\Sigma = 2 I\)</span>，可以看到随着 <span class="math inline">\(\Sigma\)</span> 的变大，分布变得越来越“展开”，看起来就像变得越来越“扁”.</p>
 <p>让我们来看看更多的例子。</p>
-<p><img src="/images/cs229-5-2.png" width="70%" height="70%"></p>
+<p><img src="http://media.zjubiomedit.com/2018-05-28-133711.png" width="70%" height="70%"></p>
 <p>上图表示的分布均值均为0，对应的协方差矩阵为： <span class="math display">\[
 \Sigma =\left[ \begin{array}{cc}
 1 &amp; 0 \\
@@ -477,9 +477,9 @@ Cov(X) &amp;= E[(Z - E[Z])(Z - E[Z])^T] \\
 \right ]
 \]</span></p>
 <p>左边的图就是标准正态分布，而可以看到随着非对角线上数值的增大，分布在45度方向上压缩的幅度越大。通过下面的轮廓图可以更清楚地展现这个特点。</p>
-<p><img src="/images/cs229-5-3.png" width="70%" height="70%"></p>
+<p><img src="http://media.zjubiomedit.com/2018-05-28-133717.png" width="70%" height="70%"></p>
 <p>下面是最后一组例子（改变 <span class="math inline">\(\Sigma\)</span> 的值）</p>
-<p><img src="/images/cs229-5-4.png" width="70%" height="70%"></p>
+<p><img src="http://media.zjubiomedit.com/2018-05-28-133724.png" width="70%" height="70%"></p>
 <p>上图对应的协方差为： <span class="math display">\[
 \Sigma =\left[ \begin{array}{cc}
 1 &amp; -0.5 \\
@@ -499,7 +499,7 @@ Cov(X) &amp;= E[(Z - E[Z])(Z - E[Z])^T] \\
 \]</span></p>
 <p>从左图和中图可以看到，随着元素值的减小（绝对值变大），分布在相反的方向上“压缩”得越明显。最后，右图中我们改变了对角线上的元素值，分布变得更趋近于椭圆。</p>
 <p>在最后一组例子中，令 <span class="math inline">\(\Sigma = I\)</span>，通过改变 <span class="math inline">\(\mu\)</span> ，我们可以移动分布的中心（均值）。</p>
-<p><img src="/images/cs229-5-5.png" width="70%" height="70%"></p>
+<p><img src="http://media.zjubiomedit.com/2018-05-28-133731.png" width="70%" height="70%"></p>
 <p>总而言之，多元正态分布与正态分布一样是钟型的曲线，参数 <span class="math inline">\(\mu\)</span> 会影响分布的位置（平移），而 <span class="math inline">\(\Sigma\)</span> 会影响分布的形状。</p>
 <h4 id="高斯判别分析模型">高斯判别分析模型</h4>
 <p>对于一个分类问题，输入变量 x 是连续随机变量，我们可以使用高斯判别分析（GDA）模型，对 <span class="math inline">\(p(x \mid y)\)</span> 使用多元正态分布建模，模型如下： <span class="math display">\[
@@ -529,7 +529,7 @@ p(x\mid y=1) &amp;= \frac{1}{(2\pi)^{n/2}|\Sigma|^{1/2}}\exp\left(-\frac 1 2 (x-
 \Sigma &amp;= \frac 1 m \sum_{i=1}^m (x^{(i)}-\mu_{y^{(i)}})(x^{(i)}-\mu_{y^{(i)}})^T
 \end{align*}
 \]</span> 用图形来表示，该算法可以表示为下图：</p>
-<p><img src="/images/cs229-5-6.png" width="50%" height="50%"></p>
+<p><img src="http://media.zjubiomedit.com/2018-05-28-134230.png" width="50%" height="50%"></p>
 <p>图中展示的是训练集，求得的高斯分布以及拟合至数据中，将数据分为了两类，注意两个高斯分布的形状与方向相同，因为它们共享同一个协方差矩阵，但是它们的均值不同。此外图中的直线表示决策边界：<span class="math inline">\(p(y=1|x) = 0.5\)</span>，在该边界的一侧，我们预测 y=1 是最可能的输出，在另一侧，则预测 y=0。</p>
 <h4 id="高斯判别分析与逻辑回归">高斯判别分析与逻辑回归</h4>
 <p>高斯判别分析与逻辑回归之间有着有趣的关系。如果我们将 <span class="math inline">\(p(y=1 \mid x; \phi,\mu_0,\mu_1, \Sigma)\)</span>表示为 x 的函数，可以得到：</p>
@@ -670,7 +670,7 @@ p(y=1 \mid x;\phi,\Sigma,\mu_0,\mu_1) = \frac 1 {1+\exp(-\theta^T x)}
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-count">17</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -742,7 +742,9 @@ p(y=1 \mid x;\phi,\Sigma,\mu_0,\mu_1) = \frac 1 {1+\exp(-\theta^T x)}
                     
                       
                     
-                    <span class="site-state-item-count">17</span>
+                      
+                    
+                    <span class="site-state-item-count">18</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

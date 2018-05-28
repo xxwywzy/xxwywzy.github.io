@@ -110,14 +110,14 @@
 <meta property="og:site_name" content="xxwywzy&#39;s Blog">
 <meta property="og:description" content="本篇博客为CS229第六篇学习笔记，主要内容包括朴素贝叶斯算法、拉普拉斯平滑以及文本分类的事件模型。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/images/cs229-6-0.jpg">
-<meta property="og:image" content="http://yoursite.com/images/cs229-6-1.png">
-<meta property="og:image" content="http://yoursite.com/images/cs229-6-2.png">
-<meta property="og:updated_time" content="2018-05-20T15:29:02.303Z">
+<meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-134336.jpg">
+<meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-134347.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-134401.png">
+<meta property="og:updated_time" content="2018-05-28T13:44:07.113Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS229学习笔记之六：朴素贝叶斯">
 <meta name="twitter:description" content="本篇博客为CS229第六篇学习笔记，主要内容包括朴素贝叶斯算法、拉普拉斯平滑以及文本分类的事件模型。">
-<meta name="twitter:image" content="http://yoursite.com/images/cs229-6-0.jpg">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2018-05-28-134336.jpg">
 
 
 
@@ -423,7 +423,7 @@
       
 
       
-        <p><img src="/images/cs229-6-0.jpg" width="75%" height="75%"></p>
+        <p><img src="http://media.zjubiomedit.com/2018-05-28-134336.jpg" width="75%" height="75%"></p>
 <p>本篇博客为CS229第六篇学习笔记，主要内容包括朴素贝叶斯算法、拉普拉斯平滑以及文本分类的事件模型。</p>
 <a id="more"></a>
 <h3 id="朴素贝叶斯算法">朴素贝叶斯算法</h3>
@@ -431,7 +431,7 @@
 <p>让我们以识别垃圾邮件为例，这类问题被称为<strong>文本分类</strong>问题。</p>
 <p>假设我们有一个训练集（已经标记好了是否为垃圾邮件的邮件集合），我们首先需要构建表示一封邮件的特征向量。</p>
 <p>我们通过如下方式表示特征向量：其长度为词表的长度（词表为所有可能出现的词的集合，一般通过训练集生成），如果这封邮件包含了第 i 个词，<span class="math inline">\(x_i = 1\)</span>，否则 <span class="math inline">\(x_i = 0\)</span>。下图为一个简单的例子：</p>
-<p><img src="/images/cs229-6-1.png" width="25%" height="25%"></p>
+<p><img src="http://media.zjubiomedit.com/2018-05-28-134347.png" width="25%" height="25%"></p>
 <p>选择好特征向量后，我们需要来构建生成模型，但考虑到x是一个高维向量，因此如果直接对 <span class="math inline">\(p(x\mid y)\)</span> 建模，那么会得到一个参数向量的维数极高的多项分布，使计算过于复杂。</p>
 <p>因此，我们需要做一个强力的假设，假设给定 y 时， 每一个$x_i $是条件独立的。这个假设被称为<strong>朴素贝叶斯假设</strong>，其引出的算法被称为<strong>朴素贝叶斯分类器</strong>。（注意是条件独立而不是独立，即仅在给定 y 的情况下独立）</p>
 <p>现在我们有（以50000维度为例）：</p>
@@ -474,7 +474,7 @@ p(y=1 \mid x) &amp;= \frac{p(x\mid y=1)p(y=1)}{p(x)} \\
 \]</span></p>
 <p>然后选择具有更高后验概率的类作为输出。（这里的n指字典的维数，需要先把x转换为统一长度的向量）</p>
 <p>在之前的例子中，输入的每一维特征都是是二元的，其对应的分布是伯努利分布，而当特征是多元时，其对应的分布应该用多项式分布建模。</p>
-<p><img src="/images/cs229-6-2.png" width="60%" height="60%"></p>
+<p><img src="http://media.zjubiomedit.com/2018-05-28-134401.png" width="60%" height="60%"></p>
 <p>实际上，即便一些原始的输入数据是连续值，我们可以通过一个映射表将连续值映射为离散值，然后运用朴素贝叶斯方法进行建模。当原始，连续值的数据不能很好的用多元正态分布进行建模时，将其离散化再使用朴素贝叶斯建模往往会取得更好的效果。（现在还有高斯离散贝叶斯算法）</p>
 <h3 id="拉普拉斯平滑">拉普拉斯平滑</h3>
 <p>之前描述的朴素贝叶斯算法有很多的应用，但是其当前的形式仍存在一个问题，让我们讨论一下如何解决这个问题。</p>
@@ -678,7 +678,7 @@ p(y=1 \mid x) &amp;= \frac {(\prod_{i=1}^n p(x_i \mid y=1))p(y=1)}{(\prod_{i=1}^
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-count">17</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -750,7 +750,9 @@ p(y=1 \mid x) &amp;= \frac {(\prod_{i=1}^n p(x_i \mid y=1))p(y=1)}{(\prod_{i=1}^
                     
                       
                     
-                    <span class="site-state-item-count">17</span>
+                      
+                    
+                    <span class="site-state-item-count">18</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

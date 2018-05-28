@@ -110,15 +110,15 @@
 <meta property="og:site_name" content="xxwywzy&#39;s Blog">
 <meta property="og:description" content="本篇博客为CS229第七篇学习笔记，主要内容为对支持向量机算法的系统介绍。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/images/cs229-7-0.jpg">
-<meta property="og:image" content="http://yoursite.com/images/cs229-7-1.png">
-<meta property="og:image" content="http://yoursite.com/images/cs229-7-2.png">
-<meta property="og:image" content="http://yoursite.com/images/cs229-7-3.png">
-<meta property="og:updated_time" content="2018-05-20T15:29:09.409Z">
+<meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-134414.jpg">
+<meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-134426.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-134438.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-134453.png">
+<meta property="og:updated_time" content="2018-05-28T13:45:03.159Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS229学习笔记之七：支持向量机">
 <meta name="twitter:description" content="本篇博客为CS229第七篇学习笔记，主要内容为对支持向量机算法的系统介绍。">
-<meta name="twitter:image" content="http://yoursite.com/images/cs229-7-0.jpg">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2018-05-28-134414.jpg">
 
 
 
@@ -424,7 +424,7 @@
       
 
       
-        <p><img src="/images/cs229-7-0.jpg" width="75%" height="75%"></p>
+        <p><img src="http://media.zjubiomedit.com/2018-05-28-134414.jpg" width="75%" height="75%"></p>
 <p>本篇博客为CS229第七篇学习笔记，主要内容为对支持向量机算法的系统介绍。</p>
 <a id="more"></a>
 <p>支持向量机（Support Vector Machines）被认为是最好的监督学习算法之一。这里先简要说明一下理解SVM的必要的几个部分（本段引用自<a href="http://blog.csdn.net/stdcoutzyx/article/details/9774135" target="_blank" rel="noopener">张雨石的博客</a>）：首先是函数间隔和几何间隔，由它们引出最优间隔分类器；为了多快好地解决最优间隔分类器问题，使用了拉格朗日对偶性性质，于是，先要理解原始优化问题与对偶问题及它们在什么条件下最优解等价，然后写出最优间隔分类器的对偶形式；通过对最优间隔分类器对偶问题求解，发现求解时目标函数存在内积形式的计算，据此引入了核技法；引入核技法后就得到了完完全全的 SVM 求解问题，使用序列最小化算法（SMO）进行求解。</p>
@@ -440,7 +440,7 @@
 \]</span></p>
 <p>给定一个训练集，如果我们可以找到这样的 <span class="math inline">\(\theta\)</span>，满足上面的条件，那么对所有的训练样本来说，分类的置信度将很高，这看起来是一个不错的目标。之后我们将用<strong>函数间隔</strong>来对这一描述进行定义。</p>
 <p>接下来我们将换一个角度来描述间隔。观察下面这幅图，x 代表正训练样本，o 代表负训练样本，决策边界由 <span class="math inline">\(\theta^Tx=0\)</span> 给出（又被称为<strong>分离超平面</strong>），有三个点以 A, B 和 C 标注。</p>
-<p><img src="/images/cs229-7-1.png" width="45%" height="45%"></p>
+<p><img src="http://media.zjubiomedit.com/2018-05-28-134426.png" width="45%" height="45%"></p>
 <p>可以看到，点 A 距离决策边界很远，因此如果要进行预测，我们非常“确信”其标签为1。而对于点 C ，由于其离决策边界太近，所以我们不能非常确定其标签为1，只要决策边界发生一点点变化，就可能导致对 C 的预测结果发生改变。而 B 的预测置信度介于 A 和 C 之间。</p>
 <p>因此，给定一个训练集，我们希望能找到一条决策边界，使我们对所有训练样本的预测时正确且置信度高的，即要求所有样本都远离决策边界。之后我们将用<strong>几何间隔</strong>来对这一描述进行定义。</p>
 <p>注：在前几部分的讨论中，我们默认数据是线性可分的。（之后会讨论线性不可分的情况）</p>
@@ -471,7 +471,7 @@ g(z)=\begin{cases} 1, \quad z\ge0 \\ -1, \quad \text{otherwise} \end{cases}
 \hat{\gamma}=\min_{i=1,\ldots,m}\hat{\gamma}^{(i)}.
 \]</span></p>
 <p>接下来，让我们讨论<strong>几何间隔</strong>。观察下面的图片：</p>
-<p><img src="/images/cs229-7-2.png" width="45%" height="45%"></p>
+<p><img src="http://media.zjubiomedit.com/2018-05-28-134438.png" width="45%" height="45%"></p>
 <p>对于超平面 <span class="math inline">\(w^Tx+b = 0\)</span>，其法向量为 <span class="math inline">\(w\)</span>（证明略） ，点 A 表示某个输入为 <span class="math inline">\(x^{(i)}\)</span> 的训练样本，标签为 <span class="math inline">\(y^{(i)} = 1\)</span>，其到决策边界的距离为 <span class="math inline">\(\gamma^{(i)}\)</span>，即线段AB的长度。</p>
 <p>现在，我们需要求解出 <span class="math inline">\(\gamma^{(i)}\)</span> 的值。由于BA方向即为法向量，其单位向量为 <span class="math inline">\(\frac{w}{||w||}\)</span>，因此点 B 可以通过下式计算：</p>
 <p><span class="math display">\[
@@ -610,7 +610,7 @@ g_i(w^{\ast}) &amp;\le 0,\quad i=1,\ldots,k \tag{6} \\
 g_i(w) = -y^{(i)}(w^Tx^{(i)}+b) +1 \le 0.
 \]</span></p>
 <p>注意到：从KKT对偶互补条件可以得出，只有当函数间隔等于1时，才有 <span class="math inline">\(\alpha_i&gt;0\)</span>，而函数间隔等于1对应着距离分隔超平面最近的点，即下图中虚线穿过的三个点：</p>
-<p><img src="/images/cs229-7-3.png" width="45%" height="45%"></p>
+<p><img src="http://media.zjubiomedit.com/2018-05-28-134453.png" width="45%" height="45%"></p>
 <p>只有这三个点对应的 <span class="math inline">\(\alpha_i\)</span> 在优化问题的解中不为0，这些点也被称为<strong>支持向量</strong>，其数量远小于训练集。</p>
 <p>接着往下来，我们已经给出了原始问题的对偶形式，那么一个关键思路就是，我们将尝试把算法表示为仅包含输入空间中的点的内积的形式 <span class="math inline">\(\langle x^{(i)},x^{(j)} \rangle\)</span>（可以理解为<span class="math inline">\((x^{(i)})^Tx^{(j)}\)</span>），当使用核技巧的时候，这将十分重要。</p>
 <p>让我们构建该优化问题的拉格朗日方程： <span class="math display">\[
@@ -894,7 +894,7 @@ z^TKz &amp;= \sum_i\sum_j z_iK_{ij}z_j\\
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-count">17</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -966,7 +966,9 @@ z^TKz &amp;= \sum_i\sum_j z_iK_{ij}z_j\\
                     
                       
                     
-                    <span class="site-state-item-count">17</span>
+                      
+                    
+                    <span class="site-state-item-count">18</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

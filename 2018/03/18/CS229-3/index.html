@@ -110,14 +110,14 @@
 <meta property="og:site_name" content="xxwywzy&#39;s Blog">
 <meta property="og:description" content="本篇博客为CS229第三篇学习笔记，主要内容包括逻辑回归、感知器学习算法以及牛顿方法。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/images/cs229-3-0.jpg">
-<meta property="og:image" content="http://yoursite.com/images/cs229-3-1.png">
-<meta property="og:image" content="http://yoursite.com/images/cs229-3-2.png">
-<meta property="og:updated_time" content="2018-05-20T15:28:33.601Z">
+<meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-133603.jpg">
+<meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-133612.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-133622.png">
+<meta property="og:updated_time" content="2018-05-28T13:36:27.056Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS229学习笔记之三：逻辑回归">
 <meta name="twitter:description" content="本篇博客为CS229第三篇学习笔记，主要内容包括逻辑回归、感知器学习算法以及牛顿方法。">
-<meta name="twitter:image" content="http://yoursite.com/images/cs229-3-0.jpg">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2018-05-28-133603.jpg">
 
 
 
@@ -423,7 +423,7 @@
       
 
       
-        <p><img src="/images/cs229-3-0.jpg" width="75%" height="75%"></p>
+        <p><img src="http://media.zjubiomedit.com/2018-05-28-133603.jpg" width="75%" height="75%"></p>
 <p>本篇博客为CS229第三篇学习笔记，主要内容包括逻辑回归、感知器学习算法以及牛顿方法。</p>
 <a id="more"></a>
 <p>之前我们讨论的是<strong>回归问题</strong>，即输出是连续值，现在我们来讨论输出是离散值的<strong>分类问题</strong>。首先，我们专注于<strong>二元分类</strong>问题，即输出 <span class="math inline">\(y\)</span> 只能取 <span class="math inline">\(0\)</span> 和 <span class="math inline">\(1\)</span> 两个值。</p>
@@ -434,7 +434,7 @@ h_{\theta}(x) = g(\theta^Tx) = \frac 1 {1+e^{-\theta^Tx}}
 \]</span> 其中 <span class="math display">\[
 g(z) = \frac 1 {1+e^{-z}}
 \]</span> 被称为<strong>逻辑函数</strong>或 <strong>S 型函数</strong>，其图像如下：</p>
-<p><img src="/images/cs229-3-1.png" width="45%" height="45%"></p>
+<p><img src="http://media.zjubiomedit.com/2018-05-28-133612.png" width="45%" height="45%"></p>
 <p>可以看到，当<span class="math inline">\(z \to +\infty\)</span>时<span class="math inline">\(g(z)\)</span>趋向于 <span class="math inline">\(1\)</span>， 当<span class="math inline">\(z \to -\infty\)</span>时<span class="math inline">\(g(z)\)</span>趋向于 <span class="math inline">\(0\)</span>，即<span class="math inline">\(g(z)\)</span>的值域为<span class="math inline">\((0,1)\)</span>，至于为什么要选择这个函数，在之后会作出解释。</p>
 <p>首先给出一个关于 S 型函数求导的有用性质： <span class="math display">\[
 \begin{align*}
@@ -490,7 +490,7 @@ g(z)=\left\{
 <h3 id="牛顿方法">牛顿方法</h3>
 <p>下面我们介绍另外一种算法来求解<span class="math inline">\(\ell (\theta)\)</span>的最大值，称为<strong>牛顿方法</strong>。</p>
 <p>我们通过如下的几张图来理解牛顿方法：</p>
-<p><img src="/images/cs229-3-2.png" width="70%" height="70%"></p>
+<p><img src="http://media.zjubiomedit.com/2018-05-28-133622.png" width="70%" height="70%"></p>
 <p>对于梯度下降，每次只是在梯度方向上下降一小步（取决于学习速率），而牛顿方法是一直下降到导数（切线）和<span class="math inline">\(\theta\)</span>轴交界的那个<span class="math inline">\(\theta\)</span>。因此牛顿方法的更新规则是： <span class="math display">\[
 \theta := \theta - \frac {f(\theta)} {f&#39; (\theta)}
 \]</span> 下面我们将牛顿方法应用于逻辑回归，我们需要找到<span class="math inline">\(\ell (\theta)\)</span>的最大值，即<span class="math inline">\(\ell &#39;(\theta)=0\)</span>，因此令<span class="math inline">\(f(\theta)=\ell &#39;(\theta)\)</span>，我们可以得到逻辑回归的牛顿方法更新公式： <span class="math display">\[
@@ -630,7 +630,7 @@ H_{ij}=\frac {\partial^2 \ell(\theta)} {\partial \theta_i \partial \theta_j}
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-count">17</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -702,7 +702,9 @@ H_{ij}=\frac {\partial^2 \ell(\theta)} {\partial \theta_i \partial \theta_j}
                     
                       
                     
-                    <span class="site-state-item-count">17</span>
+                      
+                    
+                    <span class="site-state-item-count">18</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
