@@ -111,7 +111,8 @@
 <meta property="og:description" content="课程地址">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-143715.png">
-<meta property="og:updated_time" content="2018-05-28T14:37:19.234Z">
+<meta property="og:image" content="http://media.zjubiomedit.com/2018-06-01-063821.jpg">
+<meta property="og:updated_time" content="2018-06-01T07:01:34.528Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Programming Languages Week1">
 <meta name="twitter:description" content="课程地址">
@@ -542,8 +543,64 @@
 <li>Download Emacs as a Mac OS X application from http://emacsformacosx.com/. Open the disk image file (.dmg) and drag the Emacs application to your Applications folder.</li>
 </ul>
 <h5 id="emacs-basics">Emacs Basics</h5>
+<p>Using Emacs feels a little different than using other editors; it can take some getting used to, especially the keyboard shortcuts. The following is a short primer on Emacs terminology and keyboard commands.</p>
+<p><img src="http://media.zjubiomedit.com/2018-06-01-063821.jpg" width="75%" height="75%"></p>
+<ul>
+<li>The cursor is a rectangular block and is referred to as the <strong>point</strong>.</li>
+<li>The mode line displays information about the <strong>buffer</strong> displayed in the current <strong>window</strong>. A buffer is a logical “thing” that you are working on.</li>
+<li>Every buffer is edited in a <strong>mode</strong>. The most basic mode is <strong>Fundamental</strong>, which provides only the most basic Emacs editing features.</li>
+<li>There are many “special” buffers that do not correspond to loaded files. The one above is called <strong><em>scratch</em></strong>. This buffer runs in Lisp Interaction mode.</li>
+</ul>
+<p>Emacs uses many key combinations involving the <strong>Control</strong> and <strong>Meta</strong> keys. <strong>Meta</strong> keys corresponds to <strong>Alt</strong> keys. The most important commands in Emacs are as following:</p>
+<ul>
+<li><strong>C-x C-c</strong>: Quit Emacs</li>
+<li><strong>C-g</strong>: Cancel the current action</li>
+<li><strong>C-x C-f</strong>: Open a file (whether or not it already exists)</li>
+<li><strong>C-x C-s</strong>: Save a file</li>
+<li><strong>C-x C-w</strong>: Write a file (probably more familiar to you as <em>Save as…</em>)</li>
+</ul>
+<p>Cut, copy, paste:</p>
+<ul>
+<li>Highlight text with the mouse or by hitting <strong>C-Space</strong> to <em>set a mark</em> and then moving the cursor to highlight a region.</li>
+<li><strong>C-w</strong>: Cut a highlighted region</li>
+<li><strong>M-w</strong>: Copy a highlighted region</li>
+<li><strong>C-k</strong>: Cut (<em>k</em>ill) from the cursor to the end of the line</li>
+<li><strong>C-y</strong>: Paste (<em>y</em>ank)</li>
+</ul>
+<p>Some other useful commands:</p>
+<ul>
+<li><strong>C-x 2</strong>: Split the window into 2 buffers, one above the other (Use the mouse or <strong>C-x o</strong> to switch between them)</li>
+<li><strong>C-x 0</strong>: Undo window-splitting so there is only 1 buffer</li>
+<li><strong>C-x b</strong>: Switch to another buffer by entering its name</li>
+<li><strong>C-x C-b</strong>: See a list of all current buffers</li>
+</ul>
+<p>Getting help within Emacs: In addition to the help button/menu on the right…</p>
+<ul>
+<li><strong>C-h</strong>: Hitting this will display a short message in the minibuffer: <code>C-h (Type ? for further options)|</code>.</li>
+<li><strong>C-h b</strong>: Key <em>b</em>indings. This lists all key bindings that are valid for the current mode. Note that key bindings change from mode to mode.</li>
+<li><strong>C-h a</strong>: Command <em>a</em>propos. After typing <code>C-h a</code> you can type a symbol and a buffer will appear that lists all symbols and functions that match that phrase.</li>
+</ul>
 <h5 id="smlnj-installation">SML/NJ Installation</h5>
+<ul>
+<li>Dowload and run the installer available at http://www.smlnj.org/dist/working/110.82/index.html</li>
+<li>110.79 and below may not work on Mac OS High Sierra</li>
+<li>edit the file <code>/.bash_profile</code> , add this line: <code>export PATH=&quot;$PATH:/usr/local/smlnj/bin&quot;</code></li>
+<li>run <code>source /.bash_profile</code></li>
+<li>Open a terminal window and type <code>sml</code> followed by Enter/Return.</li>
+<li>You should see a prompt that looks like this: <code>Standard ML of New Jersey v110.80 [built: ...]</code></li>
+<li>To exit the interpreter, type <em>Control-D</em> on Mac or Linux.</li>
+</ul>
 <h5 id="sml-mode-for-emac-installation">SML Mode for Emac Installation</h5>
+<ul>
+<li>Run the command <code>M-x list-package</code> (and then <em>Return/Enter</em>).</li>
+<li>Find <code>sml-mode</code> and click on it with your mouse. If that worked, then click on <code>install</code> with your mouse then move to the next step.</li>
+<li>verify that SML Mode is properly installed:
+<ul>
+<li>edit an existing or new SML file (try <code>C-x C-f test.sml</code> to create a new file if nothing else is handy).</li>
+<li>while the cursor is in an SML buffer (i.e., you are editing an SML file), run <code>C-c C-s</code> and press Enter/Return. (need to edit your <code>.emacs</code> file)</li>
+</ul></li>
+</ul>
+<h5 id="using-the-smlnj-repl-read-eval-print-loop-in-emacs">Using the SML/NJ REPL (Read-Eval-Print Loop) in Emacs</h5>
 
       
     </div>
@@ -670,7 +727,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">17</span>
+                    <span class="site-state-item-count">18</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -804,7 +861,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#welcome"><span class="nav-number">1.</span> <span class="nav-text">Welcome!</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#what-the-course-is-about"><span class="nav-number">2.</span> <span class="nav-text">What the Course is About</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#recommended-background"><span class="nav-number">3.</span> <span class="nav-text">Recommended Background</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#assumed-background"><span class="nav-number">3.1.</span> <span class="nav-text">Assumed background</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#things-i-assume-you-know-a-little"><span class="nav-number">3.2.</span> <span class="nav-text">Things I assume you know (a little)</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#course-goals"><span class="nav-number">4.</span> <span class="nav-text">Course Goals</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#approximate-list-of-specific-course-topics"><span class="nav-number">5.</span> <span class="nav-text">Approximate List of Specific Course Topics</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#part-a"><span class="nav-number">5.1.</span> <span class="nav-text">Part A</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#part-b"><span class="nav-number">5.2.</span> <span class="nav-text">Part B</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#part-c"><span class="nav-number">5.3.</span> <span class="nav-text">Part C</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#software-installation-and-use-sml-and-emacs"><span class="nav-number">6.</span> <span class="nav-text">Software Installation and Use: SML and Emacs</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#overview"><span class="nav-number">6.1.</span> <span class="nav-text">Overview</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#emacs-installation"><span class="nav-number">6.2.</span> <span class="nav-text">Emacs Installation</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#emacs-basics"><span class="nav-number">6.3.</span> <span class="nav-text">Emacs Basics</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#smlnj-installation"><span class="nav-number">6.4.</span> <span class="nav-text">SML/NJ Installation</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#sml-mode-for-emac-installation"><span class="nav-number">6.5.</span> <span class="nav-text">SML Mode for Emac Installation</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#welcome"><span class="nav-number">1.</span> <span class="nav-text">Welcome!</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#what-the-course-is-about"><span class="nav-number">2.</span> <span class="nav-text">What the Course is About</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#recommended-background"><span class="nav-number">3.</span> <span class="nav-text">Recommended Background</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#assumed-background"><span class="nav-number">3.1.</span> <span class="nav-text">Assumed background</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#things-i-assume-you-know-a-little"><span class="nav-number">3.2.</span> <span class="nav-text">Things I assume you know (a little)</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#course-goals"><span class="nav-number">4.</span> <span class="nav-text">Course Goals</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#approximate-list-of-specific-course-topics"><span class="nav-number">5.</span> <span class="nav-text">Approximate List of Specific Course Topics</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#part-a"><span class="nav-number">5.1.</span> <span class="nav-text">Part A</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#part-b"><span class="nav-number">5.2.</span> <span class="nav-text">Part B</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#part-c"><span class="nav-number">5.3.</span> <span class="nav-text">Part C</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#software-installation-and-use-sml-and-emacs"><span class="nav-number">6.</span> <span class="nav-text">Software Installation and Use: SML and Emacs</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#overview"><span class="nav-number">6.1.</span> <span class="nav-text">Overview</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#emacs-installation"><span class="nav-number">6.2.</span> <span class="nav-text">Emacs Installation</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#emacs-basics"><span class="nav-number">6.3.</span> <span class="nav-text">Emacs Basics</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#smlnj-installation"><span class="nav-number">6.4.</span> <span class="nav-text">SML/NJ Installation</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#sml-mode-for-emac-installation"><span class="nav-number">6.5.</span> <span class="nav-text">SML Mode for Emac Installation</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#using-the-smlnj-repl-read-eval-print-loop-in-emacs"><span class="nav-number">6.6.</span> <span class="nav-text">Using the SML/NJ REPL (Read-Eval-Print Loop) in Emacs</span></a></li></ol></li></ol></div>
             
 
           </div>
