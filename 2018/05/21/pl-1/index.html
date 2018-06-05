@@ -112,7 +112,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-143715.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2018-06-01-063821.jpg">
-<meta property="og:updated_time" content="2018-06-01T07:01:34.528Z">
+<meta property="og:updated_time" content="2018-06-05T03:08:41.018Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Programming Languages Week1">
 <meta name="twitter:description" content="课程地址">
@@ -576,7 +576,7 @@
 </ul>
 <p>Getting help within Emacs: In addition to the help button/menu on the right…</p>
 <ul>
-<li><strong>C-h</strong>: Hitting this will display a short message in the minibuffer: <code>C-h (Type ? for further options)|</code>.</li>
+<li><strong>C-h</strong>: Hitting this will display a short message in the minibuffer: <code>C-h (Type ? for further options)</code>.</li>
 <li><strong>C-h b</strong>: Key <em>b</em>indings. This lists all key bindings that are valid for the current mode. Note that key bindings change from mode to mode.</li>
 <li><strong>C-h a</strong>: Command <em>a</em>propos. After typing <code>C-h a</code> you can type a symbol and a buffer will appear that lists all symbols and functions that match that phrase.</li>
 </ul>
@@ -601,6 +601,17 @@
 </ul></li>
 </ul>
 <h5 id="using-the-smlnj-repl-read-eval-print-loop-in-emacs">Using the SML/NJ REPL (Read-Eval-Print Loop) in Emacs</h5>
+<p>In each REPL session, follow this pattern:</p>
+<ul>
+<li>First type <code>use &quot;foo.sml&quot;</code>; for any SML files you want to use.</li>
+<li>Then use the REPL manually as long as you wish.</li>
+<li>After using the REPL to test something, do <em>not</em> use use to load (or reload) any more files.</li>
+<li>When tempted to violate the previous point, end and restart your REPL session before continuing.</li>
+<li><code>C-c</code> will interrupt evaluation and get you your prompt back.</li>
+<li>To end and restart a REPL session, type <code>C-d</code> (to end it) and <code>C-c C-s</code> (and then <em>Return/Enter</em>) (to restart it). </li>
+<li><code>M-p</code> will print the previous line you used in the REPL, with the p stands for <em>previous</em>.</li>
+<li><code>M-n</code> (repeatedly) does the same thing in the opposite direction, with the n standing for <em>next</em>.</li>
+</ul>
 
       
     </div>
