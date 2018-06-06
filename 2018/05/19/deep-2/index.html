@@ -112,7 +112,12 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-135447.jpg">
 <meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-135457.jpg">
-<meta property="og:updated_time" content="2018-05-28T13:55:07.364Z">
+<meta property="og:image" content="http://media.zjubiomedit.com/2018-06-06-082755.jpg">
+<meta property="og:image" content="http://media.zjubiomedit.com/2018-06-06-124240.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2018-06-06-124749.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2018-06-06-130227.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2018-06-06-131136.png">
+<meta property="og:updated_time" content="2018-06-06T13:19:14.832Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="deeplearning.ai 第二周学习笔记：神经网络的编程基础">
 <meta name="twitter:description" content="本篇博客为 deeplearning.ai 第二周学习笔记，主题是：神经网络的编程基础。">
@@ -443,6 +448,87 @@
 <li><span class="math inline">\(Y = [y^{(1)}, y^{(2)}, \ldots, y^{(m)}]\)</span>：表示所有训练数据集的输出值，维度为 <span class="math inline">\((1,m)\)</span></li>
 </ul>
 <h4 id="逻辑回归">逻辑回归</h4>
+<p>逻辑回归算法适用于二分类问题，其公式为：</p>
+<p><span class="math display">\[
+Given\;x, \hat{y}=P(y=1\mid x), where\;0\le\hat{y}\le1
+\]</span></p>
+<p>逻辑回归中使用的参数为：</p>
+<ul>
+<li>输入特征向量：<span class="math inline">\(x \in \mathbb{R}^{n_x}\)</span></li>
+<li>训练标签：<span class="math inline">\(y \in 0,1\)</span></li>
+<li>权重：<span class="math inline">\(w \in \mathbb{R}^{n_x}\)</span></li>
+<li>输出：<span class="math inline">\(\hat{y} = \sigma(w^Tx+b)\)</span></li>
+<li>sigmoid函数：<span class="math inline">\(s = \sigma(w^Tx+b) = \sigma(z) = \frac 1 {1+e^{-z}}\)</span></li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2018-06-06-082755.jpg" width="65%" height="65%"></p>
+<h4 id="逻辑回归的代价函数">逻辑回归的代价函数</h4>
+<p>为了训练参数 w 和 b，我们需要定义一个代价函数。</p>
+<ul>
+<li><p>使用最小二乘法定义的损失函数为：<span class="math inline">\(L(\hat{y^{(i)}},y^{(i)}) = \frac 1 2 (\hat{y}^{(i)} - y^{(i)})^2\)</span></p>
+<ul>
+<li>该损失函数的优化是一个非凸优化问题，会导致出现局部最优，所以不采用</li>
+</ul></li>
+<li><p>我们选择的损失函数为：<span class="math inline">\(L(\hat{y^{(i)}},y^{(i)}) = -(y^{(i)}\log(\hat{y}^{(i)})+(1-y^{(i)})\log(1-\hat{y}^{(i)}))\)</span></p>
+<ul>
+<li>如果 <span class="math inline">\(y^{(i)}=1\)</span>，<span class="math inline">\(L(\hat{y^{(i)}},y^{(i)}) = -\log(\hat{y}^{(i)})\)</span>，我们会希望 <span class="math inline">\(\hat{y}^{(i)}\)</span> 接近1</li>
+<li>如果 <span class="math inline">\(y^{(i)}=0\)</span>，<span class="math inline">\(L(\hat{y^{(i)}},y^{(i)}) = -\log(1-\hat{y}^{(i)})\)</span>，我们会希望 <span class="math inline">\(\hat{y}^{(i)}\)</span> 接近0</li>
+</ul></li>
+<li>代价函数为：<span class="math inline">\(J(w,b) = \frac 1 m \sum_{i=1}^m L(\hat{y}^{(i)},y^{(i)}) = - \frac 1 m \sum_{i=1}^m[y^{(i)}\log(\hat{y}^{(i)})+(1-y^{(i)})\log(1-\hat{y}^{(i)})]\)</span></li>
+<li><p>损失函数计算单个训练样本的误差，而代价函数是整个训练集损失函数的平均</p></li>
+</ul>
+<h4 id="梯度下降">梯度下降</h4>
+<ul>
+<li>我们希望找出最小化代价函数的 w 和 b</li>
+<li>我们的代价函数是凸函数（可以找到最优）</li>
+<li>首先我们初始化 w 和 b 为 0 或随机值，然后不断的更新它们，来找到最优值</li>
+<li>在逻辑回归中，一般使用0而不是随机值</li>
+<li>梯度下降的更新公式为 <span class="math inline">\(w = w - \alpha*dw\)</span>，其中 <span class="math inline">\(\alpha\)</span> 是学习速率，<span class="math inline">\(dw\)</span> 代表导数（斜率）</li>
+<li>这个算法类似贪心算法，导数告诉了我们参数更新的方向</li>
+<li>实际的公式为：
+<ul>
+<li><span class="math inline">\(w = w - \alpha * \frac {d(J(w,b) )} {dw}\)</span></li>
+<li><span class="math inline">\(b = b - \alpha * \frac {d(J(w,b))} {db}\)</span></li>
+</ul></li>
+</ul>
+<h4 id="计算图">计算图</h4>
+<ul>
+<li>计算图是一种将计算组织为从左往右的形式的图</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2018-06-06-124240.png" width="75%" height="75%"></p>
+<h4 id="计算图的导数">计算图的导数</h4>
+<ul>
+<li>我们利用微积分的链式法则求解复合导数</li>
+<li>我们基于计算图，从右往左逐步计算，得出每个自变量的导数</li>
+<li>这是一种反向传播的过程</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2018-06-06-124749.png" width="75%" height="75%"></p>
+<h4 id="逻辑回归中的梯度下降">逻辑回归中的梯度下降</h4>
+<ul>
+<li>我们同样可以使用计算图的方式对逻辑回归中的导数进行求解</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2018-06-06-130227.png" width="75%" height="75%"></p>
+<h4 id="m-个样本中的梯度下降">m 个样本中的梯度下降</h4>
+<ul>
+<li>假定我们有如下变量</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">X1					Feature</span><br><span class="line">X2                  Feature</span><br><span class="line">W1                  Weight of the first feature.</span><br><span class="line">W2                  Weight of the second feature.</span><br><span class="line">B                   Logistic Regression parameter.</span><br><span class="line">M                   Number of training examples</span><br><span class="line">Y(i)				Expected output of i</span><br></pre></td></tr></table></figure>
+<ul>
+<li>根据计算图，我们可以推导出如下的导数：</li>
+</ul>
+<figure>
+<img src="http://media.zjubiomedit.com/2018-06-06-131136.png" alt="img"><figcaption>img</figcaption>
+</figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">d(a)  = d(l)/d(a) = -(y/a) + ((1-y)/(1-a))</span><br><span class="line">d(z)  = d(l)/d(z) = a - y</span><br><span class="line">d(W1) = X1 * d(z)</span><br><span class="line">d(W2) = X2 * d(z)</span><br><span class="line">d(B) = d(z)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>那么对于 m 个样本，我们可以写出如下的伪代码：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">J = 0; dW1 = 0; dW2 =0; dB = 0;                 # Devs.</span><br><span class="line">W1 = 0; W2 = 0; B=0;							# Weights</span><br><span class="line">for i = 1 to m</span><br><span class="line">    # Forward pass</span><br><span class="line">	z(i) = W1*X1(i) + W2*X2(i) + b</span><br><span class="line">	a(i) = Sigmoid(z(i))</span><br><span class="line">	J += (Y(i)*log(a(i)) + (1-Y(i))*log(1-a(i)))</span><br><span class="line">    </span><br><span class="line">	# Backward pass</span><br><span class="line">	dz(i) = a(i) - Y(i)</span><br><span class="line">	dW1 += dz(i) * X1(i)</span><br><span class="line">	dW2 += dz(i) * X2(i)</span><br><span class="line">	dB  += dz(i)</span><br><span class="line">J /= m</span><br><span class="line">dW1/= m</span><br><span class="line">dW2/= m</span><br><span class="line">dB/= m</span><br><span class="line">	</span><br><span class="line"># Gradient descent</span><br><span class="line">W1 = W1 - alpha * dW1</span><br><span class="line">W2 = W2 - alpha * dW2</span><br><span class="line">B = B - alpha * dB</span><br></pre></td></tr></table></figure>
+<ul>
+<li>上述过程存在两组内循环。会影响计算的效率</li>
+<li>我们可以使用<strong>向量化</strong>来减少循环</li>
+</ul>
+<h4 id="向量化">向量化</h4>
+<h4 id="向量化逻辑回归">向量化逻辑回归</h4>
 
       
     </div>
@@ -571,7 +657,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">18</span>
+                    <span class="site-state-item-count">19</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -645,7 +731,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">18</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">20</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -705,7 +795,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#二分类binary-classification"><span class="nav-number">1.</span> <span class="nav-text">二分类（Binary Classification）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#符号定义"><span class="nav-number">1.1.</span> <span class="nav-text">符号定义</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#逻辑回归"><span class="nav-number">2.</span> <span class="nav-text">逻辑回归</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#二分类binary-classification"><span class="nav-number">1.</span> <span class="nav-text">二分类（Binary Classification）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#符号定义"><span class="nav-number">1.1.</span> <span class="nav-text">符号定义</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#逻辑回归"><span class="nav-number">2.</span> <span class="nav-text">逻辑回归</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#逻辑回归的代价函数"><span class="nav-number">3.</span> <span class="nav-text">逻辑回归的代价函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#梯度下降"><span class="nav-number">4.</span> <span class="nav-text">梯度下降</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#计算图"><span class="nav-number">5.</span> <span class="nav-text">计算图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#计算图的导数"><span class="nav-number">6.</span> <span class="nav-text">计算图的导数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#逻辑回归中的梯度下降"><span class="nav-number">7.</span> <span class="nav-text">逻辑回归中的梯度下降</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#m-个样本中的梯度下降"><span class="nav-number">8.</span> <span class="nav-text">m 个样本中的梯度下降</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#向量化"><span class="nav-number">9.</span> <span class="nav-text">向量化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#向量化逻辑回归"><span class="nav-number">10.</span> <span class="nav-text">向量化逻辑回归</span></a></li></ol></div>
             
 
           </div>
