@@ -117,7 +117,9 @@
 <meta property="og:image" content="http://media.zjubiomedit.com/2018-06-06-124749.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2018-06-06-130227.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2018-06-06-131136.png">
-<meta property="og:updated_time" content="2018-06-06T13:19:14.832Z">
+<meta property="og:image" content="http://media.zjubiomedit.com/2018-06-07-030211.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2018-06-07-030750.jpg">
+<meta property="og:updated_time" content="2018-06-07T03:12:22.490Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="deeplearning.ai 第二周学习笔记：神经网络的编程基础">
 <meta name="twitter:description" content="本篇博客为 deeplearning.ai 第二周学习笔记，主题是：神经网络的编程基础。">
@@ -511,24 +513,62 @@ Given\;x, \hat{y}=P(y=1\mid x), where\;0\le\hat{y}\le1
 <ul>
 <li>假定我们有如下变量</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">X1					Feature</span><br><span class="line">X2                  Feature</span><br><span class="line">W1                  Weight of the first feature.</span><br><span class="line">W2                  Weight of the second feature.</span><br><span class="line">B                   Logistic Regression parameter.</span><br><span class="line">M                   Number of training examples</span><br><span class="line">Y(i)				Expected output of i</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">X1                  Feature</span><br><span class="line">X2                  Feature</span><br><span class="line">W1                  Weight of the first feature.</span><br><span class="line">W2                  Weight of the second feature.</span><br><span class="line">B                   Logistic Regression parameter.</span><br><span class="line">M                   Number of training examples</span><br><span class="line">Y(i)                Expected output of i</span><br></pre></td></tr></table></figure>
 <ul>
 <li>根据计算图，我们可以推导出如下的导数：</li>
 </ul>
-<figure>
-<img src="http://media.zjubiomedit.com/2018-06-06-131136.png" alt="img"><figcaption>img</figcaption>
-</figure>
+<p><img src="http://media.zjubiomedit.com/2018-06-06-131136.png" width="100%" height="100%"></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">d(a)  = d(l)/d(a) = -(y/a) + ((1-y)/(1-a))</span><br><span class="line">d(z)  = d(l)/d(z) = a - y</span><br><span class="line">d(W1) = X1 * d(z)</span><br><span class="line">d(W2) = X2 * d(z)</span><br><span class="line">d(B) = d(z)</span><br></pre></td></tr></table></figure>
 <ul>
 <li>那么对于 m 个样本，我们可以写出如下的伪代码：</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">J = 0; dW1 = 0; dW2 =0; dB = 0;                 # Devs.</span><br><span class="line">W1 = 0; W2 = 0; B=0;							# Weights</span><br><span class="line">for i = 1 to m</span><br><span class="line">    # Forward pass</span><br><span class="line">	z(i) = W1*X1(i) + W2*X2(i) + b</span><br><span class="line">	a(i) = Sigmoid(z(i))</span><br><span class="line">	J += (Y(i)*log(a(i)) + (1-Y(i))*log(1-a(i)))</span><br><span class="line">    </span><br><span class="line">	# Backward pass</span><br><span class="line">	dz(i) = a(i) - Y(i)</span><br><span class="line">	dW1 += dz(i) * X1(i)</span><br><span class="line">	dW2 += dz(i) * X2(i)</span><br><span class="line">	dB  += dz(i)</span><br><span class="line">J /= m</span><br><span class="line">dW1/= m</span><br><span class="line">dW2/= m</span><br><span class="line">dB/= m</span><br><span class="line">	</span><br><span class="line"># Gradient descent</span><br><span class="line">W1 = W1 - alpha * dW1</span><br><span class="line">W2 = W2 - alpha * dW2</span><br><span class="line">B = B - alpha * dB</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">J = 0; dW1 = 0; dW2 =0; dB = 0;                 # Devs.</span><br><span class="line">W1 = 0; W2 = 0; B=0;                            # Weights</span><br><span class="line">for i = 1 to m</span><br><span class="line">    # Forward pass</span><br><span class="line">	z(i) = W1*X1(i) + W2*X2(i) + b</span><br><span class="line">	a(i) = Sigmoid(z(i))</span><br><span class="line">	J += (Y(i)*log(a(i)) + (1-Y(i))*log(1-a(i)))</span><br><span class="line">    </span><br><span class="line">	# Backward pass</span><br><span class="line">	dz(i) = a(i) - Y(i)</span><br><span class="line">	dW1 += dz(i) * X1(i)</span><br><span class="line">	dW2 += dz(i) * X2(i)</span><br><span class="line">	dB  += dz(i)</span><br><span class="line">J /= m</span><br><span class="line">dW1/= m</span><br><span class="line">dW2/= m</span><br><span class="line">dB/= m</span><br><span class="line">	</span><br><span class="line"># Gradient descent</span><br><span class="line">W1 = W1 - alpha * dW1</span><br><span class="line">W2 = W2 - alpha * dW2</span><br><span class="line">B = B - alpha * dB</span><br></pre></td></tr></table></figure>
 <ul>
-<li>上述过程存在两组内循环。会影响计算的效率</li>
+<li>上述过程存在两组循环（还有一组是迭代循环）。会影响计算的效率</li>
 <li>我们可以使用<strong>向量化</strong>来减少循环</li>
 </ul>
 <h4 id="向量化">向量化</h4>
+<ul>
+<li>向量化可以避免循环，减少运算时间</li>
+<li>Numpy 的函数库基本都是向量化版本</li>
+<li>向量化可以在 CPU 或 GPU 上实现（通过 SIMD 操作），GPU 上速度更快</li>
+</ul>
 <h4 id="向量化逻辑回归">向量化逻辑回归</h4>
+<ul>
+<li>我们将仅使用一组循环来实现逻辑回归</li>
+<li>输入变量为：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">X       Input Feature, X shape is [Nx,m]</span><br><span class="line">Y       Expect Output, Y shape is [Ny,m]</span><br><span class="line">W       Weight, W shape is [Nx,1]</span><br><span class="line">b       Parameter, b shape is [1,1]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>通过向量化，可以写出如下的代码</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">W = np.zeros((Nx, <span class="number">1</span>))</span><br><span class="line">b = <span class="number">0</span></span><br><span class="line">dW = np.zeros((Nx, <span class="number">1</span>))</span><br><span class="line">db = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> iter <span class="keyword">in</span> range(<span class="number">1000</span>):</span><br><span class="line">    Z = np.dot(W.T, X) + b      <span class="comment"># Vectorization, then broadcasting, Z shape is (1, m)</span></span><br><span class="line">    A = <span class="number">1</span> / (<span class="number">1</span> + np.exp(-Z))    <span class="comment"># Vectorization, A shape is (1, m)</span></span><br><span class="line">  	dZ = A - Y                  <span class="comment"># Vectorization, dZ shape is (1, m)</span></span><br><span class="line">    dW = np.dot(X, dZ.T) / m    <span class="comment"># Vectorization, dW shape is (Nx, 1)</span></span><br><span class="line">    db = np.sum(dZ) / m         <span class="comment"># Vectorization, db shape is (1, 1)</span></span><br><span class="line">    </span><br><span class="line">    W = W - alpha * dW</span><br><span class="line">    b = b - alpha * db</span><br></pre></td></tr></table></figure>
+<h4 id="pythonnumpy-笔记">Python/Numpy 笔记</h4>
+<ul>
+<li>在 Numpy 中，<code>np.sum(axis = 0)</code> 按列求和，np.sum(axis = 1) 按行求和，默认将所有元素求和</li>
+<li>在 Numpy 中，<code>np.reshape(1, 4)</code> 将通过广播机制（broadcasting）重组矩阵 </li>
+<li>reshape 操作的调用代价极低，可以放在任何位置</li>
+<li>关于矩阵 shape 的问题
+<ul>
+<li>如果不指定一个矩阵的 shape，将生成 “rank 1 array”，会导致其 shape 为 (m, )，无法进行转置</li>
+<li>对于这种情况，需要进行 reshape</li>
+<li>可以使用 <code>assert(a.shape == (5,1))</code> 来判断矩阵的 shape 是否正确</li>
+</ul></li>
+<li>计算 Sigmoid 函数的导数：</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">s = sigmoid(x)</span><br><span class="line">ds = s * (<span class="number">1</span> - s)      <span class="comment"># derivative  using calculus</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>将图片重组为一个向量：</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">v = image.reshape(image.shape[<span class="number">0</span>]*image.shape[<span class="number">1</span>]*image.shape[<span class="number">2</span>],<span class="number">1</span>)  <span class="comment">#reshapes the image.</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>归一化输入矩阵后，梯度下降将收敛的更快</li>
+<li>关于 Python 的广播机制，可以参考下图：</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2018-06-07-030211.png" width="50%" height="50%"></p>
+<h4 id="总结">总结</h4>
+<p><img src="http://media.zjubiomedit.com/2018-06-07-030750.jpg" width="100%" height="100%"></p>
+<p>第二周 END</p>
 
       
     </div>
@@ -795,7 +835,7 @@ Given\;x, \hat{y}=P(y=1\mid x), where\;0\le\hat{y}\le1
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#二分类binary-classification"><span class="nav-number">1.</span> <span class="nav-text">二分类（Binary Classification）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#符号定义"><span class="nav-number">1.1.</span> <span class="nav-text">符号定义</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#逻辑回归"><span class="nav-number">2.</span> <span class="nav-text">逻辑回归</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#逻辑回归的代价函数"><span class="nav-number">3.</span> <span class="nav-text">逻辑回归的代价函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#梯度下降"><span class="nav-number">4.</span> <span class="nav-text">梯度下降</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#计算图"><span class="nav-number">5.</span> <span class="nav-text">计算图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#计算图的导数"><span class="nav-number">6.</span> <span class="nav-text">计算图的导数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#逻辑回归中的梯度下降"><span class="nav-number">7.</span> <span class="nav-text">逻辑回归中的梯度下降</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#m-个样本中的梯度下降"><span class="nav-number">8.</span> <span class="nav-text">m 个样本中的梯度下降</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#向量化"><span class="nav-number">9.</span> <span class="nav-text">向量化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#向量化逻辑回归"><span class="nav-number">10.</span> <span class="nav-text">向量化逻辑回归</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#二分类binary-classification"><span class="nav-number">1.</span> <span class="nav-text">二分类（Binary Classification）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#符号定义"><span class="nav-number">1.1.</span> <span class="nav-text">符号定义</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#逻辑回归"><span class="nav-number">2.</span> <span class="nav-text">逻辑回归</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#逻辑回归的代价函数"><span class="nav-number">3.</span> <span class="nav-text">逻辑回归的代价函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#梯度下降"><span class="nav-number">4.</span> <span class="nav-text">梯度下降</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#计算图"><span class="nav-number">5.</span> <span class="nav-text">计算图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#计算图的导数"><span class="nav-number">6.</span> <span class="nav-text">计算图的导数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#逻辑回归中的梯度下降"><span class="nav-number">7.</span> <span class="nav-text">逻辑回归中的梯度下降</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#m-个样本中的梯度下降"><span class="nav-number">8.</span> <span class="nav-text">m 个样本中的梯度下降</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#向量化"><span class="nav-number">9.</span> <span class="nav-text">向量化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#向量化逻辑回归"><span class="nav-number">10.</span> <span class="nav-text">向量化逻辑回归</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#pythonnumpy-笔记"><span class="nav-number">11.</span> <span class="nav-text">Python/Numpy 笔记</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结"><span class="nav-number">12.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
 
           </div>
