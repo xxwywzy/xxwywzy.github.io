@@ -119,7 +119,7 @@
 <meta property="og:image" content="http://media.zjubiomedit.com/2018-06-06-131136.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2018-06-07-030211.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2018-06-07-030750.jpg">
-<meta property="og:updated_time" content="2018-06-07T03:12:22.490Z">
+<meta property="og:updated_time" content="2018-06-16T15:41:56.521Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="deeplearning.ai 第二周学习笔记：神经网络的编程基础">
 <meta name="twitter:description" content="本篇博客为 deeplearning.ai 第二周学习笔记，主题是：神经网络的编程基础。">
@@ -545,8 +545,8 @@ Given\;x, \hat{y}=P(y=1\mid x), where\;0\le\hat{y}\le1
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">W = np.zeros((Nx, <span class="number">1</span>))</span><br><span class="line">b = <span class="number">0</span></span><br><span class="line">dW = np.zeros((Nx, <span class="number">1</span>))</span><br><span class="line">db = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> iter <span class="keyword">in</span> range(<span class="number">1000</span>):</span><br><span class="line">    Z = np.dot(W.T, X) + b      <span class="comment"># Vectorization, then broadcasting, Z shape is (1, m)</span></span><br><span class="line">    A = <span class="number">1</span> / (<span class="number">1</span> + np.exp(-Z))    <span class="comment"># Vectorization, A shape is (1, m)</span></span><br><span class="line">  	dZ = A - Y                  <span class="comment"># Vectorization, dZ shape is (1, m)</span></span><br><span class="line">    dW = np.dot(X, dZ.T) / m    <span class="comment"># Vectorization, dW shape is (Nx, 1)</span></span><br><span class="line">    db = np.sum(dZ) / m         <span class="comment"># Vectorization, db shape is (1, 1)</span></span><br><span class="line">    </span><br><span class="line">    W = W - alpha * dW</span><br><span class="line">    b = b - alpha * db</span><br></pre></td></tr></table></figure>
 <h4 id="pythonnumpy-笔记">Python/Numpy 笔记</h4>
 <ul>
-<li>在 Numpy 中，<code>np.sum(axis = 0)</code> 按列求和，np.sum(axis = 1) 按行求和，默认将所有元素求和</li>
-<li>在 Numpy 中，<code>np.reshape(1, 4)</code> 将通过广播机制（broadcasting）重组矩阵 </li>
+<li>在 Numpy 中，<code>obj.sum(axis = 0)</code> 按列求和，<code>obj.sum(axis = 1)</code> 按行求和，默认将所有元素求和</li>
+<li>在 Numpy 中，<code>obj.reshape(1, 4)</code> 将通过广播机制（broadcasting）重组矩阵 </li>
 <li>reshape 操作的调用代价极低，可以放在任何位置</li>
 <li>关于矩阵 shape 的问题
 <ul>
@@ -604,8 +604,8 @@ Given\;x, \hat{y}=P(y=1\mid x), where\;0\le\hat{y}\le1
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/05/18/paper-week2/" rel="next" title="PaperWeekly 第二期">
-                <i class="fa fa-chevron-left"></i> PaperWeekly 第二期
+              <a href="/2018/05/11/ogus753/" rel="next" title="Ogus 753 计划详解">
+                <i class="fa fa-chevron-left"></i> Ogus 753 计划详解
               </a>
             
           </div>
@@ -697,7 +697,7 @@ Given\;x, \hat{y}=P(y=1\mid x), where\;0\le\hat{y}\le1
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-count">15</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -722,7 +722,7 @@ Given\;x, \hat{y}=P(y=1\mid x), where\;0\le\hat{y}\le1
                     
                       
                     
-                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-count">5</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -775,7 +775,7 @@ Given\;x, \hat{y}=P(y=1\mid x), where\;0\le\hat{y}\le1
                     
                       
                     
-                    <span class="site-state-item-count">20</span>
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

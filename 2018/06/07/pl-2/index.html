@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/favicon.png?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="keywords" content="Programming Languages">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Programming Languages Week2">
+<meta property="og:url" content="http://yoursite.com/2018/06/07/pl-2/index.html">
+<meta property="og:site_name" content="xxwywzy&#39;s Blog">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/2018-06-22-083942.png">
+<meta property="og:updated_time" content="2018-06-22T08:41:24.150Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Programming Languages Week2">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2018-06-22-083942.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/06/07/pl-2/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Programming Languages Week2 | xxwywzy's Blog</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a02b5462e7522b1ed191c4cea6b1d6e6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xxwywzy's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Long may the sunshine</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/07/pl-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zheyu Wang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xxwywzy's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Programming Languages Week2
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-06-07 16:05:16" itemprop="dateCreated datePublished" datetime="2018-06-07T16:05:16+08:00">2018-06-07</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/课程笔记/" itemprop="url" rel="index"><span itemprop="name">课程笔记</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/06/07/pl-2/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/06/07/pl-2/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/06/07/pl-2/" class="leancloud_visitors" data-flag-title="Programming Languages Week2">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="http://media.zjubiomedit.com/2018-06-22-083942.png" width="75%" height="75%"></p>
+<a id="more"></a>
+<h3 id="ml-expressions-and-variable-bindings">ML Expressions and Variable Bindings</h3>
+<ul>
+<li>An ML program is a sequence of <em>bindings</em></li>
+<li>Each binding gets <em>type-checked</em> and then <em>evaluated</em></li>
+<li>What type a binding has depends on a <em>static environment</em></li>
+<li>How a binding is evaluated depends on a <em>dynamic environment</em></li>
+</ul>
+<p>There are several kinds of bindings, but for now let’s consider only a <em>variable binding</em></p>
+<figure class="highlight sml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> x = e;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Syntax: <code>val</code> is a keyword, <code>x</code> can be any variable, and <code>e</code> can be any expression</li>
+<li>Type-checking: <code>x</code> having type <code>t</code> where <code>t</code> is the type of <code>e</code></li>
+<li>Evaluation: <code>x</code> having the value <code>v</code> where <code>v</code> is the result of evaluating <code>e</code></li>
+</ul>
+<p>Here are several different kinds of expressions:</p>
+<ul>
+<li>Integer constants</li>
+<li>Addition</li>
+<li>Variables</li>
+<li>Conditionals</li>
+<li>Boolean constants</li>
+<li>Less-than comparison</li>
+</ul>
+<h3 id="using-use">Using use</h3>
+<p>When using the REPL, it is very convenient to add a sequence of bindings from a file.</p>
+<figure class="highlight sml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">use <span class="string">"foo.sml"</span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Its type is <code>unit</code></li>
+<li>Its result is ()</li>
+<li>Its effect is to include all the bindings in the file <code>&quot;foo.sml&quot;</code></li>
+</ul>
+<h3 id="variables-are-immutable">Variables are Immutable</h3>
+<ul>
+<li>Bindings are <em>immutable</em></li>
+<li>The later binding <em>shadows</em> the earlier one</li>
+</ul>
+<h3 id="function-bindings">Function Bindings</h3>
+<ul>
+<li>A function is something that is called with arguments and has a body that produces a result</li>
+<li>There is no notion of a class, this, etc</li>
+<li>Do not have things like return statements</li>
+</ul>
+<figure class="highlight sml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fun</span> pow (x:<span class="built_in">int</span>, y:<span class="built_in">int</span>) = <span class="comment">(* correct only for y &gt;= 0 *)</span> </span><br><span class="line">    <span class="keyword">if</span> y=<span class="number">0</span> </span><br><span class="line">    <span class="keyword">then</span> <span class="number">1</span> </span><br><span class="line">    <span class="keyword">else</span> x * pow(x,y-<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<h4 id="syntax">Syntax</h4>
+<figure class="highlight sml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fun</span> x0 (x1 : t1, ..., xn : tn) = e</span><br></pre></td></tr></table></figure>
+<ul>
+<li>This is a binding for a function named <code>x0</code></li>
+<li>It takes n arguments <code>x1, ..., xn</code> of types <code>t1, ..., tn</code></li>
+<li>Has an expression <code>e</code> for its body</li>
+</ul>
+<h4 id="type-checking">Type-checking</h4>
+<ul>
+<li>A function type is “argument types” -&gt; “result type”</li>
+<li>The argument types are separated by *</li>
+<li>ML can use <em>type inference</em> to figure out the type of <code>e</code></li>
+</ul>
+<h4 id="evaluation">Evaluation</h4>
+<ul>
+<li>A function is a value</li>
+<li>We simply add x0 to the environment as a function that can be <em>called</em> later</li>
+</ul>
+<h4 id="function-calls">Function calls</h4>
+<ul>
+<li>A new kind of expression</li>
+<li>The <em>syntax</em> is e0 (e1,…,en)</li>
+<li><em>The typing rules</em>:
+<ul>
+<li><code>e0</code> has a type that looks like <code>t1*...*tn-&gt;t</code></li>
+<li>For 1 ≤ i ≤ n, <code>ei</code> has type <code>ti</code></li>
+<li>The whole call has type <code>t</code></li>
+</ul></li>
+<li><em>The evaluation rules</em>:
+<ul>
+<li>use the environment at the point of the call to evaluate <code>e0</code> to <code>v0</code>, <code>e1</code> to <code>v1</code>, …, <code>en</code> to <code>vn</code></li>
+<li>Then <code>v0</code> must be a function</li>
+<li>We evaluate the function’s body in an environment extended</li>
+<li>The environment is the one when the function was <em>deﬁned</em></li>
+</ul></li>
+</ul>
+<h3 id="pairs-and-other-tuples">Pairs and Other Tuples</h3>
+<h4 id="pairs">Pairs</h4>
+<ul>
+<li><em>The syntax</em> is <code>(e1,e2)</code></li>
+<li><em>The typing rules</em>:
+<ul>
+<li>the type of a pair is <code>t1*t2</code></li>
+<li><code>t1</code> is the type of the first part</li>
+<li><code>t2</code> is the type of the second part</li>
+</ul></li>
+<li><em>The evaluation rules</em>:
+<ul>
+<li><code>e1</code> to <code>v1</code> and <code>e2</code> to <code>v2</code></li>
+<li>make the pair of values <code>(v1,v2)</code></li>
+</ul></li>
+<li>use <code>#1</code> and <code>#2</code> to access the first and second part
+<ul>
+<li><code>e</code> must have some type that looks like <code>ta * tb</code></li>
+<li><code>#1 e</code> has type <code>ta</code> and <code>#2 e</code> has type <code>tb</code></li>
+</ul></li>
+</ul>
+<p>Examples:</p>
+<figure class="highlight sml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fun</span> sum_two_pairs (pr1 : <span class="built_in">int</span>*<span class="built_in">int</span>, pr2 : <span class="built_in">int</span>*<span class="built_in">int</span>) = </span><br><span class="line">    (#<span class="number">1</span> pr1) + (#<span class="number">2</span> pr1) + (#<span class="number">1</span> pr2) + (#<span class="number">2</span> pr2)</span><br><span class="line"></span><br><span class="line"><span class="keyword">fun</span> div_mod (x : <span class="built_in">int</span>, y : <span class="built_in">int</span>) = <span class="comment">(* note: returning a pair is a real pain in Java *)</span></span><br><span class="line">    (x div y, x mod y)</span><br></pre></td></tr></table></figure>
+<h4 id="tuples">Tuples</h4>
+<ul>
+<li>ML supports <em>tuples</em> by allowing any number of parts</li>
+<li>An example is <code>(7,9,11)</code></li>
+<li>You can retrieve the parts with <code>#1 e</code>, <code>#2 e</code>, and <code>#3 e</code></li>
+<li>Pairs and tuples can be nested however you want</li>
+</ul>
+<h3 id="lists">Lists</h3>
+<ul>
+<li><em>Lists</em> can have any length</li>
+<li>all the elements of any particular list must have the same type</li>
+<li>The empty list:
+<ul>
+<li>syntax <code>[]</code></li>
+<li>It is a value</li>
+<li>It can have type <code>t list</code> for any type <code>t</code></li>
+<li>ML writes as <code>’a list</code></li>
+</ul></li>
+<li>A non-empty list:
+<ul>
+<li>syntax <code>[v1,v2,...,vn]</code></li>
+<li>More common to make a list with <code>e1 :: e2</code>
+<ul>
+<li><code>e1</code> evaluates to an “item of type <code>t</code>”</li>
+<li><code>e2</code> evaluates to a “list of <code>t</code> values”</li>
+</ul></li>
+</ul></li>
+<li>we will use three functions provided by ML:
+<ul>
+<li><code>null</code> evaluates to <code>true</code> for empty lists and <code>false</code> for nonempty lists</li>
+<li><code>hd</code> returns the first element of a list, <em>raising an exception</em> if the list is empty</li>
+<li><code>tl</code> returns the tail of a list, raising an exception if the list is empty</li>
+</ul></li>
+</ul>
+<p>Examples:</p>
+<figure class="highlight sml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fun</span> sum_list (xs : <span class="built_in">int</span> <span class="built_in">list</span>) =</span><br><span class="line">    <span class="keyword">if</span> null xs </span><br><span class="line">    <span class="keyword">then</span> <span class="number">0</span> </span><br><span class="line">    <span class="keyword">else</span> hd(xs) + sum_list(tl xs)</span><br><span class="line"></span><br><span class="line"><span class="keyword">fun</span> append (xs : <span class="built_in">int</span> <span class="built_in">list</span>, ys : <span class="built_in">int</span> <span class="built_in">list</span>) = </span><br><span class="line">    <span class="keyword">if</span> null xs </span><br><span class="line">    <span class="keyword">then</span> ys </span><br><span class="line">    <span class="keyword">else</span> (hd xs) :: append(tl xs, ys)</span><br><span class="line">    </span><br><span class="line"><span class="keyword">fun</span> firsts (xs : (<span class="built_in">int</span> * <span class="built_in">int</span>) <span class="built_in">list</span>) =</span><br><span class="line">    <span class="keyword">if</span> null xs </span><br><span class="line">    <span class="keyword">then</span> <span class="literal">[]</span> </span><br><span class="line">    <span class="keyword">else</span> (#<span class="number">1</span> (hd xs))::(firsts(tl xs))</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Functions that make and use lists are almost always recursive</li>
+<li>To write a recursive function:
+<ul>
+<li>thinking about the <em>base case</em></li>
+<li>then the <em>recursive case</em></li>
+</ul></li>
+<li>we can combine pairs and lists however we want</li>
+</ul>
+<h3 id="let-expressions">Let Expressions</h3>
+<ul>
+<li>An absolutely crucial feature</li>
+<li>It lets us have local bindings of any sort</li>
+<li>It can appear anywhere an expression can</li>
+</ul>
+<p>Syntactically, A let-expression is:</p>
+<figure class="highlight sml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> b1 b2 ... bn <span class="keyword">in</span> e <span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><em>The syntax</em>: each <code>bi</code> is a binding and <code>e</code> is an expression</li>
+<li>the scope of a binding in a let-expression is:
+<ul>
+<li>the later bindings in that let-expression</li>
+<li>the “body” of the let-expression</li>
+</ul></li>
+<li>The type of <code>e</code> is the type for the entire let-expression</li>
+<li>The value <code>e</code> evaluates to is the value for the entire let-expression</li>
+</ul>
+<p>Examples:</p>
+<figure class="highlight sml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fun</span> countup_from1_better (x:<span class="built_in">int</span>) =</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">fun</span> count (from:<span class="built_in">int</span>) = </span><br><span class="line">        <span class="keyword">if</span> from=x </span><br><span class="line">        <span class="keyword">then</span> x::<span class="literal">[]</span> </span><br><span class="line">        <span class="keyword">else</span> from :: count(from+<span class="number">1</span>) </span><br><span class="line">    <span class="keyword">in</span> </span><br><span class="line">        count <span class="number">1</span> </span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">fun</span> good_max (xs : <span class="built_in">int</span> <span class="built_in">list</span>) =</span><br><span class="line">    <span class="keyword">if</span> null xs </span><br><span class="line">    <span class="keyword">then</span> <span class="number">0</span> <span class="comment">(* note: bad style; see below *)</span> </span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> null (tl xs) </span><br><span class="line">    <span class="keyword">then</span> hd xs </span><br><span class="line">    <span class="keyword">else</span> </span><br><span class="line">        <span class="comment">(* for style, could also use a let-binding for hd xs *)</span></span><br><span class="line">        <span class="keyword">let</span> <span class="keyword">val</span> tl_ans = good_max(tl xs) </span><br><span class="line">        <span class="keyword">in</span> </span><br><span class="line">            <span class="keyword">if</span> hd xs &gt; tl_ans </span><br><span class="line">            <span class="keyword">then</span> hd xs </span><br><span class="line">            <span class="keyword">else</span> tl_ans </span><br><span class="line">        <span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>Deﬁne a local function that uses other variables in scope
+<ul>
+<li>a hugely common and convenient thing to do in functional programming</li>
+</ul></li>
+<li>We can use let-expressions to avoid repeated computations</li>
+</ul>
+<h3 id="options">Options</h3>
+<ul>
+<li>An option value has either 0 or 1 thing:
+<ul>
+<li><code>NONE</code> is an option value “carrying nothing”</li>
+<li><code>SOME e</code> evaluates <code>e</code> to a value <code>v</code></li>
+<li>The type of <code>NONE</code> is <code>’a option</code></li>
+<li>The type of <code>SOME e</code> is <code>t</code> option if <code>e</code> has type <code>t</code></li>
+<li>We have <code>isSome</code> which evaluates to false if its argument is <code>NONE</code></li>
+<li>We have <code>valOf</code> to get the value carried by <code>SOME</code></li>
+</ul></li>
+</ul>
+<figure class="highlight sml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fun</span> better_max2 (xs : <span class="built_in">int</span> <span class="built_in">list</span>) =</span><br><span class="line">    <span class="keyword">if</span> null xs </span><br><span class="line">    <span class="keyword">then</span> <span class="type">NONE</span> </span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">let</span> <span class="comment">(* fine to assume argument nonempty because it is local *)</span> </span><br><span class="line">             <span class="keyword">fun</span> max_nonempty (xs : <span class="built_in">int</span> <span class="built_in">list</span>) = </span><br><span class="line">                <span class="keyword">if</span> null (tl xs) <span class="comment">(* xs must not be [] *)</span> </span><br><span class="line">                <span class="keyword">then</span> hd xs </span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">let</span> <span class="keyword">val</span> tl_ans = max_nonempty(tl xs) </span><br><span class="line">                     <span class="keyword">in</span> </span><br><span class="line">                         <span class="keyword">if</span> hd xs &gt; tl_ans </span><br><span class="line">                         <span class="keyword">then</span> hd xs </span><br><span class="line">                         <span class="keyword">else</span> tl_ans </span><br><span class="line">                     <span class="keyword">end</span></span><br><span class="line">          <span class="keyword">in</span></span><br><span class="line">              <span class="type">SOME</span> (max_nonempty xs)</span><br><span class="line">          <span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<h3 id="some-other-expressions-and-operators">Some Other Expressions and Operators</h3>
+<p>Here is a brief list of some additional forms of expressions:</p>
+<ul>
+<li><code>e1 andalso e2</code> is logical-and</li>
+<li><code>e1 orelse e2</code> is logical-or</li>
+<li><code>not e</code> is logical-negation</li>
+<li><code>e1 = e2</code> judges if two numbers are same</li>
+<li><code>e1 &lt;&gt; e2</code> judges if two numbers are different</li>
+<li>other arithmetic comparisons: <code>&gt;, &lt;, &gt;=, &lt;=</code>
+<ul>
+<li>can be used with <code>real</code></li>
+<li>but not 1 <code>int</code> and 1 <code>real</code></li>
+</ul></li>
+<li>use <code>~e</code> for negation</li>
+</ul>
+<h3 id="lack-of-mutation-and-benefits-thereof">Lack of Mutation and Benefits Thereof</h3>
+<ul>
+<li>There is no way to <em>change</em> the contents of a binding, a tuple, or a list</li>
+<li>Having <em>immutable data</em> is one of the main contributions of functional programming</li>
+<li>It makes sharing and aliasing irrelevant</li>
+</ul>
+<h3 id="the-pieces-of-a-programming-language">The Pieces of a Programming Language</h3>
+<p>Here are the essential “pieces” necessary for defining and learning <em>any</em> programming language</p>
+<ul>
+<li><strong>Syntax</strong>: How do you write the various parts of the language?</li>
+<li><strong>Semantics</strong>: What do the various language features mean?</li>
+<li><strong>Idioms</strong>: What are the common approaches to using language features to express computations?</li>
+<li><strong>Libraries</strong>: What has already been written for you?</li>
+<li><strong>Tools</strong>: What is available for manipulating programs in the language?</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Programming-Languages/" rel="tag"># Programming Languages</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/21/pl-1/" rel="next" title="Programming Languages Week1">
+                <i class="fa fa-chevron-left"></i> Programming Languages Week1
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Zheyu Wang" />
+            
+              <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+              <p class="site-description motion-element" itemprop="description">今でもあなたはわたしの光</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">16</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/xxwywzy" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/xxwywzy" target="_blank" title="Twitter"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/xxwywzy" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://instagram.com/xxwywzy" target="_blank" title="Instagram"><i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#ml-expressions-and-variable-bindings"><span class="nav-number">1.</span> <span class="nav-text">ML Expressions and Variable Bindings</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#using-use"><span class="nav-number">2.</span> <span class="nav-text">Using use</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#variables-are-immutable"><span class="nav-number">3.</span> <span class="nav-text">Variables are Immutable</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#function-bindings"><span class="nav-number">4.</span> <span class="nav-text">Function Bindings</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#syntax"><span class="nav-number">4.1.</span> <span class="nav-text">Syntax</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#type-checking"><span class="nav-number">4.2.</span> <span class="nav-text">Type-checking</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#evaluation"><span class="nav-number">4.3.</span> <span class="nav-text">Evaluation</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#function-calls"><span class="nav-number">4.4.</span> <span class="nav-text">Function calls</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pairs-and-other-tuples"><span class="nav-number">5.</span> <span class="nav-text">Pairs and Other Tuples</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#pairs"><span class="nav-number">5.1.</span> <span class="nav-text">Pairs</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tuples"><span class="nav-number">5.2.</span> <span class="nav-text">Tuples</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lists"><span class="nav-number">6.</span> <span class="nav-text">Lists</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#let-expressions"><span class="nav-number">7.</span> <span class="nav-text">Let Expressions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#options"><span class="nav-number">8.</span> <span class="nav-text">Options</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#some-other-expressions-and-operators"><span class="nav-number">9.</span> <span class="nav-text">Some Other Expressions and Operators</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lack-of-mutation-and-benefits-thereof"><span class="nav-number">10.</span> <span class="nav-text">Lack of Mutation and Benefits Thereof</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#the-pieces-of-a-programming-language"><span class="nav-number">11.</span> <span class="nav-text">The Pieces of a Programming Language</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.5.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  
+  
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(function (item) {
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz',
+        appKey: 'IxP5URFEhxow4TfWyVNiowbH',
+        placeholder: '请在这里评论=￣ω￣=',
+        avatar:'retro',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz", "IxP5URFEhxow4TfWyVNiowbH");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text(counter.get('time'));
+            
+            counter.save(null, {
+              success: function(counter) {
+                
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            
+              var newcounter = new Counter();
+              /* Set ACL */
+              var acl = new AV.ACL();
+              acl.setPublicReadAccess(true);
+              acl.setPublicWriteAccess(true);
+              newcounter.setACL(acl);
+              /* End Set ACL */
+              newcounter.set("title", title);
+              newcounter.set("url", url);
+              newcounter.set("time", 1);
+              newcounter.save(null, {
+                success: function(newcounter) {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+                },
+                error: function(newcounter, error) {
+                  console.log('Failed to create');
+                }
+              });
+            
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
