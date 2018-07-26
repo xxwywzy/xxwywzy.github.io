@@ -114,7 +114,10 @@
 <meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-134426.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-134438.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-134453.png">
-<meta property="og:updated_time" content="2018-05-28T13:45:03.159Z">
+<meta property="og:image" content="http://media.zjubiomedit.com/2018-07-26-014831.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2018-07-26-015037.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2018-07-26-015157.png">
+<meta property="og:updated_time" content="2018-07-26T01:56:23.488Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS229学习笔记之七：支持向量机">
 <meta name="twitter:description" content="本篇博客为CS229第七篇学习笔记，主要内容为对支持向量机算法的系统介绍。">
@@ -354,6 +357,22 @@
               <time title="创建时间：2018-04-19 20:43:02" itemprop="dateCreated datePublished" datetime="2018-04-19T20:43:02+08:00">2018-04-19</time>
             
 
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-07-26 09:56:23" itemprop="dateModified" datetime="2018-07-26T09:56:23+08:00">2018-07-26</time>
+              
             
           </span>
 
@@ -764,6 +783,106 @@ z^TKz &amp;= \sum_i\sum_j z_iK_{ij}z_j\\
 <p>因为 z 是任意的，所以 <span class="math inline">\(K\)</span> 是一个<strong>半正定矩阵（positive semi-definite）</strong>。</p>
 <p>综上所述，我们证明了如果 <span class="math inline">\(K\)</span> 是一个合法的核，则其对应的核矩阵 <span class="math inline">\(K \in \mathbb{R}^{m \times m}\)</span> 是对称半正定矩阵。其实，这不仅是一个必要条件，也是一个充分条件。<strong>Mercer 定理</strong> 指出：给定一个函数 <span class="math inline">\(K\)</span> : <span class="math inline">\(\mathbb{R}^n \times \mathbb{R}^n \to \mathbb{R}\)</span> ，则 <span class="math inline">\(K\)</span> 为合法核（又称为 Mercer 核）的充要条件为对于任意的有限数据集 <span class="math inline">\(\lbrace x^{(1)},…,x^{(m)}\rbrace, (m\lt\infty)\)</span>，其对应的核矩阵为对称半正定矩阵。</p>
 <p>对于核来说，其不仅仅只存在于 SVM 中，对于任意的算法，只要计算时出现了内积，都可以用核函数替代，从而提高在高维数据上的性能，比如感知器算法，代入后可发展为核感知器算法。这就是所谓的<strong>“核技法”（kernel trick）</strong>。</p>
+<h3 id="l1-正则化软间隔-svm">L1 正则化软间隔 SVM</h3>
+<p>到目前为止，对于 SVM 的推导都是基于<strong>数据线性可分</strong>这一前提的。虽然将数据映射到高维空间可能会增加数据可分的可能性，但我们并不能保证这一点。此外，在某些情况下，超平面可能会对于新加入的样本(噪声)过于敏感，如下图所示：</p>
+<p><img src="http://media.zjubiomedit.com/2018-07-26-014831.png" width="65%" height="65%"></p>
+<p>为了让算法对于线性不可分的数据起效，同时减少其对于噪声的敏感度，我们对于之前的原始优化问题进行了修正，引入了<strong>L1正则化</strong>：</p>
+<p><span class="math display">\[
+\begin{align*} 
+\min_{\gamma,w,b} &amp;\quad \frac{1}{2}\Vert w \Vert^2 + C\sum_{i=1}^m \xi_i\\ \text{s.t.} &amp;\quad y^{(i)}(w^Tx^{(i)}+ b)\ge 1 - \xi_i, \; i=1,2,…,m \\
+&amp;\quad \xi_i \ge 0, \; i=1,2,…,m
+\end{align*}
+\]</span></p>
+<p>上述公式引入了一个惩罚项，能够使得样本的函数距离小于1（甚至小于0，即分类错误），但这样会导致目标函数变大，参数C用于控制相对权重。</p>
+<p>与之前同理，我们可以得出下面的拉格朗日方程：</p>
+<p><span class="math display">\[
+\mathcal{L}(w,b,\xi,\alpha,r) = \frac 1 2 w^Tw + C\sum_{i=1}^m\xi_i-\sum_{i=1}^m\alpha_i[y^{(i)}(x^Tw+b)-1+\xi_i]- \sum_{i=1}^m r_i\xi_i.
+\]</span></p>
+<p>其中 <span class="math inline">\(\alpha_i\)</span> 与 <span class="math inline">\(r_i\)</span> 是拉格朗日乘子，省略推导过程，我们可以得到下面的对偶问题：</p>
+<p><span class="math display">\[
+\begin{align*} 
+\max_{\alpha} &amp;\quad W(\alpha) = \sum_{i=1}^m\alpha_i  - \frac12\sum_{i,j=1}^my^{(i)}y^{(j)}\alpha_i\alpha_j\langle x^{(i)},x^{(j)} \rangle \\ \text{s.t.} &amp;\quad 0 \le \alpha \le C, \; i=1,2,…,m \\
+&amp; \quad \sum_{i=1}^m\alpha_iy^{(i)}=0,
+\end{align*}
+\]</span></p>
+<p>可以看到，对偶问题唯一改变的地方就是 <span class="math inline">\(\alpha_i\)</span> 多了一个约束，我们仍然可以利用样本的内积进行预测，不过截距 b 的计算公式会发生变化。</p>
+<p>此外，kkt对偶互补条件也会发生一些变化：</p>
+<p><span class="math display">\[
+\begin{align*}
+\alpha_i = 0 &amp;\Rightarrow y^{(i)}(w^Tx^{(i)}+b) \ge 1 \tag{14} \\
+\alpha_i = C &amp;\Rightarrow y^{(i)}(w^Tx^{(i)}+b) \le 1 \tag{15} \\
+0 &lt; \alpha_i &lt; C &amp;\Rightarrow y^{(i)}(w^Tx^{(i)}+b) = 1. \tag{16} \\
+\end{align*}
+\]</span></p>
+<p>这些条件将在下一节中用于判断 SMO 算法是否收敛。现在我们只需要一个能够实际求解对偶问题的算法，就可以实现支持向量机了！</p>
+<h3 id="smo-算法">SMO 算法</h3>
+<p>SMO（sequential minimal optimization）算法，为 SVM 推导中产生的对偶问题提供了一种高效解法。在讨论 SMO 算法之前，让我们先看一个与其思想相同的有趣算法：坐标上升（coordinate ascent）算法。</p>
+<h4 id="坐标上升法">坐标上升法</h4>
+<p>我们要解决如下的无约束优化问题：</p>
+<p><span class="math display">\[
+\max_\alpha W(\alpha_1,\alpha_2,\ldots,\alpha_m)
+\]</span></p>
+<p>我们已经介绍了两种优化算法：梯度下降法和牛顿方法，下面要介绍一种新方法，称为<strong>坐标上升法</strong>：</p>
+<p>Loop until convergence<span class="math inline">\(\;\)</span>{<br>
+<span class="math inline">\(\quad\)</span> For i=1 to m,<span class="math inline">\(\;\)</span>{<br>
+<span class="math display">\[
+\alpha_i := \arg \max_{\hat{\alpha_i}} W(\alpha_1,\alpha_{i-1},\hat{\alpha_i},\alpha_{i+1}\ldots,\alpha_m).
+\]</span> <span class="math inline">\(\quad\)</span> }<br>
+}</p>
+<p>在内层循环中，当更新 <span class="math inline">\(\alpha_i\)</span> 时，保持其他的参数不变。在这个版本中，参数更新的顺序是按照下标的，其他更复杂的版本可能会根据 <span class="math inline">\(W(\alpha)\)</span> 的变化程度来决定参数的更新顺序。</p>
+<p>当内层循环中的 arg max 能够很快的求解时，此算法是一个相当高效的算法。下面是一张算法运行样例图：</p>
+<p><img src="http://media.zjubiomedit.com/2018-07-26-015037.png" width="45%" height="45%"></p>
+<p>图中的椭圆是我们想要优化的二次函数的轮廓。坐标上升法从(2，-2)这一点开始，可以看到每一步的优化路线都与坐标轴<strong>平行</strong>，因为每次只优化一个变量。</p>
+<h4 id="smo">SMO</h4>
+<p>让我们用对 SMO 算法的推导为支持向量机的学习收尾。我们希望解决如下的对偶问题：</p>
+<p><span class="math display">\[
+\begin{align*} 
+\max_{\alpha} &amp;\quad W(\alpha) = \sum_{i=1}^m\alpha_i  - \frac12\sum_{i,j=1}^my^{(i)}y^{(j)}\alpha_i\alpha_j\langle x^{(i)},x^{(j)} \rangle \tag{17}\\ \text{s.t.} &amp;\quad 0 \le \alpha \le C, \; i=1,2,…,m \tag{18}\\
+&amp; \quad \sum_{i=1}^m\alpha_iy^{(i)}=0. \tag{19}
+\end{align*}
+\]</span></p>
+<p>如果我们使用坐标上升法来求解最优值，会发现由于约束(19)的存在，会有：</p>
+<p><span class="math display">\[
+\alpha_1y^{(1)} = -\sum_{i=2}^m \alpha_i y^{(i)}.
+\]</span></p>
+<p>由于 <span class="math inline">\(y^{(1)} \in \{1,-1\}\)</span>，两边同乘 <span class="math inline">\(y^{(1)}\)</span>， 得到：</p>
+<p><span class="math display">\[
+\alpha_1 = -y^{(1)}\sum_{i=2}^m \alpha_i y^{(i)}.
+\]</span></p>
+<p>因此，<span class="math inline">\(\alpha_1\)</span> 完全由其他的 <span class="math inline">\(\alpha_i\)</span> 决定，我们无法在不违背约束的情况下仅改变一个参数的值来求解优化问题。为了解决这个问题，我们可以一次更新两个参数，从而得到 SMO 算法：</p>
+<p>Repeat until convergence<span class="math inline">\(\;\)</span>{<br>
+<span class="math inline">\(\quad\)</span> 1. 选择要更新的参数对 <span class="math inline">\(\alpha_i\)</span> 和 <span class="math inline">\(\alpha_j\)</span><br>
+<span class="math inline">\(\quad\)</span> 2. 保持其他参数不变，针对 <span class="math inline">\(\alpha_i\)</span> 和 <span class="math inline">\(\alpha_j\)</span> 来优化 <span class="math inline">\(W(\alpha)\)</span><br>
+}</p>
+<p>我们可以使用一些启发式规则来选择使目标函数全局增长最大的参数对。为了测试算法是否收敛，我们可以检查 KKT条件（方程14-16）是否在某个tol的范围内得到满足。这里，tol是收敛误差参数（convergence tolerance parameter）, 通常被设置为大约 0.01 至 0.001 。（具体细节请参考<a href="https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/tr-98-14.pdf" target="_blank" rel="noopener">论文</a>）</p>
+<p>SMO 算法高效的关键原因是对于 <span class="math inline">\(\alpha_i\)</span> 和 <span class="math inline">\(\alpha_j\)</span> 的更新计算非常的高效，下面进行简单的阐述。</p>
+<p>假设有一组参数 <span class="math inline">\(\alpha_i\)</span> ，满足约束(18-19) ，我们希望去更新 <span class="math inline">\(\alpha_1\)</span> 和 <span class="math inline">\(\alpha_2\)</span> ，并保持其他参数不变，那么根据公式(19)，我们有：</p>
+<p><span class="math display">\[
+\alpha_1y^{(1)} + \alpha_2y^{(2)} =  -\sum_{i=3}^m \alpha_i y^{(i)} = \zeta \tag{20}
+\]</span></p>
+<p><span class="math inline">\(\zeta\)</span> 为某个常数，我们可以得到如下的图像：</p>
+<p><img src="http://media.zjubiomedit.com/2018-07-26-015157.png" width="40%" height="40%"></p>
+<p>根据约束(18)，我们知道 <span class="math inline">\(\alpha_1\)</span> 和 <span class="math inline">\(\alpha_2\)</span> 一定位于区间 <span class="math inline">\([0,C] \times [0,C]\)</span> 内，从图中可以看出，<span class="math inline">\(\alpha_2\)</span> 一定存在某个上界 H 和某个下界 L ，来保证 <span class="math inline">\(\alpha_1\)</span> 和 <span class="math inline">\(\alpha_2\)</span> 位于区间 <span class="math inline">\([0,C] \times [0,C]\)</span> 内，这个上界与下界取决于直线的位置。</p>
+<p>使用公式(20)，我们可以得到：</p>
+<p><span class="math display">\[
+\alpha_1 = (\zeta - \alpha_2y^{(2)})y^{(1)}.
+\]</span></p>
+<p>因此，目标函数 <span class="math inline">\(W(\alpha)\)</span> 可以被写成：</p>
+<p><span class="math display">\[
+W(\alpha_1,\alpha_2,\ldots,\alpha_m) = W((\zeta-\alpha_2y^{(2)})y^{(1)},\alpha_2, \ldots,\alpha_m).
+\]</span></p>
+<p>可以看到，将 <span class="math inline">\(\alpha_3,\dots,\alpha_m\)</span> 看作常数，那么目标函数就是一个标准的一元二次函数，可以改写成 <span class="math inline">\(a\alpha_2^2 + b\alpha_2 +c\)</span> 的形式。如果 <span class="math inline">\(a&lt;0\)</span> ，那么假设导数为 0 时 <span class="math inline">\(\alpha_2\)</span> 为 <span class="math inline">\(\alpha_2^{new,unclipped}\)</span> ，那么根据边界条件 <span class="math inline">\([L,H]\)</span> ，有如下几种情况：</p>
+<p><span class="math display">\[
+\left\{  
+\begin{array}{l}  
+H &amp;\text{if} \; \alpha_2^{new,unclipped} &gt; H\\  
+\alpha_2^{new,unclipped} &amp;\text{if} \;L \le \alpha_2^{new,unclipped} \le H\\  
+L &amp;\text{if} \; \alpha_2^{new,unclipped} &lt; L    
+\end{array}  
+\right.
+\]</span></p>
+<p>总的来说，对于该函数的极值求解是很简单的，这样我们就可以高效地求解出对偶问题，从而求解 SVM 算法。</p>
+<p><strong>以上就是 CS229 中关于支持向量机的全部阐述。</strong></p>
 
       
     </div>
@@ -778,6 +897,20 @@ z^TKz &amp;= \sum_i\sum_j z_iK_{ij}z_j\\
 
     
 
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Zheyu Wang</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yoursite.com/2018/04/19/CS229-7/" title="CS229学习笔记之七：支持向量机">http://yoursite.com/2018/04/19/CS229-7/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
     
 
     <footer class="post-footer">
@@ -801,8 +934,8 @@ z^TKz &amp;= \sum_i\sum_j z_iK_{ij}z_j\\
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/04/17/zelda/" rel="next" title="记日本亚马逊《塞尔达传说：荒野之息》的一条回评">
-                <i class="fa fa-chevron-left"></i> 记日本亚马逊《塞尔达传说：荒野之息》的一条回评
+              <a href="/2018/04/16/uncharted4/" rel="next" title="A thief's end —— 神秘海域4通关感想">
+                <i class="fa fa-chevron-left"></i> A thief's end —— 神秘海域4通关感想
               </a>
             
           </div>
@@ -894,7 +1027,7 @@ z^TKz &amp;= \sum_i\sum_j z_iK_{ij}z_j\\
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-count">12</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -919,7 +1052,7 @@ z^TKz &amp;= \sum_i\sum_j z_iK_{ij}z_j\\
                     
                       
                     
-                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-count">4</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -972,7 +1105,7 @@ z^TKz &amp;= \sum_i\sum_j z_iK_{ij}z_j\\
                     
                       
                     
-                    <span class="site-state-item-count">16</span>
+                    <span class="site-state-item-count">14</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -1032,7 +1165,7 @@ z^TKz &amp;= \sum_i\sum_j z_iK_{ij}z_j\\
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#间隔直观描述"><span class="nav-number">1.</span> <span class="nav-text">间隔：直观描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#符号变换"><span class="nav-number">2.</span> <span class="nav-text">符号变换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数间隔与几何间隔"><span class="nav-number">3.</span> <span class="nav-text">函数间隔与几何间隔</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最优间隔分类器"><span class="nav-number">4.</span> <span class="nav-text">最优间隔分类器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#拉格朗日对偶性"><span class="nav-number">5.</span> <span class="nav-text">拉格朗日对偶性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最优间隔分类器的求解"><span class="nav-number">6.</span> <span class="nav-text">最优间隔分类器的求解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#核"><span class="nav-number">7.</span> <span class="nav-text">核</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#关于多项式核的维数问题"><span class="nav-number">7.1.</span> <span class="nav-text">关于多项式核的维数问题</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#间隔直观描述"><span class="nav-number">1.</span> <span class="nav-text">间隔：直观描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#符号变换"><span class="nav-number">2.</span> <span class="nav-text">符号变换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数间隔与几何间隔"><span class="nav-number">3.</span> <span class="nav-text">函数间隔与几何间隔</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最优间隔分类器"><span class="nav-number">4.</span> <span class="nav-text">最优间隔分类器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#拉格朗日对偶性"><span class="nav-number">5.</span> <span class="nav-text">拉格朗日对偶性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最优间隔分类器的求解"><span class="nav-number">6.</span> <span class="nav-text">最优间隔分类器的求解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#核"><span class="nav-number">7.</span> <span class="nav-text">核</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#关于多项式核的维数问题"><span class="nav-number">7.1.</span> <span class="nav-text">关于多项式核的维数问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#l1-正则化软间隔-svm"><span class="nav-number">8.</span> <span class="nav-text">L1 正则化软间隔 SVM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#smo-算法"><span class="nav-number">9.</span> <span class="nav-text">SMO 算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#坐标上升法"><span class="nav-number">9.1.</span> <span class="nav-text">坐标上升法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#smo"><span class="nav-number">9.2.</span> <span class="nav-text">SMO</span></a></li></ol></li></ol></div>
             
 
           </div>
