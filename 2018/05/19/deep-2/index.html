@@ -5,29 +5,21 @@
 
 
 
+
+
+
+
+
+
   
 
 
 <html class="theme-next pisces use-motion" lang="zh-CN">
 <head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
-<meta name="theme-color" content="#222">
-
-
-
-
-
-
-
-
-
-
-
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta name="theme-color" content="#222"/>
 
 
 
@@ -50,36 +42,38 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
-
-<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png?v=6.2.0">
-
-
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=6.2.0">
-
-
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png?v=6.2.0">
-
-
-  <link rel="mask-icon" href="/images/favicon.png?v=6.2.0" color="#222">
 
 
 
 
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2"/>
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0"/>
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/favicon.png?v=7.0.0" color="#222">
 
 
 
 
 
-<script type="text/javascript" id="hexo.configurations">
+
+
+<script id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
     scheme: 'Pisces',
-    version: '6.2.0',
+    version: '7.0.0',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
     fancybox: false,
     fastclick: false,
@@ -106,14 +100,14 @@
 <meta name="keywords" content="deeplearning.ai,深度学习">
 <meta property="og:type" content="article">
 <meta property="og:title" content="deeplearning.ai 第二周：神经网络的编程基础">
-<meta property="og:url" content="http://yoursite.com/2018/05/19/deep-2/index.html">
+<meta property="og:url" content="https://xxwywzy.github.io/2018/05/19/deep-2/index.html">
 <meta property="og:site_name" content="xxwywzy&#39;s Blog">
 <meta property="og:description" content="本篇博客为 deeplearning.ai 第二周学习笔记，主题是：神经网络的编程基础。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-01-27-083324.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-01-29-071355.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-01-29-074845.png">
-<meta property="og:updated_time" content="2019-02-01T15:17:10.269Z">
+<meta property="og:updated_time" content="2019-02-02T02:35:38.660Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="deeplearning.ai 第二周：神经网络的编程基础">
 <meta name="twitter:description" content="本篇博客为 deeplearning.ai 第二周学习笔记，主题是：神经网络的编程基础。">
@@ -124,11 +118,11 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/05/19/deep-2/"/>
+  <link rel="canonical" href="https://xxwywzy.github.io/2018/05/19/deep-2/"/>
 
 
 
-<script type="text/javascript" id="page.configurations">
+<script id="page.configurations">
   CONFIG.page = {
     sidebar: "",
   };
@@ -142,7 +136,7 @@
 
 
 
-  <script type="text/javascript">
+  <script>
     var _hmt = _hmt || [];
     (function() {
       var hm = document.createElement("script");
@@ -155,30 +149,31 @@
 
 
 
+
+
+
   <noscript>
-  <style type="text/css">
-    .use-motion .motion-element,
-    .use-motion .brand,
-    .use-motion .menu-item,
-    .sidebar-inner,
-    .use-motion .post-block,
-    .use-motion .pagination,
-    .use-motion .comments,
-    .use-motion .post-header,
-    .use-motion .post-body,
-    .use-motion .collection-title { opacity: initial; }
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
 
-    .use-motion .logo,
-    .use-motion .site-title,
-    .use-motion .site-subtitle {
-      opacity: initial;
-      top: initial;
-    }
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
 
-    .use-motion {
-      .logo-line-before i { left: initial; }
-      .logo-line-after i { right: initial; }
-    }
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
   </style>
 </noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
@@ -196,7 +191,7 @@
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta ">
+  <div class="site-meta">
     
 
     <div class="custom-logo-site-title">
@@ -206,9 +201,12 @@
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
+    
       
         <p class="site-subtitle">Long may the sunshine</p>
       
+    
+    
   </div>
 
   <div class="site-nav-toggle">
@@ -222,7 +220,6 @@
 
 
 
-
 <nav class="site-nav">
   
     <ul id="menu" class="menu">
@@ -232,32 +229,68 @@
         
           
           <li class="menu-item menu-item-home">
-    <a href="/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br/>首页</a>
+
   </li>
         
         
         
           
           <li class="menu-item menu-item-tags">
-    <a href="/tags/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br/>标签</a>
+
   </li>
         
         
         
           
           <li class="menu-item menu-item-categories">
-    <a href="/categories/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br/>分类</a>
+
   </li>
         
         
         
           
           <li class="menu-item menu-item-archives">
-    <a href="/archives/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br/>归档</a>
+
   </li>
 
       
@@ -308,16 +341,16 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/19/deep-2/">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2018/05/19/deep-2/"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Zheyu Wang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Zheyu Wang"/>
+      <meta itemprop="description" content="更に向こうへ"/>
+      <meta itemprop="image" content="/images/avatar.png"/>
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xxwywzy's Blog">
+      <meta itemprop="name" content="xxwywzy's Blog"/>
     </span>
 
     
@@ -326,6 +359,7 @@
         
         
           <h1 class="post-title" itemprop="name headline">deeplearning.ai 第二周：神经网络的编程基础
+
               
             
           </h1>
@@ -357,7 +391,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -378,11 +412,14 @@
 
           
             
+            
+              
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
+            
                 <a href="/2018/05/19/deep-2/#comments" itemprop="discussionUrl">
                   <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/05/19/deep-2/" itemprop="commentCount"></span>
                 </a>
@@ -392,16 +429,16 @@
 
           
           
-             <span id="/2018/05/19/deep-2/" class="leancloud_visitors" data-flag-title="deeplearning.ai 第二周：神经网络的编程基础">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数：</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
+            <span id="/2018/05/19/deep-2/" class="leancloud_visitors" data-flag-title="deeplearning.ai 第二周：神经网络的编程基础">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
           
 
           
@@ -423,7 +460,9 @@
       
 
       
-        <div class="note info">本篇博客为 deeplearning.ai 第二周学习笔记，主题是：神经网络的编程基础。</div>
+        <div class="note info">
+            本篇博客为 deeplearning.ai 第二周学习笔记，主题是：神经网络的编程基础。 
+          </div>
 <a id="more"></a>
 <ul>
 <li>本节以二分类问题为例，即输出仅包含两种情况的分类问题</li>
@@ -499,11 +538,11 @@ b = b - \alpha * \frac {d(J(w,b))} {db}
 <li>下面给出求解含有 m 个样本的逻辑回归的梯度下降的伪代码
 <ul>
 <li><p>变量名如下：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">X1                  Feature</span><br><span class="line">X2                  Feature</span><br><span class="line">W1                  Weight of the first feature.</span><br><span class="line">W2                  Weight of the second feature.</span><br><span class="line">B                   Logistic Regression parameter.</span><br><span class="line">M                   Number of training examples</span><br><span class="line">Y(i)                Expected output of i</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">X1                  Feature</span><br><span class="line">X2                  Feature</span><br><span class="line">W1                  Weight of the first feature.</span><br><span class="line">W2                  Weight of the second feature.</span><br><span class="line">B                   Logistic Regression parameter.</span><br><span class="line">M                   Number of training examples</span><br><span class="line">Y(i)                Expected output of i</span><br></pre></td></tr></table></figure></li>
 <li><p>基于复合求导得出的导数如下：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">d(a)  = d(l)/d(a) = -(y/a) + ((<span class="number">1</span>-y)/(<span class="number">1</span>-a))</span><br><span class="line">d(z)  = d(l)/d(z) = a - y</span><br><span class="line">d(W1) = X1 * d(z)</span><br><span class="line">d(W2) = X2 * d(z)</span><br><span class="line">d(B)  = d(z)</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">d(a)  = d(l)/d(a) = -(y/a) + ((<span class="number">1</span>-y)/(<span class="number">1</span>-a))</span><br><span class="line">d(z)  = d(l)/d(z) = a - y</span><br><span class="line">d(W1) = X1 * d(z)</span><br><span class="line">d(W2) = X2 * d(z)</span><br><span class="line">d(B)  = d(z)</span><br></pre></td></tr></table></figure></li>
 <li><p>伪代码如下：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">J = <span class="number">0</span>; dW1 = <span class="number">0</span>; dW2 =<span class="number">0</span>; dB = <span class="number">0</span>;                 <span class="comment"># Devs</span></span><br><span class="line">W1 = <span class="number">0</span>; W2 = <span class="number">0</span>; B=<span class="number">0</span>;                            <span class="comment"># Weights</span></span><br><span class="line"><span class="keyword">for</span> i = <span class="number">1</span> to m</span><br><span class="line">    <span class="comment"># Forward pass</span></span><br><span class="line">    z(i) = W1*X1(i) + W2*X2(i) + b</span><br><span class="line">    a(i) = Sigmoid(z(i))</span><br><span class="line">    J += (Y(i)*log(a(i)) + (<span class="number">1</span>-Y(i))*log(<span class="number">1</span>-a(i)))</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># Backward pass</span></span><br><span class="line">    dz(i) = a(i) - Y(i)</span><br><span class="line">    dW1 += dz(i) * X1(i)</span><br><span class="line">    dW2 += dz(i) * X2(i)</span><br><span class="line">    dB  += dz(i)</span><br><span class="line">J /= m</span><br><span class="line">dW1/= m</span><br><span class="line">dW2/= m</span><br><span class="line">dB/= m</span><br><span class="line">    </span><br><span class="line"><span class="comment"># Gradient descent</span></span><br><span class="line">W1 = W1 - alpha * dW1</span><br><span class="line">W2 = W2 - alpha * dW2</span><br><span class="line">B = B - alpha * dB</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">J = <span class="number">0</span>; dW1 = <span class="number">0</span>; dW2 =<span class="number">0</span>; dB = <span class="number">0</span>;                 <span class="comment"># Devs</span></span><br><span class="line">W1 = <span class="number">0</span>; W2 = <span class="number">0</span>; B=<span class="number">0</span>;                            <span class="comment"># Weights</span></span><br><span class="line"><span class="keyword">for</span> i = <span class="number">1</span> to m</span><br><span class="line">    <span class="comment"># Forward pass</span></span><br><span class="line">    z(i) = W1*X1(i) + W2*X2(i) + b</span><br><span class="line">    a(i) = Sigmoid(z(i))</span><br><span class="line">    J += (Y(i)*log(a(i)) + (<span class="number">1</span>-Y(i))*log(<span class="number">1</span>-a(i)))</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># Backward pass</span></span><br><span class="line">    dz(i) = a(i) - Y(i)</span><br><span class="line">    dW1 += dz(i) * X1(i)</span><br><span class="line">    dW2 += dz(i) * X2(i)</span><br><span class="line">    dB  += dz(i)</span><br><span class="line">J /= m</span><br><span class="line">dW1/= m</span><br><span class="line">dW2/= m</span><br><span class="line">dB/= m</span><br><span class="line">    </span><br><span class="line"><span class="comment"># Gradient descent</span></span><br><span class="line">W1 = W1 - alpha * dW1</span><br><span class="line">W2 = W2 - alpha * dW2</span><br><span class="line">B = B - alpha * dB</span><br></pre></td></tr></table></figure>
 <ul>
 <li>上述伪代码实际上存在两组循环（迭代循环没有写出），会影响计算的效率</li>
 <li>我们可以使用<strong>向量化</strong>来减少循环</li>
@@ -521,14 +560,14 @@ b = b - \alpha * \frac {d(J(w,b))} {db}
 <li>下面将仅使用一组循环来实现逻辑回归
 <ul>
 <li><p>输入变量为：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">X       Input Feature, X shape <span class="keyword">is</span> [Nx,m]</span><br><span class="line">Y       Expect Output, Y shape <span class="keyword">is</span> [Ny,m]</span><br><span class="line">W       Weight, W shape <span class="keyword">is</span> [Nx,<span class="number">1</span>]</span><br><span class="line">b       Parameter, b shape <span class="keyword">is</span> [<span class="number">1</span>,<span class="number">1</span>]</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">X       Input Feature, X shape <span class="keyword">is</span> [Nx,m]</span><br><span class="line">Y       Expect Output, Y shape <span class="keyword">is</span> [Ny,m]</span><br><span class="line">W       Weight, W shape <span class="keyword">is</span> [Nx,<span class="number">1</span>]</span><br><span class="line">b       Parameter, b shape <span class="keyword">is</span> [<span class="number">1</span>,<span class="number">1</span>]</span><br></pre></td></tr></table></figure></li>
 <li><p>向量化后的伪代码如下：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">W = np.zeros((Nx, <span class="number">1</span>))</span><br><span class="line">b = <span class="number">0</span></span><br><span class="line">dW = np.zeros((Nx, <span class="number">1</span>))</span><br><span class="line">db = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> iter <span class="keyword">in</span> range(<span class="number">1000</span>):</span><br><span class="line">    Z = np.dot(W.T, X) + b      <span class="comment"># Vectorization, then broadcasting, Z shape is (1, m)</span></span><br><span class="line">    A = <span class="number">1</span> / (<span class="number">1</span> + np.exp(-Z))    <span class="comment"># Vectorization, A shape is (1, m)</span></span><br><span class="line">  	dZ = A - Y                  <span class="comment"># Vectorization, dZ shape is (1, m)</span></span><br><span class="line">    dW = np.dot(X, dZ.T) / m    <span class="comment"># Vectorization, dW shape is (Nx, 1)</span></span><br><span class="line">    db = np.sum(dZ) / m         <span class="comment"># Vectorization, db shape is (1, 1)</span></span><br><span class="line">    </span><br><span class="line">    W = W - alpha * dW</span><br><span class="line">    b = b - alpha * db</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">W = np.zeros((Nx, <span class="number">1</span>))</span><br><span class="line">b = <span class="number">0</span></span><br><span class="line">dW = np.zeros((Nx, <span class="number">1</span>))</span><br><span class="line">db = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> iter <span class="keyword">in</span> range(<span class="number">1000</span>):</span><br><span class="line">    Z = np.dot(W.T, X) + b      <span class="comment"># Vectorization, then broadcasting, Z shape is (1, m)</span></span><br><span class="line">    A = <span class="number">1</span> / (<span class="number">1</span> + np.exp(-Z))    <span class="comment"># Vectorization, A shape is (1, m)</span></span><br><span class="line">  	dZ = A - Y                  <span class="comment"># Vectorization, dZ shape is (1, m)</span></span><br><span class="line">    dW = np.dot(X, dZ.T) / m    <span class="comment"># Vectorization, dW shape is (Nx, 1)</span></span><br><span class="line">    db = np.sum(dZ) / m         <span class="comment"># Vectorization, db shape is (1, 1)</span></span><br><span class="line">    </span><br><span class="line">    W = W - alpha * dW</span><br><span class="line">    b = b - alpha * db</span><br></pre></td></tr></table></figure></li>
 </ul></li>
 </ul>
 <h3 id="pythonnumpy-使用笔记">Python/Numpy 使用笔记</h3>
 <ul>
-<li>在 Numpy 中，<code>obj.sum(axis = 0)</code> 按列求和，<code>obj.sum(axis = 1)</code> 按行求和，默认将所有元素求和</li>
+<li>在 Numpy 中，<code>obj.sum(axis = 0)</code> 按列求和，<code>obj.sum(axis = 1)</code> 按行求和，默认将所有元素求和</li>
 <li>在 Numpy 中，<code>obj.reshape(1, 4)</code> 将通过广播机制（broadcasting）重组矩阵
 <ul>
 <li>reshape 操作的调用代价极低，可以放在任何位置</li>
@@ -544,9 +583,9 @@ b = b - \alpha * \frac {d(J(w,b))} {db}
 <li>可以使用 <code>assert(a.shape == (5,1))</code> 来判断矩阵的 shape 是否正确</li>
 </ul></li>
 <li><p>计算 Sigmoid 函数的导数：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">s = sigmoid(x)</span><br><span class="line">ds = s * (<span class="number">1</span> - s)</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">s = sigmoid(x)</span><br><span class="line">ds = s * (<span class="number">1</span> - s)</span><br></pre></td></tr></table></figure></li>
 <li><p>如何将三维图片重组为一个向量：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">v = image.reshape(image.shape[<span class="number">0</span>]*image.shape[<span class="number">1</span>]*image.shape[<span class="number">2</span>],<span class="number">1</span>)</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">v = image.reshape(image.shape[<span class="number">0</span>]*image.shape[<span class="number">1</span>]*image.shape[<span class="number">2</span>],<span class="number">1</span>)</span><br></pre></td></tr></table></figure></li>
 <li><p>归一化输入矩阵后，梯度下降将收敛得更快</p></li>
 </ul>
 <h3 id="构建神经网络">构建神经网络</h3>
@@ -579,18 +618,30 @@ b = b - \alpha * \frac {d(J(w,b))} {db}
     
 
     
+      
+    
+    
 
     
       <div>
-        <ul class="post-copyright">
+        
+
+
+
+  
+
+
+
+<ul class="post-copyright">
   <li class="post-copyright-author">
     <strong>本文作者： </strong>Zheyu Wang</li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://yoursite.com/2018/05/19/deep-2/" title="deeplearning.ai 第二周：神经网络的编程基础">http://yoursite.com/2018/05/19/deep-2/</a>
+    
+    <a href="https://xxwywzy.github.io/2018/05/19/deep-2/" title="deeplearning.ai 第二周：神经网络的编程基础">https://xxwywzy.github.io/2018/05/19/deep-2/</a>
   </li>
   <li class="post-copyright-license">
-    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
 </ul>
 
       </div>
@@ -643,10 +694,6 @@ b = b - \alpha * \frac {d(J(w,b))} {db}
   </article>
 
 
-
-    <div class="post-spread">
-      
-    </div>
   </div>
 
 
@@ -656,6 +703,7 @@ b = b - \alpha * \frac {d(J(w,b))} {db}
   
     <div class="comments" id="comments">
     </div>
+
   
 
 
@@ -689,13 +737,13 @@ b = b - \alpha * \frac {d(J(w,b))} {db}
         </ul>
       
 
-      <section class="site-overview-wrap sidebar-panel">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <img class="site-author-image" itemprop="image"
                 src="/images/avatar.png"
-                alt="Zheyu Wang" />
+                alt="Zheyu Wang"/>
             
               <p class="site-author-name" itemprop="name">Zheyu Wang</p>
               <p class="site-description motion-element" itemprop="description">更に向こうへ</p>
@@ -720,20 +768,6 @@ b = b - \alpha * \frac {d(J(w,b))} {db}
                 <div class="site-state-item site-state-categories">
                   <a href="/categories/index.html">
                     
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
                     
                       
                     
@@ -814,29 +848,52 @@ b = b - \alpha * \frac {d(J(w,b))} {db}
             <div class="links-of-author motion-element">
               
                 <span class="links-of-author-item">
-                  <a href="https://github.com/xxwywzy" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
                   
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/xxwywzy" title="GitHub &rarr; https://github.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
                 </span>
               
                 <span class="links-of-author-item">
-                  <a href="https://twitter.com/xxwywzy" target="_blank" title="Twitter"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
                   
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://twitter.com/xxwywzy" title="Twitter &rarr; https://twitter.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
                 </span>
               
                 <span class="links-of-author-item">
-                  <a href="http://weibo.com/xxwywzy" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
                   
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="http://weibo.com/xxwywzy" title="Weibo &rarr; http://weibo.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
                 </span>
               
                 <span class="links-of-author-item">
-                  <a href="https://instagram.com/xxwywzy" target="_blank" title="Instagram"><i class="fa fa-fw fa-instagram"></i>Instagram</a>
                   
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://instagram.com/xxwywzy" title="Instagram &rarr; https://instagram.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>Instagram</a>
                 </span>
               
             </div>
           
 
-          
           
 
           
@@ -848,15 +905,16 @@ b = b - \alpha * \frac {d(J(w,b))} {db}
           
 
         </div>
-      </section>
+      </div>
 
       
       <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
           <div class="post-toc">
 
             
-              
+            
+            
             
 
             
@@ -864,7 +922,7 @@ b = b - \alpha * \frac {d(J(w,b))} {db}
             
 
           </div>
-        </section>
+        </div>
       <!--/noindex-->
       
 
@@ -892,9 +950,7 @@ b = b - \alpha * \frac {d(J(w,b))} {db}
 </div>
 
 
-
-
-  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.5.0</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.5.0</div>
 
 
 
@@ -902,7 +958,7 @@ b = b - \alpha * \frac {d(J(w,b))} {db}
 
 
 
-  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.0.0</div>
 
 
 
@@ -931,11 +987,14 @@ b = b - \alpha * \frac {d(J(w,b))} {db}
 
     
 
+    
+
+    
   </div>
 
   
 
-<script type="text/javascript">
+<script>
   if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
     window.Promise = null;
   }
@@ -967,27 +1026,21 @@ b = b - \alpha * \frac {d(J(w,b))} {db}
 
 
   
-  
-    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
-  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
 
   
-  
-    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
 
   
-  
-    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
 
 
   
 
 
-  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+  <script src="/js/src/utils.js?v=7.0.0"></script>
 
-  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+  <script src="/js/src/motion.js?v=7.0.0"></script>
 
 
 
@@ -995,74 +1048,58 @@ b = b - \alpha * \frac {d(J(w,b))} {db}
   
 
 
-  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+  <script src="/js/src/affix.js?v=7.0.0"></script>
 
-  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
-
-
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
 
 
 
   
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
 
 
 
   
 
 
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
 
-	
 
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz',
+    appKey: 'IxP5URFEhxow4TfWyVNiowbH',
+    placeholder: '请在这里评论=￣ω￣=',
+    avatar: 'retro',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+</script>
 
 
 
 
   
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
-  
-  
-  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
-  
-  <script type="text/javascript">
-    var GUEST = ['nick','mail','link'];
-    var guest = 'nick,mail,link';
-    guest = guest.split(',').filter(function (item) {
-      return GUEST.indexOf(item)>-1;
-    });
-    new Valine({
-        el: '#comments' ,
-        verify: false,
-        notify: false,
-        appId: 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz',
-        appKey: 'IxP5URFEhxow4TfWyVNiowbH',
-        placeholder: '请在这里评论=￣ω￣=',
-        avatar:'retro',
-        guest_info:guest,
-        pageSize:'10' || 10,
-    });
-  </script>
-
 
 
   
@@ -1072,118 +1109,71 @@ b = b - \alpha * \frac {d(J(w,b))} {db}
 
 
   
-
   
-  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
-  <script>AV.initialize("FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz", "IxP5URFEhxow4TfWyVNiowbH");</script>
   <script>
-    function showTime(Counter) {
-      var query = new AV.Query(Counter);
-      var entries = [];
-      var $visitors = $(".leancloud_visitors");
-
-      $visitors.each(function () {
-        entries.push( $(this).attr("id").trim() );
-      });
-
-      query.containedIn('url', entries);
-      query.find()
-        .done(function (results) {
-          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
-
-          if (results.length === 0) {
-            $visitors.find(COUNT_CONTAINER_REF).text(0);
-            return;
-          }
-
-          for (var i = 0; i < results.length; i++) {
-            var item = results[i];
-            var url = item.get('url');
-            var time = item.get('time');
-            var element = document.getElementById(url);
-
-            $(element).find(COUNT_CONTAINER_REF).text(time);
-          }
-          for(var i = 0; i < entries.length; i++) {
-            var url = entries[i];
-            var element = document.getElementById(url);
-            var countSpan = $(element).find(COUNT_CONTAINER_REF);
-            if( countSpan.text() == '') {
-              countSpan.text(0);
-            }
-          }
-        })
-        .fail(function (object, error) {
-          console.log("Error: " + error.code + " " + error.message);
-        });
-    }
-
+    
     function addCount(Counter) {
-      var $visitors = $(".leancloud_visitors");
+      var $visitors = $('.leancloud_visitors');
       var url = $visitors.attr('id').trim();
       var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
 
-      query.equalTo("url", url);
-      query.find({
-        success: function(results) {
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
           if (results.length > 0) {
             var counter = results[0];
-            counter.fetchWhenSave(true);
-            counter.increment("time");
             
               var $element = $(document.getElementById(url));
-              $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              $element.find('.leancloud-visitors-count').text(counter.time + 1);
             
-            counter.save(null, {
-              success: function(counter) {
-                
-              },
-              error: function(counter, error) {
-                console.log('Failed to save Visitor num, with error message: ' + error.message);
-              }
-            });
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .fail(function ({ responseJSON }) {
+                console.log(`Failed to save Visitor num, with error message: ${responseJSON.error}`);
+              })
           } else {
             
-              var newcounter = new Counter();
-              /* Set ACL */
-              var acl = new AV.ACL();
-              acl.setPublicReadAccess(true);
-              acl.setPublicWriteAccess(true);
-              newcounter.setACL(acl);
-              /* End Set ACL */
-              newcounter.set("title", title);
-              newcounter.set("url", url);
-              newcounter.set("time", 1);
-              newcounter.save(null, {
-                success: function(newcounter) {
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1 }))
+                .done(function() {
                   var $element = $(document.getElementById(url));
-                  $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
-                },
-                error: function(newcounter, error) {
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function() {
                   console.log('Failed to create');
-                }
-              });
+                });
             
           }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
+        })
+        .fail(function ({ responseJSON }) {
+          console.log(`LeanCloud Counter Error: ${responseJSON.code} ${responseJSON.error}`);
+        });
     }
+    
 
     $(function() {
-      var Counter = AV.Object.extend("Counter");
-      if ($('.leancloud_visitors').length == 1) {
-        addCount(Counter);
-      } else if ($('.post-title-link').length > 1) {
-        showTime(Counter);
-      }
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz',
+                'X-LC-Key': 'IxP5URFEhxow4TfWyVNiowbH',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            addCount(Counter);
+          
+        });
     });
   </script>
 
 
+
+  
 
   
 
@@ -1198,30 +1188,47 @@ b = b - \alpha * \frac {d(J(w,b))} {db}
   
     
       <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-      tex2jax: {
-        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-        processEscapes: true,
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: "AMS"
       }
-    });
+    }
+  });
 </script>
 
 <script type="text/x-mathjax-config">
-    MathJax.Hub.Queue(function() {
-      var all = MathJax.Hub.getAllJax(), i;
-        for (i=0; i < all.length; i += 1) {
-          all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-    });
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+      for (i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
 </script>
-<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<script src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+  overflow: auto hidden;
+}
+</style><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
     
   
 
 
   
+
+  
+
   
 
   
