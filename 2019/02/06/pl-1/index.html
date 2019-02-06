@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2"/>
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0"/>
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/favicon.png?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本篇博客为 coursera programming languages 课程的第一部分学习笔记。">
+<meta name="keywords" content="programming languages">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Progamming Languages 第一部分笔记">
+<meta property="og:url" content="https://xxwywzy.github.io/2019/02/06/pl-1/index.html">
+<meta property="og:site_name" content="xxwywzy&#39;s Blog">
+<meta property="og:description" content="本篇博客为 coursera programming languages 课程的第一部分学习笔记。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-02-06-030209.png">
+<meta property="og:updated_time" content="2019-02-06T03:58:50.311Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Progamming Languages 第一部分笔记">
+<meta name="twitter:description" content="本篇博客为 coursera programming languages 课程的第一部分学习笔记。">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2019-02-06-030209.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://xxwywzy.github.io/2019/02/06/pl-1/"/>
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Progamming Languages 第一部分笔记 | xxwywzy's Blog</title>
+  
+
+
+
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a02b5462e7522b1ed191c4cea6b1d6e6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xxwywzy's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Long may the sunshine</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br/>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br/>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br/>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br/>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2019/02/06/pl-1/"/>
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zheyu Wang"/>
+      <meta itemprop="description" content="更に向こうへ"/>
+      <meta itemprop="image" content="/images/avatar.png"/>
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xxwywzy's Blog"/>
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Progamming Languages 第一部分笔记
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-02-06 11:37:48" itemprop="dateCreated datePublished" datetime="2019-02-06T11:37:48+08:00">2019-02-06</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/编程/" itemprop="url" rel="index"><span itemprop="name">编程</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/编程/学习笔记/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <a href="/2019/02/06/pl-1/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/02/06/pl-1/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+            <span id="/2019/02/06/pl-1/" class="leancloud_visitors" data-flag-title="Progamming Languages 第一部分笔记">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <div class="note danger">
+            本篇博客为 coursera programming languages 课程的第一部分学习笔记。 
+          </div>
+<a id="more"></a>
+<h1 id="ml-表达式与变量绑定">ML 表达式与变量绑定</h1>
+<ul>
+<li>一个 ML 程序由一系列的<strong>绑定</strong>（bindings）组成
+<ul>
+<li>每个绑定会先进行<strong>类型检查</strong>，再进行<strong>分析</strong>
+<ul>
+<li>类型检查在<strong>静态环境</strong>中完成</li>
+<li>绑定的分析在<strong>动态环境</strong>中完成</li>
+</ul></li>
+</ul></li>
+<li><p>绑定有很多种，这里先介绍最常见的<strong>变量绑定</strong>，其语法如下：</p>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">val x = e;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>val</code> 是一个关键字，<code>x</code> 可以是任意变量，<code>e</code> 可以是任意表达式
+<ul>
+<li>分号在文件中可以省略，在交互终端（REPL）中不能省略</li>
+</ul></li>
+<li>类型检查：将<code>x</code> 的类型设为 <code>t</code> 其中 <code>t</code> 是表达式 <code>e</code> 的类型</li>
+<li>分析：将<code>x</code> 的值设为 <code>v</code> 其中 <code>v</code> 是表达式 <code>e</code> 的分析结果</li>
+</ul></li>
+<li>值是一种无法进一步进行计算（简化）的表达式
+<ul>
+<li>所有的值都是表达式，但并非所有的表达式都是值</li>
+</ul></li>
+<li>ML 中常见的表达式包括：
+<ul>
+<li><strong>整型常量</strong>
+<ul>
+<li>语法：一个数字序列</li>
+<li>类型检查：在任意静态环境中均为 <code>int</code></li>
+<li>分析：在任意动态环境中均为其自身（是一个值）</li>
+</ul></li>
+<li><strong>四则运算</strong>（以加法为例）
+<ul>
+<li>语法：<code>e1 + e2</code> 其中 <code>e1</code> 和 <code>e2</code> 是表达式</li>
+<li>类型检查：当且仅当 <code>e1</code> 和 <code>e2</code> 在同一静态环境中均为 <code>int</code> 时，该表达式类型为 <code>int</code>，否则类型检查不通过（实际上同为 <code>real</code> 类型也可以）</li>
+<li>分析：在同一动态环境中将 <code>e1</code> 分析为 <code>v1</code>，将 <code>e2</code> 分析为 <code>v2</code>，则整个表达式的值为 <code>v1+v2</code></li>
+</ul></li>
+<li><strong>变量</strong>
+<ul>
+<li>语法：一个字母或下划线等组成的序列</li>
+<li>类型检查：寻找在当前静态环境中该变量的类型并使用该类型</li>
+<li>分析：寻找在当前动态环境中该变量的值并使用该值</li>
+</ul></li>
+<li><strong>条件式</strong>
+<ul>
+<li>语法：<code>if e1 then e2 else e3</code> 其中 <code>e1</code>、<code>e2</code>、<code>e3</code> 均为表达式</li>
+<li>类型检查：在当前静态环境下，当且仅当 <code>e1</code> 为 <code>bool</code> 类型且 <code>e2</code> 和 <code>e3</code> 为同一类型时类型检查才通过，此时表达式的类型为 <code>e2</code> 和 <code>e3</code> 的类型</li>
+<li>分析：在当前动态环境下，如果 <code>e1</code> 为 true，则表达式的值为 <code>e2</code> 的值，否则为 <code>e3</code> 的值</li>
+</ul></li>
+<li><strong>布尔常量</strong>
+<ul>
+<li>语法：<code>true</code> 或 <code>false</code></li>
+<li>类型检查：在任意静态环境中均为 <code>bool</code></li>
+<li>分析：在任意动态环境中均为其自身（是一个值）</li>
+</ul></li>
+<li><strong>比较式</strong>（以小于为例）
+<ul>
+<li>语法：<code>e1 &lt; e2</code> 其中 <code>e1</code> 和 <code>e2</code> 是表达式</li>
+<li>类型检查：当且仅当 <code>e1</code> 和 <code>e2</code> 在同一静态环境中均为 <code>int</code> 时，该表达式类型为 <code>bool</code>，否则类型检查不通过</li>
+<li>分析：在同一动态环境中将 <code>e1</code> 分析为 <code>v1</code>，将 <code>e2</code> 分析为 <code>v2</code>，如果 <code>v1</code> 小于 <code>v2</code>，则整个表达式的值为 <code>true</code>，否则为 <code>false</code></li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="变量的不可变性">变量的不可变性</h2>
+<ul>
+<li>在 ML 中，绑定是<strong>不可变</strong>的
+<ul>
+<li>对于一个变量，如果你在第一次绑定之后又重新进行绑定，则其只是在第二次绑定后的动态环境中<strong>投影</strong>（shadows）了原来的值，并不会对第一次绑定时的结果造成影响</li>
+</ul></li>
+</ul>
+<h2 id="使用-use">使用 use</h2>
+<ul>
+<li><p>在使用 REPL 时，我们可以通过 <code>use</code> 语句将文件中的所有绑定一次性导入：</p>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">use <span class="string">"foo.sml"</span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>该语句的输出类型为 <code>unit</code>，结果为 <code>()</code></li>
+</ul></li>
+</ul>
+<h1 id="函数绑定">函数绑定</h1>
+<ul>
+<li>函数是一种调用参数并通过函数体产生结果的代码块</li>
+<li>ML 中的函数没有类（class）的概念，也不存在返回语句</li>
+<li><p>下面给出一个计算幂次的简单函数：</p>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun pow (<span class="symbol">x:</span>int, <span class="symbol">y:</span>int) = (* correct only <span class="keyword">for</span> y &gt;= <span class="number">0</span> *) </span><br><span class="line">    <span class="keyword">if</span> y=<span class="number">0</span> </span><br><span class="line">    <span class="keyword">then</span> <span class="number">1</span> </span><br><span class="line">    <span class="keyword">else</span> x * pow(x,y-<span class="number">1</span>)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="语法">语法</h2>
+<ul>
+<li><p>函数绑定的语法如下：</p>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun x<span class="number">0</span> (x1 : t1, ..., xn : tn) = e</span><br></pre></td></tr></table></figure>
+<ul>
+<li>函数名为 <code>x0</code></li>
+<li>其接收 <code>n</code> 个参数 <code>x1, ..., xn</code> ，其类型对应为 <code>t1, ..., tn</code></li>
+<li>其函数体为表达式 <code>e</code></li>
+</ul></li>
+</ul>
+<h2 id="类型检查">类型检查</h2>
+<ul>
+<li>函数的类型为<strong>“参数类型” -&gt; “结果类型”</strong>
+<ul>
+<li>对于 <code>x0</code>，其类型为 <code>t1 * ... * tn -&gt; t</code></li>
+<li>表达式 <code>e</code> 的类型 <code>t</code> 由 ML 自动推理得出</li>
+</ul></li>
+<li>参数并没有添加到顶层的静态环境中，只能在函数体中使用</li>
+</ul>
+<h2 id="分析">分析</h2>
+<ul>
+<li>ML 将函数简单地分析为一个值
+<ul>
+<li>将该函数添加到动态环境中，方便之后调用</li>
+</ul></li>
+</ul>
+<h2 id="函数调用">函数调用</h2>
+<ul>
+<li>函数调用是一种新的表达式</li>
+<li>语法： <code>e0 (e1, ..., en)</code></li>
+<li>类型检查：
+<ul>
+<li><code>e0</code> 的类型为 <code>t1*...*tn-&gt;t</code></li>
+<li>对于 1 ≤ i ≤ n, <code>ei</code> 的类型为 <code>ti</code></li>
+<li>则整个函数调用的类型为 <code>t</code></li>
+</ul></li>
+<li>分析：
+<ul>
+<li>使用进行调用时的动态环境将 <code>e0</code> 分析为 <code>v0</code>, <code>e1</code> 分析为 <code>v1</code>，以此类推
+<ul>
+<li><code>v0</code> 一定是一个函数</li>
+</ul></li>
+<li>然后我们将这些参数代入到函数体中进行计算，得出最终的结果
+<ul>
+<li>注意此时的动态环境为函数<strong>定义</strong>时的环境，而非调用的环境</li>
+</ul></li>
+</ul></li>
+</ul>
+<h1 id="pairs-和-tuples">Pairs 和 Tuples</h1>
+<ul>
+<li>编程语言需要基于简单数据构造复合数据的方法
+<ul>
+<li>本节将介绍 <strong><em>pairs</em></strong> 和 <strong><em>tuples</em></strong> 这两种构建方法</li>
+</ul></li>
+</ul>
+<h2 id="pairs">Pairs</h2>
+<ul>
+<li>语法：<code>(e1, e2)</code></li>
+<li>类型检查：pair 的类型为 <code>t1 * t2</code>
+<ul>
+<li><code>t1</code> 是 <code>e1</code> 的类型</li>
+<li><code>t2</code> 是 <code>e2</code> 的类型</li>
+</ul></li>
+<li>分析：pair 的取值为 <code>(v1, v2)</code>
+<ul>
+<li><code>v1</code> 是 <code>e1</code> 的值</li>
+<li><code>t2</code> 是 <code>e2</code> 的值</li>
+</ul></li>
+<li>使用 <code>#1</code> 和 <code>#2</code> 来获取 pair 的第一部分与第二部分
+<ul>
+<li>如果 <code>e</code> 的类型 <code>ta * tb</code></li>
+<li>则 <code>#1 e</code> 的类型为 <code>ta</code> 且 <code>#2 e</code> 的类型为 <code>tb</code></li>
+</ul></li>
+<li><p>应用举例：</p>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun sum_two_pairs (pr1 : int*int, pr2 : int*int) = </span><br><span class="line">    (<span class="comment">#1 pr1) + (#2 pr1) + (#1 pr2) + (#2 pr2)</span></span><br><span class="line"></span><br><span class="line">fun div_mod (x : int, y : int) = (* <span class="symbol">note:</span> returning a pair is a real pain <span class="keyword">in</span> Java *)</span><br><span class="line">    (x div y, x mod y)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="tuples">Tuples</h2>
+<ul>
+<li>tuples 可以理解为 pairs 的扩展，其支持任意数量的部件
+<ul>
+<li>3-tuple 举例： <code>(7, 9, 11)</code>
+<ul>
+<li>其类型为 <code>int * int * int</code></li>
+<li>可以通过 <code>#1 e</code>、 <code>#2 e</code> 和 <code>#3 e</code> 来获取部件</li>
+</ul></li>
+</ul></li>
+<li>tuples 和 pairs 可以任意嵌套，组成更加复杂的数据结构
+<ul>
+<li>举例：<code>(7, (true, 9))</code></li>
+</ul></li>
+</ul>
+<h1 id="lists">Lists</h1>
+<ul>
+<li>pairs 和 tuples 的长度需要提前确定，下面介绍另一种长度可变的数据类型 <strong><em>lists</em></strong>
+<ul>
+<li>lists 的长度不固定，但其中所有元素需保持<strong>同一类型</strong></li>
+</ul></li>
+<li>lists 可以分为两类：空 list 和非空 list</li>
+</ul>
+<h2 id="空-list">空 list</h2>
+<ul>
+<li>语法： <code>[ ]</code></li>
+<li>类型检查：<code>’a list</code>
+<ul>
+<li>这表明其可以为任意类型的 list</li>
+</ul></li>
+<li>分析：空 list 本身是一个值</li>
+</ul>
+<h2 id="非空-list">非空 list</h2>
+<ul>
+<li>语法： <code>[e1, e2, ..., en]</code></li>
+<li>类型检查：当所有的元素均为类型 <code>t</code> 时，list 的类型为 <code>t list</code></li>
+<li>分析：list 的值为 <code>[v1, v2, ..., vn]</code></li>
+<li>通常我们使用 <code>e1 :: e2</code> 来创建一个 list
+<ul>
+<li><code>e1</code> 是一个类型为 <code>t</code> 的元素</li>
+<li><code>e2</code> 是一个元素类型为 <code>t</code> 的 list</li>
+</ul></li>
+</ul>
+<h2 id="内置函数">内置函数</h2>
+<ul>
+<li>目前我们将使用 ML 内置的以下三种函数来操作 lists：
+<ul>
+<li><code>null</code> 函数： 空 list 为 <code>true</code>，非空 list 为 <code>false</code></li>
+<li><code>hd</code> 返回 lists 的第一个元素，如果为空则抛出异常</li>
+<li><code>tl</code> 返回 lists 除第一个元素之外的剩余部分（仍然是 list ），如果为空则抛出异常</li>
+</ul></li>
+</ul>
+<h2 id="应用举例">应用举例</h2>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun append (xs : int list, ys : int list) = </span><br><span class="line">    <span class="keyword">if</span> null xs </span><br><span class="line">    <span class="keyword">then</span> ys </span><br><span class="line">    <span class="keyword">else</span> (hd xs) <span class="symbol">:</span>: append(tl xs, ys)</span><br><span class="line">        </span><br><span class="line">fun sum_pair_list (xs : (int * int) list) =</span><br><span class="line">    <span class="keyword">if</span> null xs </span><br><span class="line">    <span class="keyword">then</span> <span class="number">0</span> </span><br><span class="line">    <span class="keyword">else</span> <span class="comment">#1 (hd xs) + #2 (hd xs) + sum_pair_list(tl xs)</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>一般使用 lists 的函数通常都是<strong>递归</strong>的</li>
+<li>写递归函数的两个步骤：
+<ul>
+<li>先考虑基线情况（base case）</li>
+<li>然后写递归（recursive case）</li>
+</ul></li>
+<li>我们可以将 pairs 或 tuples 和 lists 随意结合在一起</li>
+</ul>
+<h1 id="let-表达式">Let 表达式</h1>
+<ul>
+<li>let 表达式是 ML 的一个重要特性
+<ul>
+<li>其能够提供简单灵活的<strong>局部绑定</strong></li>
+<li>可以放置在任何能够放置表达式的地方</li>
+</ul></li>
+<li><p>let 表达式的形式如下：</p>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">let b1 b2 ... bn <span class="keyword">in</span> e <span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>语法：每个 <code>bi</code> 都是一个绑定，<code>e</code> 是一个表达式</li>
+<li>let 表达式中的一个绑定的作用范围是：
+<ul>
+<li>该绑定之后的所有绑定</li>
+<li>let 表达式的本体（body）</li>
+</ul></li>
+<li>类型检查：<code>e</code> 的类型即为整个 let 表达式的类型</li>
+<li>分析：<code>e</code> 的值即为整个 let 表达式的值</li>
+</ul></li>
+</ul>
+<h2 id="应用举例-1">应用举例</h2>
+<ul>
+<li><p>let 表达式也可以绑定函数：</p>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun countup_from1_better (<span class="symbol">x:</span>int) =</span><br><span class="line">    let fun count (<span class="symbol">from:</span>int) = </span><br><span class="line">        <span class="keyword">if</span> from=x </span><br><span class="line">        <span class="keyword">then</span> x::[] </span><br><span class="line">        <span class="keyword">else</span> from <span class="symbol">:</span>: count(from+<span class="number">1</span>) </span><br><span class="line">    <span class="keyword">in</span> </span><br><span class="line">        count <span class="number">1</span> </span><br><span class="line">    <span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>在这个局部函数中，使用了函数体外的变量 <code>x</code></li>
+<li>这是函数式编程的一个重要特性（函数闭包）</li>
+</ul></li>
+<li>let 表达式可以避免重复的运算
+<ul>
+<li><p>下面的例子用于获得一个 int list 中的最大值</p>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun bad_max (xs : int list) =</span><br><span class="line">    <span class="keyword">if</span> null xs </span><br><span class="line">    <span class="keyword">then</span> <span class="number">0</span> (* <span class="symbol">note:</span> bad style; see below *) </span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> null (tl xs) </span><br><span class="line">    <span class="keyword">then</span> hd xs </span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> hd xs &gt; bad_max(tl xs) </span><br><span class="line">    <span class="keyword">then</span> hd xs </span><br><span class="line">    <span class="keyword">else</span> bad_max(tl xs)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>bad_max</code> 函数在一次递归中被调用了两次，导致计算复杂度指数增加</li>
+</ul></li>
+<li><p>如果采用了 let 表达式，计算复杂度会大大下降</p>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun good_max (xs : int list) =</span><br><span class="line">    <span class="keyword">if</span> null xs </span><br><span class="line">    <span class="keyword">then</span> <span class="number">0</span> (* <span class="symbol">note:</span> bad style; see below *) </span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> null (tl xs) </span><br><span class="line">    <span class="keyword">then</span> hd xs </span><br><span class="line">    <span class="keyword">else</span> </span><br><span class="line">        (* <span class="keyword">for</span> style, could also use a let-binding <span class="keyword">for</span> hd xs *)</span><br><span class="line">        let val tl_ans = good_max(tl xs) </span><br><span class="line">        <span class="keyword">in</span> </span><br><span class="line">            <span class="keyword">if</span> hd xs &gt; tl_ans </span><br><span class="line">            <span class="keyword">then</span> hd xs </span><br><span class="line">            <span class="keyword">else</span> tl_ans </span><br><span class="line">        <span class="keyword">end</span></span><br></pre></td></tr></table></figure></li>
+</ul></li>
+</ul>
+<h1 id="options">Options</h1>
+<ul>
+<li>上面的例子在 list 为空时返回了 0，这并不优雅
+<ul>
+<li>我们希望返回一个值，表明该 list 为空因此没有最大值</li>
+<li>ML 提供了 options 来做到这一点</li>
+</ul></li>
+<li>一个 option 有两种可能的取值：<code>NONE</code> 或 <code>SOME e</code>
+<ul>
+<li><code>NONE</code> 表示该 option 没有携带任何值
+<ul>
+<li><code>NONE</code> 的类型为 <code>’a option</code></li>
+</ul></li>
+<li><code>SOME e</code> 表示该 option 携带了一个表达式 <code>e</code>，该表达式的值 <code>v</code> 即为 option 的值
+<ul>
+<li><code>SOME e</code> 的类型为 <code>t option</code>，其中 <code>t</code> 为 <code>e</code> 的类型</li>
+</ul></li>
+</ul></li>
+<li>我们使用 <code>isSome</code> 和 <code>valOf</code> 来处理 options
+<ul>
+<li>如果 option 为 <code>NONE</code>，则 <code>isSome</code> 为 <code>false</code></li>
+<li><code>valOf</code> 获取 <code>SOME e</code> 的值（<code>NONE</code> 则抛出异常）</li>
+</ul></li>
+<li><p>基于 <code>options</code>，我们可以对之前的例子进行进一步改写：</p>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun better_max2 (xs : int list) =</span><br><span class="line">    <span class="keyword">if</span> null xs </span><br><span class="line">    <span class="keyword">then</span> NONE </span><br><span class="line">    <span class="keyword">else</span> let (* fine to assume argument nonempty because it is local *) </span><br><span class="line">             fun max_nonempty (xs : int list) = </span><br><span class="line">                <span class="keyword">if</span> null (tl xs) (* xs must <span class="keyword">not</span> be [] *) </span><br><span class="line">                <span class="keyword">then</span> hd xs </span><br><span class="line">                <span class="keyword">else</span> let val tl_ans = max_nonempty(tl xs) </span><br><span class="line">                     <span class="keyword">in</span> </span><br><span class="line">                         <span class="keyword">if</span> hd xs &gt; tl_ans </span><br><span class="line">                         <span class="keyword">then</span> hd xs </span><br><span class="line">                         <span class="keyword">else</span> tl_ans </span><br><span class="line">                     <span class="keyword">end</span></span><br><span class="line">          <span class="keyword">in</span></span><br><span class="line">              SOME (max_nonempty xs)</span><br><span class="line">          <span class="keyword">end</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h1 id="其他表达式与操作符">其他表达式与操作符</h1>
+<ul>
+<li><code>e1 andalso e2</code> 是逻辑与
+<ul>
+<li><code>e1</code> 和 <code>e2</code> 的类型为 <code>bool</code>（下同）</li>
+</ul></li>
+<li><code>e1 orelse e2</code> 是逻辑或</li>
+<li><code>not e</code> 是逻辑非</li>
+<li><code>e1 = e2</code> 判断两个表达式是否相等</li>
+<li><code>e1 &lt;&gt; e2</code> 判断两个表达式是否不同</li>
+<li>其他比较运算符包括：<code>&gt;, &lt;, &gt;=, &lt;=</code>
+<ul>
+<li><code>real</code> 和 <code>int</code> 类型不能混合比较</li>
+</ul></li>
+<li><code>~e</code> 表示负数</li>
+</ul>
+<h1 id="不可变性的好处">不可变性的好处</h1>
+<ul>
+<li>在 ML 中，我们没有方法去改变任何绑定、tuple 或 list 等的内容
+<ul>
+<li>例如一个变量 <code>x</code> 绑定为 <code>[(3,4),(7,9)]</code>
+<ul>
+<li>我们可以为 <code>x</code> 绑定一个新的值，但这仅仅是投影，不会对任何引用了原来 <code>x</code> 的代码产生影响</li>
+<li>我们无法去改变 list 或 tuple 中的任何部分，只能进行构建与查询</li>
+</ul></li>
+</ul></li>
+<li>数据的不可变性是函数式编程的主要贡献</li>
+</ul>
+<h2 id="共享与别名">共享与别名</h2>
+<ul>
+<li>具体来说，不可变性的一大好处就是让共享（sharing）与别名（aliasing）互不相关</li>
+<li><p>下面以一个例子来说明：</p>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun append (xs : int list, ys : int list) = </span><br><span class="line">    <span class="keyword">if</span> null xs </span><br><span class="line">    <span class="keyword">then</span> ys </span><br><span class="line">    <span class="keyword">else</span> (hd xs) <span class="symbol">:</span>: append(tl xs, ys)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在上面的例子中，返回的 list 是否共享了参数中的元素？
+<ul>
+<li>在 ML 中，这是无法得知的（实际上发生了），也是无关紧要的，因为所有的数据都是<strong>不可变</strong>的</li>
+<li>而对于可变数据的语言来说，如果发生了共享，即发生了别名现象，那么对于某个变量的改动可能会引起别的变量的改变，这会导致难以查明的 bug</li>
+</ul></li>
+</ul></li>
+<li><p>在 Java 语言中，可变的数据往往会引起困扰：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ProtectedResource</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Resource theResource = ...; </span><br><span class="line">    <span class="keyword">private</span> String[] allowedUsers = ...; </span><br><span class="line">    <span class="keyword">public</span> String[] getAllowedUsers() &#123;</span><br><span class="line">        <span class="keyword">return</span> allowedUsers; </span><br><span class="line">    &#125; </span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">currentUser</span><span class="params">()</span> </span>&#123; ... &#125; </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">useTheResource</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i &lt; allowedUsers.length; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(currentUser().equals(allowedUsers[i])) &#123; </span><br><span class="line">                ... <span class="comment">// access allowed: use it return;</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalAccessException();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在上面的例子中，<code>getAllowedUsers</code> 会返回一个 <code>allowedUsers</code> 的别名，我们可以随意修改允许用户的名单
+<ul>
+<li>数组变量是引用类型变量，即使本身是 <code>private</code>，但其中元素可以修改</li>
+</ul></li>
+<li>在 Java 中，我们需要经常对数据进行拷贝，防止别名的出现</li>
+</ul></li>
+</ul>
+<h1 id="编程语言的部件">编程语言的部件</h1>
+<ul>
+<li>一般来说，任何编程语言的定义与学习都应该包含如下组成部分：
+<ul>
+<li><strong>语法</strong>（Syntax）：如何正确地编写代码</li>
+<li><strong>语义</strong>（Semantics）：如何理解代码（例如表达式的值如何分析）</li>
+<li><strong>习语</strong>（Idioms）：可以理解为代码模式(惯用代码，例如 let 表达式)</li>
+<li><strong>库</strong>（Libraries）： 可以直接复用的代码</li>
+<li><strong>工具</strong>（Tools）：操作程序的工具（编译器、调试器等）</li>
+</ul></li>
+</ul>
+<h1 id="思维导图">思维导图</h1>
+<p><img src="http://media.zjubiomedit.com/2019-02-06-030209.png" width="80%"></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Zheyu Wang</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://xxwywzy.github.io/2019/02/06/pl-1/" title="Progamming Languages 第一部分笔记">https://xxwywzy.github.io/2019/02/06/pl-1/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/programming-languages/" rel="tag"># programming languages</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/03/deep-4/" rel="next" title="deeplearning.ai 第四周：深层神经网络">
+                <i class="fa fa-chevron-left"></i> deeplearning.ai 第四周：深层神经网络
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Zheyu Wang"/>
+            
+              <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+              <p class="site-description motion-element" itemprop="description">更に向こうへ</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">16</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/xxwywzy" title="GitHub &rarr; https://github.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://twitter.com/xxwywzy" title="Twitter &rarr; https://twitter.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="http://weibo.com/xxwywzy" title="Weibo &rarr; http://weibo.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://instagram.com/xxwywzy" title="Instagram &rarr; https://instagram.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ml-表达式与变量绑定"><span class="nav-number">1.</span> <span class="nav-text">ML 表达式与变量绑定</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#变量的不可变性"><span class="nav-number">1.1.</span> <span class="nav-text">变量的不可变性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-use"><span class="nav-number">1.2.</span> <span class="nav-text">使用 use</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#函数绑定"><span class="nav-number">2.</span> <span class="nav-text">函数绑定</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#语法"><span class="nav-number">2.1.</span> <span class="nav-text">语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类型检查"><span class="nav-number">2.2.</span> <span class="nav-text">类型检查</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析"><span class="nav-number">2.3.</span> <span class="nav-text">分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数调用"><span class="nav-number">2.4.</span> <span class="nav-text">函数调用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#pairs-和-tuples"><span class="nav-number">3.</span> <span class="nav-text">Pairs 和 Tuples</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#pairs"><span class="nav-number">3.1.</span> <span class="nav-text">Pairs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tuples"><span class="nav-number">3.2.</span> <span class="nav-text">Tuples</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lists"><span class="nav-number">4.</span> <span class="nav-text">Lists</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#空-list"><span class="nav-number">4.1.</span> <span class="nav-text">空 list</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#非空-list"><span class="nav-number">4.2.</span> <span class="nav-text">非空 list</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内置函数"><span class="nav-number">4.3.</span> <span class="nav-text">内置函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用举例"><span class="nav-number">4.4.</span> <span class="nav-text">应用举例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#let-表达式"><span class="nav-number">5.</span> <span class="nav-text">Let 表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#应用举例-1"><span class="nav-number">5.1.</span> <span class="nav-text">应用举例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#options"><span class="nav-number">6.</span> <span class="nav-text">Options</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#其他表达式与操作符"><span class="nav-number">7.</span> <span class="nav-text">其他表达式与操作符</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#不可变性的好处"><span class="nav-number">8.</span> <span class="nav-text">不可变性的好处</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#共享与别名"><span class="nav-number">8.1.</span> <span class="nav-text">共享与别名</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#编程语言的部件"><span class="nav-number">9.</span> <span class="nav-text">编程语言的部件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#思维导图"><span class="nav-number">10.</span> <span class="nav-text">思维导图</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.5.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.0.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz',
+    appKey: 'IxP5URFEhxow4TfWyVNiowbH',
+    placeholder: '请在这里评论=￣ω￣=',
+    avatar: 'retro',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+</script>
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+  
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .fail(function ({ responseJSON }) {
+                console.log(`Failed to save Visitor num, with error message: ${responseJSON.error}`);
+              })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1 }))
+                .done(function() {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function() {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+        .fail(function ({ responseJSON }) {
+          console.log(`LeanCloud Counter Error: ${responseJSON.code} ${responseJSON.error}`);
+        });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz',
+                'X-LC-Key': 'IxP5URFEhxow4TfWyVNiowbH',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            addCount(Counter);
+          
+        });
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: "AMS"
+      }
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+      for (i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+<script src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+  overflow: auto hidden;
+}
+</style><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+    
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

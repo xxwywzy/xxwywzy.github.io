@@ -106,7 +106,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-02-03-025828.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-02-03-075840.png">
-<meta property="og:updated_time" content="2019-02-03T08:03:04.806Z">
+<meta property="og:updated_time" content="2019-02-06T03:38:11.551Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="deeplearning.ai 第四周：深层神经网络">
 <meta name="twitter:description" content="本篇博客为 deeplearning.ai 第四周学习笔记，主题是：深层神经网络。">
@@ -556,7 +556,7 @@
 <ul>
 <li><p>向量化后的伪代码如下：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input dA[l], Caches</span><br><span class="line">dZ[l] = dA[l] * g&apos;[l](Z[l])</span><br><span class="line">dW[l] = (1/m) * np.dot(dZ[l], A[l-1].T)</span><br><span class="line">dB[l] = (1/m) * np.sum(dZ[l], axis=1, keepdims=True)</span><br><span class="line">dA[l-1] = np.dot(W[l].T, dZ[l])</span><br><span class="line">Output dA[l-1], dW[l], dB[l]</span><br></pre></td></tr></table></figure></li>
-<li><p>最后一层 <code>dA</code> 的求解基于代价函数得出</p>
+<li>最后一层 <code>dA</code> 的求解基于代价函数得出
 <ul>
 <li>注意计算应去除 <code>1/m</code> 这一项，防止重复计算</li>
 </ul></li>
@@ -650,6 +650,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2019/02/06/pl-1/" rel="prev" title="Progamming Languages 第一部分笔记">
+                Progamming Languages 第一部分笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -726,7 +730,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -759,7 +763,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">7</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -812,7 +820,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">13</span>
+                      
+                    
+                    <span class="site-state-item-count">14</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
