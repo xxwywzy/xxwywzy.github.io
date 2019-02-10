@@ -1,0 +1,1525 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2"/>
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0"/>
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/favicon.png?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本篇博客为 deeplearning.ai 第十四周学习笔记，主题是：循环神经网络。">
+<meta name="keywords" content="deeplearning.ai">
+<meta property="og:type" content="article">
+<meta property="og:title" content="deeplearning.ai 第十四周：循环神经网络">
+<meta property="og:url" content="https://xxwywzy.github.io/2019/02/10/deep-14/index.html">
+<meta property="og:site_name" content="xxwywzy&#39;s Blog">
+<meta property="og:description" content="本篇博客为 deeplearning.ai 第十四周学习笔记，主题是：循环神经网络。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-02-10-074456.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-02-10-074614.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-02-10-075220.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-02-10-075841.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-02-10-075506.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-02-10-075958.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-02-10-080341.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-02-10-080902.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-02-10-081141.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-02-10-083016.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-02-10-083123.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-02-10-083254.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-02-10-084122.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-02-10-083619.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-02-10-084948.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-02-10-090724.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-02-10-090446.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-02-10-150840.png">
+<meta property="og:updated_time" content="2019-02-10T15:09:26.417Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="deeplearning.ai 第十四周：循环神经网络">
+<meta name="twitter:description" content="本篇博客为 deeplearning.ai 第十四周学习笔记，主题是：循环神经网络。">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2019-02-10-074456.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://xxwywzy.github.io/2019/02/10/deep-14/"/>
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>deeplearning.ai 第十四周：循环神经网络 | xxwywzy's Blog</title>
+  
+
+
+
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a02b5462e7522b1ed191c4cea6b1d6e6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xxwywzy's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Long may the sunshine</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br/>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br/>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br/>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br/>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2019/02/10/deep-14/"/>
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zheyu Wang"/>
+      <meta itemprop="description" content="更に向こうへ"/>
+      <meta itemprop="image" content="/images/avatar.png"/>
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xxwywzy's Blog"/>
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">deeplearning.ai 第十四周：循环神经网络
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-02-10 17:09:45" itemprop="dateCreated datePublished" datetime="2019-02-10T17:09:45+08:00">2019-02-10</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/人工智能/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/人工智能/深度学习/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <a href="/2019/02/10/deep-14/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/02/10/deep-14/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+            <span id="/2019/02/10/deep-14/" class="leancloud_visitors" data-flag-title="deeplearning.ai 第十四周：循环神经网络">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <div class="note info">
+            本篇博客为 deeplearning.ai 第十四周学习笔记，主题是：循环神经网络。 
+          </div>
+<a id="more"></a>
+<h1 id="为什么选择序列模型">为什么选择序列模型</h1>
+<ul>
+<li>序列模型是深度学习中的一个重要分支，包括传统 RNN、LSTM 等，其处理的是序列型数据</li>
+<li>序列模型的应用领域如下：
+<ul>
+<li>语音识别（<strong>sequence to sequence</strong>）
+<ul>
+<li>输入：波形序列</li>
+<li>输出：文字序列</li>
+</ul></li>
+<li>音乐生成（<strong>one to sequence</strong>）
+<ul>
+<li>输入：空集或单一整数（比如代表音乐风格）</li>
+<li>输出：波形序列</li>
+</ul></li>
+<li>情感分类（<strong>sequence to one</strong>）
+<ul>
+<li>输入：文字序列</li>
+<li>输出：整数评分（1-5）</li>
+</ul></li>
+<li>DNA 序列分析（<strong>sequence to sequence</strong>）
+<ul>
+<li>输入：DNA 序列</li>
+<li>输出：DNA 标签</li>
+</ul></li>
+<li>机器翻译（<strong>sequence to sequence</strong>）
+<ul>
+<li>输入：文字序列（一种语言）</li>
+<li>输出：文字序列（另一种语言）</li>
+</ul></li>
+<li>视频行为识别（<strong>sequence to one</strong>）
+<ul>
+<li>输入：视频帧</li>
+<li>输出：标签（行为）</li>
+</ul></li>
+<li>命名实体识别（<strong>sequence to sequence</strong>）
+<ul>
+<li>输入：文本序列</li>
+<li>输出：标签序列（比如人名）</li>
+</ul></li>
+</ul></li>
+<li>以上所有问题都可以看做使用标注数据作为训练集的监督学习</li>
+</ul>
+<h1 id="数学符号">数学符号</h1>
+<h2 id="输入与输出">输入与输出</h2>
+<ul>
+<li>用 <span class="math inline">\(x^{&lt;t&gt;}\)</span> 和 <span class="math inline">\(y^{&lt;t&gt;}\)</span> 表示输入和输出序列中的第 t 个元素</li>
+<li>用 <span class="math inline">\(T_x\)</span> 和 <span class="math inline">\(T_y\)</span> 表示输入和输出序列的长度</li>
+<li>用 <span class="math inline">\((i)\)</span> 表示第 i 个样本</li>
+</ul>
+<h2 id="词语的表示">词语的表示</h2>
+<ul>
+<li>自然语言处理的一个挑战是如何表示词语</li>
+<li>常用的方法是：
+<ol type="1">
+<li>构建一个<strong>词典</strong>
+<ul>
+<li>构建的方法为使用网上现成的词典，或是从训练集中找出出现频率靠前的词</li>
+<li>词典的长度一般为 30000-50000 甚至更大，这里为了方便说明使用的词典长度为 10000</li>
+</ul></li>
+<li>使用 <strong>one-hot encoding</strong> 表示词语
+<ul>
+<li>使用一个与词典长度相同的向量来进行描述，只有该词出现的位置为 1，其余位置为 0</li>
+<li>对于未被词典收录的词，可以统一使用<strong>未知词语</strong>（Unknown Words）来进行表达</li>
+</ul></li>
+</ol></li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-02-10-074456.png" width="70%"></p>
+<h1 id="循环神经网络模型">循环神经网络模型</h1>
+<h2 id="为什么不使用标准的神经网络">为什么不使用标准的神经网络</h2>
+<ul>
+<li>对于序列形式的样本，如果采用传统形式的神经网络，将存在以下几个问题：
+<ul>
+<li>对于不同的样本，<strong>输入与输出序列的长度不尽相同</strong>，因此网络的输入与输出长度无法确定
+<ul>
+<li>可以使用最大长度+zero padding来进行表达，但这不是一个很好的方式</li>
+</ul></li>
+<li>传统的网络<strong>不会分享不同位置的文本所学习到的特征</strong>
+<ul>
+<li>如果我们从文本的第一个位置中学习到某个词一般用于表示人名，我们希望在其他的位置这个词也能被识别为人名，但传统的网络结构无法做到这一点</li>
+</ul></li>
+<li>传统的网络结构还可能导致需要<strong>学习的参数过多</strong></li>
+</ul></li>
+<li>综上所述，我们需要使用一种新的网络结构来进行序列数据的学习，即<strong>循环神经网络</strong></li>
+</ul>
+<h2 id="模型概述">模型概述</h2>
+<ul>
+<li><p>一个输入与输出长度相同的 RNN 模型如下所示：</p>
+<p><img src="http://media.zjubiomedit.com/2019-02-10-074614.png" width="70%"></p></li>
+<li>RNN 的本质是将序列按顺序输入隐藏层，<strong>前一个元素所产生的激励会被传递到后一个元素</strong></li>
+<li>在每个时间步中使用到的参数是<strong>共享</strong>的（即该模型中实际上只有一个隐藏层）</li>
+<li>模型涉及到的参数如下：
+<ul>
+<li><span class="math inline">\(W_{ax}\)</span> ：表示将每个元素传入的隐藏层的参数
+<ul>
+<li>形状为 (NoOfHiddenNeurons, n<sub>x</sub>)</li>
+</ul></li>
+<li><span class="math inline">\(W_{aa}\)</span> ：表示传递到下一层的激励所对应的参数
+<ul>
+<li>形状为 (NoOfHiddenNeurons, NoOfHiddenNeurons)</li>
+</ul></li>
+<li><span class="math inline">\(W_{ya}\)</span> ：表示计算输出的参数
+<ul>
+<li>形状为 (n<sub>y</sub>, NoOfHiddenNeurons)</li>
+</ul></li>
+</ul></li>
+<li>为了体现结构的完整性，常常会在网络的开端加入 <span class="math inline">\(a^{&lt;0&gt;}\)</span>（实际为0向量）</li>
+<li>一些论文和书籍中会将 RNN 表示为右图所示的结构，这与左图是等价的</li>
+<li>这种结构的 RNN 只考虑了序列中每个元素之前的元素对其的影响，而没有考虑之后的元素的影响
+<ul>
+<li>示例： ‘He Said, “Teddy Roosevelt was a great president”’</li>
+<li>对于这个问题，我们可以使用 <strong>Bidirectional RNN</strong> 来解决（这里讨论单向的 RNN）</li>
+</ul></li>
+</ul>
+<h2 id="前向传播">前向传播</h2>
+<p><img src="http://media.zjubiomedit.com/2019-02-10-075220.png" width="70%"></p>
+<ul>
+<li>计算激励的激活函数一般为 tanh 或 ReLU</li>
+<li>计算输出的激活函数视具体任务而定，比如 sigmoid 或 softmax
+<ul>
+<li>在命名实体识别任务中我们选择 sigmoid 函数（因为只有两个类）</li>
+</ul></li>
+<li>参数的下标的第一位表示计算输出的类型，第二位表示输入的类型</li>
+<li>通用的前向传播公式为：</li>
+</ul>
+<p><span class="math display">\[
+\begin{align*}
+a^{&lt;t&gt;} &amp;= g(W_{aa}a^{&lt;t-1&gt;}+W_{ax}x^{&lt;t&gt;}+b_a)\\
+\hat{y}^{&lt;t&gt;} &amp;= g(W_{ya}a^{&lt;t&gt;}+b_y)
+\end{align*}
+\]</span></p>
+<ul>
+<li>我们可以对该公式进行简化，将其转化为矩阵相乘的形式，同时将参数的下标变为1个，表示输出的类型。简化后的表达式如下：</li>
+</ul>
+<p><span class="math display">\[
+\begin{align*}
+a^{&lt;t&gt;} &amp;= g(W_{a}[a^{&lt;t-1&gt;},x^{&lt;t&gt;}]+b_a)\\
+\hat{y}^{&lt;t&gt;} &amp;= g(W_{y}a^{&lt;t&gt;}+b_y)
+\end{align*}
+\]</span></p>
+<ul>
+<li><span class="math inline">\(W_{a}\)</span> ：将 <span class="math inline">\(W_{aa}\)</span> 和 <span class="math inline">\(W_{ax}\)</span> 水平组合
+<ul>
+<li>形状为 (NoOfHiddenNeurons, NoOfHiddenNeurons + n<sub>x</sub>)</li>
+</ul></li>
+<li><span class="math inline">\([a^{&lt;t-1&gt;},x^{&lt;t&gt;}]\)</span> ：将 <span class="math inline">\(a^{&lt;t-1&gt;}\)</span> 和 <span class="math inline">\(x^{&lt;t&gt;}\)</span> 竖直组合
+<ul>
+<li>形状为 (NoOfHiddenNeurons + n<sub>x</sub>, 1)</li>
+</ul></li>
+</ul>
+<h2 id="通过时间的反向传播">通过时间的反向传播</h2>
+<p><img src="http://media.zjubiomedit.com/2019-02-10-075841.png" width="70%"></p>
+<ul>
+<li>一般深度学习框架会自动帮你完成反向传播，但了解其工作原理是很有价值的</li>
+<li>为了进行反向传播，需要先定义损失函数，这里使用传统的<strong>交叉熵函数</strong>
+<ul>
+<li>对于每个时间步，均有一个损失函数，总的损失函数为每个时间步对应的损失函数之和</li>
+</ul></li>
+<li>蓝色箭头表示前向传播的过程</li>
+<li>绿色箭头表示前向传播中使用到的相关参数（每一时间步共享参数）</li>
+<li>红色箭头表示反向传播，其在前向传播的反方向上进行传播
+<ul>
+<li>通过反向传播，我们可以计算出各个参数的导数，从而使用梯度下降法进行优化</li>
+</ul></li>
+<li>在反向传播的过程中，最重要的信息传递（递归计算）是横向从右到左的的运算</li>
+<li>由于该部分是以与时间步相反的顺序进行传播的（时光倒流），因此这种反向传播又被称为<strong>通过时间的反向传播</strong></li>
+</ul>
+<h2 id="不同类型的循环神经网络">不同类型的循环神经网络</h2>
+<ul>
+<li>之前介绍的 RNN 结构输入与输出序列长度相等，其实还存在许多其他的情况</li>
+<li><p>下图给出了 RNN 常见的五种结构（图取自此<a href="http://karpathy.github.io/2015/05/21/rnn-effectiveness/" target="_blank" rel="noopener">文章</a>）</p>
+<p><img src="http://media.zjubiomedit.com/2019-02-10-075506.png" width="70%"></p></li>
+<li><strong>一对一结构</strong>：即传统的神经网络，这里不作赘述</li>
+<li><strong>一对多结构</strong>：这种结构的特点是仅在第一个时间步上有输入，例如音乐生成
+<ul>
+<li>具体实现时，这种结构还会将每一步的输出输入到下一步</li>
+</ul></li>
+<li><strong>多对一结构</strong>：即输出序列的长度为1，这种结构只在最后一个时间步上产生输出，例如情感分析</li>
+<li><strong>多对多结构a</strong>：之前所说的命名实体识别属于这种结构，其输入与输出长度相同</li>
+<li><strong>多对多结构b</strong>：输入与输出长度不同，例如机器翻译
+<ul>
+<li>这种结构会分为两个部分：编码器和解码器，编码器只有输入，解码器只有输出</li>
+</ul></li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-02-10-075958.png" width="70%"></p>
+<h1 id="语言模型和序列生成">语言模型和序列生成</h1>
+<h2 id="语言模型是什么">语言模型是什么</h2>
+<ul>
+<li>一个语言模型的作用是<strong>计算某个特定的句子出现的概率</strong></li>
+<li>以语音识别为例，对于两句发音相同的话，语言模型能够计算出两句话的可能性，帮助语音识别系统做出选择：
+<ul>
+<li>The apple and <strong>pair</strong> salad</li>
+<li>The apple and <strong>pear</strong> salad</li>
+</ul></li>
+</ul>
+<h2 id="如何使用-rnn-构建语言模型">如何使用 RNN 构建语言模型</h2>
+<ol type="1">
+<li>需要一个由目标语言组成的庞大<strong>语料库</strong>（训练集）</li>
+<li>对其中的句子进行标记化
+<ul>
+<li>对照词典将每个词语转化为长度相同的向量</li>
+<li>对于每个句子的结尾，可以使用结束符<code>&lt;EOS&gt;</code>进行标记（也可以将句号收录进词典）</li>
+<li>对于词典中没有的词语，统一使用<code>&lt;UNK&gt;</code>进行表示</li>
+</ul></li>
+<li><p>训练模型，网络结构如下图所示：</p>
+<p><img src="http://media.zjubiomedit.com/2019-02-10-080341.png" width="70%"></p>
+<ul>
+<li>第一个时间步的输入为 0</li>
+<li>每一步的计算输出为给定之前词语条件下下一个词语的概率（one-hot）</li>
+<li>输入与输出的关系为 <span class="math inline">\(x^{&lt;t&gt;} = y^{&lt;t-1&gt;}\)</span></li>
+<li>代价函数如图所示，基于代价函数通过反向传播，即可以训练该网络
+<ul>
+<li><code>i</code> 对应样本数，<code>t</code> 对应时间步数</li>
+</ul></li>
+</ul></li>
+<li>使用模型：
+<ul>
+<li>预测<strong>下一个词语</strong>：将已有的部分输入，得到最后一个时间步产生的输出，取概率最大的词语作为输出</li>
+<li>预测<strong>整个句子的概率</strong>：将整个句子输入，计算其各个时间步输出的概率并进行相乘（选择对应词语的概率），即可得出该句子的概率（公式如图所示）</li>
+</ul></li>
+</ol>
+<h2 id="对新序列采样">对新序列采样</h2>
+<ul>
+<li>在训练了一个序列模型（语言模型）后，要了解到这个模型学到了什么，一个非正式的方法就是进行<strong>新序列采样</strong></li>
+<li>下面给出对一个训练好的语言模型进行新序列采样的步骤：
+<ol type="1">
+<li><p>给定如下模型：</p>
+<p><img src="http://media.zjubiomedit.com/2019-02-10-080902.png" width="70%"></p></li>
+<li>输入 0 向量</li>
+<li>对输出的 softmax 分布进行随机采样，选择出一个词语
+<ul>
+<li>numpy 中可以通过 <code>numpy.random.choice(...)</code> 实现</li>
+</ul></li>
+<li>将该词语作为下一个时间步的输入</li>
+<li>重复上述两个步骤直到达到设定的长度或是出现 <code>&lt;EOS&gt;</code> 字符
+<ul>
+<li>仅第一个词语随机选择，之后选择概率最大的</li>
+</ul></li>
+<li><p>可以选择屏蔽 <code>&lt;UNK&gt;</code>，也可以不去管它</p></li>
+</ol></li>
+</ul>
+<h2 id="基于字符的语言模型">基于字符的语言模型</h2>
+<ul>
+<li>到目前为止我们训练的的是基于词语的语言模型，我们还可以构建一个<strong>基于字符的语言模型</strong></li>
+<li>基于字符的语言模型采用的字典相对简单，包括 <code>[a-zA-Z0-9]</code>、标点符号、特殊字符、<code>&lt;EOS&gt;</code>（针对英语来说）</li>
+<li>与基于词语的语言模型相比，基于字符的语言模型具有如下优缺点：
+<ul>
+<li>优点：
+<ol type="1">
+<li>不用担心出现未知的词语（针对英语）</li>
+</ol></li>
+<li>缺点：
+<ol type="1">
+<li>序列过长</li>
+<li>难以捕捉句子前后相距较远的依赖关系</li>
+<li>计算成本比较高昂</li>
+</ol></li>
+</ul></li>
+<li>目前大部分应用采用的还是基于词汇的语言模型，而随着计算机性能的提升，在某些特殊应用（比如有很多未知词语或专有名词）中也开始使用基于字符的模型</li>
+</ul>
+<h1 id="循环神经网络的梯度消失">循环神经网络的梯度消失</h1>
+<ul>
+<li>在传统的 RNN 中，一个比较棘手的问题就是<strong>梯度消失</strong></li>
+<li>下面以一个例子解释梯度消失现象，给出如下两个模型需要学习的句子：
+<ul>
+<li>“The <strong>cat</strong>, which already ate …, <strong>was</strong> full”</li>
+<li>“The <strong>cats</strong>, which already ate …, <strong>were</strong> full”</li>
+</ul></li>
+<li>如果这两个句子很长，由于隐藏层层数较多，那么反向传播时较后的词语所产生的变化将难以影响到较前词语的梯度计算（如图所示，梯度出现指数性的下降）</li>
+<li>因此梯度消失导致的问题就是传统 RNN 难以处理<strong>长期依赖</strong>（long-term dependencies)</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-02-10-081141.png" width="50%"></p>
+<h2 id="梯度爆炸">梯度爆炸</h2>
+<ul>
+<li>除了梯度消失，深度网络还存在的一个问题就是<strong>梯度爆炸</strong></li>
+<li>即反向传播时，梯度不仅可能出现指数性的下降，还可能出现指数性的上升，引起某些参数的异常（超过上限）</li>
+<li>解决这个问题的方法是<strong>梯度修剪</strong>
+<ul>
+<li>当梯度向量大于某个阈值时，对其进行缩放</li>
+<li><p>这是一种相对比较鲁棒的解决方法</p>
+<p><img src="http://media.zjubiomedit.com/2019-02-10-083016.png" width="70%"></p></li>
+</ul></li>
+<li>梯度消失相比梯度爆炸来说更加棘手</li>
+</ul>
+<h1 id="门控循环单元gru">门控循环单元（GRU）</h1>
+<ul>
+<li><strong>门控循环单元</strong>改变了 RNN 的隐藏层，使其可以更好地捕捉深层连接，解决梯度消失问题</li>
+<li><p>基础的 RNN 隐藏层如下图所示，我们将使用了类似的图来解释门控循环单元</p>
+<p><img src="http://media.zjubiomedit.com/2019-02-10-083123.png" width="60%"></p></li>
+<li><strong>GRU</strong> 单元将会有一个新的变量称为 <span class="math inline">\(c\)</span>，代表记忆细胞
+<ul>
+<li>它的作用是提供了记忆的能力，比如记住一只猫是单数还是负数</li>
+<li>实际上记忆细胞的输出即为激活值（<span class="math inline">\(c^{&lt;t&gt;} = a^{&lt;t&gt;}\)</span>），这里用不同的符号表示（LSTM中两者将不同）</li>
+</ul></li>
+<li><p>GRU 单元的计算由以下公式完成：</p>
+<ol type="1">
+<li>用一个候选值 <span class="math inline">\(\tilde{c}^{&lt;t&gt;}\)</span> 重写记忆细胞：</li>
+</ol>
+<p><span class="math display">\[
+  \tilde{c}^{&lt;t&gt;} = \tanh (W_c[c^{&lt;t-1&gt;},x^{&lt;t&gt;}]+b_c) 
+\]</span></p>
+<ol start="2" type="1">
+<li>设置一个门 <span class="math inline">\(\Gamma_u\)</span>（u代表更新），其取值为0-1之间：</li>
+</ol>
+<p><span class="math display">\[
+  \Gamma_u = \sigma(W_u[c^{&lt;t-1},x^{&lt;t&gt;}]+b_u)
+\]</span></p>
+<ol start="3" type="1">
+<li>基于候选值和门来更新记忆细胞的值：</li>
+</ol>
+<p><span class="math display">\[
+c^{&lt;t&gt;} = \Gamma_u * \tilde{c}^{&lt;t&gt;}  + (1- \Gamma_u) * c^{&lt;t-1&gt;}
+\]</span></p>
+<p><img src="http://media.zjubiomedit.com/2019-02-10-083254.png" width="40%"></p></li>
+<li>GRU 的优点是通过门决定，当你从左到右扫描一个句子的时候，是否要更新记忆细胞，可以一直不更新直到你真的需要这些记忆细胞的时候
+<ul>
+<li>因为门较容易取到0（很接近0），所以细胞的值可以被较好地进行传递，从而解决因层数过多引起的梯度消失问题</li>
+</ul></li>
+<li>注意之前的公式中变量可能都是向量形式的，所以 <span class="math inline">\(*\)</span> 实际上是元素对应的乘积
+<ul>
+<li>这种情况下向量形式的门可以决定哪些维度的细胞要更新，哪些维度不用更新</li>
+</ul></li>
+<li><p>之前介绍的 GRU 实际上是简化的版本，下面给出完整的版本 <span class="math display">\[
+\begin{aligned}
+\tilde{c}^{&lt;t&gt;} &amp;= \tanh (W_c[\Gamma_r * c^{&lt;t-1&gt;},x^{&lt;t&gt;}]+b_c) \\
+\Gamma_u &amp;= \sigma(W_u[c^{&lt;t-1},x^{&lt;t&gt;}]+b_u) \\
+\Gamma_r &amp;= \sigma(W_r[c^{&lt;t-1},x^{&lt;t&gt;}]+b_r) \\
+c^{&lt;t&gt;} &amp;= \Gamma_u * \tilde{c}^{&lt;t&gt;}  + (1- \Gamma_u) * c^{&lt;t-1&gt;}
+\end{aligned}
+\]</span></p></li>
+<li>完整版本多了一个参数 <span class="math inline">\(\Gamma_r\)</span>，来表示 <span class="math inline">\(c^{&lt;t&gt;}\)</span> 和 <span class="math inline">\(c^{&lt;t-1&gt;}\)</span> 的相关性</li>
+<li>至于为什么要设置这样的参数，这是因为GRU 是研究者们多年研究出来的 RNN 标准改进版本之一，其被证明具有较高的鲁棒性实用性，你也可以使用自己的版本
+<ul>
+<li>而此外另一个常用的版本是 LSTM ，将在之后进行介绍</li>
+</ul></li>
+<li><p>注意，在一些学术文献中，GRU 使用的符号定义可能略有不同</p></li>
+</ul>
+<h1 id="长短期记忆lstm">长短期记忆（LSTM）</h1>
+<ul>
+<li>LSTM 可以说是一种比 GRU 更强大和通用的版本，用以解决梯度消失问题</li>
+<li><p>LSTM 的示意图如下：</p>
+<p><img src="http://media.zjubiomedit.com/2019-02-10-084122.png" width="55%"></p>
+<ul>
+<li>与 GRU 不同，LSTM 中 <span class="math inline">\(a^{&lt;t&gt;}\)</span> 与 <span class="math inline">\(c^{&lt;t&gt;}\)</span> 不再相等，且有三道门：更新门、遗忘门和输出门</li>
+</ul></li>
+<li><p>下面给出 LSTM 的计算公式：</p>
+<p><img src="http://media.zjubiomedit.com/2019-02-10-083619.png" width="70%"></p></li>
+<li>实际上，最常用的 LSTM 版本会在计算门时加入 <span class="math inline">\(c^{&lt;t-1&gt;}\)</span> ，这叫做<strong>窥视孔连接</strong>（peehole connections）</li>
+<li>关于 GRU 和 LSTM 的选择：GRU 更晚出现，可以说是 LSTM 的简化，其可以用于创建一个更大的网络，并且计算上更加迅速，而 LSTM 则更加灵活与强大
+<ul>
+<li>如果只能选一个的话，建议先选择 LSTM</li>
+</ul></li>
+</ul>
+<h1 id="双向循环神经网络">双向循环神经网络</h1>
+<ul>
+<li>除了上述方法外，还有两个方法可以帮助你构建更好的模型，第一个是双向 RNN 模型，第二个则是深层 RNN 模型</li>
+<li>双向 RNN 可以让你在序列的某点处不仅可以获取之前的信息，还可以获取未来的信息</li>
+<li><p>对于单向的RNN而言，不管隐藏层单元是标准的还是 GRU 还是 LSTM，其都无法接收未来的信息，而有些情况下，两边的信息都很重要</p>
+<p><img src="http://media.zjubiomedit.com/2019-02-10-084948.png" width="70%"></p></li>
+<li><p>BRNN 新增了反向连接，构成了一个无环图</p>
+<p><img src="http://media.zjubiomedit.com/2019-02-10-090724.png" width="50%"></p></li>
+<li>给定一个输入序列，首先进行从左向右的前向传播，然后进行从右到左的前向传播，然后基于前向与反向连接得到的激活值计算输出</li>
+<li>这里的隐藏层单元不仅可以是标准单元，也可以是 GRU 或 LSTM
+<ul>
+<li>在大量自然语言处理的应用中，经常使用有 LSTM 单元的 BRNN 模型</li>
+</ul></li>
+<li>BRNN 的缺点是你需要完整的数据序列，这样在某些领域中会存在局限性
+<ul>
+<li>如在语音识别中你可能需要等待用户说完来得到整个语音表达，这种情况下我们会使用更加复杂的模块</li>
+</ul></li>
+<li><p>对于可以获取到整个序列的情况，BRNN 会是一个比较高效的模型</p></li>
+</ul>
+<h1 id="深层循环神经网络">深层循环神经网络</h1>
+<ul>
+<li><p>为了学习更加复杂的函数，我们需要把 RNN 的多个层堆叠在一起来构建更深的模型</p>
+<p><img src="http://media.zjubiomedit.com/2019-02-10-090446.png" width="70%"></p></li>
+<li>上图展示了深度 RNN 的结构。参数新增了上标，表示层数，每一层的各时间步共享参数</li>
+<li>由于深度 RNN 较为复杂，训练起来较为耗时，所以一般不会有很多层
+<ul>
+<li>但可以在竖直方向上堆叠一个普通的深层网络，用来计算输出，这些网络层并不水平连接</li>
+</ul></li>
+<li><p>注意隐藏层单元可以是标准、GRU 或 LSTM 中的任意一个，此外也可以构建深层双向 RNN 模型</p></li>
+</ul>
+<h1 id="思维导图">思维导图</h1>
+<p><img src="http://media.zjubiomedit.com/2019-02-10-150840.png" width="85%"></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Zheyu Wang</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://xxwywzy.github.io/2019/02/10/deep-14/" title="deeplearning.ai 第十四周：循环神经网络">https://xxwywzy.github.io/2019/02/10/deep-14/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/deeplearning-ai/" rel="tag"># deeplearning.ai</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/06/english/" rel="next" title="English for Writing Research Papers">
+                <i class="fa fa-chevron-left"></i> English for Writing Research Papers
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Zheyu Wang"/>
+            
+              <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+              <p class="site-description motion-element" itemprop="description">更に向こうへ</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">18</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/xxwywzy" title="GitHub &rarr; https://github.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://twitter.com/xxwywzy" title="Twitter &rarr; https://twitter.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="http://weibo.com/xxwywzy" title="Weibo &rarr; http://weibo.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://instagram.com/xxwywzy" title="Instagram &rarr; https://instagram.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#为什么选择序列模型"><span class="nav-number">1.</span> <span class="nav-text">为什么选择序列模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数学符号"><span class="nav-number">2.</span> <span class="nav-text">数学符号</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#输入与输出"><span class="nav-number">2.1.</span> <span class="nav-text">输入与输出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#词语的表示"><span class="nav-number">2.2.</span> <span class="nav-text">词语的表示</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#循环神经网络模型"><span class="nav-number">3.</span> <span class="nav-text">循环神经网络模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么不使用标准的神经网络"><span class="nav-number">3.1.</span> <span class="nav-text">为什么不使用标准的神经网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模型概述"><span class="nav-number">3.2.</span> <span class="nav-text">模型概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#前向传播"><span class="nav-number">3.3.</span> <span class="nav-text">前向传播</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通过时间的反向传播"><span class="nav-number">3.4.</span> <span class="nav-text">通过时间的反向传播</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#不同类型的循环神经网络"><span class="nav-number">3.5.</span> <span class="nav-text">不同类型的循环神经网络</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#语言模型和序列生成"><span class="nav-number">4.</span> <span class="nav-text">语言模型和序列生成</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#语言模型是什么"><span class="nav-number">4.1.</span> <span class="nav-text">语言模型是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何使用-rnn-构建语言模型"><span class="nav-number">4.2.</span> <span class="nav-text">如何使用 RNN 构建语言模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对新序列采样"><span class="nav-number">4.3.</span> <span class="nav-text">对新序列采样</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于字符的语言模型"><span class="nav-number">4.4.</span> <span class="nav-text">基于字符的语言模型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#循环神经网络的梯度消失"><span class="nav-number">5.</span> <span class="nav-text">循环神经网络的梯度消失</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#梯度爆炸"><span class="nav-number">5.1.</span> <span class="nav-text">梯度爆炸</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#门控循环单元gru"><span class="nav-number">6.</span> <span class="nav-text">门控循环单元（GRU）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#长短期记忆lstm"><span class="nav-number">7.</span> <span class="nav-text">长短期记忆（LSTM）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#双向循环神经网络"><span class="nav-number">8.</span> <span class="nav-text">双向循环神经网络</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#深层循环神经网络"><span class="nav-number">9.</span> <span class="nav-text">深层循环神经网络</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#思维导图"><span class="nav-number">10.</span> <span class="nav-text">思维导图</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.5.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.0.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz',
+    appKey: 'IxP5URFEhxow4TfWyVNiowbH',
+    placeholder: '请在这里评论=￣ω￣=',
+    avatar: 'retro',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+</script>
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+  
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .fail(function ({ responseJSON }) {
+                console.log(`Failed to save Visitor num, with error message: ${responseJSON.error}`);
+              })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1 }))
+                .done(function() {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function() {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+        .fail(function ({ responseJSON }) {
+          console.log(`LeanCloud Counter Error: ${responseJSON.code} ${responseJSON.error}`);
+        });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz',
+                'X-LC-Key': 'IxP5URFEhxow4TfWyVNiowbH',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            addCount(Counter);
+          
+        });
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: "AMS"
+      }
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+      for (i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+<script src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+  overflow: auto hidden;
+}
+</style><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+    
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
