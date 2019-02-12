@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2"/>
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0"/>
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/favicon.png?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本篇博客为 CS229 学习笔记第九部分，主题是：聚类问题与 EM 算法。">
+<meta name="keywords" content="CS229">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CS229 学习笔记之九：聚类问题与 EM 算法">
+<meta property="og:url" content="https://xxwywzy.github.io/2019/02/12/cs229-9/index.html">
+<meta property="og:site_name" content="xxwywzy&#39;s Blog">
+<meta property="og:description" content="本篇博客为 CS229 学习笔记第九部分，主题是：聚类问题与 EM 算法。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-01-15-013548.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-01-30-020919.png">
+<meta property="og:updated_time" content="2019-02-12T10:30:05.569Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CS229 学习笔记之九：聚类问题与 EM 算法">
+<meta name="twitter:description" content="本篇博客为 CS229 学习笔记第九部分，主题是：聚类问题与 EM 算法。">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2019-01-15-013548.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://xxwywzy.github.io/2019/02/12/cs229-9/"/>
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>CS229 学习笔记之九：聚类问题与 EM 算法 | xxwywzy's Blog</title>
+  
+
+
+
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a02b5462e7522b1ed191c4cea6b1d6e6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xxwywzy's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Long may the sunshine</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br/>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br/>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br/>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br/>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2019/02/12/cs229-9/"/>
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zheyu Wang"/>
+      <meta itemprop="description" content="更に向こうへ"/>
+      <meta itemprop="image" content="/images/avatar.png"/>
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xxwywzy's Blog"/>
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">CS229 学习笔记之九：聚类问题与 EM 算法
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-02-12 18:13:01" itemprop="dateCreated datePublished" datetime="2019-02-12T18:13:01+08:00">2019-02-12</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/人工智能/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/人工智能/机器学习/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <a href="/2019/02/12/cs229-9/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/02/12/cs229-9/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+            <span id="/2019/02/12/cs229-9/" class="leancloud_visitors" data-flag-title="CS229 学习笔记之九：聚类问题与 EM 算法">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <div class="note info">
+            本篇博客为 CS229 学习笔记第九部分，主题是：聚类问题与 EM 算法。 
+          </div>
+<a id="more"></a>
+<h1 id="k-means-聚类">K-means 聚类</h1>
+<ul>
+<li>聚类问题是一种无监督学习，给定训练集 <span class="math inline">\(\{x^{(1)}, \ldots, x^{(m)}\}\)</span>，我们希望将其聚合成几个特定的类</li>
+<li>k-means 聚类算法的流程如下：
+<ol type="1">
+<li>随机初始化<strong>聚类中心</strong> <span class="math inline">\(\mu_1,\mu_2,\dots, \mu_k \in \mathbb{R}^n\)</span></li>
+<li>重复以下步骤直至收敛：
+<ul>
+<li><p>对于每个 i（训练集大小），令 <span class="math display">\[
+c^{(i)} := \arg \min_j ||x^{(i)}-\mu_j||^2
+\]</span></p></li>
+<li><p>对于每个 j（聚类数量），令 <span class="math display">\[
+\mu^{(j)} := \frac {\sum _{i=1}^m 1\{c^{(i)}=j\}x^{(i)}} {\sum _{i=1}^m 1\{c^{(i)}=j\}}
+\]</span></p></li>
+</ul></li>
+</ol></li>
+<li>该算法的思想为：
+<ol type="1">
+<li>将每个训练样本 <span class="math inline">\(x^{(i)}\)</span> 分配到距离其最近的中心 <span class="math inline">\(\mu_j\)</span></li>
+<li>将每个聚类中心移动到第一步中分配到该中心的样本的均值</li>
+</ol></li>
+<li><p>下图可视化了 k-means 算法的运行流程：</p>
+<p><img src="http://media.zjubiomedit.com/2019-01-15-013548.png" width="80%"></p></li>
+<li><p>为了证明 k-means 算法能否保证收敛，我们定义<strong>失真函数</strong>（distortion function）为： <span class="math display">\[
+J(c,\mu) = \sum_{i=1}^m ||x^{(i)}-\mu_{c^{(i)}}||^2
+\]</span></p>
+<ul>
+<li>可以发现 k-means 本质上就是对失真函数进行坐标上升法优化</li>
+<li>其内层循环首先保持 <span class="math inline">\(\mu\)</span> 不变关于 <span class="math inline">\(c\)</span> 最小化 <span class="math inline">\(J\)</span>，然后保持 <span class="math inline">\(c\)</span> 不变关于 <span class="math inline">\(\mu\)</span> 最小化 <span class="math inline">\(J\)</span></li>
+<li>因此，<span class="math inline">\(J\)</span> 一定会持续下降，最终达到收敛</li>
+<li>一般 <span class="math inline">\(c\)</span> 和 <span class="math inline">\(\mu\)</span> 也会收敛，但理论上存在同时出现多种聚类组合的可能性，使得失真函数的值一样</li>
+</ul></li>
+<li>失真函数是一个非凸函数，这意味着坐标上升并不能保证其收敛至全局最优，存在收敛到局部最优的可能性
+<ul>
+<li>一般情况下这不会发生</li>
+<li>可以通过多次运行 k-means 算法，选择最优解来解决这个问题</li>
+</ul></li>
+</ul>
+<h1 id="混合高斯分布">混合高斯分布</h1>
+<ul>
+<li>混合高斯分布可以用于软聚类问题，即输出一个样本属于各个类的概率</li>
+<li>我们可以将数据的类别看作一个隐含随机变量 <span class="math inline">\(z\)</span>，并给出如下假设：
+<ol type="1">
+<li><span class="math inline">\(z\)</span> 服从多项式分布 <span class="math inline">\(z^{(i)} \sim \text{Multinomial}(\phi)\)</span></li>
+<li>给定不同的 <span class="math inline">\(z\)</span> ，<span class="math inline">\(x\)</span> 服从不同的高斯分布 <span class="math inline">\(x^{(i)} | z^{(i)} = j \sim \mathcal{N}(\mu_i, \Sigma_j)\)</span></li>
+</ol></li>
+<li><p>使用极大似然法求解该优化问题，可以得到如下的似然函数： <span class="math display">\[
+\begin{aligned}
+\ell(\phi,\mu,\Sigma) &amp;= \sum_{i=1}^m \log p(x^{(i)};\phi,\mu,\Sigma) \\
+&amp;= \sum_{i=1}^m \log \sum_{z^{(i)} = 1}^k p(x^{(i)}| z^{(i)};\mu, \Sigma)p(z^{(i)};\phi)
+\end{aligned}
+\]</span></p></li>
+<li>该问题无法求出闭合解</li>
+<li><p>如果 <span class="math inline">\(z^{(i)}\)</span> 已知，即我们知道每个样本来自于哪个高斯分布，那么极大似然估计的求解是容易的，似然函数如下： <span class="math display">\[
+\ell(\phi,\mu,\Sigma) = \sum_{i=1}^m \left(\log p(x^{(i)}| z^{(i)};\mu, \Sigma)+ \log p(z^{(i)};\phi)\right)
+\]</span></p>
+<ul>
+<li><p>求解的结果是： <span class="math display">\[
+\begin{aligned}
+\phi_j &amp;= \frac 1 m \sum_{i=1}^m 1\{z^{(i)} =  j\} \\
+\mu_j &amp;= \frac{\sum_{i=1}^m 1\{z^{(i)}=j\}x^{(i)}}{\sum_{i=1}^m 1\{z^{(i)}=j\}} \\
+\Sigma_j &amp;= \frac{\sum_{i=1}^m 1\{z^{(i)}=j\}(x^{(i)}-\mu_{j})(x^{(i)}-\mu_{j})^T}{\sum_{i=1}^m 1\{z^{(i)}=j\}} 
+\end{aligned}
+\]</span></p>
+<ul>
+<li>该结果与之前的高斯判别分析的结论类似（GDA 的协方差矩阵必须相同）</li>
+</ul></li>
+</ul></li>
+</ul>
+<h1 id="em-算法初步">EM 算法初步</h1>
+<ul>
+<li>实际上，我们并不知道 <span class="math inline">\(z^{(i)}\)</span> 的值</li>
+<li>我们可以通过 EM 算法进行迭代估计出 <span class="math inline">\(z^{i}\)</span> 从而得到参数，其基本思想如下：
+<ul>
+<li>重复以下步骤直至收敛：
+<ol type="1">
+<li><p>（<strong>E-step</strong>）对于每个 <span class="math inline">\(i,j\)</span>，令： <span class="math display">\[
+w_j^{(i)} := p(z^{(i)} = j|x^{(i)};\phi,\mu,\Sigma)
+\]</span></p></li>
+<li><p>（<strong>M-step</strong>）更新参数： <span class="math display">\[
+\begin{aligned}
+\phi_j &amp;= \frac 1 m \sum_{i=1}^m w_j^{(i)} \\
+\mu_j &amp;= \frac{\sum_{i=1}^m w_j^{(i)}x^{(i)}}{\sum_{i=1}^m w_j^{(i)}} \\
+\Sigma_j &amp;= \frac{\sum_{i=1}^m w_j^{(i)}(x^{(i)}-\mu_{j})(x^{(i)}-\mu_{j})^T}{\sum_{i=1}^m w_j^{(i)}} 
+\end{aligned}
+\]</span></p></li>
+</ol></li>
+</ul></li>
+<li>关于 EM 算法的几点解释：
+<ul>
+<li><p>在 E-step 中，给定 <span class="math inline">\(x^{(i)}\)</span>，我们使用当前的参数值来计算 <span class="math inline">\(z^{(i)}\)</span> 的后验概率，即 <span class="math display">\[
+p(z^{(i)} = j|x^{(i)};\phi,\mu,\Sigma) = \frac {p(x^{(i)}|z^{(i)} = j;\mu,\Sigma)p(z^{(i)}=j;\phi)} {\sum_{l=1}^k p(x^{(i)}|z^{(i)}=l;\mu,\Sigma)p(z^{(i)}=l;\phi)}
+\]</span></p>
+<ul>
+<li>该概率代表我们对 <span class="math inline">\(z^{(i)}\)</span> 值的软猜测（即以概率值代替具体的值）</li>
+</ul></li>
+<li>在 M-step 中，参数的更新公式与之前已知 <span class="math inline">\(z^{(i)}\)</span> 的公式相比，只是把指示函数替换为了概率</li>
+<li>与 K-means 算法相比，EM 算法输出的是样本属于各个类的概率，这是一种软聚类
+<ul>
+<li>与 K-means 相似，EM 算法容易陷入局部最优，因此多次尝试不同的初始参数可能是一个好主意</li>
+</ul></li>
+<li><p>下一节将给出 EM 算法的一般形式，并证明其收敛性</p></li>
+</ul></li>
+</ul>
+<h1 id="jensen-不等式">Jensen 不等式</h1>
+<h2 id="函数的凹凸性">函数的凹凸性</h2>
+<ul>
+<li>在介绍 Jensen 不等式之前，先回顾一下函数的凹凸性</li>
+<li>对于一个实数域的函数 <span class="math inline">\(f\)</span>，其为凸函数的条件为 <span class="math inline">\(f&#39;&#39;(x) \ge 0\)</span>
+<ul>
+<li>如果输入为向量形式，则该条件可推广为其 Hessian 矩阵半正定（<span class="math inline">\(H \ge 0\)</span>）</li>
+<li>如果 <span class="math inline">\(f&#39;&#39;(x) &gt; 0\)</span>（<span class="math inline">\(H &gt; 0\)</span>），则函数<strong>严格</strong>凸</li>
+</ul></li>
+<li>凹函数的判定条件与凸函数完全相反</li>
+</ul>
+<h2 id="定理">定理</h2>
+<ul>
+<li><p>令 <span class="math inline">\(f\)</span> 是一个凸函数，<span class="math inline">\(X\)</span> 是一个随机变量，则： <span class="math display">\[
+\text{E}[f(X)] \ge f(\text{E}X)
+\]</span></p>
+<ul>
+<li>如果 <span class="math inline">\(f\)</span> 严格凸，那么当且仅当 <span class="math inline">\(X = \text{E}[X]\)</span> 时等号成立（即 <span class="math inline">\(X\)</span> 为常量）</li>
+</ul></li>
+<li><p>可以通过下图对该不等式有一个直观的理解：</p>
+<p><img src="http://media.zjubiomedit.com/2019-01-30-020919.png" width="50%"></p></li>
+<li><p>当 <span class="math inline">\(f\)</span> 为凹函数时，不等式方向对调，仍然成立</p></li>
+</ul>
+<h1 id="em-算法">EM 算法</h1>
+<h2 id="算法的导出">算法的导出</h2>
+<ul>
+<li><p>假定我们有一个包含 m 个独立样本的训练集，我们希望去拟合一个概率模型 <span class="math inline">\(p(x,z)\)</span>，其对数似然函数为： <span class="math display">\[
+\begin{aligned}
+\ell(\theta) &amp;= \sum_{i=1}^m \log p(x;\theta) \\
+&amp;= \sum_{i=1}^m \log \sum_z p(x,z;\theta)
+\end{aligned}
+\]</span></p>
+<ul>
+<li>这里假定 <span class="math inline">\(z\)</span> 是离散变量（连续变量需要使用积分）</li>
+<li>直接最大化 <span class="math inline">\(\ell(\theta)\)</span> 是难以求解的</li>
+</ul></li>
+<li>EM 算法的思想是先构建一个 <span class="math inline">\(\ell\)</span> 的下界（E-step），然后去优化这个下界（M-step），达到间接最大化 <span class="math inline">\(\ell\)</span> 的目的
+<ul>
+<li>对于每个 <span class="math inline">\(i\)</span>，设 <span class="math inline">\(Q_i\)</span> 是 <span class="math inline">\(z\)</span> 的某种概率分布（<span class="math inline">\(\sum_z Q_i(z) = 1, Q_i(z) \ge 0\)</span>）</li>
+<li><p>根据期望的定义以及 Jensen 不等式，我们有： <span class="math display">\[
+\begin{align*}
+\sum_i \log p(x^{(i)};\theta) &amp;= \sum_i \log \sum_{z^{(i)}} p(x^{(i)},z^{(i)};\theta) \tag{1} \\
+&amp;= \sum_i \log \sum_{z^{(i)}}  Q_i(z^{(i)}) \frac {p(x^{(i)},z^{(i)};\theta)}{Q_i(z^{(i)})} \tag{2} \\
+&amp;\ge \sum_i \sum_{z^{(i)}} Q_i(z^{(i)}) \log \frac {p(x^{(i)},z^{(i)};\theta)}{Q_i(z^{(i)})} \tag{3} \\
+\end{align*}
+\]</span></p>
+<ul>
+<li><span class="math inline">\(\frac {p(x^{(i)},z^{(i)};\theta)}{Q_i(z^{(i)})}\)</span> 可以看做 <span class="math inline">\(z^{(i)}\)</span> 的随机变量，其概率分布为 <span class="math inline">\(Q_i\)</span>，期望可以通过 <span class="math inline">\(\sum_{z^{(i)}} Q_i(z^{(i)}) \frac {p(x^{(i)},z^{(i)};\theta)}{Q_i(z^{(i)})}\)</span> 得到</li>
+<li><span class="math inline">\(f(x) = \log x\)</span> 是一个凹函数，应用 Jensen 不等式时注意方向对调</li>
+</ul></li>
+</ul></li>
+<li>为了执行 EM 算法，我们需要选择合适的 <span class="math inline">\(Q_i\)</span> 以保证在当前的参数设置下取到下界，即目前的 <span class="math inline">\(\theta\)</span> 值能够使得 <span class="math inline">\((3)\)</span> 式的等号成立
+<ul>
+<li><p>之前的定理表明等号成立的条件是随机变量为<strong>常数</strong> <span class="math display">\[
+\frac {p(x^{(i)},z^{(i)};\theta)}{Q_i(z^{(i)})} = c
+\]</span></p>
+<ul>
+<li><p>因此只要 <span class="math inline">\(Q_i(z^{(i)})\)</span> 和 <span class="math inline">\(p(x^{(i)},z^{(i)};\theta)\)</span> 成比例即可 <span class="math display">\[
+Q_i(z^{(i)}) \propto p(x^{(i)},z^{(i)};\theta)
+\]</span></p></li>
+<li><p>实际上，因为 <span class="math inline">\(\sum_z Q_i(z^{(i)}) = 1\)</span>，将其代入上述公式，可以得到： <span class="math display">\[
+\sum_z Q_i(z^{(i)}) = \frac {\sum_z p(x^{(i)},z^{(i)};\theta)} c  = 1
+\]</span></p></li>
+<li><p>因此 <span class="math inline">\(c = \sum_z p(x^{(i)},z^{(i)};\theta)\)</span>，从而有： <span class="math display">\[
+\begin{aligned}
+Q_i(z^{(i)}) &amp;= \frac {p(x^{(i)},z^{(i)};\theta)} {\sum_z p(x^{(i)},z^{(i)};\theta)} \\
+&amp;= \frac {p(x^{(i)},z^{(i)};\theta)} {p(x^{(i)};\theta)} \\
+&amp;= p(z^{(i)}|x^{(i)};\theta)
+\end{aligned}
+\]</span></p></li>
+</ul></li>
+<li>根据上述推导，我们只需要将 <span class="math inline">\(Q_i\)</span> 设置为给定 <span class="math inline">\(x^{(i)}\)</span> 时 <span class="math inline">\(z^{(i)}\)</span> 的后验分布即可（以 <span class="math inline">\(\theta\)</span> 为参数）</li>
+</ul></li>
+<li>综上所述，EM 算法的具体步骤为：
+<ul>
+<li><p><strong>E-step</strong>：对于每个 <span class="math inline">\(i\)</span>，令 <span class="math display">\[
+Q_i(z^{(i)}) := p(z^{(i)}|x^{(i)};\theta)
+\]</span></p></li>
+<li><p><strong>M-step</strong>：更新参数 <span class="math display">\[
+\theta := \arg \max_\theta \sum_i \sum_{z^{(i)}} Q_i(z^{(i)}) \log \frac {p(x^{(i)},z^{(i)};\theta)}{Q_i(z^{(i)})}
+\]</span></p></li>
+<li><p>重复以上两个步骤直至收敛</p></li>
+</ul></li>
+</ul>
+<h2 id="收敛性证明">收敛性证明</h2>
+<ul>
+<li>下面证明该算法的收敛性
+<ul>
+<li>假定 <span class="math inline">\(\theta^{(t)}\)</span> 和 <span class="math inline">\(\theta^{(t+1)}\)</span> 来自于 EM 算法的两次成功的迭代，那么通过证明 <span class="math inline">\(\ell(\theta^{(t)}) \le \ell(\theta^{(t+1)})\)</span>，就可以表明 EM 算法是单调收敛的（对数似然函数单调递增）</li>
+<li><p>当参数为 <span class="math inline">\(\theta^{(t)}\)</span> 时，根据算法步骤，我们令 <span class="math inline">\(Q_i^{(t)}(z^{(i)}) := p(z^{(i)}|x^{(i)};\theta^{(t)})\)</span>，这一选择保证了等号成立，即： <span class="math display">\[
+\ell(\theta^{(t)}) = \sum_i \sum_{z^{(i)}} Q_i^{(t)}(z^{(i)}) \log \frac {p(x^{(i)},z^{(i)};\theta^{(t)})}{Q_i^{(t)}(z^{(i)})}
+\]</span></p></li>
+<li><p>而参数 <span class="math inline">\(\theta^{(t+1)}\)</span> 是通过最大化上式的右边部分得出的（更新 <span class="math inline">\(\theta\)</span>），因此有： <span class="math display">\[
+\begin{align*}
+\ell(\theta^{(t+1)}) &amp;\ge \sum_i \sum_{z^{(i)}} Q_i^{(t)}(z^{(i)}) \log \frac {p(x^{(i)},z^{(i)};\theta^{(t+1)})}{Q_i^{(t)}(z^{(i)})} \tag{4} \\
+&amp;\ge \sum_i \sum_{z^{(i)}} Q_i^{(t)}(z^{(i)}) \log \frac {p(x^{(i)},z^{(i)};\theta^{(t)})}{Q_i^{(t)}(z^{(i)})} \tag{5}\\
+&amp;= \ell(\theta^{(t)}) \tag{6}
+\end{align*}
+\]</span></p>
+<ul>
+<li><span class="math inline">\((4)\)</span> 式的得出来源于 <span class="math inline">\((3)\)</span> 式</li>
+<li><span class="math inline">\((5)\)</span> 式的得出来源于 <span class="math inline">\(\theta^{(t+1)}\)</span> 是上一步的下界最大化的结果</li>
+<li><span class="math inline">\((6)\)</span> 式的得出之前已经证明（满足等号成立的条件）</li>
+</ul></li>
+<li>综上所述，EM 算法可以保证似然函数的<strong>单调收敛</strong>
+<ul>
+<li>一个可取的收敛条件是 <span class="math inline">\(\ell(\theta)\)</span> 的增长速度小于某个临界值</li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="坐标上升法">坐标上升法</h2>
+<ul>
+<li><p>如果我们定义： <span class="math display">\[
+J(Q,\theta) = \sum_i \sum_{z^{(i)}} Q_i(z^{(i)}) \log \frac {p(x^{(i)},z^{(i)};\theta)}{Q_i(z^{(i)})}
+\]</span></p>
+<ul>
+<li>从之前的推导可以知道 <span class="math inline">\(\ell(\theta) \ge J(Q,\theta)\)</span></li>
+</ul></li>
+<li>EM 算法可以看做是对 <span class="math inline">\(J\)</span> 的坐标上升法
+<ul>
+<li>在 E-step 中，关于 <span class="math inline">\(Q\)</span> 最大化 <span class="math inline">\(J\)</span></li>
+<li>在 M-step 中，关于 <span class="math inline">\(\theta\)</span> 最大化 <span class="math inline">\(J\)</span></li>
+</ul></li>
+</ul>
+<h1 id="混合高斯模型复盘">混合高斯模型复盘</h1>
+<ul>
+<li>下面将使用 EM 算法的一般形式来对之前混合高斯模型中的公式进行推导
+<ul>
+<li>由于篇幅所限，这里只给出 <span class="math inline">\(\phi\)</span> 和 <span class="math inline">\(\mu_j\)</span> 的推导过程</li>
+</ul></li>
+<li><p>之前我们得出的参数更新公式如下： <span class="math display">\[
+\begin{aligned}
+\phi_j &amp;= \frac 1 m \sum_{i=1}^m w_j^{(i)} \\
+\mu_j &amp;= \frac{\sum_{i=1}^m w_j^{(i)}x^{(i)}}{\sum_{i=1}^m w_j^{(i)}} \\
+\Sigma_j &amp;= \frac{\sum_{i=1}^m w_j^{(i)}(x^{(i)}-\mu_{j})(x^{(i)}-\mu_{j})^T}{\sum_{i=1}^m w_j^{(i)}} 
+\end{aligned}
+\]</span></p></li>
+<li><p>根据 E-step 的定义，我们可以得到： <span class="math display">\[
+w_j^{(i)} = Q_i(z^{(i)} = j) = P(z^{(i)} = j|x^{(i)};\phi,\mu,\Sigma)
+\]</span></p></li>
+<li><p>在 M-step 中，我们需要通过上述三个参数去最大化下式： <span class="math display">\[
+\begin{aligned}
+\sum_{i=1}^m &amp;\sum_{z^{(i)}} Q_i(z^{(i)}) \log \frac {p(x^{(i)},z^{(i)};\phi,\mu,\Sigma)}{Q_i(z^{(i)})} \\ &amp;= \sum_{i=1}^m\sum_{j=1}^k Q_i(z^{(i)}=j) \log \frac {p(x^{(i)}|z^{(i)}=j;\mu,\Sigma)p(z^{(i)}=j;\phi)}{Q_i(z^{(i)}=j)} \\
+&amp;= \sum_{i=1}^m\sum_{j=1}^k w_j^{(i)} \log \frac {\frac 1 {(2\pi)^{n/2}|\Sigma_j|^{1/2}}\exp \left(-\frac 1 2 (x^{(i)}-\mu_j)^T\Sigma_j^{-1}(x^{(i)}-\mu_j)\right)\cdot\phi_j}{w_j^{(i)}}
+\end{aligned}
+\]</span></p></li>
+<li><p>我们首先关于 <span class="math inline">\(\mu_j\)</span> 去进行最大化，求导可得： <span class="math display">\[
+\begin{aligned}
+\nabla_{\mu_j}&amp;\sum_{i=1}^m\sum_{j=1}^k w_j^{(i)} \log \frac {\frac 1 {(2\pi)^{n/2}|\sum_j|^{1/2}}\exp \left(-\frac 1 2 (x^{(i)}-\mu_j)^T\Sigma_j^{-1}(x^{(i)}-\mu_j)\right)\cdot\phi_j}{w_j^{(i)}} \\
+&amp;= - \nabla_{\mu_j} \sum_{i=1}^m\sum_{j=1}^k w_j^{(i)}\frac 1 2 (x^{(i)}-\mu_j)^T\Sigma_j^{-1}(x^{(i)}-\mu_j) \\
+&amp;= \frac 1 2 \sum_{i=1}^m w_j^{(i)} \nabla_{\mu_j} 2\mu_j^T \Sigma_j^{-1}x^{(i)}-\mu_j^T\Sigma_j^{-1}\mu_j \\
+&amp;= \sum_{i=1}^m w_j^{(i)} (\Sigma_j^{-1}x^{(i)}-\Sigma_j^{-1}\mu_j)
+\end{aligned}
+\]</span></p>
+<ul>
+<li>上述推导首先去除了不相关的项，然后去除了求和符号（导数性质），最后合并同类项得到结果</li>
+<li>将上式设为 0 求解 <span class="math inline">\(\mu_j\)</span>，可得： <span class="math display">\[
+\mu_j = \frac{\sum_{i=1}^m w_j^{(i)}x^{(i)}}{\sum_{i=1}^m w_j^{(i)}}
+\]</span></li>
+</ul></li>
+<li><p>下面关于 <span class="math inline">\(\phi_j\)</span> 去进行最大化，将与 <span class="math inline">\(\phi_j\)</span> 相关的部分提取出来，可以得到需要最大化的项为： <span class="math display">\[
+\sum_{i=1}^m\sum_{j=1}^k w_j^{(i)}\log \phi_j
+\]</span></p>
+<ul>
+<li>这里我们还有一个额外的约束条件：<span class="math inline">\(\sum_{j=1}^k\phi_j = 1\)</span></li>
+<li><p>因此，我们需要构建拉格朗日算子： <span class="math display">\[
+\mathcal{L}(\phi) = \sum_{i=1}^m\sum_{j=1}^k w_j^{(i)}\log \phi_j + \beta (\sum_{j=1}^k \phi -1)
+\]</span></p>
+<ul>
+<li><p>其中 <span class="math inline">\(\beta\)</span> 是拉格朗日乘数，对上式求导可得： <span class="math display">\[
+\frac {\partial}{\partial\phi_j} \mathcal{L}(\phi) = \sum_{i=1}^m \frac{w_j^{(i)}}{\phi_j} + \beta
+\]</span></p>
+<ul>
+<li><p>将其设为 0，可得： <span class="math display">\[
+\phi_j = \frac {\sum_{i=1}^m w_j^{(i)}} {-\beta}
+\]</span></p></li>
+<li><p>由于 <span class="math inline">\(\sum_j \phi_j = 1\)</span>，因此 <span class="math inline">\(-\beta = \sum_{i=1}^m \sum_{j=1}^k w_j^{(i)} = \sum_{i=1}^m 1 = m\)</span>，所以： <span class="math display">\[
+\phi_j = \frac 1 m \sum_{i=1}^m w_j^{(i)}
+\]</span></p></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+<h1 id="混合朴素贝叶斯模型">混合朴素贝叶斯模型</h1>
+<p>未完待续</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Zheyu Wang</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://xxwywzy.github.io/2019/02/12/cs229-9/" title="CS229 学习笔记之九：聚类问题与 EM 算法">https://xxwywzy.github.io/2019/02/12/cs229-9/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CS229/" rel="tag"># CS229</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/10/deep-14/" rel="next" title="deeplearning.ai 第十四周：循环神经网络">
+                <i class="fa fa-chevron-left"></i> deeplearning.ai 第十四周：循环神经网络
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Zheyu Wang"/>
+            
+              <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+              <p class="site-description motion-element" itemprop="description">更に向こうへ</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/xxwywzy" title="GitHub &rarr; https://github.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://twitter.com/xxwywzy" title="Twitter &rarr; https://twitter.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="http://weibo.com/xxwywzy" title="Weibo &rarr; http://weibo.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://instagram.com/xxwywzy" title="Instagram &rarr; https://instagram.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#k-means-聚类"><span class="nav-number">1.</span> <span class="nav-text">K-means 聚类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#混合高斯分布"><span class="nav-number">2.</span> <span class="nav-text">混合高斯分布</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#em-算法初步"><span class="nav-number">3.</span> <span class="nav-text">EM 算法初步</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#jensen-不等式"><span class="nav-number">4.</span> <span class="nav-text">Jensen 不等式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#函数的凹凸性"><span class="nav-number">4.1.</span> <span class="nav-text">函数的凹凸性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定理"><span class="nav-number">4.2.</span> <span class="nav-text">定理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#em-算法"><span class="nav-number">5.</span> <span class="nav-text">EM 算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#算法的导出"><span class="nav-number">5.1.</span> <span class="nav-text">算法的导出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#收敛性证明"><span class="nav-number">5.2.</span> <span class="nav-text">收敛性证明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#坐标上升法"><span class="nav-number">5.3.</span> <span class="nav-text">坐标上升法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#混合高斯模型复盘"><span class="nav-number">6.</span> <span class="nav-text">混合高斯模型复盘</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#混合朴素贝叶斯模型"><span class="nav-number">7.</span> <span class="nav-text">混合朴素贝叶斯模型</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.5.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.0.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz',
+    appKey: 'IxP5URFEhxow4TfWyVNiowbH',
+    placeholder: '请在这里评论=￣ω￣=',
+    avatar: 'retro',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+</script>
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+  
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .fail(function ({ responseJSON }) {
+                console.log(`Failed to save Visitor num, with error message: ${responseJSON.error}`);
+              })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1 }))
+                .done(function() {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function() {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+        .fail(function ({ responseJSON }) {
+          console.log(`LeanCloud Counter Error: ${responseJSON.code} ${responseJSON.error}`);
+        });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz',
+                'X-LC-Key': 'IxP5URFEhxow4TfWyVNiowbH',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            addCount(Counter);
+          
+        });
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: "AMS"
+      }
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+      for (i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+<script src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+  overflow: auto hidden;
+}
+</style><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+    
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
