@@ -96,21 +96,20 @@
 
 
 
-  <meta name="description" content="本系列笔记是对《游戏引擎架构》这本书的阅读记录，参考资源主要为该书的中文译本，感兴趣的童鞋可以去阅读原版。本篇博客为第一篇读书笔记，记录的章节是第1章：导论。">
+  <meta name="description" content="本篇博客为《游戏引擎架构》的第一章读书笔记。">
 <meta name="keywords" content="游戏引擎架构">
 <meta property="og:type" content="article">
 <meta property="og:title" content="《游戏引擎架构》读书笔记之一：导论">
 <meta property="og:url" content="https://xxwywzy.github.io/2018/04/22/game-engine-1/index.html">
 <meta property="og:site_name" content="xxwywzy&#39;s Blog">
-<meta property="og:description" content="本系列笔记是对《游戏引擎架构》这本书的阅读记录，参考资源主要为该书的中文译本，感兴趣的童鞋可以去阅读原版。本篇博客为第一篇读书笔记，记录的章节是第1章：导论。">
+<meta property="og:description" content="本篇博客为《游戏引擎架构》的第一章读书笔记。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-135912.jpg">
 <meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-135927.png">
-<meta property="og:updated_time" content="2019-02-06T13:19:39.301Z">
+<meta property="og:updated_time" content="2019-02-19T01:09:32.045Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《游戏引擎架构》读书笔记之一：导论">
-<meta name="twitter:description" content="本系列笔记是对《游戏引擎架构》这本书的阅读记录，参考资源主要为该书的中文译本，感兴趣的童鞋可以去阅读原版。本篇博客为第一篇读书笔记，记录的章节是第1章：导论。">
-<meta name="twitter:image" content="http://media.zjubiomedit.com/2018-05-28-135912.jpg">
+<meta name="twitter:description" content="本篇博客为《游戏引擎架构》的第一章读书笔记。">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2018-05-28-135927.png">
 
 
 
@@ -408,7 +407,7 @@
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/游戏/游戏引擎/" itemprop="url" rel="index"><span itemprop="name">游戏引擎</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/游戏/游戏开发/" itemprop="url" rel="index"><span itemprop="name">游戏开发</span></a></span>
 
                 
                 
@@ -466,39 +465,83 @@
       
 
       
-        <p><img src="http://media.zjubiomedit.com/2018-05-28-135912.jpg" width="45%" height="45%"></p>
-<p>本系列笔记是对《游戏引擎架构》这本书的阅读记录，参考资源主要为该书的中文译本，感兴趣的童鞋可以去阅读<a href="http://www.latexstudio.net/wp-content/uploads/2014/12/Game_Engine_Architecture-en.pdf" target="_blank" rel="noopener">原版</a>。本篇博客为第一篇读书笔记，记录的章节是<strong>第1章：导论</strong>。</p>
+        <div class="note primary">
+            本篇博客为《游戏引擎架构》的第一章读书笔记。 
+          </div>
 <a id="more"></a>
-<h3 id="典型游戏团队的结构">典型游戏团队的结构</h3>
-<p>游戏工作室通常由5个基本专业领域的人员构成，包括<strong>工程师、艺术家、游戏设计师、制作人及其他管理/支持人员</strong>。</p>
-<h4 id="工程师">工程师</h4>
-<p>工程师设计并实现软件，使游戏及工具得以运行。有时候，工程师分为两类：<strong>运行时</strong>程序员和<strong>工具</strong>程序员。运行时程序员制作引擎和游戏本身；工具程序员制作离线工具，供整个团队使用，以提供团队的工作效率。运行时/工具两方面的工程师都各有专长。资深工程师有时候会被赋予技术领导的角色，如首席工程师、技术总监、首席技术官等。</p>
-<h4 id="艺术家">艺术家</h4>
-<p>艺术家肩负制作游戏中所有视听内容的重任，而这些内容的品质能够决定游戏成败。下面来了解一下艺术家的不同分工。</p>
+<h1 id="典型游戏团队的结构">典型游戏团队的结构</h1>
 <ul>
-<li><strong>概念艺术家</strong> 通过素描或绘画，让团队了解游戏的预设最终面貌。概念艺术家的工作始于游戏开发的概念阶段，一般会在项目的整个生命周期里继续担任美术指导。</li>
-<li><strong>三维建模师</strong> 为游戏世界的所有事物制作三维几何模型。这类人员通常会再细分为两类：前景建模师及背景建模师。由于人物建模与其他物体或场景的建模在技术及工作方式上有很大分别，所以有的公司还有独立的角色建模师。</li>
-<li><strong>纹理艺术家</strong> 制作称为纹理的二维影像。这些纹理用来贴附于三维模型之上，以增加模型的细节及真实感。</li>
-<li><strong>灯光师</strong> 布置游戏世界的静态和动态光源，并通过颜色、亮度、光源方向等设定，加强每个场景的美感及情感。</li>
-<li><strong>动画师</strong> 为游戏中的角色及物体加入动作。如同动画电影制作，在游戏制作过程中，动画师充当演员。</li>
-<li><strong>动画捕捉演员</strong> 提供一些原始的动作数据，这些数据经由动画师整理后，置于游戏中。</li>
-<li><strong>音效设计师</strong> 与工程师紧密合作，制作并混合游戏中的音效及音乐。</li>
-<li><strong>配音演员</strong> 为游戏角色配音。</li>
-<li><strong>作曲家</strong> 为游戏创作音乐。</li>
+<li>游戏工作室通常由 5 个基本专业领域的人员构成，包括<strong>工程师、艺术家、游戏设计师、制作人及其他管理/支持人员</strong></li>
 </ul>
-<p>如同工程师，资深艺术家有时候会成为团队的领导。一些游戏有一位或多位艺术总监，他们是资深的艺术家，负责把控整个游戏的艺术风格，并维持所有团队成员作品的一致性。</p>
-<h4 id="游戏设计师">游戏设计师</h4>
-<p>游戏设计师负责设计玩家体验的互动部分，这部分一般称为<strong>游戏性</strong>。不同种类的游戏设计师，从事不同细致程度的工作。有些游戏团队会聘请一位或多位<strong>作家</strong>。如同其他游戏专业领域，有些资深游戏设计师也会负责管理团队。</p>
-<h4 id="制作人">制作人</h4>
-<p>在不同的工作室里，制作人的角色不尽相同。有些游戏公司，制作人负责管理时间表，并同时承担人力资源经理的职责。有些游戏公司里，制作人主要做资深游戏设计师的工作。还有些游戏工作室，要求制作人作为开发团队和商业部门之间的联系人。有些工作室甚至是完全没有制作人。</p>
-<h4 id="其他工作人员">其他工作人员</h4>
-<p>游戏开发团队通常需要一支非常重要的支持团队，包括工作室的行政管理团队、市场策划团队（或一个与市场研究公司联系的团队，与发行商相关）、行政人员及IT部门。</p>
-<h4 id="发行商及工作室">发行商及工作室</h4>
-<p>游戏的市场策划、制造及分销，通常由发行商负责，而非开发游戏的工作室本身。发行商通常是大企业，如艺电、THQ、维旺迪、索尼、任天堂等。很多游戏工作室并不隶属于个别发行商，这些工作室把他们制作的游戏，卖给出最好条件的发行商，还有一些工作室让单一发行商独家代理他们的游戏。<strong>第一方开发商</strong>是指游戏工作室直接隶属于游戏主机生产商（索尼、任天堂、微软）。这些工作室独家为母公司的游戏硬件制作游戏。</p>
-<h3 id="游戏是什么">游戏是什么</h3>
+<h2 id="工程师">工程师</h2>
+<ul>
+<li>工程师设计并实现软件，使游戏及工具得以运行</li>
+<li>工程师通常分为两类：<strong>运行时</strong>程序员和<strong>工具</strong>程序员
+<ul>
+<li>运行时程序员：制作引擎和游戏本身</li>
+<li>工具程序员：制作离线工具，供整个团队使用，以提供团队的工作效率</li>
+</ul></li>
+</ul>
+<h2 id="艺术家">艺术家</h2>
+<ul>
+<li>艺术家肩负制作游戏中所有视听内容的重任
+<ul>
+<li>而这些内容的品质能够决定游戏成败</li>
+</ul></li>
+<li>艺术家又可以细分为很多种：
+<ul>
+<li><strong>概念艺术家</strong>：通过素描或绘画，让团队了解游戏的预设最终面貌</li>
+<li><strong>三维建模师</strong>：为游戏世界的所有事物制作三维几何模型
+<ul>
+<li>这类人员通常会再细分为两类：前景建模师和背景建模师</li>
+</ul></li>
+<li><strong>纹理艺术家</strong>：制作称为纹理的二维影像
+<ul>
+<li>这些纹理用来贴附于三维模型之上，以增加模型的细节及真实感</li>
+</ul></li>
+<li><strong>灯光师</strong>：布置游戏世界的静态和动态光源</li>
+<li><strong>动画师</strong>：为游戏中的角色及物体加入动作</li>
+<li><strong>动画捕捉演员</strong>：提供一些原始的动作数据
+<ul>
+<li>这些数据经由动画师整理后，置于游戏中</li>
+</ul></li>
+<li><strong>音效设计师</strong>：与工程师紧密合作，制作并混合游戏中的音效及音乐</li>
+<li><strong>配音演员</strong>：为游戏角色配音</li>
+<li><strong>作曲家</strong>：为游戏创作音乐</li>
+</ul></li>
+</ul>
+<h2 id="游戏设计师">游戏设计师</h2>
+<ul>
+<li>游戏设计师负责设计玩家体验的互动部分
+<ul>
+<li>这部分一般称为<strong>游戏性</strong></li>
+</ul></li>
+<li>不同种类的游戏设计师，从事不同细致程度的工作</li>
+<li>有些游戏团队会聘请一位或多位<strong>作家</strong>来创作故事</li>
+</ul>
+<h2 id="制作人">制作人</h2>
+<ul>
+<li>在不同的工作室里，制作人的角色不尽相同
+<ul>
+<li>有些制作人负责管理时间表，并同时承担人力资源经理的职责</li>
+<li>有些制作人主要做资深游戏设计师的工作</li>
+<li>有些制作人是开发团队和商业部门之间的联系人</li>
+</ul></li>
+</ul>
+<h2 id="其他职员">其他职员</h2>
+<ul>
+<li>游戏开发团队通常需要一支非常重要的支持团队，包括：
+<ul>
+<li>工作室的行政管理团队</li>
+<li>市场策划团队</li>
+<li>行政人员</li>
+<li>IT 部门</li>
+</ul></li>
+</ul>
+<h1 id="游戏是什么">游戏是什么</h1>
 <p>“游戏”是什么，每个人多半有自己非常直观的理解。“游戏”一词泛指棋类游戏、纸牌游戏、赌场游戏、军事战争游戏、计算机游戏、孩子们一起玩耍的多种游戏等。学术上还有个“博弈论”，它是指在一个明确的游戏规则框架下，多个代理人选择战略及战术，以求自身利益的最大化。</p>
 <p>在《快乐之道：游戏设计的黄金法则》一书中，拉夫·斯科特把游戏定义为一个互动体验，为玩家提供一连串渐进式挑战，玩家最终能通过学习而精通该游戏。基于本书的主旨，我们会集中讨论一些游戏的子集，子集里的游戏由二维或三维虚拟世界组成，并有少量的玩家。</p>
-<h4 id="电子游戏作为软实时模拟">电子游戏作为软实时模拟</h4>
+<h2 id="电子游戏作为软实时模拟">电子游戏作为软实时模拟</h2>
 <p>大部分二维或三维的电子游戏，会被计算机科学家称为<strong>软实时互动基于代理计算机模拟</strong>的例子。以下，我们会把这个词组分拆讨论，以便理解。</p>
 <p>在大部分电子游戏中，会用数学方式来为一些真实世界（或<strong>想象</strong>世界）的子集<strong>建模</strong>，从而使这些模型能在计算机中运行 。明显地，我们不可能囊括世界上的而所有细节，所以这些模型只是现实或想象世界的简化或近似版本。因此，数学模型是现实或虚拟世界的<strong>模拟</strong>。 <strong>近似化</strong>和<strong>简化</strong>是游戏开发者最有力的两个工具。若能巧妙地运用它们，就算是一个大量简化的模型，也能非常接近现实，难辨真假，而能带来的乐趣也比现实更多。</p>
 <p><strong>基于代理</strong>模拟是指，模拟中多个独立的实体（称为代理一起互动）。此术语非常符合三维电子游戏的描述，游戏中的载具、人物角色、火球、豆子等都可以视为代理，这也是多数游戏采用面向对象编程语言的原因。</p>
@@ -515,7 +558,7 @@ y(t) = \frac 1 2 gt^2 + v_0t + y_0
 y(t+ \Delta t) = F(y(t), \dot{y(t)}, \ddot{y(t)},\ldots)
 \]</span></p>
 <p>即是说，该刚体在 <span class="math inline">\((t+ \Delta t)\)</span> 未来时间的高度，可以用目前的高度、高度的第一导数、高度的第二导数及目前时间 <span class="math inline">\(t\)</span> 为参数的函数来表示。为实现数值式模拟，通常要不断重复计算，以决定每个离散时步的系统状态。游戏也是如此运作的。</p>
-<h3 id="游戏引擎是什么">游戏引擎是什么</h3>
+<h2 id="游戏引擎是什么">游戏引擎是什么</h2>
 <p>游戏引擎这个术语在20世纪90年代中期形成，与第一人称射击游戏如 id Software 公司非常受欢迎的游戏《毁灭战士》有关。《毁灭战士》的软件架构相当清楚地划分成核心软件组件（如三维图形渲染系统、碰撞检测系统和音频系统等）、美术资产、游戏世界、构成玩家体验的游戏规则。这么划分是很有价值的，若另一个开发商取得这类游戏的授权，只要制作新的美术、关卡布局、武器、角色、载具、游戏规则等，对引擎软件做出很少的修改，就可以把游戏打造成新产品。</p>
 <p>这一划分也引发mod社区的兴起。mod是指，一些特殊游戏玩家组成的小组，或小规模的独立游戏工作室，利用原开发商提供的工具箱修改现有的游戏，从而创作出新的游戏。在20世纪90年代末，一些游戏，如《雷神之锤Ⅲ竞技场》和《虚幻》，在设计时就照顾到复用性和mod。今天，游戏开发者可以取得一个游戏引擎的授权，复用其中大部分关键软件组件去制作游戏。</p>
 <p>通常，游戏和其引擎之间的分界线是很模糊的。一些引擎有相当清晰的划分，一些则没有尝试把两者分开。没有工作室可以完美地划分游戏和引擎，因为随着游戏设计的逐渐成形，这两个组件的定义会经常转移。</p>
@@ -524,7 +567,8 @@ y(t+ \Delta t) = F(y(t), \dot{y(t)}, \ddot{y(t)},\ldots)
 <p><img src="http://media.zjubiomedit.com/2018-05-28-135927.png" width="90%" height="90%"></p>
 <p>有些人可能以为游戏引擎能变成一个通用软件，去运行几乎<strong>任何</strong>可以想象到的游戏内容。可是，这个设想至今尚未（或许永远不能）实现。大部分游戏引擎是针对特定游戏及特定硬件平台所精心制作及微调的。出现这种现象，是因为设计高效的软件总是需要取舍，而这些取舍是基于一些假设的，像是一个软件会如何使用及在哪个硬件上运行等。</p>
 <p>随着计算机硬件速度的提高及专用显卡的应用，再加上更高效的渲染算法及数据结构，不同游戏类型的图形引擎差异已经缩小。但是，通用性和最优性仍然需要取舍。按照游戏/硬件平台的特定需求及限制，经常可以通过微调引擎制作更精美的游戏。</p>
-<h3 id="不同游戏类型中的引擎差异">不同游戏类型中的引擎差异</h3>
+<h1 id="不同游戏类型中的引擎差异">不同游戏类型中的引擎差异</h1>
+<p>附：<a href="http://www.latexstudio.net/wp-content/uploads/2014/12/Game_Engine_Architecture-en.pdf" target="_blank" rel="noopener">英文版下载</a></p>
 
       
     </div>
@@ -674,7 +718,7 @@ y(t+ \Delta t) = F(y(t), \dot{y(t)}, \ddot{y(t)},\ldots)
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-count">21</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -772,7 +816,9 @@ y(t+ \Delta t) = F(y(t), \dot{y(t)}, \ddot{y(t)},\ldots)
                     
                       
                     
-                    <span class="site-state-item-count">14</span>
+                      
+                    
+                    <span class="site-state-item-count">15</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -856,7 +902,7 @@ y(t+ \Delta t) = F(y(t), \dot{y(t)}, \ddot{y(t)},\ldots)
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#典型游戏团队的结构"><span class="nav-number">1.</span> <span class="nav-text">典型游戏团队的结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#工程师"><span class="nav-number">1.1.</span> <span class="nav-text">工程师</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#艺术家"><span class="nav-number">1.2.</span> <span class="nav-text">艺术家</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#游戏设计师"><span class="nav-number">1.3.</span> <span class="nav-text">游戏设计师</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#制作人"><span class="nav-number">1.4.</span> <span class="nav-text">制作人</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#其他工作人员"><span class="nav-number">1.5.</span> <span class="nav-text">其他工作人员</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#发行商及工作室"><span class="nav-number">1.6.</span> <span class="nav-text">发行商及工作室</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#游戏是什么"><span class="nav-number">2.</span> <span class="nav-text">游戏是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#电子游戏作为软实时模拟"><span class="nav-number">2.1.</span> <span class="nav-text">电子游戏作为软实时模拟</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#游戏引擎是什么"><span class="nav-number">3.</span> <span class="nav-text">游戏引擎是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不同游戏类型中的引擎差异"><span class="nav-number">4.</span> <span class="nav-text">不同游戏类型中的引擎差异</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#典型游戏团队的结构"><span class="nav-number">1.</span> <span class="nav-text">典型游戏团队的结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#工程师"><span class="nav-number">1.1.</span> <span class="nav-text">工程师</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#艺术家"><span class="nav-number">1.2.</span> <span class="nav-text">艺术家</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#游戏设计师"><span class="nav-number">1.3.</span> <span class="nav-text">游戏设计师</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#制作人"><span class="nav-number">1.4.</span> <span class="nav-text">制作人</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他职员"><span class="nav-number">1.5.</span> <span class="nav-text">其他职员</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#游戏是什么"><span class="nav-number">2.</span> <span class="nav-text">游戏是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#电子游戏作为软实时模拟"><span class="nav-number">2.1.</span> <span class="nav-text">电子游戏作为软实时模拟</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#游戏引擎是什么"><span class="nav-number">2.2.</span> <span class="nav-text">游戏引擎是什么</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#不同游戏类型中的引擎差异"><span class="nav-number">3.</span> <span class="nav-text">不同游戏类型中的引擎差异</span></a></li></ol></div>
             
 
           </div>
