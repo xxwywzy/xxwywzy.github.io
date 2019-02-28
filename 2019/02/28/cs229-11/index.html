@@ -96,28 +96,29 @@
 
 
 
-  <meta name="description" content="本篇博客为CS229第二篇学习笔记，主要内容包括线性回归模型的概率解释和局部加权线性回归。">
-<meta name="keywords" content="CS229,线性回归,机器学习">
+  <meta name="description" content="本篇博客为 CS229 学习笔记第十一部分，主题是：主成分分析。">
+<meta name="keywords" content="CS229">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CS229学习笔记之二：线性回归的概率解释">
-<meta property="og:url" content="https://xxwywzy.github.io/2018/03/15/CS229-2/index.html">
+<meta property="og:title" content="CS229 学习笔记之十一：主成分分析">
+<meta property="og:url" content="https://xxwywzy.github.io/2019/02/28/cs229-11/index.html">
 <meta property="og:site_name" content="xxwywzy&#39;s Blog">
-<meta property="og:description" content="本篇博客为CS229第二篇学习笔记，主要内容包括线性回归模型的概率解释和局部加权线性回归。">
+<meta property="og:description" content="本篇博客为 CS229 学习笔记第十一部分，主题是：主成分分析。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-133419.jpg">
-<meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-133438.png">
-<meta property="og:updated_time" content="2019-02-01T14:17:50.479Z">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-02-27-013445.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-02-27-015435.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-02-28-024212.png">
+<meta property="og:updated_time" content="2019-02-28T02:47:02.870Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CS229学习笔记之二：线性回归的概率解释">
-<meta name="twitter:description" content="本篇博客为CS229第二篇学习笔记，主要内容包括线性回归模型的概率解释和局部加权线性回归。">
-<meta name="twitter:image" content="http://media.zjubiomedit.com/2018-05-28-133419.jpg">
+<meta name="twitter:title" content="CS229 学习笔记之十一：主成分分析">
+<meta name="twitter:description" content="本篇博客为 CS229 学习笔记第十一部分，主题是：主成分分析。">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2019-02-27-013445.png">
 
 
 
 
 
 
-  <link rel="canonical" href="https://xxwywzy.github.io/2018/03/15/CS229-2/"/>
+  <link rel="canonical" href="https://xxwywzy.github.io/2019/02/28/cs229-11/"/>
 
 
 
@@ -127,7 +128,7 @@
   };
 </script>
 
-  <title>CS229学习笔记之二：线性回归的概率解释 | xxwywzy's Blog</title>
+  <title>CS229 学习笔记之十一：主成分分析 | xxwywzy's Blog</title>
   
 
 
@@ -340,7 +341,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2018/03/15/CS229-2/"/>
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2019/02/28/cs229-11/"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Zheyu Wang"/>
@@ -357,7 +358,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">CS229学习笔记之二：线性回归的概率解释
+          <h1 class="post-title" itemprop="name headline">CS229 学习笔记之十一：主成分分析
 
               
             
@@ -383,7 +384,7 @@
                 
               
 
-              <time title="创建时间：2018-03-15 22:11:30" itemprop="dateCreated datePublished" datetime="2018-03-15T22:11:30+08:00">2018-03-15</time>
+              <time title="创建时间：2019-02-28 10:27:08" itemprop="dateCreated datePublished" datetime="2019-02-28T10:27:08+08:00">2019-02-28</time>
             
 
             
@@ -405,6 +406,13 @@
 
                 
                 
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/人工智能/机器学习/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a></span>
+
+                
+                
               
             </span>
           
@@ -419,8 +427,8 @@
                   <i class="fa fa-comment-o"></i>
                 </span>
             
-                <a href="/2018/03/15/CS229-2/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/03/15/CS229-2/" itemprop="commentCount"></span>
+                <a href="/2019/02/28/cs229-11/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/02/28/cs229-11/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -428,7 +436,7 @@
 
           
           
-            <span id="/2018/03/15/CS229-2/" class="leancloud_visitors" data-flag-title="CS229学习笔记之二：线性回归的概率解释">
+            <span id="/2019/02/28/cs229-11/" class="leancloud_visitors" data-flag-title="CS229 学习笔记之十一：主成分分析">
               <span class="post-meta-divider">|</span>
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
@@ -459,67 +467,127 @@
       
 
       
-        <p><img src="http://media.zjubiomedit.com/2018-05-28-133419.jpg" width="75%" height="75%"></p>
-<p>本篇博客为CS229第二篇学习笔记，主要内容包括线性回归模型的概率解释和局部加权线性回归。</p>
+        <div class="note info">
+            本篇博客为 CS229 学习笔记第十一部分，主题是：主成分分析。 
+          </div>
 <a id="more"></a>
-<h3 id="线性回归模型的概率解释">线性回归模型的概率解释</h3>
-<p>在线性回归中，为什么要选择最小二乘函数作为代价函数？我们可以用概率模型来对其进行解释。</p>
-<h4 id="概率模型">概率模型</h4>
-<p>假设真实值与输入之间满足如下等式： <span class="math display">\[
-y^{(i)} = \theta^Tx^{(i)}+\epsilon^{(i)}
-\]</span> 其中<span class="math inline">\(\epsilon^{(i)}\)</span>是误差项，表示没有被建模的因素或是随机噪声。进一步假设误差项是独立同分布的，那么根据中心极限定理，大量相互独立的随机变量之和是符合正态分布（可以理解为大量独立随机变量的大部分误差会相互抵消），即<span class="math inline">\(\epsilon^{(i)}\sim {\cal N} (0,\sigma^2)\)</span>，那么有： <span class="math display">\[
-p(\epsilon^{(i)}) = \frac{1}{\sqrt{2\pi}\sigma}\text{exp}\left(-\frac{(\epsilon^{(i)})^2}{2\sigma^2}\right)
-\]</span> 因为误差的概率和预测出真实值的概率是一样的，因此： <span class="math display">\[
-p(y^{(i)} \,\rvert \,x^{(i)};\theta ) = \frac{1}{\sqrt{2\pi}\sigma}\text{exp}\left(-\frac{(y^{(i)} - \theta^Tx^{(i)})^2}{2\sigma^2}\right)
-\]</span> 注意，这里<span class="math inline">\(p(y^{(i)} \,\rvert \,x^{(i)};\theta )\)</span>不同于<span class="math inline">\(p(y^{(i)} \,\rvert \,x^{(i)},\theta )\)</span>，这里指给定<span class="math inline">\(x^{(i)}\)</span>，以<span class="math inline">\(\theta\)</span>为参数的<span class="math inline">\(y^{(i)}\)</span>的分布，因为对于训练集，<span class="math inline">\(\theta\)</span>是客观存在的，只是当前还不确定，所以有 <span class="math display">\[
-y^{(i)} \,\rvert \,x^{(i)};\theta\sim {\cal N }(\theta^Tx^{(i)},\sigma^2)
-\]</span> 即真实值应该是以预测值为中心的一个正态分布。</p>
-<h4 id="似然函数">似然函数</h4>
-<p>给定训练集<span class="math inline">\({X}\)</span>和参数<span class="math inline">\(\theta\)</span>，预测结果等于真实结果的概率，将其看作<span class="math inline">\(\theta\)</span>的函数，可以理解为<span class="math inline">\(\theta\)</span>为真实<span class="math inline">\(\theta\)</span>的可能性（似然性），即： <span class="math display">\[
-L(\theta)=L(\theta;X,\vec y)=p(\vec y  \,\rvert\, X;\theta)
-\]</span> 因为假设<span class="math inline">\(\epsilon^{(i)}\)</span>是独立的（即给定<span class="math inline">\(x^{(i)}\)</span>，<span class="math inline">\(y^{(i)}\)</span>也是独立的），所以有： <span class="math display">\[
-\begin{align*}
-L(\theta) &amp;= \prod_{i=1}^m p(y^{(i)}\,\lvert\,x^{(i)};\theta)\\
-&amp;=\prod_{i=1}^m  \frac{1}{\sqrt{2\pi}\sigma}\text{exp}\left(-\frac{(y^{(i)} - \theta^Tx^{(i)})^2}{2\sigma^2}\right)
-\end{align*}
-\]</span> 现在，我们可以通过<strong>最大似然法</strong>，即找出使<span class="math inline">\(L(\theta)\)</span>最大的那个<span class="math inline">\(\theta\)</span>，作为对参数<span class="math inline">\(\theta\)</span>的最佳取值。</p>
-<p>实际应用中，为了简化计算，通常不直接求似然函数的最大值，而是采用<strong>对数似然</strong>函数： <span class="math display">\[
-\begin{align*}
-\ell(\theta) &amp;= \text{log}L(\theta)\\
-&amp;= \text{log}\prod_{i=1}^m \frac{1}{\sqrt{2\pi}\sigma}\text{exp}\left(-\frac{(y^{(i)} - \theta^Tx^{(i)})^2}{2\sigma^2}\right)\\
-&amp;= \sum_{i=1}^m\text{log}\frac{1}{\sqrt{2\pi}\sigma}\text{exp}\left(-\frac{(y^{(i)} - \theta^Tx^{(i)})^2}{2\sigma^2}\right)\\
-&amp;=m\text{log}\frac{1}{\sqrt{2\pi}\sigma}-\frac{1}{\sigma^2} \cdot \frac 1 2 \sum_{i=1}^m(y^{(i)} - \theta^Tx^{(i)})^2
-\end{align*}
-\]</span> 因此，最大化<span class="math inline">\(l(\theta)\)</span>就是最小化： <span class="math display">\[
- \frac 1 2 \sum_{i=1}^m(y^{(i)} - \theta^Tx^{(i)})^2
-\]</span> 而这正是我们之前提出的<strong>最小二乘代价函数</strong>！</p>
-<p>注意点：</p>
+<h1 id="引入">引入</h1>
 <ul>
-<li>概率解释只是对最小二乘法的一种合理解释，其实还有其他的解释方法</li>
-<li><span class="math inline">\(\theta\)</span>的选择并不依赖于<span class="math inline">\(\sigma^2\)</span>，即使它是未知的</li>
+<li>在上一章，我们介绍了因子分析，其给出了一种将 <span class="math inline">\(n\)</span> 维数据 <span class="math inline">\(x\)</span> 在 <span class="math inline">\(k\)</span> 维子空间中建模的方法
+<ul>
+<li>其基于概率模型，通过 EM 算法来估计参数</li>
+</ul></li>
+<li>本章我们将介绍另一种降维方法：<strong>主成分分析</strong>法（PCA）
+<ul>
+<li>该方法更加直接，只需要特征向量的计算，不需要 EM 求解</li>
+</ul></li>
+<li>给定一个数据集 <span class="math inline">\(\{x^{(i)};i=1,\ldots,m\}\)</span>，其中 <span class="math inline">\(x^{(i)} \in \mathbb{R}^n (n \ll m)\)</span>
+<ul>
+<li>假定该数据集来自对无线电控制直升机飞行员的调查，而其中的两个属性分别为飞行员的技能评估和其对飞行的感兴趣长度</li>
+<li>考虑到飞行的特殊性，这两个属性是存在正相关关系的，即实际上数据的信息量是 n-1 维的</li>
+<li>PCA 解决的就是如何将多余属性去除的问题</li>
+</ul></li>
+<li><p>将上述两个属性使用坐标图进行展示，得到：</p>
+<p><img src="http://media.zjubiomedit.com/2019-02-27-013445.png" width="50%"></p>
+<ul>
+<li>可以看到，<span class="math inline">\(u1\)</span> 展示出了数据之间的相关性，称之为“主方向”</li>
+<li><span class="math inline">\(u2\)</span> 则代表主方向之外的噪声</li>
+<li>PCA 要做的就是找到主方向，并将数据投影到该方向，达到降维的目的</li>
+</ul></li>
 </ul>
-<h3 id="局部加权线性回归">局部加权线性回归</h3>
-<h4 id="欠拟合与过拟合">欠拟合与过拟合</h4>
-<p>对于传统的线性回归，特征的选择极为重要，对于下面三幅图，我们称第一幅图的模型是<strong>欠拟合</strong>，第三幅图的模型则是<strong>过拟合</strong>。</p>
-<p><img src="http://media.zjubiomedit.com/2018-05-28-133438.png" width="75%" height="75%"></p>
-<p>可以看出，找到一个全局的线性模型去拟合整个训练集，并不是一件简单的事情，往往会引起欠拟合或是过拟合的发生，对于这种情况之后会给出解决方案，而这里我们提出了另外一种思路，即<strong>局部线性加权回归</strong>，这种方案可以使特征的选择的重要性降低。</p>
-<h4 id="算法思路">算法思路</h4>
-<p>局部线性加权回归的思路是并不去拟合整个训练集来产生全局的模型，而是在每次预测时，只去拟合给定输入x附近的一小段训练集，无论全局训练集是怎样的一条分布曲线，在局部小段数据上，都可以用线性去逼近。具体步骤如下： <span class="math display">\[
-\begin{align*}
-1.\,&amp; \text{Fit} \;\theta\;\text{to minimize}\;\sum_i\omega^{(i)}(y^{(i)} - \theta^Tx^{(i)})^2\\
-2.\,&amp; \text{Output} \;\theta^Tx
-\end{align*}
+<h1 id="算法流程">算法流程</h1>
+<h2 id="预处理">预处理</h2>
+<ul>
+<li>在运行 PCA 算法之前，需要首先进行预处理来归一化数据均值及方差：
+<ol type="1">
+<li>令 <span class="math inline">\(\mu = \frac 1 m \sum_{i=1}^m x^{(i)}\)</span></li>
+<li>使用 <span class="math inline">\(x^{(i)} -\mu\)</span> 来替代 <span class="math inline">\(x^{(i)}\)</span></li>
+<li>令 <span class="math inline">\(\sigma_j^2 = \frac 1 m \sum_i (x_j^{(i)})^2\)</span></li>
+<li>使用 <span class="math inline">\(x^{(i)}_j / \sigma_j\)</span> 来替代 <span class="math inline">\(x^{(i)}\)</span></li>
+</ol></li>
+<li>前两步将数据的均值变为 0（已知均值为 0 时可以省略）</li>
+<li>后两步将数据每个维度的方差变为 1（已知数据各维度处于同一尺度下时可以省略）</li>
+</ul>
+<h2 id="计算主方向">计算主方向</h2>
+<ul>
+<li>计算主方向的方法之一是找到单位向量 <span class="math inline">\(u\)</span>，使得数据在该方向上的投影的<strong>方差最大化</strong>
+<ul>
+<li>直观上来看，原始数据必然存在一定的方差（信息），而我们希望投影后的数据（降维后）在子空间尽量保留原始数据的信息，即方差最大化</li>
+</ul></li>
+<li><p>以如下数据集为例（归一化已完成）：</p>
+<p><img src="http://media.zjubiomedit.com/2019-02-27-015435.png" width="80%"></p>
+<ul>
+<li>可以看到，图 2 方向上的投影相比图 3 距离原点更远，方差更大</li>
+<li>我们希望能够自动找到类似图 2 的方向</li>
+</ul></li>
+<li>下面给出寻找该方向的方法：
+<ul>
+<li>给定一个单位向量 <span class="math inline">\(u\)</span> 和一个点 <span class="math inline">\(x\)</span>，其投影长度（距离原点）为 <span class="math inline">\(x^Tu\)</span></li>
+<li><p>因此，为了最大化投影的方差，即最大化： <span class="math display">\[
+\begin{aligned}
+\frac 1 m \sum_{i=1}^m (x^{(i)^T}u)^2 &amp;= \frac 1 m \sum_{i=1}^m u^Tx^{(i)}x^{(i)^T}u \\ &amp;= u^T\left(\frac 1 m \sum_{i=1}^m x^{(i)}x^{(i)^T}\right) u
+\end{aligned}
 \]</span></p>
-<p>这里<span class="math inline">\(\omega^{(i)}\)</span>是非负<strong>权重</strong>，一般取为</p>
-<p><span class="math display">\[
-\omega^{(i)}=exp\left(-\frac{(x^{(i)}-x)^2}{2\tau^2}\right)
-\]</span> （当x为向量时表达式有所不同）</p>
-<p>可以看出，离给定输入越近的样本点权重越大，拟合程度越高。</p>
-<p>注意：<span class="math inline">\(\omega^{(i)}\)</span>的定义与高斯分布类似，但并没有关系，分布曲线同为钟型。<span class="math inline">\(\tau\)</span>称为<strong>带宽参数</strong>，用来控制钟型曲线的顶峰下降速度，即权重变化的快慢，需要根据具体情况作出调整。</p>
-<h4 id="参数与非参数">参数与非参数</h4>
-<p>局部加权线性回归本质上是一种<strong>非参数学习算法</strong>，而传统的线性回归是一种<strong>参数学习算法</strong>。</p>
-<p>两者的区别在于参数学习算法有一组有限的、固定的参数，一旦完成拟合，只需要保存下参数值做预测，而不需要保存完整的训练集；而非参数学习算法由于参数不固定，所以需要保存完整的训练集来进行预测，而不仅仅是保存参数。</p>
-<p><strong>非参数</strong>导致的结果：为了表达假设h而保存的数据将随着训练集的大小而线性增长。</p>
+<ul>
+<li>对于归一化后的数据，其投影点的均值也为 0，因此方差计算为直接平方</li>
+<li>该公式有一个约束条件：<span class="math inline">\(||u||_2 =1\)</span></li>
+</ul></li>
+<li>利用拉格朗日方程，可以求得该最大化问题的解即为经验协方差矩阵 <span class="math inline">\(\Sigma = \frac 1 m \sum_{i=1}^m x^{(i)}x^{(i)^T}\)</span> 的<strong>主要特征向量</strong>
+<ul>
+<li><p>构建如下拉格朗日方程： <span class="math display">\[
+\ell = u^T\Sigma u - \lambda(u^Tu-1)
+\]</span></p></li>
+<li><p>对 <span class="math inline">\(u\)</span> 求导，得到： <span class="math display">\[
+\begin{aligned}
+\nabla_u \ell &amp;= \nabla_u u^T\Sigma u - \nabla_u u^Tu \\
+&amp;= \nabla_u \text{tr}(u^T\Sigma u) - \nabla_u \text{tr}(u^Tu) \\
+&amp;= \left(\nabla_{u^T} \text{tr}(u^T\Sigma u)\right)^T - \left(\nabla_{u^T} \text{tr}(u^Tu)\right)^T \\
+&amp;= (\Sigma u)^{T^T} - \lambda u^{T^T} \\
+&amp;= \Sigma u - \lambda u
+\end{aligned}
+\]</span></p>
+<ul>
+<li>令导数为 0，得 <span class="math inline">\(\Sigma u = \lambda u\)</span>，即 <span class="math inline">\(u\)</span> 为 <span class="math inline">\(\Sigma\)</span> 的特征向量，其特征值为 <span class="math inline">\(\lambda\)</span></li>
+</ul></li>
+</ul></li>
+<li>综上所述，如果我们需要将数据降至 1 维，则应该选择 <span class="math inline">\(\Sigma\)</span> 的主要特征向量 <span class="math inline">\(u\)</span> 作为主方向（特征值最大）</li>
+<li>当需要将数据降为 k 维时（<span class="math inline">\(k&lt;n\)</span>），我们应该选择 <span class="math inline">\(\Sigma\)</span> 的前 k 个特征向量 <span class="math inline">\(u_1, \ldots, u_k\)</span> 作为主方向（因为 <span class="math inline">\(\Sigma\)</span> 是对称矩阵，所以其可以得到 n 个相互正交的特征向量）
+<ul>
+<li>前 k 个即最大的 k 个特征值所对应的特征向量</li>
+<li>这些特征向量形成了一个新的正交基底（k 维）</li>
+</ul></li>
+<li><p>基于该基底，可以将 <span class="math inline">\(x^{(i)}\)</span> 进行降维： <span class="math display">\[
+y^{(i)} = \left[\begin{array}{cc}
+u_1^Tx^{(i)} \\
+u_2^Tx^{(i)} \\
+\vdots \\
+u_k^Tx^{(i)}
+\end{array} 
+\right] \in \mathbb{R}^k
+\]</span></p>
+<ul>
+<li>向量 <span class="math inline">\(u_1, \ldots, u_k\)</span> 被称为数据的前 k 个<strong>主成分</strong></li>
+</ul></li>
+</ul></li>
+</ul>
+<h1 id="算法应用">算法应用</h1>
+<ul>
+<li>数据可视化
+<ul>
+<li>将数据降至2-3维后进行可视化</li>
+</ul></li>
+<li>数据预处理
+<ul>
+<li>在运行算法之前对数据进行降维，不仅能够提升计算速度，还能够降低假设的复杂性，避免过拟合</li>
+<li>对线性分类器即意味着 VC 维的减小</li>
+</ul></li>
+<li>降噪
+<ul>
+<li>去除数据中的无关干扰因素</li>
+</ul></li>
+</ul>
+<h1 id="思维导图">思维导图</h1>
+<p><img src="http://media.zjubiomedit.com/2019-02-28-024212.png" width="100%"></p>
 
       
     </div>
@@ -553,7 +621,7 @@ L(\theta) &amp;= \prod_{i=1}^m p(y^{(i)}\,\lvert\,x^{(i)};\theta)\\
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
     
-    <a href="https://xxwywzy.github.io/2018/03/15/CS229-2/" title="CS229学习笔记之二：线性回归的概率解释">https://xxwywzy.github.io/2018/03/15/CS229-2/</a>
+    <a href="https://xxwywzy.github.io/2019/02/28/cs229-11/" title="CS229 学习笔记之十一：主成分分析">https://xxwywzy.github.io/2019/02/28/cs229-11/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
@@ -568,10 +636,6 @@ L(\theta) &amp;= \prod_{i=1}^m p(y^{(i)}\,\lvert\,x^{(i)};\theta)\\
           
             <a href="/tags/CS229/" rel="tag"># CS229</a>
           
-            <a href="/tags/线性回归/" rel="tag"># 线性回归</a>
-          
-            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
-          
         </div>
       
 
@@ -583,8 +647,8 @@ L(\theta) &amp;= \prod_{i=1}^m p(y^{(i)}\,\lvert\,x^{(i)};\theta)\\
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/03/14/CS229-1/" rel="next" title="CS229 学习笔记之一：线性回归">
-                <i class="fa fa-chevron-left"></i> CS229 学习笔记之一：线性回归
+              <a href="/2019/02/19/cs229-10/" rel="next" title="CS229 学习笔记之十：因子分析">
+                <i class="fa fa-chevron-left"></i> CS229 学习笔记之十：因子分析
               </a>
             
           </div>
@@ -592,10 +656,6 @@ L(\theta) &amp;= \prod_{i=1}^m p(y^{(i)}\,\lvert\,x^{(i)};\theta)\\
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/03/18/CS229-3/" rel="prev" title="CS229学习笔记之三：逻辑回归">
-                CS229学习笔记之三：逻辑回归 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -857,7 +917,7 @@ L(\theta) &amp;= \prod_{i=1}^m p(y^{(i)}\,\lvert\,x^{(i)};\theta)\\
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#线性回归模型的概率解释"><span class="nav-number">1.</span> <span class="nav-text">线性回归模型的概率解释</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#概率模型"><span class="nav-number">1.1.</span> <span class="nav-text">概率模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#似然函数"><span class="nav-number">1.2.</span> <span class="nav-text">似然函数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#局部加权线性回归"><span class="nav-number">2.</span> <span class="nav-text">局部加权线性回归</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#欠拟合与过拟合"><span class="nav-number">2.1.</span> <span class="nav-text">欠拟合与过拟合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#算法思路"><span class="nav-number">2.2.</span> <span class="nav-text">算法思路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参数与非参数"><span class="nav-number">2.3.</span> <span class="nav-text">参数与非参数</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#引入"><span class="nav-number">1.</span> <span class="nav-text">引入</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#算法流程"><span class="nav-number">2.</span> <span class="nav-text">算法流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#预处理"><span class="nav-number">2.1.</span> <span class="nav-text">预处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#计算主方向"><span class="nav-number">2.2.</span> <span class="nav-text">计算主方向</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#算法应用"><span class="nav-number">3.</span> <span class="nav-text">算法应用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#思维导图"><span class="nav-number">4.</span> <span class="nav-text">思维导图</span></a></li></ol></div>
             
 
           </div>

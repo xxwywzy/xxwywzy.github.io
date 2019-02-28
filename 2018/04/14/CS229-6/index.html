@@ -107,7 +107,7 @@
 <meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-134336.jpg">
 <meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-134347.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-134401.png">
-<meta property="og:updated_time" content="2019-02-01T14:18:28.138Z">
+<meta property="og:updated_time" content="2019-02-28T02:25:21.098Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS229学习笔记之六：朴素贝叶斯">
 <meta name="twitter:description" content="本篇博客为CS229第六篇学习笔记，主要内容包括朴素贝叶斯算法、拉普拉斯平滑以及文本分类的事件模型。">
@@ -477,7 +477,7 @@
 p(x_1,\ldots,x_{50000}\mid y) &amp;=  
 p(x_1 \mid y) p(x_2 \mid y,x_1)p(x_3 \mid y,x_1,x_2)\cdots p(x_{50000} \mid y,x_1, \ldots, x_{49999})\\
 &amp;=p(x_1 \mid y)p(x_2 \mid y) p(x_3 \mid y)\cdot p(x_{50000} \mid y)\\
-&amp;= \prod_{i=1}^np(x^{(i)}\mid y)
+&amp;= \prod_{j=1}^np(x_j\mid y)
 \end{align*}
 \]</span></p>
 <p>第一个等式来自于概率的基本性质，第二个等式则使用了朴素贝叶斯假设。即使这个假设在现实中不一定成立，但其实际的效果还是不错的。</p>
@@ -738,7 +738,7 @@ p(y=1 \mid x) &amp;= \frac {(\prod_{i=1}^n p(x_i \mid y=1))p(y=1)}{(\prod_{i=1}^
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">21</span>
+                    <span class="site-state-item-count">22</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

@@ -106,7 +106,8 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-01-15-013548.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-01-30-020919.png">
-<meta property="og:updated_time" content="2019-02-22T08:04:58.417Z">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-02-28-021935.png">
+<meta property="og:updated_time" content="2019-02-28T02:25:43.020Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS229 学习笔记之九：聚类问题与 EM 算法">
 <meta name="twitter:description" content="本篇博客为 CS229 学习笔记第九部分，主题是：聚类问题与 EM 算法。">
@@ -757,8 +758,8 @@ w_j^{(i)} = Q_i(z^{(i)} = j) = P(z^{(i)} = j|x^{(i)};\phi,\mu,\Sigma)
 </ul></li>
 </ul></li>
 </ul>
-<h1 id="混合朴素贝叶斯模型">混合朴素贝叶斯模型</h1>
-<p>未完待续</p>
+<h1 id="思维导图">思维导图</h1>
+<p><img src="http://media.zjubiomedit.com/2019-02-28-021935.png" width="100%"></p>
 
       
     </div>
@@ -908,7 +909,7 @@ w_j^{(i)} = Q_i(z^{(i)} = j) = P(z^{(i)} = j|x^{(i)};\phi,\mu,\Sigma)
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">21</span>
+                    <span class="site-state-item-count">22</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1092,7 +1093,7 @@ w_j^{(i)} = Q_i(z^{(i)} = j) = P(z^{(i)} = j|x^{(i)};\phi,\mu,\Sigma)
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#k-means-聚类"><span class="nav-number">1.</span> <span class="nav-text">K-means 聚类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#混合高斯分布"><span class="nav-number">2.</span> <span class="nav-text">混合高斯分布</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#em-算法初步"><span class="nav-number">3.</span> <span class="nav-text">EM 算法初步</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#jensen-不等式"><span class="nav-number">4.</span> <span class="nav-text">Jensen 不等式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#函数的凹凸性"><span class="nav-number">4.1.</span> <span class="nav-text">函数的凹凸性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定理"><span class="nav-number">4.2.</span> <span class="nav-text">定理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#em-算法"><span class="nav-number">5.</span> <span class="nav-text">EM 算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#算法的导出"><span class="nav-number">5.1.</span> <span class="nav-text">算法的导出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#收敛性证明"><span class="nav-number">5.2.</span> <span class="nav-text">收敛性证明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#坐标上升法"><span class="nav-number">5.3.</span> <span class="nav-text">坐标上升法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#混合高斯模型复盘"><span class="nav-number">6.</span> <span class="nav-text">混合高斯模型复盘</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#混合朴素贝叶斯模型"><span class="nav-number">7.</span> <span class="nav-text">混合朴素贝叶斯模型</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#k-means-聚类"><span class="nav-number">1.</span> <span class="nav-text">K-means 聚类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#混合高斯分布"><span class="nav-number">2.</span> <span class="nav-text">混合高斯分布</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#em-算法初步"><span class="nav-number">3.</span> <span class="nav-text">EM 算法初步</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#jensen-不等式"><span class="nav-number">4.</span> <span class="nav-text">Jensen 不等式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#函数的凹凸性"><span class="nav-number">4.1.</span> <span class="nav-text">函数的凹凸性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定理"><span class="nav-number">4.2.</span> <span class="nav-text">定理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#em-算法"><span class="nav-number">5.</span> <span class="nav-text">EM 算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#算法的导出"><span class="nav-number">5.1.</span> <span class="nav-text">算法的导出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#收敛性证明"><span class="nav-number">5.2.</span> <span class="nav-text">收敛性证明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#坐标上升法"><span class="nav-number">5.3.</span> <span class="nav-text">坐标上升法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#混合高斯模型复盘"><span class="nav-number">6.</span> <span class="nav-text">混合高斯模型复盘</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#思维导图"><span class="nav-number">7.</span> <span class="nav-text">思维导图</span></a></li></ol></div>
             
 
           </div>
