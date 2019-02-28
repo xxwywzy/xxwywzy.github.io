@@ -106,7 +106,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-02-05-060331.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-02-05-062839.png">
-<meta property="og:updated_time" content="2019-02-06T13:18:42.000Z">
+<meta property="og:updated_time" content="2019-02-28T14:58:57.711Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS229 学习笔记之一：线性回归">
 <meta name="twitter:description" content="本篇博客为 CS229 学习笔记第一部分，主题是：线性回归。">
@@ -509,16 +509,16 @@ J(\theta) = \frac 1 2 \sum_{i=1}^m \left(h_\theta(x^{(i)})-y^{(i)}\right)^2
 \theta_j := \theta_j+\alpha\left(y^{(i)}-h_\theta(x^{(i)})\right)x^{(i)}_j\tag{2}
 \]</span></p>
 <ul>
-<li>上述的结果通过数学变换将减号变成了加号， ⽅便之后与逻辑回归的结果作⽐较</li>
+<li>上述的结果通过数学变换将减号变成了加号，方便之后与逻辑回归的结果作比较</li>
 </ul></li>
 </ul>
 <h3 id="分类">分类</h3>
 <ul>
 <li>梯度下降主要可以分为两类：<strong>批量梯度下降</strong>和<strong>随机梯度下降</strong></li>
-<li>批量梯度下降：每次计算梯度都需要遍历所有的样本点，当样本量很⼤时， 计算速度会⼗分缓慢</li>
-<li>随机梯度下降：每次只考虑⼀个样本点，⽽不是所有样本点，计算速度会提⾼， 但是收敛过程会⽐较曲折， 可能⽆法精确收敛⾄最优值
+<li>批量梯度下降：每次计算梯度都需要遍历所有的样本点，当样本量很大时， 计算速度会十分缓慢</li>
+<li>随机梯度下降：每次只考虑⼀个样本点，而不是所有样本点，计算速度会提高，但是收敛过程会⽐较曲折，可能⽆法精确收敛⾄最优值
 <ul>
-<li>随机梯度下降的优化：⼩批量梯度下降，利⽤矩阵并⾏运算，⼀次处理⼩批量的样本点，有时可以⽐随机梯度下降速度更快</li>
+<li>随机梯度下降的优化：小批量梯度下降，利用矩阵并⾏运算，⼀次处理小批量的样本点，有时可以比随机梯度下降速度更快</li>
 </ul></li>
 </ul>
 <h3 id="梯度方向的选择">梯度方向的选择</h3>
