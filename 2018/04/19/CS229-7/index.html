@@ -111,7 +111,7 @@
 <meta property="og:image" content="http://media.zjubiomedit.com/2018-07-26-014831.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2018-07-26-015037.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2018-07-26-015157.png">
-<meta property="og:updated_time" content="2019-02-01T14:18:37.114Z">
+<meta property="og:updated_time" content="2019-02-01T14:18:37.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS229学习笔记之七：支持向量机">
 <meta name="twitter:description" content="本篇博客为CS229第七篇学习笔记，主要内容为对支持向量机算法的系统介绍。">
@@ -486,7 +486,7 @@
 <p>注：在前几部分的讨论中，我们默认数据是线性可分的。（之后会讨论线性不可分的情况）</p>
 <h3 id="符号变换">符号变换</h3>
 <p>为了更好地说明 SVM，我们将修改一些之前定义过的符号：</p>
-<ol type="1">
+<ol style="list-style-type: decimal">
 <li>在逻辑回归中，我们使用 0,1 来表示两个类，现在将改用 -1,+1 ，即 <span class="math inline">\(y \in \{-1,+1\}\)</span>；</li>
 <li>在逻辑回归中，我们使用向量 <span class="math inline">\(\theta\)</span> 作为参数，现在我们将使用参数 <span class="math inline">\(\omega\)</span> 和 <span class="math inline">\(b\)</span>，即 <span class="math inline">\(h_{w,b}(x)=g(w^Tx+b)\)</span>，其中 <span class="math inline">\(\omega\)</span> 相当于 <span class="math inline">\({\begin{bmatrix} \theta_1 \ldots \theta_n \end{bmatrix}}^T\)</span>，<span class="math inline">\(b\)</span> 相当于 <span class="math inline">\(\theta_0\)</span>；</li>
 <li>在逻辑回归中，我们的 g 是 sigmoid 函数，现在改为： <span class="math display">\[
@@ -1057,7 +1057,7 @@ L &amp;\text{if} \; \alpha_2^{new,unclipped} &lt; L
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">22</span>
+                    <span class="site-state-item-count">23</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1157,7 +1157,9 @@ L &amp;\text{if} \; \alpha_2^{new,unclipped} &lt; L
                     
                       
                     
-                    <span class="site-state-item-count">15</span>
+                      
+                    
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

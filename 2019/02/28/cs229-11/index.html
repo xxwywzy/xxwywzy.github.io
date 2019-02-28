@@ -107,7 +107,7 @@
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-02-27-013445.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-02-27-015435.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-02-28-024212.png">
-<meta property="og:updated_time" content="2019-02-28T02:47:02.870Z">
+<meta property="og:updated_time" content="2019-02-28T02:47:02.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS229 学习笔记之十一：主成分分析">
 <meta name="twitter:description" content="本篇博客为 CS229 学习笔记第十一部分，主题是：主成分分析。">
@@ -473,55 +473,48 @@
 <a id="more"></a>
 <h1 id="引入">引入</h1>
 <ul>
-<li>在上一章，我们介绍了因子分析，其给出了一种将 <span class="math inline">\(n\)</span> 维数据 <span class="math inline">\(x\)</span> 在 <span class="math inline">\(k\)</span> 维子空间中建模的方法
-<ul>
+<li>在上一章，我们介绍了因子分析，其给出了一种将 <span class="math inline">\(n\)</span> 维数据 <span class="math inline">\(x\)</span> 在 <span class="math inline">\(k\)</span> 维子空间中建模的方法</li>
 <li>其基于概率模型，通过 EM 算法来估计参数</li>
-</ul></li>
-<li>本章我们将介绍另一种降维方法：<strong>主成分分析</strong>法（PCA）
-<ul>
+<li>本章我们将介绍另一种降维方法：<strong>主成分分析</strong>法（PCA）</li>
 <li>该方法更加直接，只需要特征向量的计算，不需要 EM 求解</li>
-</ul></li>
-<li>给定一个数据集 <span class="math inline">\(\{x^{(i)};i=1,\ldots,m\}\)</span>，其中 <span class="math inline">\(x^{(i)} \in \mathbb{R}^n (n \ll m)\)</span>
-<ul>
+<li>给定一个数据集 <span class="math inline">\(\{x^{(i)};i=1,\ldots,m\}\)</span>，其中 <span class="math inline">\(x^{(i)} \in \mathbb{R}^n (n \ll m)\)</span></li>
 <li>假定该数据集来自对无线电控制直升机飞行员的调查，而其中的两个属性分别为飞行员的技能评估和其对飞行的感兴趣长度</li>
 <li>考虑到飞行的特殊性，这两个属性是存在正相关关系的，即实际上数据的信息量是 n-1 维的</li>
 <li>PCA 解决的就是如何将多余属性去除的问题</li>
-</ul></li>
-<li><p>将上述两个属性使用坐标图进行展示，得到：</p>
+<li>将上述两个属性使用坐标图进行展示，得到：</li>
+</ul>
 <p><img src="http://media.zjubiomedit.com/2019-02-27-013445.png" width="50%"></p>
 <ul>
 <li>可以看到，<span class="math inline">\(u1\)</span> 展示出了数据之间的相关性，称之为“主方向”</li>
 <li><span class="math inline">\(u2\)</span> 则代表主方向之外的噪声</li>
 <li>PCA 要做的就是找到主方向，并将数据投影到该方向，达到降维的目的</li>
-</ul></li>
 </ul>
 <h1 id="算法流程">算法流程</h1>
 <h2 id="预处理">预处理</h2>
 <ul>
-<li>在运行 PCA 算法之前，需要首先进行预处理来归一化数据均值及方差：
-<ol type="1">
+<li>在运行 PCA 算法之前，需要首先进行预处理来归一化数据均值及方差：</li>
+</ul>
+<ol style="list-style-type: decimal">
 <li>令 <span class="math inline">\(\mu = \frac 1 m \sum_{i=1}^m x^{(i)}\)</span></li>
 <li>使用 <span class="math inline">\(x^{(i)} -\mu\)</span> 来替代 <span class="math inline">\(x^{(i)}\)</span></li>
 <li>令 <span class="math inline">\(\sigma_j^2 = \frac 1 m \sum_i (x_j^{(i)})^2\)</span></li>
 <li>使用 <span class="math inline">\(x^{(i)}_j / \sigma_j\)</span> 来替代 <span class="math inline">\(x^{(i)}\)</span></li>
-</ol></li>
+</ol>
+<ul>
 <li>前两步将数据的均值变为 0（已知均值为 0 时可以省略）</li>
 <li>后两步将数据每个维度的方差变为 1（已知数据各维度处于同一尺度下时可以省略）</li>
 </ul>
 <h2 id="计算主方向">计算主方向</h2>
 <ul>
-<li>计算主方向的方法之一是找到单位向量 <span class="math inline">\(u\)</span>，使得数据在该方向上的投影的<strong>方差最大化</strong>
-<ul>
+<li>计算主方向的方法之一是找到单位向量 <span class="math inline">\(u\)</span>，使得数据在该方向上的投影的<strong>方差最大化</strong></li>
 <li>直观上来看，原始数据必然存在一定的方差（信息），而我们希望投影后的数据（降维后）在子空间尽量保留原始数据的信息，即方差最大化</li>
-</ul></li>
-<li><p>以如下数据集为例（归一化已完成）：</p>
+<li>以如下数据集为例（归一化已完成）：</li>
+</ul>
 <p><img src="http://media.zjubiomedit.com/2019-02-27-015435.png" width="80%"></p>
 <ul>
 <li>可以看到，图 2 方向上的投影相比图 3 距离原点更远，方差更大</li>
 <li>我们希望能够自动找到类似图 2 的方向</li>
-</ul></li>
-<li>下面给出寻找该方向的方法：
-<ul>
+<li>下面给出寻找该方向的方法：</li>
 <li>给定一个单位向量 <span class="math inline">\(u\)</span> 和一个点 <span class="math inline">\(x\)</span>，其投影长度（距离原点）为 <span class="math inline">\(x^Tu\)</span></li>
 <li><p>因此，为了最大化投影的方差，即最大化： <span class="math display">\[
 \begin{aligned}
@@ -535,20 +528,18 @@
 <li>利用拉格朗日方程，可以求得该最大化问题的解即为经验协方差矩阵 <span class="math inline">\(\Sigma = \frac 1 m \sum_{i=1}^m x^{(i)}x^{(i)^T}\)</span> 的<strong>主要特征向量</strong>
 <ul>
 <li><p>构建如下拉格朗日方程： <span class="math display">\[
-\ell = u^T\Sigma u - \lambda(u^Tu-1)
-\]</span></p></li>
+  \ell = u^T\Sigma u - \lambda(u^Tu-1)
+  \]</span></p></li>
 <li><p>对 <span class="math inline">\(u\)</span> 求导，得到： <span class="math display">\[
-\begin{aligned}
-\nabla_u \ell &amp;= \nabla_u u^T\Sigma u - \nabla_u u^Tu \\
-&amp;= \nabla_u \text{tr}(u^T\Sigma u) - \nabla_u \text{tr}(u^Tu) \\
-&amp;= \left(\nabla_{u^T} \text{tr}(u^T\Sigma u)\right)^T - \left(\nabla_{u^T} \text{tr}(u^Tu)\right)^T \\
-&amp;= (\Sigma u)^{T^T} - \lambda u^{T^T} \\
-&amp;= \Sigma u - \lambda u
-\end{aligned}
-\]</span></p>
-<ul>
+  \begin{aligned}
+  \nabla_u \ell &amp;= \nabla_u u^T\Sigma u - \nabla_u u^Tu \\
+  &amp;= \nabla_u \text{tr}(u^T\Sigma u) - \nabla_u \text{tr}(u^Tu) \\
+  &amp;= \left(\nabla_{u^T} \text{tr}(u^T\Sigma u)\right)^T - \left(\nabla_{u^T} \text{tr}(u^Tu)\right)^T \\
+  &amp;= (\Sigma u)^{T^T} - \lambda u^{T^T} \\
+  &amp;= \Sigma u - \lambda u
+  \end{aligned}
+  \]</span></p></li>
 <li>令导数为 0，得 <span class="math inline">\(\Sigma u = \lambda u\)</span>，即 <span class="math inline">\(u\)</span> 为 <span class="math inline">\(\Sigma\)</span> 的特征向量，其特征值为 <span class="math inline">\(\lambda\)</span></li>
-</ul></li>
 </ul></li>
 <li>综上所述，如果我们需要将数据降至 1 维，则应该选择 <span class="math inline">\(\Sigma\)</span> 的主要特征向量 <span class="math inline">\(u\)</span> 作为主方向（特征值最大）</li>
 <li>当需要将数据降为 k 维时（<span class="math inline">\(k&lt;n\)</span>），我们应该选择 <span class="math inline">\(\Sigma\)</span> 的前 k 个特征向量 <span class="math inline">\(u_1, \ldots, u_k\)</span> 作为主方向（因为 <span class="math inline">\(\Sigma\)</span> 是对称矩阵，所以其可以得到 n 个相互正交的特征向量）
@@ -568,23 +559,16 @@ u_k^Tx^{(i)}
 <ul>
 <li>向量 <span class="math inline">\(u_1, \ldots, u_k\)</span> 被称为数据的前 k 个<strong>主成分</strong></li>
 </ul></li>
-</ul></li>
 </ul>
 <h1 id="算法应用">算法应用</h1>
 <ul>
-<li>数据可视化
-<ul>
+<li>数据可视化</li>
 <li>将数据降至2-3维后进行可视化</li>
-</ul></li>
-<li>数据预处理
-<ul>
+<li>数据预处理</li>
 <li>在运行算法之前对数据进行降维，不仅能够提升计算速度，还能够降低假设的复杂性，避免过拟合</li>
 <li>对线性分类器即意味着 VC 维的减小</li>
-</ul></li>
-<li>降噪
-<ul>
+<li>降噪</li>
 <li>去除数据中的无关干扰因素</li>
-</ul></li>
 </ul>
 <h1 id="思维导图">思维导图</h1>
 <p><img src="http://media.zjubiomedit.com/2019-02-28-024212.png" width="100%"></p>
@@ -656,6 +640,10 @@ u_k^Tx^{(i)}
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/02/28/game-ai-pro-1/" rel="prev" title="《Game AI Pro》第一章笔记：What is Game AI?">
+                《Game AI Pro》第一章笔记：What is Game AI? <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -733,7 +721,7 @@ u_k^Tx^{(i)}
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">22</span>
+                    <span class="site-state-item-count">23</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -833,7 +821,9 @@ u_k^Tx^{(i)}
                     
                       
                     
-                    <span class="site-state-item-count">15</span>
+                      
+                    
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

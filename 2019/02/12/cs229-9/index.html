@@ -107,7 +107,7 @@
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-01-15-013548.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-01-30-020919.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-02-28-021935.png">
-<meta property="og:updated_time" content="2019-02-28T02:25:43.020Z">
+<meta property="og:updated_time" content="2019-02-28T02:25:43.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS229 学习笔记之九：聚类问题与 EM 算法">
 <meta name="twitter:description" content="本篇博客为 CS229 学习笔记第九部分，主题是：聚类问题与 EM 算法。">
@@ -474,60 +474,63 @@
 <h1 id="k-means-聚类">K-means 聚类</h1>
 <ul>
 <li>聚类问题是一种无监督学习，给定训练集 <span class="math inline">\(\{x^{(1)}, \ldots, x^{(m)}\}\)</span>，我们希望将其聚合成几个特定的类</li>
-<li>k-means 聚类算法的流程如下：
-<ol type="1">
+<li>k-means 聚类算法的流程如下：</li>
+</ul>
+<ol style="list-style-type: decimal">
 <li>随机初始化<strong>聚类中心</strong> <span class="math inline">\(\mu_1,\mu_2,\dots, \mu_k \in \mathbb{R}^n\)</span></li>
 <li>重复以下步骤直至收敛：
 <ul>
 <li><p>对于每个 i（训练集大小），令 <span class="math display">\[
-c^{(i)} := \arg \min_j ||x^{(i)}-\mu_j||^2
-\]</span></p></li>
+   c^{(i)} := \arg \min_j ||x^{(i)}-\mu_j||^2
+   \]</span></p></li>
 <li><p>对于每个 j（聚类数量），令 <span class="math display">\[
-\mu^{(j)} := \frac {\sum _{i=1}^m 1\{c^{(i)}=j\}x^{(i)}} {\sum _{i=1}^m 1\{c^{(i)}=j\}}
-\]</span></p></li>
+   \mu^{(j)} := \frac {\sum _{i=1}^m 1\{c^{(i)}=j\}x^{(i)}} {\sum _{i=1}^m 1\{c^{(i)}=j\}}
+   \]</span></p></li>
 </ul></li>
-</ol></li>
-<li>该算法的思想为：
-<ol type="1">
+</ol>
+<ul>
+<li>该算法的思想为：</li>
+</ul>
+<ol style="list-style-type: decimal">
 <li>将每个训练样本 <span class="math inline">\(x^{(i)}\)</span> 分配到距离其最近的中心 <span class="math inline">\(\mu_j\)</span></li>
 <li>将每个聚类中心移动到第一步中分配到该中心的样本的均值</li>
-</ol></li>
-<li><p>下图可视化了 k-means 算法的运行流程：</p>
-<p><img src="http://media.zjubiomedit.com/2019-01-15-013548.png" width="80%"></p></li>
-<li><p>为了证明 k-means 算法能否保证收敛，我们定义<strong>失真函数</strong>（distortion function）为： <span class="math display">\[
-J(c,\mu) = \sum_{i=1}^m ||x^{(i)}-\mu_{c^{(i)}}||^2
-\]</span></p>
+</ol>
 <ul>
+<li>下图可视化了 k-means 算法的运行流程：</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-01-15-013548.png" width="80%"></p>
+<ul>
+<li><p>为了证明 k-means 算法能否保证收敛，我们定义<strong>失真函数</strong>（distortion function）为： <span class="math display">\[
+  J(c,\mu) = \sum_{i=1}^m ||x^{(i)}-\mu_{c^{(i)}}||^2
+  \]</span></p></li>
 <li>可以发现 k-means 本质上就是对失真函数进行坐标上升法优化</li>
 <li>其内层循环首先保持 <span class="math inline">\(\mu\)</span> 不变关于 <span class="math inline">\(c\)</span> 最小化 <span class="math inline">\(J\)</span>，然后保持 <span class="math inline">\(c\)</span> 不变关于 <span class="math inline">\(\mu\)</span> 最小化 <span class="math inline">\(J\)</span></li>
 <li>因此，<span class="math inline">\(J\)</span> 一定会持续下降，最终达到收敛</li>
 <li>一般 <span class="math inline">\(c\)</span> 和 <span class="math inline">\(\mu\)</span> 也会收敛，但理论上存在同时出现多种聚类组合的可能性，使得失真函数的值一样</li>
-</ul></li>
-<li>失真函数是一个非凸函数，这意味着坐标上升并不能保证其收敛至全局最优，存在收敛到局部最优的可能性
-<ul>
+<li>失真函数是一个非凸函数，这意味着坐标上升并不能保证其收敛至全局最优，存在收敛到局部最优的可能性</li>
 <li>一般情况下这不会发生</li>
-<li>可以通过多次运行 k-means 算法，选择最优解来解决这个问题</li>
-</ul></li>
+<li><p>可以通过多次运行 k-means 算法，选择最优解来解决这个问题</p></li>
 </ul>
 <h1 id="混合高斯分布">混合高斯分布</h1>
 <ul>
 <li>混合高斯分布可以用于软聚类问题，即输出一个样本属于各个类的概率</li>
-<li>我们可以将数据的类别看作一个隐含随机变量 <span class="math inline">\(z\)</span>，并给出如下假设：
-<ol type="1">
+<li>我们可以将数据的类别看作一个隐含随机变量 <span class="math inline">\(z\)</span>，并给出如下假设：</li>
+</ul>
+<ol style="list-style-type: decimal">
 <li><span class="math inline">\(z\)</span> 服从多项式分布 <span class="math inline">\(z^{(i)} \sim \text{Multinomial}(\phi)\)</span></li>
 <li>给定不同的 <span class="math inline">\(z\)</span> ，<span class="math inline">\(x\)</span> 服从不同的高斯分布 <span class="math inline">\(x^{(i)} | z^{(i)} = j \sim \mathcal{N}(\mu_i, \Sigma_j)\)</span></li>
-</ol></li>
+</ol>
+<ul>
 <li><p>使用极大似然法求解该优化问题，可以得到如下的似然函数： <span class="math display">\[
-\begin{aligned}
-\ell(\phi,\mu,\Sigma) &amp;= \sum_{i=1}^m \log p(x^{(i)};\phi,\mu,\Sigma) \\
-&amp;= \sum_{i=1}^m \log \sum_{z^{(i)} = 1}^k p(x^{(i)}| z^{(i)};\mu, \Sigma)p(z^{(i)};\phi)
-\end{aligned}
-\]</span></p></li>
+  \begin{aligned}
+  \ell(\phi,\mu,\Sigma) &amp;= \sum_{i=1}^m \log p(x^{(i)};\phi,\mu,\Sigma) \\
+  &amp;= \sum_{i=1}^m \log \sum_{z^{(i)} = 1}^k p(x^{(i)}| z^{(i)};\mu, \Sigma)p(z^{(i)};\phi)
+  \end{aligned}
+  \]</span></p></li>
 <li>该问题无法求出闭合解</li>
 <li><p>如果 <span class="math inline">\(z^{(i)}\)</span> 已知，即我们知道每个样本来自于哪个高斯分布，那么极大似然估计的求解是容易的，似然函数如下： <span class="math display">\[
-\ell(\phi,\mu,\Sigma) = \sum_{i=1}^m \left(\log p(x^{(i)}| z^{(i)};\mu, \Sigma)+ \log p(z^{(i)};\phi)\right)
-\]</span></p>
-<ul>
+  \ell(\phi,\mu,\Sigma) = \sum_{i=1}^m \left(\log p(x^{(i)}| z^{(i)};\mu, \Sigma)+ \log p(z^{(i)};\phi)\right)
+  \]</span></p></li>
 <li><p>求解的结果是： <span class="math display">\[
 \begin{aligned}
 \phi_j &amp;= \frac 1 m \sum_{i=1}^m 1\{z^{(i)} =  j\} \\
@@ -538,29 +541,25 @@ J(c,\mu) = \sum_{i=1}^m ||x^{(i)}-\mu_{c^{(i)}}||^2
 <ul>
 <li>该结果与之前的高斯判别分析的结论类似（GDA 的协方差矩阵必须相同）</li>
 </ul></li>
-</ul></li>
 </ul>
 <h1 id="em-算法初步">EM 算法初步</h1>
 <ul>
 <li>实际上，我们并不知道 <span class="math inline">\(z^{(i)}\)</span> 的值</li>
-<li>我们可以通过 EM 算法进行迭代估计出 <span class="math inline">\(z^{(i)}\)</span> 从而得到参数，其基本思想如下：
-<ul>
+<li>我们可以通过 EM 算法进行迭代估计出 <span class="math inline">\(z^{(i)}\)</span> 从而得到参数，其基本思想如下：</li>
 <li>重复以下步骤直至收敛：
-<ol type="1">
+<ol style="list-style-type: decimal">
 <li><p>（<strong>E-step</strong>）对于每个 <span class="math inline">\(i,j\)</span>，令： <span class="math display">\[
-w_j^{(i)} := p(z^{(i)} = j|x^{(i)};\phi,\mu,\Sigma)
-\]</span></p></li>
+   w_j^{(i)} := p(z^{(i)} = j|x^{(i)};\phi,\mu,\Sigma)
+   \]</span></p></li>
 <li><p>（<strong>M-step</strong>）更新参数： <span class="math display">\[
-\begin{aligned}
-\phi_j &amp;= \frac 1 m \sum_{i=1}^m w_j^{(i)} \\
-\mu_j &amp;= \frac{\sum_{i=1}^m w_j^{(i)}x^{(i)}}{\sum_{i=1}^m w_j^{(i)}} \\
-\Sigma_j &amp;= \frac{\sum_{i=1}^m w_j^{(i)}(x^{(i)}-\mu_{j})(x^{(i)}-\mu_{j})^T}{\sum_{i=1}^m w_j^{(i)}} 
-\end{aligned}
-\]</span></p></li>
+   \begin{aligned}
+   \phi_j &amp;= \frac 1 m \sum_{i=1}^m w_j^{(i)} \\
+   \mu_j &amp;= \frac{\sum_{i=1}^m w_j^{(i)}x^{(i)}}{\sum_{i=1}^m w_j^{(i)}} \\
+   \Sigma_j &amp;= \frac{\sum_{i=1}^m w_j^{(i)}(x^{(i)}-\mu_{j})(x^{(i)}-\mu_{j})^T}{\sum_{i=1}^m w_j^{(i)}} 
+   \end{aligned}
+   \]</span></p></li>
 </ol></li>
-</ul></li>
-<li>关于 EM 算法的几点解释：
-<ul>
+<li>关于 EM 算法的几点解释：</li>
 <li><p>在 E-step 中，给定 <span class="math inline">\(x^{(i)}\)</span>，我们使用当前的参数值来计算 <span class="math inline">\(z^{(i)}\)</span> 的后验概率，即 <span class="math display">\[
 p(z^{(i)} = j|x^{(i)};\phi,\mu,\Sigma) = \frac {p(x^{(i)}|z^{(i)} = j;\mu,\Sigma)p(z^{(i)}=j;\phi)} {\sum_{l=1}^k p(x^{(i)}|z^{(i)}=l;\mu,\Sigma)p(z^{(i)}=l;\phi)}
 \]</span></p>
@@ -573,46 +572,40 @@ p(z^{(i)} = j|x^{(i)};\phi,\mu,\Sigma) = \frac {p(x^{(i)}|z^{(i)} = j;\mu,\Sigma
 <li>与 K-means 相似，EM 算法容易陷入局部最优，因此多次尝试不同的初始参数可能是一个好主意</li>
 </ul></li>
 <li><p>下一节将给出 EM 算法的一般形式，并证明其收敛性</p></li>
-</ul></li>
 </ul>
 <h1 id="jensen-不等式">Jensen 不等式</h1>
 <h2 id="函数的凹凸性">函数的凹凸性</h2>
 <ul>
 <li>在介绍 Jensen 不等式之前，先回顾一下函数的凹凸性</li>
-<li>对于一个实数域的函数 <span class="math inline">\(f\)</span>，其为凸函数的条件为 <span class="math inline">\(f&#39;&#39;(x) \ge 0\)</span>
-<ul>
+<li>对于一个实数域的函数 <span class="math inline">\(f\)</span>，其为凸函数的条件为 <span class="math inline">\(f&#39;&#39;(x) \ge 0\)</span></li>
 <li>如果输入为向量形式，则该条件可推广为其 Hessian 矩阵半正定（<span class="math inline">\(H \ge 0\)</span>）</li>
 <li>如果 <span class="math inline">\(f&#39;&#39;(x) &gt; 0\)</span>（<span class="math inline">\(H &gt; 0\)</span>），则函数<strong>严格</strong>凸</li>
-</ul></li>
 <li>凹函数的判定条件与凸函数完全相反</li>
 </ul>
 <h2 id="定理">定理</h2>
 <ul>
 <li><p>令 <span class="math inline">\(f\)</span> 是一个凸函数，<span class="math inline">\(X\)</span> 是一个随机变量，则： <span class="math display">\[
-\text{E}[f(X)] \ge f(\text{E}X)
-\]</span></p>
-<ul>
+  \text{E}[f(X)] \ge f(\text{E}X)
+  \]</span></p></li>
 <li>如果 <span class="math inline">\(f\)</span> 严格凸，那么当且仅当 <span class="math inline">\(X = \text{E}[X]\)</span> 时等号成立（即 <span class="math inline">\(X\)</span> 为常量）</li>
-</ul></li>
-<li><p>可以通过下图对该不等式有一个直观的理解：</p>
-<p><img src="http://media.zjubiomedit.com/2019-01-30-020919.png" width="50%"></p></li>
-<li><p>当 <span class="math inline">\(f\)</span> 为凹函数时，不等式方向对调，仍然成立</p></li>
+<li><p>可以通过下图对该不等式有一个直观的理解：</p></li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-01-30-020919.png" width="50%"></p>
+<ul>
+<li>当 <span class="math inline">\(f\)</span> 为凹函数时，不等式方向对调，仍然成立</li>
 </ul>
 <h1 id="em-算法">EM 算法</h1>
 <h2 id="算法的导出">算法的导出</h2>
 <ul>
 <li><p>假定我们有一个包含 m 个独立样本的训练集，我们希望去拟合一个概率模型 <span class="math inline">\(p(x,z)\)</span>，其对数似然函数为： <span class="math display">\[
-\begin{aligned}
-\ell(\theta) &amp;= \sum_{i=1}^m \log p(x;\theta) \\
-&amp;= \sum_{i=1}^m \log \sum_z p(x,z;\theta)
-\end{aligned}
-\]</span></p>
-<ul>
+  \begin{aligned}
+  \ell(\theta) &amp;= \sum_{i=1}^m \log p(x;\theta) \\
+  &amp;= \sum_{i=1}^m \log \sum_z p(x,z;\theta)
+  \end{aligned}
+  \]</span></p></li>
 <li>这里假定 <span class="math inline">\(z\)</span> 是离散变量（连续变量需要使用积分）</li>
-<li>直接最大化 <span class="math inline">\(\ell(\theta)\)</span> 是难以求解的</li>
-</ul></li>
-<li>EM 算法的思想是先构建一个 <span class="math inline">\(\ell\)</span> 的下界（E-step），然后去优化这个下界（M-step），达到间接最大化 <span class="math inline">\(\ell\)</span> 的目的
-<ul>
+<li><p>直接最大化 <span class="math inline">\(\ell(\theta)\)</span> 是难以求解的</p></li>
+<li>EM 算法的思想是先构建一个 <span class="math inline">\(\ell\)</span> 的下界（E-step），然后去优化这个下界（M-step），达到间接最大化 <span class="math inline">\(\ell\)</span> 的目的</li>
 <li>对于每个 <span class="math inline">\(i\)</span>，设 <span class="math inline">\(Q_i\)</span> 是 <span class="math inline">\(z\)</span> 的某种概率分布（<span class="math inline">\(\sum_z Q_i(z) = 1, Q_i(z) \ge 0\)</span>）</li>
 <li><p>根据期望的定义以及 Jensen 不等式，我们有： <span class="math display">\[
 \begin{align*}
@@ -625,31 +618,27 @@ p(z^{(i)} = j|x^{(i)};\phi,\mu,\Sigma) = \frac {p(x^{(i)}|z^{(i)} = j;\mu,\Sigma
 <li><span class="math inline">\(\frac {p(x^{(i)},z^{(i)};\theta)}{Q_i(z^{(i)})}\)</span> 可以看做 <span class="math inline">\(z^{(i)}\)</span> 的随机变量，其概率分布为 <span class="math inline">\(Q_i\)</span>，期望可以通过 <span class="math inline">\(\sum_{z^{(i)}} Q_i(z^{(i)}) \frac {p(x^{(i)},z^{(i)};\theta)}{Q_i(z^{(i)})}\)</span> 得到</li>
 <li><span class="math inline">\(f(x) = \log x\)</span> 是一个凹函数，应用 Jensen 不等式时注意方向对调</li>
 </ul></li>
-</ul></li>
-<li>为了执行 EM 算法，我们需要选择合适的 <span class="math inline">\(Q_i\)</span> 以保证在当前的参数设置下取到下界，即目前的 <span class="math inline">\(\theta\)</span> 值能够使得 <span class="math inline">\((3)\)</span> 式的等号成立
-<ul>
+<li>为了执行 EM 算法，我们需要选择合适的 <span class="math inline">\(Q_i\)</span> 以保证在当前的参数设置下取到下界，即目前的 <span class="math inline">\(\theta\)</span> 值能够使得 <span class="math inline">\((3)\)</span> 式的等号成立</li>
 <li><p>之前的定理表明等号成立的条件是随机变量为<strong>常数</strong> <span class="math display">\[
 \frac {p(x^{(i)},z^{(i)};\theta)}{Q_i(z^{(i)})} = c
 \]</span></p>
 <ul>
 <li><p>因此只要 <span class="math inline">\(Q_i(z^{(i)})\)</span> 和 <span class="math inline">\(p(x^{(i)},z^{(i)};\theta)\)</span> 成比例即可 <span class="math display">\[
-Q_i(z^{(i)}) \propto p(x^{(i)},z^{(i)};\theta)
-\]</span></p></li>
+  Q_i(z^{(i)}) \propto p(x^{(i)},z^{(i)};\theta)
+  \]</span></p></li>
 <li><p>实际上，因为 <span class="math inline">\(\sum_z Q_i(z^{(i)}) = 1\)</span>，将其代入上述公式，可以得到： <span class="math display">\[
-\sum_z Q_i(z^{(i)}) = \frac {\sum_z p(x^{(i)},z^{(i)};\theta)} c  = 1
-\]</span></p></li>
+  \sum_z Q_i(z^{(i)}) = \frac {\sum_z p(x^{(i)},z^{(i)};\theta)} c  = 1
+  \]</span></p></li>
 <li><p>因此 <span class="math inline">\(c = \sum_z p(x^{(i)},z^{(i)};\theta)\)</span>，从而有： <span class="math display">\[
-\begin{aligned}
-Q_i(z^{(i)}) &amp;= \frac {p(x^{(i)},z^{(i)};\theta)} {\sum_z p(x^{(i)},z^{(i)};\theta)} \\
-&amp;= \frac {p(x^{(i)},z^{(i)};\theta)} {p(x^{(i)};\theta)} \\
-&amp;= p(z^{(i)}|x^{(i)};\theta)
-\end{aligned}
-\]</span></p></li>
+  \begin{aligned}
+  Q_i(z^{(i)}) &amp;= \frac {p(x^{(i)},z^{(i)};\theta)} {\sum_z p(x^{(i)},z^{(i)};\theta)} \\
+  &amp;= \frac {p(x^{(i)},z^{(i)};\theta)} {p(x^{(i)};\theta)} \\
+  &amp;= p(z^{(i)}|x^{(i)};\theta)
+  \end{aligned}
+  \]</span></p></li>
 </ul></li>
 <li>根据上述推导，我们只需要将 <span class="math inline">\(Q_i\)</span> 设置为给定 <span class="math inline">\(x^{(i)}\)</span> 时 <span class="math inline">\(z^{(i)}\)</span> 的后验分布即可（以 <span class="math inline">\(\theta\)</span> 为参数）</li>
-</ul></li>
-<li>综上所述，EM 算法的具体步骤为：
-<ul>
+<li>综上所述，EM 算法的具体步骤为：</li>
 <li><p><strong>E-step</strong>：对于每个 <span class="math inline">\(i\)</span>，令 <span class="math display">\[
 Q_i(z^{(i)}) := p(z^{(i)}|x^{(i)};\theta)
 \]</span></p></li>
@@ -657,12 +646,10 @@ Q_i(z^{(i)}) := p(z^{(i)}|x^{(i)};\theta)
 \theta := \arg \max_\theta \sum_i \sum_{z^{(i)}} Q_i(z^{(i)}) \log \frac {p(x^{(i)},z^{(i)};\theta)}{Q_i(z^{(i)})}
 \]</span></p></li>
 <li><p>重复以上两个步骤直至收敛</p></li>
-</ul></li>
 </ul>
 <h2 id="收敛性证明">收敛性证明</h2>
 <ul>
-<li>下面证明该算法的收敛性
-<ul>
+<li>下面证明该算法的收敛性</li>
 <li>假定 <span class="math inline">\(\theta^{(t)}\)</span> 和 <span class="math inline">\(\theta^{(t+1)}\)</span> 来自于 EM 算法的两次成功的迭代，那么通过证明 <span class="math inline">\(\ell(\theta^{(t)}) \le \ell(\theta^{(t+1)})\)</span>，就可以表明 EM 算法是单调收敛的（对数似然函数单调递增）</li>
 <li><p>当参数为 <span class="math inline">\(\theta^{(t)}\)</span> 时，根据算法步骤，我们令 <span class="math inline">\(Q_i^{(t)}(z^{(i)}) := p(z^{(i)}|x^{(i)};\theta^{(t)})\)</span>，这一选择保证了等号成立，即： <span class="math display">\[
 \ell(\theta^{(t)}) = \sum_i \sum_{z^{(i)}} Q_i^{(t)}(z^{(i)}) \log \frac {p(x^{(i)},z^{(i)};\theta^{(t)})}{Q_i^{(t)}(z^{(i)})}
@@ -683,79 +670,66 @@ Q_i(z^{(i)}) := p(z^{(i)}|x^{(i)};\theta)
 <ul>
 <li>一个可取的收敛条件是 <span class="math inline">\(\ell(\theta)\)</span> 的增长速度小于某个临界值</li>
 </ul></li>
-</ul></li>
 </ul>
 <h2 id="坐标上升法">坐标上升法</h2>
 <ul>
 <li><p>如果我们定义： <span class="math display">\[
-J(Q,\theta) = \sum_i \sum_{z^{(i)}} Q_i(z^{(i)}) \log \frac {p(x^{(i)},z^{(i)};\theta)}{Q_i(z^{(i)})}
-\]</span></p>
-<ul>
+  J(Q,\theta) = \sum_i \sum_{z^{(i)}} Q_i(z^{(i)}) \log \frac {p(x^{(i)},z^{(i)};\theta)}{Q_i(z^{(i)})}
+  \]</span></p></li>
 <li>从之前的推导可以知道 <span class="math inline">\(\ell(\theta) \ge J(Q,\theta)\)</span></li>
-</ul></li>
-<li>EM 算法可以看做是对 <span class="math inline">\(J\)</span> 的坐标上升法
-<ul>
+<li>EM 算法可以看做是对 <span class="math inline">\(J\)</span> 的坐标上升法</li>
 <li>在 E-step 中，关于 <span class="math inline">\(Q\)</span> 最大化 <span class="math inline">\(J\)</span></li>
-<li>在 M-step 中，关于 <span class="math inline">\(\theta\)</span> 最大化 <span class="math inline">\(J\)</span></li>
-</ul></li>
+<li><p>在 M-step 中，关于 <span class="math inline">\(\theta\)</span> 最大化 <span class="math inline">\(J\)</span></p></li>
 </ul>
 <h1 id="混合高斯模型复盘">混合高斯模型复盘</h1>
 <ul>
-<li>下面将使用 EM 算法的一般形式来对之前混合高斯模型中的公式进行推导
-<ul>
+<li>下面将使用 EM 算法的一般形式来对之前混合高斯模型中的公式进行推导</li>
 <li>由于篇幅所限，这里只给出 <span class="math inline">\(\phi\)</span> 和 <span class="math inline">\(\mu_j\)</span> 的推导过程</li>
-</ul></li>
 <li><p>之前我们得出的参数更新公式如下： <span class="math display">\[
-\begin{aligned}
-\phi_j &amp;= \frac 1 m \sum_{i=1}^m w_j^{(i)} \\
-\mu_j &amp;= \frac{\sum_{i=1}^m w_j^{(i)}x^{(i)}}{\sum_{i=1}^m w_j^{(i)}} \\
-\Sigma_j &amp;= \frac{\sum_{i=1}^m w_j^{(i)}(x^{(i)}-\mu_{j})(x^{(i)}-\mu_{j})^T}{\sum_{i=1}^m w_j^{(i)}} 
-\end{aligned}
-\]</span></p></li>
+  \begin{aligned}
+  \phi_j &amp;= \frac 1 m \sum_{i=1}^m w_j^{(i)} \\
+  \mu_j &amp;= \frac{\sum_{i=1}^m w_j^{(i)}x^{(i)}}{\sum_{i=1}^m w_j^{(i)}} \\
+  \Sigma_j &amp;= \frac{\sum_{i=1}^m w_j^{(i)}(x^{(i)}-\mu_{j})(x^{(i)}-\mu_{j})^T}{\sum_{i=1}^m w_j^{(i)}} 
+  \end{aligned}
+  \]</span></p></li>
 <li><p>根据 E-step 的定义，我们可以得到： <span class="math display">\[
-w_j^{(i)} = Q_i(z^{(i)} = j) = P(z^{(i)} = j|x^{(i)};\phi,\mu,\Sigma)
-\]</span></p></li>
+  w_j^{(i)} = Q_i(z^{(i)} = j) = P(z^{(i)} = j|x^{(i)};\phi,\mu,\Sigma)
+  \]</span></p></li>
 <li><p>在 M-step 中，我们需要通过上述三个参数去最大化下式： <span class="math display">\[
-\begin{aligned}
-\sum_{i=1}^m &amp;\sum_{z^{(i)}} Q_i(z^{(i)}) \log \frac {p(x^{(i)},z^{(i)};\phi,\mu,\Sigma)}{Q_i(z^{(i)})} \\ &amp;= \sum_{i=1}^m\sum_{j=1}^k Q_i(z^{(i)}=j) \log \frac {p(x^{(i)}|z^{(i)}=j;\mu,\Sigma)p(z^{(i)}=j;\phi)}{Q_i(z^{(i)}=j)} \\
-&amp;= \sum_{i=1}^m\sum_{j=1}^k w_j^{(i)} \log \frac {\frac 1 {(2\pi)^{n/2}|\Sigma_j|^{1/2}}\exp \left(-\frac 1 2 (x^{(i)}-\mu_j)^T\Sigma_j^{-1}(x^{(i)}-\mu_j)\right)\cdot\phi_j}{w_j^{(i)}}
-\end{aligned}
-\]</span></p></li>
+  \begin{aligned}
+  \sum_{i=1}^m &amp;\sum_{z^{(i)}} Q_i(z^{(i)}) \log \frac {p(x^{(i)},z^{(i)};\phi,\mu,\Sigma)}{Q_i(z^{(i)})} \\ &amp;= \sum_{i=1}^m\sum_{j=1}^k Q_i(z^{(i)}=j) \log \frac {p(x^{(i)}|z^{(i)}=j;\mu,\Sigma)p(z^{(i)}=j;\phi)}{Q_i(z^{(i)}=j)} \\
+  &amp;= \sum_{i=1}^m\sum_{j=1}^k w_j^{(i)} \log \frac {\frac 1 {(2\pi)^{n/2}|\Sigma_j|^{1/2}}\exp \left(-\frac 1 2 (x^{(i)}-\mu_j)^T\Sigma_j^{-1}(x^{(i)}-\mu_j)\right)\cdot\phi_j}{w_j^{(i)}}
+  \end{aligned}
+  \]</span></p></li>
 <li><p>我们首先关于 <span class="math inline">\(\mu_j\)</span> 去进行最大化，求导可得： <span class="math display">\[
-\begin{aligned}
-\nabla_{\mu_j}&amp;\sum_{i=1}^m\sum_{j=1}^k w_j^{(i)} \log \frac {\frac 1 {(2\pi)^{n/2}|\sum_j|^{1/2}}\exp \left(-\frac 1 2 (x^{(i)}-\mu_j)^T\Sigma_j^{-1}(x^{(i)}-\mu_j)\right)\cdot\phi_j}{w_j^{(i)}} \\
-&amp;= - \nabla_{\mu_j} \sum_{i=1}^m\sum_{j=1}^k w_j^{(i)}\frac 1 2 (x^{(i)}-\mu_j)^T\Sigma_j^{-1}(x^{(i)}-\mu_j) \\
-&amp;= \frac 1 2 \sum_{i=1}^m w_j^{(i)} \nabla_{\mu_j} 2\mu_j^T \Sigma_j^{-1}x^{(i)}-\mu_j^T\Sigma_j^{-1}\mu_j \\
-&amp;= \sum_{i=1}^m w_j^{(i)} (\Sigma_j^{-1}x^{(i)}-\Sigma_j^{-1}\mu_j)
-\end{aligned}
-\]</span></p>
-<ul>
+  \begin{aligned}
+  \nabla_{\mu_j}&amp;\sum_{i=1}^m\sum_{j=1}^k w_j^{(i)} \log \frac {\frac 1 {(2\pi)^{n/2}|\sum_j|^{1/2}}\exp \left(-\frac 1 2 (x^{(i)}-\mu_j)^T\Sigma_j^{-1}(x^{(i)}-\mu_j)\right)\cdot\phi_j}{w_j^{(i)}} \\
+  &amp;= - \nabla_{\mu_j} \sum_{i=1}^m\sum_{j=1}^k w_j^{(i)}\frac 1 2 (x^{(i)}-\mu_j)^T\Sigma_j^{-1}(x^{(i)}-\mu_j) \\
+  &amp;= \frac 1 2 \sum_{i=1}^m w_j^{(i)} \nabla_{\mu_j} 2\mu_j^T \Sigma_j^{-1}x^{(i)}-\mu_j^T\Sigma_j^{-1}\mu_j \\
+  &amp;= \sum_{i=1}^m w_j^{(i)} (\Sigma_j^{-1}x^{(i)}-\Sigma_j^{-1}\mu_j)
+  \end{aligned}
+  \]</span></p></li>
 <li>上述推导首先去除了不相关的项，然后去除了求和符号（导数性质），最后合并同类项得到结果</li>
-<li>将上式设为 0 求解 <span class="math inline">\(\mu_j\)</span>，可得： <span class="math display">\[
+<li><p>将上式设为 0 求解 <span class="math inline">\(\mu_j\)</span>，可得： <span class="math display">\[
 \mu_j = \frac{\sum_{i=1}^m w_j^{(i)}x^{(i)}}{\sum_{i=1}^m w_j^{(i)}}
-\]</span></li>
-</ul></li>
+\]</span></p></li>
 <li><p>下面关于 <span class="math inline">\(\phi_j\)</span> 去进行最大化，将与 <span class="math inline">\(\phi_j\)</span> 相关的部分提取出来，可以得到需要最大化的项为： <span class="math display">\[
-\sum_{i=1}^m\sum_{j=1}^k w_j^{(i)}\log \phi_j
-\]</span></p>
-<ul>
+  \sum_{i=1}^m\sum_{j=1}^k w_j^{(i)}\log \phi_j
+  \]</span></p></li>
 <li>这里我们还有一个额外的约束条件：<span class="math inline">\(\sum_{j=1}^k\phi_j = 1\)</span></li>
 <li><p>因此，我们需要构建拉格朗日算子： <span class="math display">\[
 \mathcal{L}(\phi) = \sum_{i=1}^m\sum_{j=1}^k w_j^{(i)}\log \phi_j + \beta (\sum_{j=1}^k \phi -1)
 \]</span></p>
 <ul>
 <li><p>其中 <span class="math inline">\(\beta\)</span> 是拉格朗日乘数，对上式求导可得： <span class="math display">\[
-\frac {\partial}{\partial\phi_j} \mathcal{L}(\phi) = \sum_{i=1}^m \frac{w_j^{(i)}}{\phi_j} + \beta
-\]</span></p>
-<ul>
+  \frac {\partial}{\partial\phi_j} \mathcal{L}(\phi) = \sum_{i=1}^m \frac{w_j^{(i)}}{\phi_j} + \beta
+  \]</span></p></li>
 <li><p>将其设为 0，可得： <span class="math display">\[
 \phi_j = \frac {\sum_{i=1}^m w_j^{(i)}} {-\beta}
 \]</span></p></li>
 <li><p>由于 <span class="math inline">\(\sum_j \phi_j = 1\)</span>，因此 <span class="math inline">\(-\beta = \sum_{i=1}^m \sum_{j=1}^k w_j^{(i)} = \sum_{i=1}^m 1 = m\)</span>，所以： <span class="math display">\[
 \phi_j = \frac 1 m \sum_{i=1}^m w_j^{(i)}
 \]</span></p></li>
-</ul></li>
-</ul></li>
 </ul></li>
 </ul>
 <h1 id="思维导图">思维导图</h1>
@@ -909,7 +883,7 @@ w_j^{(i)} = Q_i(z^{(i)} = j) = P(z^{(i)} = j|x^{(i)};\phi,\mu,\Sigma)
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">22</span>
+                    <span class="site-state-item-count">23</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1009,7 +983,9 @@ w_j^{(i)} = Q_i(z^{(i)} = j) = P(z^{(i)} = j|x^{(i)};\phi,\mu,\Sigma)
                     
                       
                     
-                    <span class="site-state-item-count">15</span>
+                      
+                    
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

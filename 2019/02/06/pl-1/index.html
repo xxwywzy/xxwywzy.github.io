@@ -105,7 +105,7 @@
 <meta property="og:description" content="本篇博客为 coursera programming languages 课程的第一部分学习笔记。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-02-06-030209.png">
-<meta property="og:updated_time" content="2019-02-06T13:20:13.542Z">
+<meta property="og:updated_time" content="2019-02-06T13:20:13.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Progamming Languages 第一部分笔记">
 <meta name="twitter:description" content="本篇博客为 coursera programming languages 课程的第一部分学习笔记。">
@@ -471,16 +471,15 @@
 <a id="more"></a>
 <h1 id="ml-表达式与变量绑定">ML 表达式与变量绑定</h1>
 <ul>
-<li>一个 ML 程序由一系列的<strong>绑定</strong>（bindings）组成
-<ul>
+<li>一个 ML 程序由一系列的<strong>绑定</strong>（bindings）组成</li>
 <li>每个绑定会先进行<strong>类型检查</strong>，再进行<strong>分析</strong>
 <ul>
 <li>类型检查在<strong>静态环境</strong>中完成</li>
 <li>绑定的分析在<strong>动态环境</strong>中完成</li>
 </ul></li>
-</ul></li>
-<li><p>绑定有很多种，这里先介绍最常见的<strong>变量绑定</strong>，其语法如下：</p>
-<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">val x = e;</span><br></pre></td></tr></table></figure>
+<li>绑定有很多种，这里先介绍最常见的<strong>变量绑定</strong>，其语法如下：</li>
+</ul>
+<p><figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">val x = e;</span><br></pre></td></tr></table></figure></p>
 <ul>
 <li><code>val</code> 是一个关键字，<code>x</code> 可以是任意变量，<code>e</code> 可以是任意表达式
 <ul>
@@ -488,13 +487,9 @@
 </ul></li>
 <li>类型检查：将<code>x</code> 的类型设为 <code>t</code> 其中 <code>t</code> 是表达式 <code>e</code> 的类型</li>
 <li>分析：将<code>x</code> 的值设为 <code>v</code> 其中 <code>v</code> 是表达式 <code>e</code> 的分析结果</li>
-</ul></li>
-<li>值是一种无法进一步进行计算（简化）的表达式
-<ul>
+<li>值是一种无法进一步进行计算（简化）的表达式</li>
 <li>所有的值都是表达式，但并非所有的表达式都是值</li>
-</ul></li>
-<li>ML 中常见的表达式包括：
-<ul>
+<li>ML 中常见的表达式包括：</li>
 <li><strong>整型常量</strong>
 <ul>
 <li>语法：一个数字序列</li>
@@ -531,68 +526,58 @@
 <li>类型检查：当且仅当 <code>e1</code> 和 <code>e2</code> 在同一静态环境中均为 <code>int</code> 时，该表达式类型为 <code>bool</code>，否则类型检查不通过</li>
 <li>分析：在同一动态环境中将 <code>e1</code> 分析为 <code>v1</code>，将 <code>e2</code> 分析为 <code>v2</code>，如果 <code>v1</code> 小于 <code>v2</code>，则整个表达式的值为 <code>true</code>，否则为 <code>false</code></li>
 </ul></li>
-</ul></li>
 </ul>
 <h2 id="变量的不可变性">变量的不可变性</h2>
 <ul>
-<li>在 ML 中，绑定是<strong>不可变</strong>的
-<ul>
+<li>在 ML 中，绑定是<strong>不可变</strong>的</li>
 <li>对于一个变量，如果你在第一次绑定之后又重新进行绑定，则其只是在第二次绑定后的动态环境中<strong>投影</strong>（shadows）了原来的值，并不会对第一次绑定时的结果造成影响</li>
-</ul></li>
 </ul>
 <h2 id="使用-use">使用 use</h2>
 <ul>
-<li><p>在使用 REPL 时，我们可以通过 <code>use</code> 语句将文件中的所有绑定一次性导入：</p>
-<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">use <span class="string">"foo.sml"</span>;</span><br></pre></td></tr></table></figure>
+<li>在使用 REPL 时，我们可以通过 <code>use</code> 语句将文件中的所有绑定一次性导入：</li>
+</ul>
+<p><figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">use <span class="string">"foo.sml"</span>;</span><br></pre></td></tr></table></figure></p>
 <ul>
 <li>该语句的输出类型为 <code>unit</code>，结果为 <code>()</code></li>
-</ul></li>
 </ul>
 <h1 id="函数绑定">函数绑定</h1>
 <ul>
 <li>函数是一种调用参数并通过函数体产生结果的代码块</li>
 <li>ML 中的函数没有类（class）的概念，也不存在返回语句</li>
-<li><p>下面给出一个计算幂次的简单函数：</p>
-<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun pow (<span class="symbol">x:</span>int, <span class="symbol">y:</span>int) = (* correct only <span class="keyword">for</span> y &gt;= <span class="number">0</span> *) </span><br><span class="line">    <span class="keyword">if</span> y=<span class="number">0</span> </span><br><span class="line">    <span class="keyword">then</span> <span class="number">1</span> </span><br><span class="line">    <span class="keyword">else</span> x * pow(x,y-<span class="number">1</span>)</span><br></pre></td></tr></table></figure></li>
+<li>下面给出一个计算幂次的简单函数：</li>
 </ul>
+<p><figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun pow (<span class="symbol">x:</span>int, <span class="symbol">y:</span>int) = (* correct only <span class="keyword">for</span> y &gt;= <span class="number">0</span> *) </span><br><span class="line">    <span class="keyword">if</span> y=<span class="number">0</span> </span><br><span class="line">    <span class="keyword">then</span> <span class="number">1</span> </span><br><span class="line">    <span class="keyword">else</span> x * pow(x,y-<span class="number">1</span>)</span><br></pre></td></tr></table></figure></p>
 <h2 id="语法">语法</h2>
 <ul>
-<li><p>函数绑定的语法如下：</p>
-<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun x<span class="number">0</span> (x1 : t1, ..., xn : tn) = e</span><br></pre></td></tr></table></figure>
+<li>函数绑定的语法如下：</li>
+</ul>
+<p><figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun x<span class="number">0</span> (x1 : t1, ..., xn : tn) = e</span><br></pre></td></tr></table></figure></p>
 <ul>
 <li>函数名为 <code>x0</code></li>
 <li>其接收 <code>n</code> 个参数 <code>x1, ..., xn</code> ，其类型对应为 <code>t1, ..., tn</code></li>
 <li>其函数体为表达式 <code>e</code></li>
-</ul></li>
 </ul>
 <h2 id="类型检查">类型检查</h2>
 <ul>
-<li>函数的类型为<strong>“参数类型” -&gt; “结果类型”</strong>
-<ul>
+<li>函数的类型为<strong>“参数类型” -&gt; “结果类型”</strong></li>
 <li>对于 <code>x0</code>，其类型为 <code>t1 * ... * tn -&gt; t</code></li>
 <li>表达式 <code>e</code> 的类型 <code>t</code> 由 ML 自动推理得出</li>
-</ul></li>
 <li>参数并没有添加到顶层的静态环境中，只能在函数体中使用</li>
 </ul>
 <h2 id="分析">分析</h2>
 <ul>
-<li>ML 将函数简单地分析为一个值
-<ul>
+<li>ML 将函数简单地分析为一个值</li>
 <li>将该函数添加到动态环境中，方便之后调用</li>
-</ul></li>
 </ul>
 <h2 id="函数调用">函数调用</h2>
 <ul>
 <li>函数调用是一种新的表达式</li>
 <li>语法： <code>e0 (e1, ..., en)</code></li>
-<li>类型检查：
-<ul>
+<li>类型检查：</li>
 <li><code>e0</code> 的类型为 <code>t1*...*tn-&gt;t</code></li>
 <li>对于 1 ≤ i ≤ n, <code>ei</code> 的类型为 <code>ti</code></li>
 <li>则整个函数调用的类型为 <code>t</code></li>
-</ul></li>
-<li>分析：
-<ul>
+<li>分析：</li>
 <li>使用进行调用时的动态环境将 <code>e0</code> 分析为 <code>v0</code>, <code>e1</code> 分析为 <code>v1</code>，以此类推
 <ul>
 <li><code>v0</code> 一定是一个函数</li>
@@ -601,66 +586,49 @@
 <ul>
 <li>注意此时的动态环境为函数<strong>定义</strong>时的环境，而非调用的环境</li>
 </ul></li>
-</ul></li>
 </ul>
 <h1 id="pairs-和-tuples">Pairs 和 Tuples</h1>
 <ul>
-<li>编程语言需要基于简单数据构造复合数据的方法
-<ul>
+<li>编程语言需要基于简单数据构造复合数据的方法</li>
 <li>本节将介绍 <strong><em>pairs</em></strong> 和 <strong><em>tuples</em></strong> 这两种构建方法</li>
-</ul></li>
 </ul>
 <h2 id="pairs">Pairs</h2>
 <ul>
 <li>语法：<code>(e1, e2)</code></li>
-<li>类型检查：pair 的类型为 <code>t1 * t2</code>
-<ul>
+<li>类型检查：pair 的类型为 <code>t1 * t2</code></li>
 <li><code>t1</code> 是 <code>e1</code> 的类型</li>
 <li><code>t2</code> 是 <code>e2</code> 的类型</li>
-</ul></li>
-<li>分析：pair 的取值为 <code>(v1, v2)</code>
-<ul>
+<li>分析：pair 的取值为 <code>(v1, v2)</code></li>
 <li><code>v1</code> 是 <code>e1</code> 的值</li>
 <li><code>t2</code> 是 <code>e2</code> 的值</li>
-</ul></li>
-<li>使用 <code>#1</code> 和 <code>#2</code> 来获取 pair 的第一部分与第二部分
-<ul>
+<li>使用 <code>#1</code> 和 <code>#2</code> 来获取 pair 的第一部分与第二部分</li>
 <li>如果 <code>e</code> 的类型 <code>ta * tb</code></li>
 <li>则 <code>#1 e</code> 的类型为 <code>ta</code> 且 <code>#2 e</code> 的类型为 <code>tb</code></li>
-</ul></li>
-<li><p>应用举例：</p>
-<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun sum_two_pairs (pr1 : int*int, pr2 : int*int) = </span><br><span class="line">    (<span class="comment">#1 pr1) + (#2 pr1) + (#1 pr2) + (#2 pr2)</span></span><br><span class="line"></span><br><span class="line">fun div_mod (x : int, y : int) = (* <span class="symbol">note:</span> returning a pair is a real pain <span class="keyword">in</span> Java *)</span><br><span class="line">    (x div y, x mod y)</span><br></pre></td></tr></table></figure></li>
+<li>应用举例：</li>
 </ul>
+<p><figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun sum_two_pairs (pr1 : int*int, pr2 : int*int) = </span><br><span class="line">    (<span class="comment">#1 pr1) + (#2 pr1) + (#1 pr2) + (#2 pr2)</span></span><br><span class="line"></span><br><span class="line">fun div_mod (x : int, y : int) = (* <span class="symbol">note:</span> returning a pair is a real pain <span class="keyword">in</span> Java *)</span><br><span class="line">    (x div y, x mod y)</span><br></pre></td></tr></table></figure></p>
 <h2 id="tuples">Tuples</h2>
 <ul>
-<li>tuples 可以理解为 pairs 的扩展，其支持任意数量的部件
-<ul>
+<li>tuples 可以理解为 pairs 的扩展，其支持任意数量的部件</li>
 <li>3-tuple 举例： <code>(7, 9, 11)</code>
 <ul>
 <li>其类型为 <code>int * int * int</code></li>
 <li>可以通过 <code>#1 e</code>、 <code>#2 e</code> 和 <code>#3 e</code> 来获取部件</li>
 </ul></li>
-</ul></li>
-<li>tuples 和 pairs 可以任意嵌套，组成更加复杂的数据结构
-<ul>
+<li>tuples 和 pairs 可以任意嵌套，组成更加复杂的数据结构</li>
 <li>举例：<code>(7, (true, 9))</code></li>
-</ul></li>
 </ul>
 <h1 id="lists">Lists</h1>
 <ul>
-<li>pairs 和 tuples 的长度需要提前确定，下面介绍另一种长度可变的数据类型 <strong><em>lists</em></strong>
-<ul>
+<li>pairs 和 tuples 的长度需要提前确定，下面介绍另一种长度可变的数据类型 <strong><em>lists</em></strong></li>
 <li>lists 的长度不固定，但其中所有元素需保持<strong>同一类型</strong></li>
-</ul></li>
 <li>lists 可以分为两类：空 list 和非空 list</li>
 </ul>
 <h2 id="空-list">空 list</h2>
 <ul>
 <li>语法： <code>[ ]</code></li>
-<li>类型检查：<code>’a list</code>
-<ul>
+<li>类型检查：<code>’a list</code></li>
 <li>这表明其可以为任意类型的 list</li>
-</ul></li>
 <li>分析：空 list 本身是一个值</li>
 </ul>
 <h2 id="非空-list">非空 list</h2>
@@ -668,41 +636,34 @@
 <li>语法： <code>[e1, e2, ..., en]</code></li>
 <li>类型检查：当所有的元素均为类型 <code>t</code> 时，list 的类型为 <code>t list</code></li>
 <li>分析：list 的值为 <code>[v1, v2, ..., vn]</code></li>
-<li>通常我们使用 <code>e1 :: e2</code> 来创建一个 list
-<ul>
+<li>通常我们使用 <code>e1 :: e2</code> 来创建一个 list</li>
 <li><code>e1</code> 是一个类型为 <code>t</code> 的元素</li>
 <li><code>e2</code> 是一个元素类型为 <code>t</code> 的 list</li>
-</ul></li>
 </ul>
 <h2 id="内置函数">内置函数</h2>
 <ul>
-<li>目前我们将使用 ML 内置的以下三种函数来操作 lists：
-<ul>
+<li>目前我们将使用 ML 内置的以下三种函数来操作 lists：</li>
 <li><code>null</code> 函数： 空 list 为 <code>true</code>，非空 list 为 <code>false</code></li>
 <li><code>hd</code> 返回 lists 的第一个元素，如果为空则抛出异常</li>
 <li><code>tl</code> 返回 lists 除第一个元素之外的剩余部分（仍然是 list ），如果为空则抛出异常</li>
-</ul></li>
 </ul>
 <h2 id="应用举例">应用举例</h2>
 <figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun append (xs : int list, ys : int list) = </span><br><span class="line">    <span class="keyword">if</span> null xs </span><br><span class="line">    <span class="keyword">then</span> ys </span><br><span class="line">    <span class="keyword">else</span> (hd xs) <span class="symbol">:</span>: append(tl xs, ys)</span><br><span class="line">        </span><br><span class="line">fun sum_pair_list (xs : (int * int) list) =</span><br><span class="line">    <span class="keyword">if</span> null xs </span><br><span class="line">    <span class="keyword">then</span> <span class="number">0</span> </span><br><span class="line">    <span class="keyword">else</span> <span class="comment">#1 (hd xs) + #2 (hd xs) + sum_pair_list(tl xs)</span></span><br></pre></td></tr></table></figure>
 <ul>
 <li>一般使用 lists 的函数通常都是<strong>递归</strong>的</li>
-<li>写递归函数的两个步骤：
-<ul>
+<li>写递归函数的两个步骤：</li>
 <li>先考虑基线情况（base case）</li>
 <li>然后写递归（recursive case）</li>
-</ul></li>
 <li>我们可以将 pairs 或 tuples 和 lists 随意结合在一起</li>
 </ul>
 <h1 id="let-表达式">Let 表达式</h1>
 <ul>
-<li>let 表达式是 ML 的一个重要特性
-<ul>
+<li>let 表达式是 ML 的一个重要特性</li>
 <li>其能够提供简单灵活的<strong>局部绑定</strong></li>
 <li>可以放置在任何能够放置表达式的地方</li>
-</ul></li>
-<li><p>let 表达式的形式如下：</p>
-<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">let b1 b2 ... bn <span class="keyword">in</span> e <span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<li>let 表达式的形式如下：</li>
+</ul>
+<p><figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">let b1 b2 ... bn <span class="keyword">in</span> e <span class="keyword">end</span></span><br></pre></td></tr></table></figure></p>
 <ul>
 <li>语法：每个 <code>bi</code> 都是一个绑定，<code>e</code> 是一个表达式</li>
 <li>let 表达式中的一个绑定的作用范围是：
@@ -712,18 +673,16 @@
 </ul></li>
 <li>类型检查：<code>e</code> 的类型即为整个 let 表达式的类型</li>
 <li>分析：<code>e</code> 的值即为整个 let 表达式的值</li>
-</ul></li>
 </ul>
 <h2 id="应用举例-1">应用举例</h2>
 <ul>
-<li><p>let 表达式也可以绑定函数：</p>
-<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun countup_from1_better (<span class="symbol">x:</span>int) =</span><br><span class="line">    let fun count (<span class="symbol">from:</span>int) = </span><br><span class="line">        <span class="keyword">if</span> from=x </span><br><span class="line">        <span class="keyword">then</span> x::[] </span><br><span class="line">        <span class="keyword">else</span> from <span class="symbol">:</span>: count(from+<span class="number">1</span>) </span><br><span class="line">    <span class="keyword">in</span> </span><br><span class="line">        count <span class="number">1</span> </span><br><span class="line">    <span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<li>let 表达式也可以绑定函数：</li>
+</ul>
+<p><figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun countup_from1_better (<span class="symbol">x:</span>int) =</span><br><span class="line">    let fun count (<span class="symbol">from:</span>int) = </span><br><span class="line">        <span class="keyword">if</span> from=x </span><br><span class="line">        <span class="keyword">then</span> x::[] </span><br><span class="line">        <span class="keyword">else</span> from <span class="symbol">:</span>: count(from+<span class="number">1</span>) </span><br><span class="line">    <span class="keyword">in</span> </span><br><span class="line">        count <span class="number">1</span> </span><br><span class="line">    <span class="keyword">end</span></span><br></pre></td></tr></table></figure></p>
 <ul>
 <li>在这个局部函数中，使用了函数体外的变量 <code>x</code></li>
-<li>这是函数式编程的一个重要特性（函数闭包）</li>
-</ul></li>
-<li>let 表达式可以避免重复的运算
-<ul>
+<li><p>这是函数式编程的一个重要特性（函数闭包）</p></li>
+<li>let 表达式可以避免重复的运算</li>
 <li><p>下面的例子用于获得一个 int list 中的最大值</p>
 <figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun bad_max (xs : int list) =</span><br><span class="line">    <span class="keyword">if</span> null xs </span><br><span class="line">    <span class="keyword">then</span> <span class="number">0</span> (* <span class="symbol">note:</span> bad style; see below *) </span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> null (tl xs) </span><br><span class="line">    <span class="keyword">then</span> hd xs </span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> hd xs &gt; bad_max(tl xs) </span><br><span class="line">    <span class="keyword">then</span> hd xs </span><br><span class="line">    <span class="keyword">else</span> bad_max(tl xs)</span><br></pre></td></tr></table></figure>
 <ul>
@@ -731,17 +690,13 @@
 </ul></li>
 <li><p>如果采用了 let 表达式，计算复杂度会大大下降</p>
 <figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun good_max (xs : int list) =</span><br><span class="line">    <span class="keyword">if</span> null xs </span><br><span class="line">    <span class="keyword">then</span> <span class="number">0</span> (* <span class="symbol">note:</span> bad style; see below *) </span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> null (tl xs) </span><br><span class="line">    <span class="keyword">then</span> hd xs </span><br><span class="line">    <span class="keyword">else</span> </span><br><span class="line">        (* <span class="keyword">for</span> style, could also use a let-binding <span class="keyword">for</span> hd xs *)</span><br><span class="line">        let val tl_ans = good_max(tl xs) </span><br><span class="line">        <span class="keyword">in</span> </span><br><span class="line">            <span class="keyword">if</span> hd xs &gt; tl_ans </span><br><span class="line">            <span class="keyword">then</span> hd xs </span><br><span class="line">            <span class="keyword">else</span> tl_ans </span><br><span class="line">        <span class="keyword">end</span></span><br></pre></td></tr></table></figure></li>
-</ul></li>
 </ul>
 <h1 id="options">Options</h1>
 <ul>
-<li>上面的例子在 list 为空时返回了 0，这并不优雅
-<ul>
+<li>上面的例子在 list 为空时返回了 0，这并不优雅</li>
 <li>我们希望返回一个值，表明该 list 为空因此没有最大值</li>
 <li>ML 提供了 options 来做到这一点</li>
-</ul></li>
-<li>一个 option 有两种可能的取值：<code>NONE</code> 或 <code>SOME e</code>
-<ul>
+<li>一个 option 有两种可能的取值：<code>NONE</code> 或 <code>SOME e</code></li>
 <li><code>NONE</code> 表示该 option 没有携带任何值
 <ul>
 <li><code>NONE</code> 的类型为 <code>’a option</code></li>
@@ -750,75 +705,64 @@
 <ul>
 <li><code>SOME e</code> 的类型为 <code>t option</code>，其中 <code>t</code> 为 <code>e</code> 的类型</li>
 </ul></li>
-</ul></li>
-<li>我们使用 <code>isSome</code> 和 <code>valOf</code> 来处理 options
-<ul>
+<li>我们使用 <code>isSome</code> 和 <code>valOf</code> 来处理 options</li>
 <li>如果 option 为 <code>NONE</code>，则 <code>isSome</code> 为 <code>false</code></li>
 <li><code>valOf</code> 获取 <code>SOME e</code> 的值（<code>NONE</code> 则抛出异常）</li>
-</ul></li>
-<li><p>基于 <code>options</code>，我们可以对之前的例子进行进一步改写：</p>
-<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun better_max2 (xs : int list) =</span><br><span class="line">    <span class="keyword">if</span> null xs </span><br><span class="line">    <span class="keyword">then</span> NONE </span><br><span class="line">    <span class="keyword">else</span> let (* fine to assume argument nonempty because it is local *) </span><br><span class="line">             fun max_nonempty (xs : int list) = </span><br><span class="line">                <span class="keyword">if</span> null (tl xs) (* xs must <span class="keyword">not</span> be [] *) </span><br><span class="line">                <span class="keyword">then</span> hd xs </span><br><span class="line">                <span class="keyword">else</span> let val tl_ans = max_nonempty(tl xs) </span><br><span class="line">                     <span class="keyword">in</span> </span><br><span class="line">                         <span class="keyword">if</span> hd xs &gt; tl_ans </span><br><span class="line">                         <span class="keyword">then</span> hd xs </span><br><span class="line">                         <span class="keyword">else</span> tl_ans </span><br><span class="line">                     <span class="keyword">end</span></span><br><span class="line">          <span class="keyword">in</span></span><br><span class="line">              SOME (max_nonempty xs)</span><br><span class="line">          <span class="keyword">end</span></span><br></pre></td></tr></table></figure></li>
+<li>基于 <code>options</code>，我们可以对之前的例子进行进一步改写：</li>
 </ul>
+<p><figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun better_max2 (xs : int list) =</span><br><span class="line">    <span class="keyword">if</span> null xs </span><br><span class="line">    <span class="keyword">then</span> NONE </span><br><span class="line">    <span class="keyword">else</span> let (* fine to assume argument nonempty because it is local *) </span><br><span class="line">             fun max_nonempty (xs : int list) = </span><br><span class="line">                <span class="keyword">if</span> null (tl xs) (* xs must <span class="keyword">not</span> be [] *) </span><br><span class="line">                <span class="keyword">then</span> hd xs </span><br><span class="line">                <span class="keyword">else</span> let val tl_ans = max_nonempty(tl xs) </span><br><span class="line">                     <span class="keyword">in</span> </span><br><span class="line">                         <span class="keyword">if</span> hd xs &gt; tl_ans </span><br><span class="line">                         <span class="keyword">then</span> hd xs </span><br><span class="line">                         <span class="keyword">else</span> tl_ans </span><br><span class="line">                     <span class="keyword">end</span></span><br><span class="line">          <span class="keyword">in</span></span><br><span class="line">              SOME (max_nonempty xs)</span><br><span class="line">          <span class="keyword">end</span></span><br></pre></td></tr></table></figure></p>
 <h1 id="其他表达式与操作符">其他表达式与操作符</h1>
 <ul>
-<li><code>e1 andalso e2</code> 是逻辑与
-<ul>
+<li><code>e1 andalso e2</code> 是逻辑与</li>
 <li><code>e1</code> 和 <code>e2</code> 的类型为 <code>bool</code>（下同）</li>
-</ul></li>
 <li><code>e1 orelse e2</code> 是逻辑或</li>
 <li><code>not e</code> 是逻辑非</li>
 <li><code>e1 = e2</code> 判断两个表达式是否相等</li>
 <li><code>e1 &lt;&gt; e2</code> 判断两个表达式是否不同</li>
-<li>其他比较运算符包括：<code>&gt;, &lt;, &gt;=, &lt;=</code>
-<ul>
+<li>其他比较运算符包括：<code>&gt;, &lt;, &gt;=, &lt;=</code></li>
 <li><code>real</code> 和 <code>int</code> 类型不能混合比较</li>
-</ul></li>
 <li><code>~e</code> 表示负数</li>
 </ul>
 <h1 id="不可变性的好处">不可变性的好处</h1>
 <ul>
-<li>在 ML 中，我们没有方法去改变任何绑定、tuple 或 list 等的内容
-<ul>
+<li>在 ML 中，我们没有方法去改变任何绑定、tuple 或 list 等的内容</li>
 <li>例如一个变量 <code>x</code> 绑定为 <code>[(3,4),(7,9)]</code>
 <ul>
 <li>我们可以为 <code>x</code> 绑定一个新的值，但这仅仅是投影，不会对任何引用了原来 <code>x</code> 的代码产生影响</li>
 <li>我们无法去改变 list 或 tuple 中的任何部分，只能进行构建与查询</li>
-</ul></li>
 </ul></li>
 <li>数据的不可变性是函数式编程的主要贡献</li>
 </ul>
 <h2 id="共享与别名">共享与别名</h2>
 <ul>
 <li>具体来说，不可变性的一大好处就是让共享（sharing）与别名（aliasing）互不相关</li>
-<li><p>下面以一个例子来说明：</p>
-<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun append (xs : int list, ys : int list) = </span><br><span class="line">    <span class="keyword">if</span> null xs </span><br><span class="line">    <span class="keyword">then</span> ys </span><br><span class="line">    <span class="keyword">else</span> (hd xs) <span class="symbol">:</span>: append(tl xs, ys)</span><br></pre></td></tr></table></figure>
+<li>下面以一个例子来说明：</li>
+</ul>
+<p><figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun append (xs : int list, ys : int list) = </span><br><span class="line">    <span class="keyword">if</span> null xs </span><br><span class="line">    <span class="keyword">then</span> ys </span><br><span class="line">    <span class="keyword">else</span> (hd xs) <span class="symbol">:</span>: append(tl xs, ys)</span><br></pre></td></tr></table></figure></p>
 <ul>
 <li>在上面的例子中，返回的 list 是否共享了参数中的元素？
 <ul>
 <li>在 ML 中，这是无法得知的（实际上发生了），也是无关紧要的，因为所有的数据都是<strong>不可变</strong>的</li>
 <li>而对于可变数据的语言来说，如果发生了共享，即发生了别名现象，那么对于某个变量的改动可能会引起别的变量的改变，这会导致难以查明的 bug</li>
 </ul></li>
-</ul></li>
-<li><p>在 Java 语言中，可变的数据往往会引起困扰：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ProtectedResource</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Resource theResource = ...; </span><br><span class="line">    <span class="keyword">private</span> String[] allowedUsers = ...; </span><br><span class="line">    <span class="keyword">public</span> String[] getAllowedUsers() &#123;</span><br><span class="line">        <span class="keyword">return</span> allowedUsers; </span><br><span class="line">    &#125; </span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">currentUser</span><span class="params">()</span> </span>&#123; ... &#125; </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">useTheResource</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i &lt; allowedUsers.length; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(currentUser().equals(allowedUsers[i])) &#123; </span><br><span class="line">                ... <span class="comment">// access allowed: use it return;</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalAccessException();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<li>在 Java 语言中，可变的数据往往会引起困扰：</li>
+</ul>
+<p><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ProtectedResource</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Resource theResource = ...; </span><br><span class="line">    <span class="keyword">private</span> String[] allowedUsers = ...; </span><br><span class="line">    <span class="keyword">public</span> String[] getAllowedUsers() &#123;</span><br><span class="line">        <span class="keyword">return</span> allowedUsers; </span><br><span class="line">    &#125; </span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">currentUser</span><span class="params">()</span> </span>&#123; ... &#125; </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">useTheResource</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i &lt; allowedUsers.length; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(currentUser().equals(allowedUsers[i])) &#123; </span><br><span class="line">                ... <span class="comment">// access allowed: use it return;</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalAccessException();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <ul>
 <li>在上面的例子中，<code>getAllowedUsers</code> 会返回一个 <code>allowedUsers</code> 的别名，我们可以随意修改允许用户的名单
 <ul>
 <li>数组变量是引用类型变量，即使本身是 <code>private</code>，但其中元素可以修改</li>
 </ul></li>
 <li>在 Java 中，我们需要经常对数据进行拷贝，防止别名的出现</li>
-</ul></li>
 </ul>
 <h1 id="编程语言的部件">编程语言的部件</h1>
 <ul>
-<li>一般来说，任何编程语言的定义与学习都应该包含如下组成部分：
-<ul>
+<li>一般来说，任何编程语言的定义与学习都应该包含如下组成部分：</li>
 <li><strong>语法</strong>（Syntax）：如何正确地编写代码</li>
 <li><strong>语义</strong>（Semantics）：如何理解代码（例如表达式的值如何分析）</li>
 <li><strong>习语</strong>（Idioms）：可以理解为代码模式(惯用代码，例如 let 表达式)</li>
 <li><strong>库</strong>（Libraries）： 可以直接复用的代码</li>
 <li><strong>工具</strong>（Tools）：操作程序的工具（编译器、调试器等）</li>
-</ul></li>
 </ul>
 <h1 id="思维导图">思维导图</h1>
 <p><img src="http://media.zjubiomedit.com/2019-02-06-030209.png" width="80%"></p>
@@ -971,7 +915,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">22</span>
+                    <span class="site-state-item-count">23</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1071,7 +1015,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">15</span>
+                      
+                    
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
