@@ -472,88 +472,106 @@
 <a id="more"></a>
 <h1 id="深层神经网络概述">深层神经网络概述</h1>
 <ul>
-<li>深层神经网络是指隐藏层超过<strong>两层</strong>的神经网络</li>
+<li><p>深层神经网络是指隐藏层超过<strong>两层</strong>的神经网络</p>
+<p><img src="http://media.zjubiomedit.com/2019-02-03-025828.png" width="60%"></p></li>
 </ul>
-<p><img src="http://media.zjubiomedit.com/2019-02-03-025828.png" width="60%"></p>
 <h2 id="符号定义">符号定义</h2>
 <ul>
 <li>我们使用 <code>L</code> 来定义神经网络的层数（不包含输入层）</li>
-<li><code>n</code> 表示每一层的神经元数量集合</li>
+<li><code>n</code> 表示每一层的神经元数量集合
+<ul>
 <li><code>n[0]</code> 表示输入层的维数</li>
 <li><code>n[L]</code> 表示输出层的维数</li>
+</ul></li>
 <li><code>g</code> 表示每一层的激活函数</li>
-<li><code>z</code> 表示每一层的线性输出</li>
+<li><code>z</code> 表示每一层的线性输出
+<ul>
 <li><code>Z</code> 表示向量化后的线性输出</li>
-<li><code>w</code> 和 <code>b</code> 表示每一层线性输出的对应参数</li>
+</ul></li>
+<li><code>w</code> 和 <code>b</code> 表示每一层线性输出的对应参数
+<ul>
 <li><code>W</code> 和 <code>B</code> 表示向量化后的参数</li>
-<li><code>a</code> 表示每一层的激活输出</li>
+</ul></li>
+<li><code>a</code> 表示每一层的激活输出
+<ul>
 <li><code>a[0]</code> 表示输出，<code>a[L]</code> 表示输出</li>
 <li><code>A</code> 表示向量化后的激活输出</li>
+</ul></li>
 </ul>
 <h2 id="深层网络中的前向传播">深层网络中的前向传播</h2>
 <ul>
-<li>对于单个输入，前向传播的伪代码如下：</li>
-</ul>
-<p><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">z[l] = W[l]a[l-1] + b[l]</span><br><span class="line">a[l] = g[l](z[l])</span><br></pre></td></tr></table></figure></p>
-<ul>
-<li>对于 <code>m</code> 个输入（向量化），前向传播的伪代码如下：</li>
-</ul>
-<p><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Z[l] = W[l]A[l-1] + B[l]</span><br><span class="line">A[l] = g[l](Z[l])</span><br></pre></td></tr></table></figure></p>
-<ul>
-<li>我们无法对整个前向传播使用向量化，需要使用 for 循环（即每一层要分开计算）</li>
+<li><p>对于单个输入，前向传播的伪代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">z[l] = W[l]a[l-1] + b[l]</span><br><span class="line">a[l] = g[l](z[l])</span><br></pre></td></tr></table></figure></li>
+<li><p>对于 <code>m</code> 个输入（向量化），前向传播的伪代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Z[l] = W[l]A[l-1] + B[l]</span><br><span class="line">A[l] = g[l](Z[l])</span><br></pre></td></tr></table></figure></li>
+<li><p>我们无法对整个前向传播使用向量化，需要使用 for 循环（即每一层要分开计算）</p></li>
 </ul>
 <h2 id="维数的确认">维数的确认</h2>
 <ul>
-<li>我们需要确保各个向量的维数能够匹配</li>
+<li>我们需要确保各个向量的维数能够匹配
+<ul>
 <li>这里用 <code>l</code> 表示当前是第几层</li>
-<li><code>w[l]</code> 和 <code>dw[l]</code> 的维数：<code>(n[l], n[l-1])</code></li>
+</ul></li>
+<li><code>w[l]</code> 和 <code>dw[l]</code> 的维数：<code>(n[l], n[l-1])</code>
+<ul>
 <li><code>W[l]</code> 和 <code>dW[l]</code> 的维数： <code>(n[l], n[l-1])</code></li>
-<li><code>b[l]</code> 和 <code>db[l]</code> 的维数：<code>(n[l], 1)</code></li>
+</ul></li>
+<li><code>b[l]</code> 和 <code>db[l]</code> 的维数：<code>(n[l], 1)</code>
+<ul>
 <li><code>B[l]</code> 和 <code>dB[l]</code> 的维数： <code>(n[l], m)</code></li>
-<li><code>z[l]</code> 和 <code>a[l]</code> 的维数：<code>(n[l], 1)</code></li>
+</ul></li>
+<li><code>z[l]</code> 和 <code>a[l]</code> 的维数：<code>(n[l], 1)</code>
+<ul>
 <li><code>Z[l]</code> 和 <code>A[l]</code> 的维数：<code>(n[l], m)</code></li>
 <li><code>dZ[l]</code> 和 <code>dA[l]</code> 的维数：<code>(n[l], m)</code></li>
+</ul></li>
 </ul>
 <h3 id="为什么要进行深层表示">为什么要进行深层表示？</h3>
 <ul>
-<li>我们可以从两个角度解释为什么使用多个隐藏层：</li>
+<li>我们可以从两个角度解释为什么使用多个隐藏层：
+<ul>
 <li>多个隐藏层可以将问题从简单到复杂进行拆分，先考虑简单的特征，再逐步变得复杂，最终实现预期的效果</li>
 <li>电路理论表明越少的层数需要的单元数呈指数级上升，对神经网络来说也是如此，
 <ul>
 <li>对于一个复杂任务来说，层数越少每一层所要包含的神经元数量会爆炸式增长</li>
 </ul></li>
+</ul></li>
 </ul>
 <h1 id="深层神经网络的模块">深层神经网络的模块</h1>
 <ul>
-<li>深层神经网络一般包含前向传播与反向传播两个模块</li>
+<li>深层神经网络一般包含前向传播与反向传播两个模块
+<ul>
 <li>前向传播模块得到代价函数</li>
 <li>后向传播模块计算各层参数的梯度</li>
 <li>最后通过梯度下降来更新参数，进行学习</li>
+</ul></li>
 <li>在实际实现中，我们需要通过缓存将前向传播中的某些参数传递到反向传播中，帮助进行梯度的计算</li>
 </ul>
 <h2 id="前向传播模块">前向传播模块</h2>
 <ul>
-<li>向量化后的伪代码如下：</li>
+<li><p>向量化后的伪代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input  A[l-1]</span><br><span class="line">Z[l] = W[l]A[l-1] + B[l]</span><br><span class="line">A[l] = g[l](Z[l])</span><br><span class="line">Output A[l], cache(Z[l], W[l], B[l])</span><br></pre></td></tr></table></figure></li>
 </ul>
-<p><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input  A[l-1]</span><br><span class="line">Z[l] = W[l]A[l-1] + B[l]</span><br><span class="line">A[l] = g[l](Z[l])</span><br><span class="line">Output A[l], cache(Z[l], W[l], B[l])</span><br></pre></td></tr></table></figure></p>
 <h2 id="反向传播模块">反向传播模块</h2>
 <ul>
-<li>向量化后的伪代码如下：</li>
-</ul>
-<p><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input dA[l], Caches</span><br><span class="line">dZ[l] = dA[l] * g&apos;[l](Z[l])</span><br><span class="line">dW[l] = (1/m) * np.dot(dZ[l], A[l-1].T)</span><br><span class="line">dB[l] = (1/m) * np.sum(dZ[l], axis=1, keepdims=True)</span><br><span class="line">dA[l-1] = np.dot(W[l].T, dZ[l])</span><br><span class="line">Output dA[l-1], dW[l], dB[l]</span><br></pre></td></tr></table></figure></p>
+<li><p>向量化后的伪代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input dA[l], Caches</span><br><span class="line">dZ[l] = dA[l] * g&apos;[l](Z[l])</span><br><span class="line">dW[l] = (1/m) * np.dot(dZ[l], A[l-1].T)</span><br><span class="line">dB[l] = (1/m) * np.sum(dZ[l], axis=1, keepdims=True)</span><br><span class="line">dA[l-1] = np.dot(W[l].T, dZ[l])</span><br><span class="line">Output dA[l-1], dW[l], dB[l]</span><br></pre></td></tr></table></figure></li>
+<li>最后一层 <code>dA</code> 的求解基于代价函数得出
 <ul>
-<li>最后一层 <code>dA</code> 的求解基于代价函数得出</li>
 <li>注意计算应去除 <code>1/m</code> 这一项，防止重复计算</li>
+</ul></li>
 </ul>
 <h1 id="参数与超参数">参数与超参数</h1>
 <ul>
 <li>在神经网络中，参数主要指 <code>w</code> 和 <code>b</code></li>
-<li>超参数指影响参数选择的参数，例如：</li>
+<li>超参数指影响参数选择的参数，例如：
+<ul>
 <li>学习速率</li>
 <li>迭代次数</li>
 <li>隐藏层层数</li>
 <li>隐藏层单元数</li>
 <li>激励函数的选择</li>
+</ul></li>
 <li>深度学习是一个经验主义的过程，随着外界条件的不断变化，需要进行多次的实验来确定最佳的超参数与参数</li>
 </ul>
 <h1 id="深层神经网络与大脑的关系">深层神经网络与大脑的关系</h1>

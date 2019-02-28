@@ -472,7 +472,8 @@
 <h1 id="存在的问题">存在的问题</h1>
 <ul>
 <li>在之前的推导中，我们通常假定拥有足够的数据来拟合模型，即 <span class="math inline">\(m \gg n\)</span>（样本量远大于维数）</li>
-<li>但是如果维数远大于样本量，则难以对模型进行拟合</li>
+<li>但是如果维数远大于样本量，则难以对模型进行拟合
+<ul>
 <li><p>以简单的高斯分布为例，通过极大似然法可以得到： <span class="math display">\[
 \begin{aligned}
 \mu &amp;= \frac 1 m \sum_{i=1}^m x^{(i)} \\
@@ -480,23 +481,31 @@
 \end{aligned}
 \]</span></p>
 <ul>
-<li>可以发现 <span class="math inline">\(\Sigma\)</span> 是奇异矩阵，即特征值为 0，不满秩的矩阵</li>
+<li>可以发现 <span class="math inline">\(\Sigma\)</span> 是奇异矩阵，即特征值为 0，不满秩的矩阵
+<ul>
 <li>这意味着我们无法对 <span class="math inline">\(\Sigma\)</span> 求逆，且 <span class="math inline">\(1/|\Sigma|^{1/2}=0\)</span></li>
 <li>因此我们无法写出该分布的概率密度函数，也就无法对其建模</li>
-<li>可以将其理解为线性方程组求解，未知数的个数比方程数目多，因而无法完全求出所有未知数</li>
+</ul></li>
+<li>可以将其理解为线性方程组求解，未知数的个数比方程数目多，因而无法完全求出所有未知数
+<ul>
 <li>原文使用仿射空间进行解释，并不是很懂( ⊙ o ⊙ )</li>
 </ul></li>
-<li>我们可以通过一些方法解决这个问题，在接下来的几节中：</li>
+</ul></li>
+</ul></li>
+<li>我们可以通过一些方法解决这个问题，在接下来的几节中：
+<ul>
 <li>我们首先会对协方差矩阵添加两种可能的限制，来帮助求解
 <ul>
 <li>但这些方法并不能完美解决问题</li>
 </ul></li>
-<li><p>之后我们会介绍高斯分布的某些性质，并提出因子分析模型及其 EM 求解</p></li>
+<li>之后我们会介绍高斯分布的某些性质，并提出因子分析模型及其 EM 求解</li>
+</ul></li>
 </ul>
 <h1 id="对协方差矩阵的限制">对协方差矩阵的限制</h1>
 <ul>
 <li>对协方差矩阵的限制可以分为两种</li>
-<li>第一种限制是假设矩阵为对角矩阵</li>
+<li>第一种限制是假设矩阵为对角矩阵
+<ul>
 <li><p>基于该假设，最大似然估计的结果为： <span class="math display">\[
 \Sigma_{jj} = \frac 1 m \sum_{i=1}^m (x^{(i)}_j-\mu_j)^2
 \]</span></p>
@@ -504,30 +513,36 @@
 <li>对二维高斯分布来说，其概率密度在平面上的投影轮廓为椭圆</li>
 <li>当协方差矩阵为对角矩阵时，椭圆的轴与坐标轴<strong>平行</strong></li>
 </ul></li>
-<li>第二种限制是进一步假设对角线上的元素全部相同</li>
+</ul></li>
+<li>第二种限制是进一步假设对角线上的元素全部相同
+<ul>
 <li><p>此时 <span class="math inline">\(\Sigma = \sigma^2I\)</span>，其中最大似然估计表明： <span class="math display">\[
 \sigma^2 = \frac 1 {mn} \sum_{j=1}^n \sum_{i=1}^m (x_j^{(i)}-\mu_j)^2
 \]</span></p>
 <ul>
 <li>此时投影轮廓为圆（高维情况下为球面或超球面）</li>
 </ul></li>
-<li>在没有限制的情况下，我们需要 <span class="math inline">\(m &gt; n+1\)</span> 来保证 <span class="math inline">\(\Sigma\)</span> 的最大似然估计不是奇异矩阵</li>
+</ul></li>
+<li>在没有限制的情况下，我们需要 <span class="math inline">\(m &gt; n+1\)</span> 来保证 <span class="math inline">\(\Sigma\)</span> 的最大似然估计不是奇异矩阵
+<ul>
 <li>在上述两个限制中的任意一个下，我们只需要 <span class="math inline">\(m \ge 2\)</span> 来保证非奇异</li>
 <li>但是在上述限制下，我们会丢失部分特征项之间的相互联系
 <ul>
 <li>因子分析模型能够解决上述问题</li>
+</ul></li>
 </ul></li>
 </ul>
 <h1 id="高斯分布的边缘和条件分布">高斯分布的边缘和条件分布</h1>
 <ul>
 <li>在介绍因子分析前，我们先介绍联合多元高斯分布的<a href="https://zh.wikipedia.org/wiki/%E8%BE%B9%E7%BC%98%E5%88%86%E5%B8%83" target="_blank" rel="noopener">边缘分布</a>和条件分布</li>
 <li><p>假定我们有一个由两个变量组合而成的随机变量： <span class="math display">\[
-  x = \left[\begin{array}{cc}
-  x_1 \\
-  x_2  
-  \end{array} 
-  \right]
-  \]</span></p></li>
+x = \left[\begin{array}{cc}
+x_1 \\
+x_2  
+\end{array} 
+\right]
+\]</span></p>
+<ul>
 <li>其中 <span class="math inline">\(x_1 \in \mathbb{R}^r\)</span>，<span class="math inline">\(x_2 \in \mathbb{R}^s\)</span>，因此 <span class="math inline">\(x \in \mathbb{R}^{r+s}\)</span></li>
 <li><p>假定 <span class="math inline">\(x \sim \mathcal{N}(\mu, \Sigma)\)</span>，其中 <span class="math display">\[
 \mu = \left[\begin{array}{cc}
@@ -544,10 +559,12 @@
 <li>这里 <span class="math inline">\(\mu_1 \in \mathbb{R}^r\)</span>，<span class="math inline">\(\mu_2 \in \mathbb{R}^s\)</span>，<span class="math inline">\(\Sigma_{11} \in \mathbb{R}^{r\times r}\)</span>，<span class="math inline">\(\Sigma_{12} \in \mathbb{R}^{r\times s}\)</span>，以此类推</li>
 <li>因为协方差矩阵 <span class="math inline">\(\Sigma\)</span> 是对称的，所以 <span class="math inline">\(\Sigma_{12} = \Sigma_{21}^T\)</span></li>
 </ul></li>
+</ul></li>
 <li><p>基于上述定义，我们可以求出 <span class="math inline">\(x_1\)</span> 的<strong>边缘分布</strong>： <span class="math display">\[
-  \text{E}[x_1] = \mu_1 \\
-  \text{Cov}(x_1) = \text{E}[(x_1-\mu_1)(x_1-\mu_1)^T] = \Sigma_{11}
-  \]</span></p></li>
+\text{E}[x_1] = \mu_1 \\
+\text{Cov}(x_1) = \text{E}[(x_1-\mu_1)(x_1-\mu_1)^T] = \Sigma_{11}
+\]</span></p>
+<ul>
 <li><p>关于协方差公式的证明如下： <span class="math display">\[
 \begin{aligned}
 \text{Cov}(x) &amp;= \Sigma \\
@@ -574,25 +591,31 @@ x_2-\mu_2
 <li><p>因为边缘分布本身也是高斯分布，所以有： <span class="math display">\[
 x_1 \sim \mathcal{N}(\mu_1, \Sigma_{11})
 \]</span></p></li>
+</ul></li>
 <li><p>类似地，我们可以推导出条件分布 <span class="math inline">\(x_1|x_2 \sim \mathcal{N}(\mu_{1|2}, \Sigma_{1|2})\)</span>，其中： <span class="math display">\[
-  \begin{align*}
-  \mu_{1|2} &amp;= \mu_1 + \Sigma_{12}\Sigma_{22}^{-1}(x_2 - \mu_2) \tag{1} \\
-  \Sigma_{1|2} &amp;= \Sigma_{11} - \Sigma_{12}\Sigma_{22}^{-1}\Sigma_{21} \tag{2}
-  \end{align*}
-  \]</span></p></li>
-<li><p>推导过程省略</p></li>
+\begin{align*}
+\mu_{1|2} &amp;= \mu_1 + \Sigma_{12}\Sigma_{22}^{-1}(x_2 - \mu_2) \tag{1} \\
+\Sigma_{1|2} &amp;= \Sigma_{11} - \Sigma_{12}\Sigma_{22}^{-1}\Sigma_{21} \tag{2}
+\end{align*}
+\]</span></p>
+<ul>
+<li>推导过程省略</li>
+</ul></li>
 </ul>
 <h1 id="因子分析模型">因子分析模型</h1>
 <h2 id="模型的提出">模型的提出</h2>
 <ul>
-<li>因子分析模型是指通过少数几个潜在变量（因子）来表示原始数据，以此发现特征项之间的相互联系，探求原始数据的基本结构</li>
+<li>因子分析模型是指通过少数几个潜在变量（因子）来表示原始数据，以此发现特征项之间的相互联系，探求原始数据的基本结构
+<ul>
 <li>其本质是一种<strong>降维</strong>方法</li>
+</ul></li>
 <li><p>在因子模型中，我们提出如下的联合分布 <span class="math inline">\((x,z)\)</span>： <span class="math display">\[
-  \begin{aligned}
-  z &amp;\sim \mathcal{N}(0,I) \\
-  x|z &amp;\sim \mathcal{N}(\mu+\Lambda z, \Psi)
-  \end{aligned}
-  \]</span></p></li>
+\begin{aligned}
+z &amp;\sim \mathcal{N}(0,I) \\
+x|z &amp;\sim \mathcal{N}(\mu+\Lambda z, \Psi)
+\end{aligned}
+\]</span></p>
+<ul>
 <li>其中 <span class="math inline">\(z \in \mathbb{R}^k\)</span> 是潜在随机变量</li>
 <li>模型的参数包括：
 <ul>
@@ -601,83 +624,95 @@ x_1 \sim \mathcal{N}(\mu_1, \Sigma_{11})
 <li>对角矩阵 <span class="math inline">\(\Psi \in \mathbb{R}^{n\times n}\)</span></li>
 </ul></li>
 <li><span class="math inline">\(k\)</span> 应该小于 <span class="math inline">\(n\)</span></li>
-<li>因此我们可以想象 <span class="math inline">\(x^{(i)}\)</span> 是通过对 <span class="math inline">\(k\)</span> 维多元高斯分布 <span class="math inline">\(z^{(i)}\)</span> 进行采样生成的</li>
+</ul></li>
+<li>因此我们可以想象 <span class="math inline">\(x^{(i)}\)</span> 是通过对 <span class="math inline">\(k\)</span> 维多元高斯分布 <span class="math inline">\(z^{(i)}\)</span> 进行采样生成的
+<ul>
 <li>首先通过计算 <span class="math inline">\(\mu+\Lambda z^{(i)}\)</span> 将其映射至 <span class="math inline">\(k\)</span> 维仿射空间 <span class="math inline">\(\mathbb{R}^n\)</span></li>
 <li>然后通过加上协方差噪声 <span class="math inline">\(\Psi\)</span> 生成 <span class="math inline">\(x^{(i)}\)</span></li>
+</ul></li>
 <li><p>我们也可以将上述模型表示为如下形式： <span class="math display">\[
-  \begin{aligned}
-  z &amp;\sim \mathcal{N}(0,I) \\
-  \epsilon &amp;\sim \mathcal{N}(0,\Psi) \\
-  x &amp;= \mu+\Lambda z+ \epsilon
-  \end{aligned}
-  \]</span></p></li>
-<li><p>其中 <span class="math inline">\(\epsilon\)</span> 和 <span class="math inline">\(z\)</span> 是独立的</p></li>
+\begin{aligned}
+z &amp;\sim \mathcal{N}(0,I) \\
+\epsilon &amp;\sim \mathcal{N}(0,\Psi) \\
+x &amp;= \mu+\Lambda z+ \epsilon
+\end{aligned}
+\]</span></p>
+<ul>
+<li>其中 <span class="math inline">\(\epsilon\)</span> 和 <span class="math inline">\(z\)</span> 是独立的</li>
+</ul></li>
 </ul>
 <h2 id="模型的求解">模型的求解</h2>
 <ul>
 <li><p>我们的随机变量 <span class="math inline">\(z\)</span> 和 <span class="math inline">\(x\)</span> 有如下的联合高斯分布： <span class="math display">\[
-  \left[\begin{array}{cc}
-  z \\
-  x  
-  \end{array} 
-  \right] \sim \mathcal{N}(\mu_{zx}, \Sigma)
-  \]</span></p></li>
+\left[\begin{array}{cc}
+z \\
+x  
+\end{array} 
+\right] \sim \mathcal{N}(\mu_{zx}, \Sigma)
+\]</span></p>
+<ul>
 <li>下面将分别求解 <span class="math inline">\(\mu_{zx}\)</span> 和 <span class="math inline">\(\Sigma\)</span></li>
+</ul></li>
 <li><p>根据 <span class="math inline">\(z \sim \mathcal{N}(0,I)\)</span>，我们有 <span class="math inline">\(\text{E}[z] = 0\)</span>，而 <span class="math display">\[
-  \begin{aligned}
-  \text{E}[x] &amp;= \text{E}[\mu + \Lambda z + \epsilon] \\
-  &amp; = \mu + \Lambda \text{E} [z] + \text{E}[\epsilon] \\
-  &amp;= \mu
-  \end{aligned}
-  \]</span></p></li>
+\begin{aligned}
+\text{E}[x] &amp;= \text{E}[\mu + \Lambda z + \epsilon] \\
+&amp; = \mu + \Lambda \text{E} [z] + \text{E}[\epsilon] \\
+&amp;= \mu
+\end{aligned}
+\]</span></p></li>
 <li><p>将两者结合在一起，得到： <span class="math display">\[
-  \mu_{zx} = \left[\begin{array}{cc}
-  \vec 0 \\
-  \mu  
-  \end{array} 
-  \right]
-  \]</span></p></li>
-<li>为了求解 <span class="math inline">\(\Sigma\)</span>，我们需要计算 <span class="math inline">\(\Sigma_{zz}\)</span>（矩阵左上角）、<span class="math inline">\(\Sigma_{zx}\)</span>（矩阵右上角）和 <span class="math inline">\(\Sigma_{xx}\)</span>（矩阵右下角）</li>
+\mu_{zx} = \left[\begin{array}{cc}
+\vec 0 \\
+\mu  
+\end{array} 
+\right]
+\]</span></p></li>
+<li>为了求解 <span class="math inline">\(\Sigma\)</span>，我们需要计算 <span class="math inline">\(\Sigma_{zz}\)</span>（矩阵左上角）、<span class="math inline">\(\Sigma_{zx}\)</span>（矩阵右上角）和 <span class="math inline">\(\Sigma_{xx}\)</span>（矩阵右下角）
+<ul>
 <li>矩阵左下角与右上角对称，计算其一即可</li>
+</ul></li>
 <li>由于 <span class="math inline">\(z \sim \mathcal{N}(0,I)\)</span>，根据之前提出的边缘分布性质，有 <span class="math inline">\(\Sigma_{zz}= \text{Cov}(z) = I\)</span></li>
 <li><p><span class="math inline">\(\Sigma_{zx}\)</span> 的求解如下： <span class="math display">\[
-  \begin{aligned}
-  \Sigma_{zx} &amp;= \text{E}[(z-\text{E}[z])(x-\text{E}[x])^T] \\
-  &amp; = \text{E}[z(\mu + \Lambda z + \epsilon - \mu)^T] \\
-  &amp;= \text{E}[zz^T]\Lambda^T + \text{E}[z\epsilon^T] \\
-  &amp;= \Lambda^T
-  \end{aligned}
-  \]</span></p></li>
+\begin{aligned}
+\Sigma_{zx} &amp;= \text{E}[(z-\text{E}[z])(x-\text{E}[x])^T] \\
+&amp; = \text{E}[z(\mu + \Lambda z + \epsilon - \mu)^T] \\
+&amp;= \text{E}[zz^T]\Lambda^T + \text{E}[z\epsilon^T] \\
+&amp;= \Lambda^T
+\end{aligned}
+\]</span></p>
+<ul>
 <li>最后一步的推导使用了 <span class="math inline">\(\text{E}[zz^T] = \text{Cov}(z) + (\text{E}[z])^2 = \text{Cov}(z)\)</span></li>
 <li>以及 <span class="math inline">\(\text{E}[z\epsilon^T] = \text{E}[z]\text{E}[\epsilon^T] = 0\)</span>
 <ul>
 <li>因为 <span class="math inline">\(z\)</span> 和 <span class="math inline">\(\epsilon\)</span> 相互独立</li>
 </ul></li>
+</ul></li>
 <li><p>类似地，<span class="math inline">\(\Sigma_{xx}\)</span> 的求解如下： <span class="math display">\[
-  \begin{aligned}
-  \Sigma_{xx} &amp;= \text{E}[(x-\text{E}[x])(x-\text{E}[x])^T] \\
-  &amp; = \text{E}[(\mu + \Lambda z + \epsilon - \mu)(\mu + \Lambda z + \epsilon - \mu)^T] \\
-  &amp;= \text{E}[\Lambda zz^T\Lambda^T + \epsilon z^T\Lambda^T + \Lambda z\epsilon^T + \epsilon\epsilon^T] \\
-  &amp;= \Lambda\text{E}[zz^T]\Lambda^T + \text{E}[\epsilon\epsilon^T] \\
-  &amp;= \Lambda\Lambda^T + \Psi
-  \end{aligned}
-  \]</span></p></li>
+\begin{aligned}
+\Sigma_{xx} &amp;= \text{E}[(x-\text{E}[x])(x-\text{E}[x])^T] \\
+&amp; = \text{E}[(\mu + \Lambda z + \epsilon - \mu)(\mu + \Lambda z + \epsilon - \mu)^T] \\
+&amp;= \text{E}[\Lambda zz^T\Lambda^T + \epsilon z^T\Lambda^T + \Lambda z\epsilon^T + \epsilon\epsilon^T] \\
+&amp;= \Lambda\text{E}[zz^T]\Lambda^T + \text{E}[\epsilon\epsilon^T] \\
+&amp;= \Lambda\Lambda^T + \Psi
+\end{aligned}
+\]</span></p></li>
 <li><p>综上所述，得： <span class="math display">\[
-  \left[\begin{array}{cc}
-  z \\
-  x  
-  \end{array} 
-  \right] \sim \mathcal{N}(\left[\begin{array}{cc}
-  \vec 0 \\
-  \mu  
-  \end{array} 
-  \right], \left[\begin{array}{cc}
-  I &amp;  \Lambda^T\\
-  \Lambda &amp;  \Lambda\Lambda^T + \Psi
-  \end{array} 
-  \right])
-  \]</span></p></li>
-<li>因此，<span class="math inline">\(x\)</span> 的边缘分布为 <span class="math inline">\(x \sim \mathcal{N}(\mu, \Lambda\Lambda^T + \Psi)\)</span></li>
+\left[\begin{array}{cc}
+z \\
+x  
+\end{array} 
+\right] \sim \mathcal{N}(\left[\begin{array}{cc}
+\vec 0 \\
+\mu  
+\end{array} 
+\right], \left[\begin{array}{cc}
+I &amp;  \Lambda^T\\
+\Lambda &amp;  \Lambda\Lambda^T + \Psi
+\end{array} 
+\right])
+\]</span></p></li>
+<li>因此，<span class="math inline">\(x\)</span> 的边缘分布为 <span class="math inline">\(x \sim \mathcal{N}(\mu, \Lambda\Lambda^T + \Psi)\)</span>
+<ul>
 <li><p>给定一个训练集 <span class="math inline">\(\{x^{(i)};i=1,\dots,m\}\)</span>，我们可以得出如下的对数似然函数： <span class="math display">\[
 \begin{aligned}
 \ell(\mu,\Lambda,\Psi) &amp;= \sum_{i=1}^m \log p(x^{(i)};\mu,\Lambda,\Psi) \\
@@ -688,88 +723,99 @@ x_1 \sim \mathcal{N}(\mu_1, \Sigma_{11})
 <li>对该函数进行最大化估计是难以求出闭合解的</li>
 <li>我们将使用 EM 算法来求解该问题</li>
 </ul></li>
+</ul></li>
 </ul>
 <h1 id="因子分析模型的-em-求解">因子分析模型的 EM 求解</h1>
 <h2 id="e-step">E-step</h2>
 <ul>
 <li>在 E-step 中，我们需要计算 <span class="math inline">\(Q_i(z^{(i)}) = p(z^{(i)}|x^{(i)};\mu,\Lambda,\Psi)\)</span></li>
 <li><p>将 <span class="math inline">\((3)\)</span> 式代入之前推导出的条件分布公式 <span class="math inline">\((1)\)</span> 和 <span class="math inline">\((2)\)</span>，可以得出 <span class="math inline">\(z^{(i)}|x^{(i)};\mu,\Lambda,\Psi \sim \mathcal{N}(\mu_{z^{(i)}|x^{(i)}},\Sigma_{z^{(i)}|x^{(i)}} )\)</span> ，其中： <span class="math display">\[
-  \begin{aligned}
-  \mu_{z^{(i)}|x^{(i)}} &amp;= \Lambda^T(\Lambda\Lambda^T + \Psi)^{-1}(x^{(i)}-\mu), \\
-  \Sigma_{z^{(i)}|x^{(i)}} &amp;= I-\Lambda^T(\Lambda\Lambda^T + \Psi)^{-1}\Lambda
-  \end{aligned}
-  \]</span></p></li>
+\begin{aligned}
+\mu_{z^{(i)}|x^{(i)}} &amp;= \Lambda^T(\Lambda\Lambda^T + \Psi)^{-1}(x^{(i)}-\mu), \\
+\Sigma_{z^{(i)}|x^{(i)}} &amp;= I-\Lambda^T(\Lambda\Lambda^T + \Psi)^{-1}\Lambda
+\end{aligned}
+\]</span></p></li>
 <li><p>因此，基于上述定义，我们有： <span class="math display">\[
-  Q_i(z^{(i)}) = \frac 1 {(2\pi)^{k/2}| \Sigma_{z^{(i)}|x^{(i)}}|^{1/2}} \exp\left(-\frac 1 2(z^{(i)}-\mu_{z^{(i)}|x^{(i)}})^T( \Sigma_{z^{(i)}|x^{(i)}})^{-1}(z^{(i)}-\mu_{z^{(i)}|x^{(i)}})\right)
-  \]</span></p></li>
+Q_i(z^{(i)}) = \frac 1 {(2\pi)^{k/2}| \Sigma_{z^{(i)}|x^{(i)}}|^{1/2}} \exp\left(-\frac 1 2(z^{(i)}-\mu_{z^{(i)}|x^{(i)}})^T( \Sigma_{z^{(i)}|x^{(i)}})^{-1}(z^{(i)}-\mu_{z^{(i)}|x^{(i)}})\right)
+\]</span></p></li>
 </ul>
 <h2 id="m-step">M-step</h2>
 <ul>
 <li><p>在 M-step 中，我们需要最大化： <span class="math display">\[
-  \sum_{i=1}^m \int_{z^{(i)}}Q_i(z^{(i)})\log \frac {p(x^{(i)}, z^{(i)};\mu,\Lambda,\Psi)} {Q_i(z^{(i)})}dz^{(i)} \tag{4}
-  \]</span></p></li>
+\sum_{i=1}^m \int_{z^{(i)}}Q_i(z^{(i)})\log \frac {p(x^{(i)}, z^{(i)};\mu,\Lambda,\Psi)} {Q_i(z^{(i)})}dz^{(i)} \tag{4}
+\]</span></p></li>
 <li>下面介绍关于参数 <span class="math inline">\(\Lambda\)</span> 的优化方法，其他两个参数的推导省略</li>
 <li><p>我们可以将 <span class="math inline">\((4)\)</span> 式简化为： <span class="math display">\[
-  \begin{align*}
-  \sum_{i=1}^m &amp;\int_{z^{(i)}}Q_i(z^{(i)})[\log p(x^{(i)}, z^{(i)} ;\mu,\Lambda,\Psi) + \log p(z^{(i)})-\log Q_i(z^{(i)})]dz^{(i)} \tag{5} \\
-  &amp; = \sum_{i=1}^m \text{E}_{z^{(i)} \sim Q_i}[\log p(x^{(i)}, z^{(i)} ;\mu,\Lambda,\Psi) + \log p(z^{(i)})-\log Q_i(z^{(i)})] \tag{6}
-  \end{align*}
-  \]</span></p></li>
+\begin{align*}
+\sum_{i=1}^m &amp;\int_{z^{(i)}}Q_i(z^{(i)})[\log p(x^{(i)}, z^{(i)} ;\mu,\Lambda,\Psi) + \log p(z^{(i)})-\log Q_i(z^{(i)})]dz^{(i)} \tag{5} \\
+&amp; = \sum_{i=1}^m \text{E}_{z^{(i)} \sim Q_i}[\log p(x^{(i)}, z^{(i)} ;\mu,\Lambda,\Psi) + \log p(z^{(i)})-\log Q_i(z^{(i)})] \tag{6}
+\end{align*}
+\]</span></p>
+<ul>
 <li>因为 <span class="math inline">\(z \sim \mathcal{N}(0,I)\)</span>，所以 <span class="math inline">\(\log p(z^{(i)})\)</span> 与 <span class="math inline">\(\Lambda\)</span> 无关</li>
 <li><span class="math inline">\(\log Q_i(z^{(i)})\)</span> 中的参数来自上一次迭代，与本次迭代中的参数无关</li>
+</ul></li>
 <li><p>综上所述，我们需要优化的函数为： <span class="math display">\[
-  \begin{aligned}
-  \sum_{i=1}^m &amp;\,\text{E}\;[\log p(x^{(i)}, z^{(i)} ;\mu,\Lambda,\Psi)] \\
-  &amp;= \sum_{i=1}^m \text{E}\left[\log \frac 1 {(2\pi)^{n/2}| \Psi|^{1/2}} \exp\left(-\frac 1 2(x^{(i)}-\mu-\Lambda z^{(i)})^T \Psi^{-1}(x^{(i)}-\mu-\Lambda z^{(i)})\right)\right] \\ &amp;= \sum_{i=1}^m \text{E}\left[-\frac 1 2 \log|\Psi|-\frac n 2 \log(2\pi)-\frac 1 2(x^{(i)}-\mu-\Lambda z^{(i)})^T \Psi^{-1}(x^{(i)}-\mu-\Lambda z^{(i)})\right]
-  \end{aligned}
-  \]</span></p></li>
+\begin{aligned}
+\sum_{i=1}^m &amp;\,\text{E}\;[\log p(x^{(i)}, z^{(i)} ;\mu,\Lambda,\Psi)] \\
+&amp;= \sum_{i=1}^m \text{E}\left[\log \frac 1 {(2\pi)^{n/2}| \Psi|^{1/2}} \exp\left(-\frac 1 2(x^{(i)}-\mu-\Lambda z^{(i)})^T \Psi^{-1}(x^{(i)}-\mu-\Lambda z^{(i)})\right)\right] \\ &amp;= \sum_{i=1}^m \text{E}\left[-\frac 1 2 \log|\Psi|-\frac n 2 \log(2\pi)-\frac 1 2(x^{(i)}-\mu-\Lambda z^{(i)})^T \Psi^{-1}(x^{(i)}-\mu-\Lambda z^{(i)})\right]
+\end{aligned}
+\]</span></p></li>
 <li><p>具体的求导过程如下（上式只有最后一项与参数相关）： <span class="math display">\[
-  \begin{aligned}
-  \nabla_\Lambda &amp;\sum_{i=1}^m -\text{E}\left[\frac 1 2(x^{(i)}-\mu-\Lambda z^{(i)})^T \Psi^{-1}(x^{(i)}-\mu-\Lambda z^{(i)})\right] \\
-  &amp;=\sum_{i=1}^m \nabla_\Lambda \text{E}\left[-\text{tr} \frac 1 2 z^{(i)^T}\Lambda^T\Psi^{-1}\Lambda z^{(i)} + \text{tr}z^{(i)^T}\Lambda^T\Psi^{-1}(x^{(i)}-\mu)\right] \\
-  &amp;= \sum_{i=1}^m \nabla_\Lambda \text{E}\left[-\text{tr} \frac 1 2 \Lambda^T\Psi^{-1}\Lambda z^{(i)}z^{(i)^T} + \text{tr}\Lambda^T\Psi^{-1}(x^{(i)}-\mu)z^{(i)^T} \right] \\
-  &amp;= \sum_{i=1}^m \text{E} \left[-\Psi^{-1}\Lambda z^{(i)}z^{(i)^T} + \Psi^{-1}(x^{(i)}-\mu)z^{(i)^T}\right]
-  \end{aligned}
-  \]</span></p></li>
+\begin{aligned}
+\nabla_\Lambda &amp;\sum_{i=1}^m -\text{E}\left[\frac 1 2(x^{(i)}-\mu-\Lambda z^{(i)})^T \Psi^{-1}(x^{(i)}-\mu-\Lambda z^{(i)})\right] \\
+&amp;=\sum_{i=1}^m \nabla_\Lambda \text{E}\left[-\text{tr} \frac 1 2 z^{(i)^T}\Lambda^T\Psi^{-1}\Lambda z^{(i)} + \text{tr}z^{(i)^T}\Lambda^T\Psi^{-1}(x^{(i)}-\mu)\right] \\
+&amp;= \sum_{i=1}^m \nabla_\Lambda \text{E}\left[-\text{tr} \frac 1 2 \Lambda^T\Psi^{-1}\Lambda z^{(i)}z^{(i)^T} + \text{tr}\Lambda^T\Psi^{-1}(x^{(i)}-\mu)z^{(i)^T} \right] \\
+&amp;= \sum_{i=1}^m \text{E} \left[-\Psi^{-1}\Lambda z^{(i)}z^{(i)^T} + \Psi^{-1}(x^{(i)}-\mu)z^{(i)^T}\right]
+\end{aligned}
+\]</span></p>
+<ul>
 <li>第一步首先将连乘打开，然后由于结果均为实数，所以用迹替换（<span class="math inline">\(\text{tr}a = a\)</span>）</li>
 <li>第二步使用迹的性质 <span class="math inline">\(\text{tr}AB = \text{tr}BA\)</span></li>
-<li><p>第三步使用了迹的多条性质： <span class="math display">\[
+<li>第三步使用了迹的多条性质： <span class="math display">\[
 \begin{aligned}
 \nabla_{A^T}f(A) &amp;= (\nabla_{A}f(A))^T \\
 \nabla_{A^T}\mbox{tr}\,ABA^TC &amp;= B^TA^TC^T+BA^TC \\
 \nabla_A\mbox{tr}\,AB &amp;= B^T
 \end{aligned}
-\]</span></p></li>
+\]</span></li>
+</ul></li>
 <li><p>将求导结果设为 0 并简化，得到： <span class="math display">\[
-  \sum_{i=1}^m \Lambda \text{E}_{z^{(i)} \sim Q_i} \left[z^{(i)}z^{(i)^T}\right] = \sum_{i=1}^m (x^{(i)}-\mu) \text{E}_{z^{(i)} \sim Q_i} \left[z^{(i)^T}\right]
-  \]</span></p></li>
+\sum_{i=1}^m \Lambda \text{E}_{z^{(i)} \sim Q_i} \left[z^{(i)}z^{(i)^T}\right] = \sum_{i=1}^m (x^{(i)}-\mu) \text{E}_{z^{(i)} \sim Q_i} \left[z^{(i)^T}\right]
+\]</span></p>
+<ul>
 <li><p>因此，我们可以解得： <span class="math display">\[
 \Lambda = \left(\sum_{i=1}^m (x^{(i)}-\mu) \text{E}_{z^{(i)} \sim Q_i} \left[z^{(i)^T}\right]\right)\left(\sum_{i=1}^m \text{E}_{z^{(i)} \sim Q_i} \left[z^{(i)}z^{(i)^T}\right]\right)^{-1} \tag{7}
 \]</span></p>
 <ul>
 <li>该结果与线性回归中正规方程的解在形式上类似，因为二者都是在寻找两个变量之间的线性关系</li>
 </ul></li>
+</ul></li>
 <li><p>对 <span class="math inline">\((7)\)</span> 式中的期望值进行求解，得到： <span class="math display">\[
-  \begin{aligned}
-   \text{E}_{z^{(i)} \sim Q_i} \left[z^{(i)^T}\right] &amp;= \mu^T_{z^{(i)}|x^{(i)}} \\
-   \text{E}_{z^{(i)} \sim Q_i} \left[z^{(i)}z^{(i)^T}\right] &amp;= \mu_{z^{(i)}|x^{(i)}}\mu^T_{z^{(i)}|x^{(i)}} + \Sigma_{z^{(i)}|x^{(i)}}
-  \end{aligned}
-  \]</span></p></li>
+\begin{aligned}
+ \text{E}_{z^{(i)} \sim Q_i} \left[z^{(i)^T}\right] &amp;= \mu^T_{z^{(i)}|x^{(i)}} \\
+ \text{E}_{z^{(i)} \sim Q_i} \left[z^{(i)}z^{(i)^T}\right] &amp;= \mu_{z^{(i)}|x^{(i)}}\mu^T_{z^{(i)}|x^{(i)}} + \Sigma_{z^{(i)}|x^{(i)}}
+\end{aligned}
+\]</span></p>
+<ul>
 <li>第二项的求解在源于公式 <span class="math inline">\(\text{E}(YY^T) = \text{E}(Y)\text{E}(Y^T)+\text{Cov}(Y)\)</span></li>
 <li>协方差项在求解中容易被忽略，需要注意</li>
+</ul></li>
 <li><p>综上所述，可以得到 <span class="math inline">\(\Lambda\)</span> 在 M-step 的更新公式为： <span class="math display">\[
-  \Lambda = \left(\sum_{i=1}^m (x^{(i)}-\mu) \mu^T_{z^{(i)}|x^{(i)}}\right)\left(\sum_{i=1}^m \mu_{z^{(i)}|x^{(i)}}\mu^T_{z^{(i)}|x^{(i)}} + \Sigma_{z^{(i)}|x^{(i)}}\right)^{-1} \tag{8}
-  \]</span></p></li>
+\Lambda = \left(\sum_{i=1}^m (x^{(i)}-\mu) \mu^T_{z^{(i)}|x^{(i)}}\right)\left(\sum_{i=1}^m \mu_{z^{(i)}|x^{(i)}}\mu^T_{z^{(i)}|x^{(i)}} + \Sigma_{z^{(i)}|x^{(i)}}\right)^{-1} \tag{8}
+\]</span></p></li>
 <li><p>M-step 的其他两个参数的更新公式如下： <span class="math display">\[
-  \mu = \frac 1 m \sum_{i=1}^m x^{(i)}
-  \]</span></p></li>
-<li><p>该公式与参数无关，因此只需要计算一次即可</p></li>
+\mu = \frac 1 m \sum_{i=1}^m x^{(i)}
+\]</span></p>
+<ul>
+<li>该公式与参数无关，因此只需要计算一次即可</li>
 </ul>
 <p><span class="math display">\[
-  \Phi = \frac 1 m \sum_{i=1}^m x^{(i)}x^{(i)^T}-x^{(i)}\mu^T_{z^{(i)}|x^{(i)}}\Lambda^T-\Lambda\mu_{z^{(i)}|x^{(i)}}x^{(i)^T} + \Lambda(\mu_{z^{(i)}|x^{(i)}}\mu^T_{z^{(i)}|x^{(i)}}+\Sigma_{z^{(i)}|x^{(i)}})\Lambda^T
-  \]</span></p>
+\Phi = \frac 1 m \sum_{i=1}^m x^{(i)}x^{(i)^T}-x^{(i)}\mu^T_{z^{(i)}|x^{(i)}}\Lambda^T-\Lambda\mu_{z^{(i)}|x^{(i)}}x^{(i)^T} + \Lambda(\mu_{z^{(i)}|x^{(i)}}\mu^T_{z^{(i)}|x^{(i)}}+\Sigma_{z^{(i)}|x^{(i)}})\Lambda^T
+\]</span></p>
 <ul>
 <li>只取 <span class="math inline">\(\Phi\)</span> 的对角元素组成 <span class="math inline">\(\Psi\)</span>（即令 <span class="math inline">\(\Psi_{ii} = \Phi_{ii}\)</span>）</li>
+</ul></li>
 </ul>
 <h1 id="思维导图">思维导图</h1>
 <p><img src="http://media.zjubiomedit.com/2019-02-26-010421.png" width="100%"></p>

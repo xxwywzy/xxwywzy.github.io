@@ -486,7 +486,7 @@
 <p>注：在前几部分的讨论中，我们默认数据是线性可分的。（之后会讨论线性不可分的情况）</p>
 <h3 id="符号变换">符号变换</h3>
 <p>为了更好地说明 SVM，我们将修改一些之前定义过的符号：</p>
-<ol style="list-style-type: decimal">
+<ol type="1">
 <li>在逻辑回归中，我们使用 0,1 来表示两个类，现在将改用 -1,+1 ，即 <span class="math inline">\(y \in \{-1,+1\}\)</span>；</li>
 <li>在逻辑回归中，我们使用向量 <span class="math inline">\(\theta\)</span> 作为参数，现在我们将使用参数 <span class="math inline">\(\omega\)</span> 和 <span class="math inline">\(b\)</span>，即 <span class="math inline">\(h_{w,b}(x)=g(w^Tx+b)\)</span>，其中 <span class="math inline">\(\omega\)</span> 相当于 <span class="math inline">\({\begin{bmatrix} \theta_1 \ldots \theta_n \end{bmatrix}}^T\)</span>，<span class="math inline">\(b\)</span> 相当于 <span class="math inline">\(\theta_0\)</span>；</li>
 <li>在逻辑回归中，我们的 g 是 sigmoid 函数，现在改为： <span class="math display">\[

@@ -493,51 +493,59 @@
 </ul>
 <h2 id="损失函数">损失函数</h2>
 <ul>
-<li>损失函数是一个 <span class="math inline">\((z,y) \in \mathbb{R} \times Y \longmapsto L(z,y) \in \mathbb{R}​\)</span> 的函数</li>
+<li>损失函数是一个 <span class="math inline">\((z,y) \in \mathbb{R} \times Y \longmapsto L(z,y) \in \mathbb{R}​\)</span> 的函数
+<ul>
 <li>其将真实数据值 <span class="math inline">\(y\)</span> 和其预测值 <span class="math inline">\(z\)</span> 作为输入，输出它们的不同程度</li>
-<li>常见的损失函数如下表所示：</li>
-</ul>
+</ul></li>
+<li><p>常见的损失函数如下表所示：</p>
 <p><img src="http://media.zjubiomedit.com/2019-02-03-081615.png" width="95%"></p>
 <ul>
 <li>表中的例子并不一定绝对（逻辑回归一般使用交叉熵作为代价函数）</li>
+</ul></li>
 </ul>
 <h2 id="代价函数">代价函数</h2>
 <ul>
 <li><p>代价函数 J 通常用于估计模型的性能，其可以看做是损失函数在所有样本上的总和： <span class="math display">\[
-  J(\theta) = \sum_{i=1}^m L(h_{\theta}(x^{(i)}),y^{(i)})
-  \]</span></p></li>
-<li><p>根据实际情况，可能需要取平均（加上 <span class="math inline">\(\frac 1 m\)</span>）</p></li>
+J(\theta) = \sum_{i=1}^m L(h_{\theta}(x^{(i)}),y^{(i)})
+\]</span></p>
+<ul>
+<li>根据实际情况，可能需要取平均（加上 <span class="math inline">\(\frac 1 m\)</span>）</li>
+</ul></li>
 </ul>
 <h2 id="似然">似然</h2>
 <ul>
 <li><p>一个模型的似然函数 <span class="math inline">\(L(\theta)\)</span> 用于通过最大似然估计来找到最优参数 <span class="math inline">\(\theta\)</span> <span class="math display">\[
-  \theta^{\,\text{opt}} = \arg \max_\theta L(\theta)
-  \]</span></p></li>
+\theta^{\,\text{opt}} = \arg \max_\theta L(\theta)
+\]</span></p>
+<ul>
 <li>很多模型的代价函数就是通过最大似然法得出的</li>
+</ul></li>
 <li><p>在实践中，我们通常使用更加容易优化的对数似然函数来执行优化 <span class="math display">\[
-  \ell(\theta) = \log(L(\theta))
-  \]</span></p></li>
+\ell(\theta) = \log(L(\theta))
+\]</span></p></li>
 </ul>
 <h2 id="梯度下降">梯度下降</h2>
 <ul>
 <li>梯度下降是一种数值方法，用来求解使得代价函数最小化的参数</li>
 <li><p>记学习率为 <span class="math inline">\(\alpha \in \mathbb{R}\)</span>，梯度下降的更新规则如下： <span class="math display">\[
-  \theta \leftarrow \theta - \alpha \nabla J(\theta)
-  \]</span> <img src="http://media.zjubiomedit.com/2019-02-03-083949.jpg" width="85%"></p></li>
+\theta \leftarrow \theta - \alpha \nabla J(\theta)
+\]</span> <img src="http://media.zjubiomedit.com/2019-02-03-083949.jpg" width="85%"></p></li>
 <li>随机梯度下降（SGD）是指每次使用一个训练样本进行参数更新</li>
 <li><p>批量梯度下降时指每次在一批训练样本上进行更新</p></li>
 </ul>
 <h2 id="牛顿算法">牛顿算法</h2>
 <ul>
 <li><p>牛顿算法也是一种数值方法，目的是找到使得 <span class="math inline">\(\ell&#39;(\theta)=0\)</span> 的 <span class="math inline">\(\theta\)</span>，其更新规则如下： <span class="math display">\[
-  \theta \leftarrow \theta - \frac {\ell&#39;(\theta)} {\ell&#39;&#39;(\theta)}
-  \]</span></p></li>
-<li><p>其多维形式，也称为 Newton-Raphson 方法，具有如下的更新规则： <span class="math display">\[
-  \theta \leftarrow \theta - H^{-1}\nabla_\theta\ell(\theta)
-  \]</span></p></li>
-<li><p>其中 <span class="math inline">\(H\)</span> 是一个 <span class="math inline">\((n+1)\times(n+1)\)</span> 的矩阵，其中的每一项定义为： <span class="math display">\[
-H_{ij}=\frac {\partial^2 \ell(\theta)} {\partial \theta_i \partial \theta_j}
+\theta \leftarrow \theta - \frac {\ell&#39;(\theta)} {\ell&#39;&#39;(\theta)}
 \]</span></p></li>
+<li><p>其多维形式，也称为 Newton-Raphson 方法，具有如下的更新规则： <span class="math display">\[
+\theta \leftarrow \theta - H^{-1}\nabla_\theta\ell(\theta)
+\]</span></p>
+<ul>
+<li>其中 <span class="math inline">\(H\)</span> 是一个 <span class="math inline">\((n+1)\times(n+1)\)</span> 的矩阵，其中的每一项定义为： <span class="math display">\[
+H_{ij}=\frac {\partial^2 \ell(\theta)} {\partial \theta_i \partial \theta_j}
+\]</span></li>
+</ul></li>
 </ul>
 <p>本文素材来源于 Afshine 和 Shervine 分享的<a href="https://github.com/afshinea/stanford-cs-229-machine-learning" target="_blank" rel="noopener">Cheatsheet</a></p>
 

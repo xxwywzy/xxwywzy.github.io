@@ -498,7 +498,7 @@ b(y) &amp;= ( 1/\sqrt{2\pi}) \exp( -y^2/2)
 \]</span> 其实，还有许多其他的分布属于指数族，比如多项式分布、泊松分布（单位时间内随机事件发生的次数的概率分布）伽马分布（连续非负随机变量的分布）等。</p>
 <h3 id="构建广义线性模型">构建广义线性模型</h3>
 <p>首先，广义线性模型的构建需要基于以下三条假设：</p>
-<ol style="list-style-type: decimal">
+<ol type="1">
 <li><span class="math inline">\(y\mid x;\theta\)</span> 符合以 <span class="math inline">\(\eta\)</span> 为参数的指数族分布；</li>
 <li>给定 <span class="math inline">\(x\)</span>，我们的目标是预测 <span class="math inline">\(T(y)\)</span> 的理想值，而在大多数的案例中，<span class="math inline">\(T(y) = y\)</span>，这意味着我们的假设 <span class="math inline">\(h\)</span> 应该满足<span class="math inline">\(h(x)=E[y\mid x]\)</span>（可以从期望的定义上来进行理解）</li>
 <li>自然参数 <span class="math inline">\(\eta\)</span> 和 输入 <span class="math inline">\(x\)</span> 满足线性关系 <span class="math inline">\(\eta=\theta^T x\)</span> (如果 <span class="math inline">\(\eta\)</span> 是向量，那么 <span class="math inline">\(\eta_i=\theta_i^T x\)</span> )</li>

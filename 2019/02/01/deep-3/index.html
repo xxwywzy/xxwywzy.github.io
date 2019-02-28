@@ -484,13 +484,14 @@
 </ul>
 <h2 id="表示与计算">表示与计算</h2>
 <ul>
-<li>本节将定义含有一层隐藏层的神经网络</li>
+<li>本节将定义含有一层隐藏层的神经网络
+<ul>
 <li><code>a0 = x</code> 表示输入层</li>
 <li><code>a1</code> 表示隐藏层的激活值</li>
 <li><code>a2</code> 表示输出层的激活值</li>
+</ul></li>
 <li>计算神经网络的层数时，我们一般不考虑输入层（即本节讨论的是两层神经网络）</li>
-<li>下图给出了一个神经网络的前向传播计算公式：</li>
-</ul>
+<li><p>下图给出了一个神经网络的前向传播计算公式：</p>
 <p><img src="http://media.zjubiomedit.com/2019-01-31-085056.png" width="70%"></p>
 <ul>
 <li>在该网络中，隐藏层的神经元数量（<code>noOfHiddenNeurons</code>）为 4，输入的维数（<code>nx</code>）为 3</li>
@@ -505,16 +506,17 @@
 <li><code>z2</code> 是 <code>z2 = W2*a1 + b</code> 的计算结果，其形状为 <code>(1, 1)</code></li>
 <li><code>a2</code> 是 <code>a2 = sigmoid(z2)</code> 的计算结果，其形状为 <code>(1, 1)</code></li>
 </ul></li>
+</ul></li>
 </ul>
 <h2 id="代码实现">代码实现</h2>
 <ul>
-<li>两层神经网络前向传播的伪代码如下：</li>
-</ul>
-<p><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i = <span class="number">1</span> to m</span><br><span class="line">z[<span class="number">1</span>, i] = W1*x[i] + b1      <span class="comment"># shape of z[1, i] is (noOfHiddenNeurons,1)</span></span><br><span class="line">a[<span class="number">1</span>, i] = sigmoid(z[<span class="number">1</span>, i])  <span class="comment"># shape of a[1, i] is (noOfHiddenNeurons,1)</span></span><br><span class="line">z[<span class="number">2</span>, i] = W2*a[<span class="number">1</span>, i] + b2   <span class="comment"># shape of z[2, i] is (1,1)</span></span><br><span class="line">a[<span class="number">2</span>, i] = sigmoid(z[<span class="number">2</span>, i])  <span class="comment"># shape of a[2, i] is (1,1)</span></span><br></pre></td></tr></table></figure></p>
+<li><p>两层神经网络前向传播的伪代码如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i = <span class="number">1</span> to m</span><br><span class="line">z[<span class="number">1</span>, i] = W1*x[i] + b1      <span class="comment"># shape of z[1, i] is (noOfHiddenNeurons,1)</span></span><br><span class="line">a[<span class="number">1</span>, i] = sigmoid(z[<span class="number">1</span>, i])  <span class="comment"># shape of a[1, i] is (noOfHiddenNeurons,1)</span></span><br><span class="line">z[<span class="number">2</span>, i] = W2*a[<span class="number">1</span>, i] + b2   <span class="comment"># shape of z[2, i] is (1,1)</span></span><br><span class="line">a[<span class="number">2</span>, i] = sigmoid(z[<span class="number">2</span>, i])  <span class="comment"># shape of a[2, i] is (1,1)</span></span><br></pre></td></tr></table></figure></li>
+<li><p>如果对整个训练集进行向量化，得到新的 <code>X</code> 形状为 <code>(Nx, m)</code>，则新的伪代码如下： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">Z1 = W1X + b1     <span class="comment"># shape of Z1 (noOfHiddenNeurons,m)</span></span><br><span class="line">A1 = sigmoid(Z1)  <span class="comment"># shape of A1 (noOfHiddenNeurons,m)</span></span><br><span class="line">Z2 = W2A1 + b2    <span class="comment"># shape of Z2 is (1,m)</span></span><br><span class="line">A2 = sigmoid(Z2)  <span class="comment"># shape of A2 is (1,m)</span></span><br></pre></td></tr></table></figure></p>
 <ul>
-<li><p>如果对整个训练集进行向量化，得到新的 <code>X</code> 形状为 <code>(Nx, m)</code>，则新的伪代码如下： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">Z1 = W1X + b1     <span class="comment"># shape of Z1 (noOfHiddenNeurons,m)</span></span><br><span class="line">A1 = sigmoid(Z1)  <span class="comment"># shape of A1 (noOfHiddenNeurons,m)</span></span><br><span class="line">Z2 = W2A1 + b2    <span class="comment"># shape of Z2 is (1,m)</span></span><br><span class="line">A2 = sigmoid(Z2)  <span class="comment"># shape of A2 is (1,m)</span></span><br></pre></td></tr></table></figure></p></li>
 <li>样本数量 m 始终表示列的维数</li>
-<li><p><code>X</code> 可以写为 <code>A0</code></p></li>
+<li><code>X</code> 可以写为 <code>A0</code></li>
+</ul></li>
 </ul>
 <h1 id="激活函数">激活函数</h1>
 <h2 id="常见激活函数">常见激活函数</h2>
@@ -529,54 +531,50 @@
 <p><img src="http://media.zjubiomedit.com/2019-02-01-013035.png" width="30%"></p>
 <ul>
 <li>tanh 激活函数的取值范围是 [-1,1]（sigmoid 函数的偏移版本）</li>
-<li>对隐藏层来说，tanh 比 sigmoid 的效果更好，因为其输出的平均值更接近0，这使得下一层数据更加靠近中心（便于梯度下降）</li>
+<li>对隐藏层来说，tanh 比 sigmoid 的效果更好，因为其输出的平均值更接近0，这使得下一层数据更加靠近中心（便于梯度下降）
+<ul>
 <li>tanh 与 sigmoid 存在同样的缺点，即如果输入过大或过小，则斜率会趋近于0，导致梯度下降出现问题</li>
-<li>代码实现：</li>
+</ul></li>
+<li><p>代码实现：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">tanh = (np.exp(z) - np.exp(-z)) / (np.exp(z) + np.exp(-z)) <span class="comment"># Where z is the input matrix</span></span><br><span class="line">tanh = np.tanh(z)   <span class="comment"># Where z is the input matrix</span></span><br></pre></td></tr></table></figure></li>
 </ul>
-<p><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">tanh = (np.exp(z) - np.exp(-z)) / (np.exp(z) + np.exp(-z)) <span class="comment"># Where z is the input matrix</span></span><br><span class="line">tanh = np.tanh(z)   <span class="comment"># Where z is the input matrix</span></span><br></pre></td></tr></table></figure></p>
 <h3 id="relu">ReLU</h3>
 <p><img src="http://media.zjubiomedit.com/2019-02-01-013542.png" width="30%"></p>
 <ul>
 <li>ReLU 函数可以解决梯度下降慢的问题（针对正数）</li>
 <li>如果你的问题是二元分类（0或1），那么输出层使用 sigmoid，隐藏层使用 ReLU</li>
-<li>代码实现：</li>
+<li><p>代码实现：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">ReLU = np.maximum(<span class="number">0</span>,z) <span class="comment"># so if z is negative the slope is 0 and if z is positive the slope remains linear.</span></span><br></pre></td></tr></table></figure></li>
 </ul>
-<p><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">ReLU = np.maximum(<span class="number">0</span>,z) <span class="comment"># so if z is negative the slope is 0 and if z is positive the slope remains linear.</span></span><br></pre></td></tr></table></figure></p>
 <h3 id="leaky-relu">leaky ReLU</h3>
 <p><img src="http://media.zjubiomedit.com/2019-02-01-013922.png" width="30%"></p>
 <ul>
 <li>leaky RELU 与 ReLU 的区别在于当输入为负值时，斜率会较小（不为0）</li>
 <li>它和 ReLU 同样有效，但大部分人使用 ReLU</li>
-<li>代码实现：</li>
-</ul>
-<p><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">leaky_ReLU = np.maximum(<span class="number">0.01</span>*z,z)  <span class="comment">#the 0.01 can be a parameter for your algorithm.</span></span><br></pre></td></tr></table></figure></p>
-<ul>
-<li>目前激活函数的选择并没有普适性的准则，需要尝试各种激活函数（也可以参考前人的经验）</li>
+<li><p>代码实现：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">leaky_ReLU = np.maximum(<span class="number">0.01</span>*z,z)  <span class="comment">#the 0.01 can be a parameter for your algorithm.</span></span><br></pre></td></tr></table></figure></li>
+<li><p>目前激活函数的选择并没有普适性的准则，需要尝试各种激活函数（也可以参考前人的经验）</p></li>
 </ul>
 <h2 id="激活函数的非线性">激活函数的非线性</h2>
 <ul>
-<li>线性激活函数会输出线性的激活值</li>
+<li>线性激活函数会输出线性的激活值
+<ul>
 <li>无论你有多少层隐藏层，激活都将是线性的（类似逻辑回归）</li>
 <li>隐藏层会失去意义，无法处理复杂的问题</li>
+</ul></li>
 <li>当输出是实数时，可能需要使用线性激活函数，但即便如此如果输出非负，那么使用 ReLU 函数更加合理</li>
 </ul>
 <h2 id="激活函数的导数">激活函数的导数</h2>
 <ul>
-<li>sigmoid 函数：</li>
+<li><p>sigmoid 函数：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">A = <span class="number">1</span> / (<span class="number">1</span> + np.exp(-z))</span><br><span class="line">dA = (<span class="number">1</span> / (<span class="number">1</span> + np.exp(-z))) * (<span class="number">1</span> - (<span class="number">1</span> / (<span class="number">1</span> + np.exp(-z))))</span><br><span class="line">dA = A * (<span class="number">1</span> - A)</span><br></pre></td></tr></table></figure></li>
+<li><p>tanh 函数：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">A = (np.exp(z) - np.exp(-z)) / (np.exp(z) + np.exp(-z))</span><br><span class="line">dA = <span class="number">1</span> - np.tanh(z)^<span class="number">2</span> = <span class="number">1</span> - A^<span class="number">2</span></span><br></pre></td></tr></table></figure></li>
+<li><p>ReLU 函数：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">A = np.maximum(<span class="number">0</span>,z)</span><br><span class="line">dA = &#123; <span class="number">0</span>  <span class="keyword">if</span> z &lt; <span class="number">0</span></span><br><span class="line">       <span class="number">1</span>  <span class="keyword">if</span> z &gt;= <span class="number">0</span>  &#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>leaky ReLU 函数：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">A = np.maximum(<span class="number">0.01</span>*z,z)</span><br><span class="line">dA = &#123; <span class="number">0</span>  <span class="keyword">if</span> z &lt; <span class="number">0</span></span><br><span class="line">       <span class="number">1</span>  <span class="keyword">if</span> z &gt;= <span class="number">0</span>  &#125;</span><br></pre></td></tr></table></figure></li>
 </ul>
-<p><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">A = <span class="number">1</span> / (<span class="number">1</span> + np.exp(-z))</span><br><span class="line">dA = (<span class="number">1</span> / (<span class="number">1</span> + np.exp(-z))) * (<span class="number">1</span> - (<span class="number">1</span> / (<span class="number">1</span> + np.exp(-z))))</span><br><span class="line">dA = A * (<span class="number">1</span> - A)</span><br></pre></td></tr></table></figure></p>
-<ul>
-<li>tanh 函数：</li>
-</ul>
-<p><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">A = (np.exp(z) - np.exp(-z)) / (np.exp(z) + np.exp(-z))</span><br><span class="line">dA = <span class="number">1</span> - np.tanh(z)^<span class="number">2</span> = <span class="number">1</span> - A^<span class="number">2</span></span><br></pre></td></tr></table></figure></p>
-<ul>
-<li>ReLU 函数：</li>
-</ul>
-<p><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">A = np.maximum(<span class="number">0</span>,z)</span><br><span class="line">dA = &#123; <span class="number">0</span>  <span class="keyword">if</span> z &lt; <span class="number">0</span></span><br><span class="line">       <span class="number">1</span>  <span class="keyword">if</span> z &gt;= <span class="number">0</span>  &#125;</span><br></pre></td></tr></table></figure></p>
-<ul>
-<li>leaky ReLU 函数：</li>
-</ul>
-<p><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">A = np.maximum(<span class="number">0.01</span>*z,z)</span><br><span class="line">dA = &#123; <span class="number">0</span>  <span class="keyword">if</span> z &lt; <span class="number">0</span></span><br><span class="line">       <span class="number">1</span>  <span class="keyword">if</span> z &gt;= <span class="number">0</span>  &#125;</span><br></pre></td></tr></table></figure></p>
 <h1 id="神经网络的梯度下降">神经网络的梯度下降</h1>
 <ul>
 <li>反向传播的公式与伪代码如下：</li>
@@ -585,19 +583,21 @@
 <h1 id="随机初始化">随机初始化</h1>
 <ul>
 <li>在逻辑回归中随机初始化权重并不重要，而在神经网络中我们需要进行随机初始化</li>
-<li>如果在神经网络中将所有权重初始化为0，那么神经网络将不能正常工作 (bias初始化为0是可以的):</li>
+<li>如果在神经网络中将所有权重初始化为0，那么神经网络将不能正常工作 (bias初始化为0是可以的):
+<ul>
 <li>所有隐藏层会完全同步变化（计算同一个函数）</li>
 <li>每次梯度下降迭代所有隐藏层会进行相同的更新</li>
-<li>为了解决这个问题我们将 W 初始化为一个小的随机数：</li>
-</ul>
-<p><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">W1 = np.random.randn((<span class="number">2</span>,<span class="number">2</span>)) * <span class="number">0.01</span>    <span class="comment"># 0.01 to make it small enough</span></span><br><span class="line">b1 = np.zeros((<span class="number">2</span>,<span class="number">1</span>))                  <span class="comment"># its ok to have b as zero</span></span><br></pre></td></tr></table></figure></p>
+</ul></li>
+<li><p>为了解决这个问题我们将 W 初始化为一个小的随机数：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">W1 = np.random.randn((<span class="number">2</span>,<span class="number">2</span>)) * <span class="number">0.01</span>    <span class="comment"># 0.01 to make it small enough</span></span><br><span class="line">b1 = np.zeros((<span class="number">2</span>,<span class="number">1</span>))                  <span class="comment"># its ok to have b as zero</span></span><br></pre></td></tr></table></figure>
 <ul>
 <li>对于 sigmoid 或 tanh 来说，我们需要随机数较小
 <ul>
 <li>因为较大的值会导致在训练初期线性激活输出过大，从而使激活函数趋向饱和，导致学习速度下降</li>
 </ul></li>
 <li>如果没有使用 sigmoid 或 tanh 作为激活函数，就不会有很大影响</li>
-<li>常数 0.01 对单层隐藏层来说是合适的，但对于更深的神经网络来说，这个参数会发生改变来保证线性计算得出的值不会过大</li>
+</ul></li>
+<li><p>常数 0.01 对单层隐藏层来说是合适的，但对于更深的神经网络来说，这个参数会发生改变来保证线性计算得出的值不会过大</p></li>
 </ul>
 <h1 id="思维导图">思维导图</h1>
 <p><img src="http://media.zjubiomedit.com/2019-02-01-023434.png" width="100%"></p>

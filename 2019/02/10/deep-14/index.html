@@ -489,7 +489,8 @@
 <h1 id="为什么选择序列模型">为什么选择序列模型</h1>
 <ul>
 <li>序列模型是深度学习中的一个重要分支，包括传统 RNN、LSTM 等，其处理的是序列型数据</li>
-<li>序列模型的应用领域如下：</li>
+<li>序列模型的应用领域如下：
+<ul>
 <li>语音识别（<strong>sequence to sequence</strong>）
 <ul>
 <li>输入：波形序列</li>
@@ -525,6 +526,7 @@
 <li>输入：文本序列</li>
 <li>输出：标签序列（比如人名）</li>
 </ul></li>
+</ul></li>
 <li>以上所有问题都可以看做使用标注数据作为训练集的监督学习</li>
 </ul>
 <h1 id="数学符号">数学符号</h1>
@@ -537,9 +539,8 @@
 <h2 id="词语的表示">词语的表示</h2>
 <ul>
 <li>自然语言处理的一个挑战是如何表示词语</li>
-<li>常用的方法是：</li>
-</ul>
-<ol style="list-style-type: decimal">
+<li>常用的方法是：
+<ol type="1">
 <li>构建一个<strong>词典</strong>
 <ul>
 <li>构建的方法为使用网上现成的词典，或是从训练集中找出出现频率靠前的词</li>
@@ -550,12 +551,14 @@
 <li>使用一个与词典长度相同的向量来进行描述，只有该词出现的位置为 1，其余位置为 0</li>
 <li>对于未被词典收录的词，可以统一使用<strong>未知词语</strong>（Unknown Words）来进行表达</li>
 </ul></li>
-</ol>
+</ol></li>
+</ul>
 <p><img src="http://media.zjubiomedit.com/2019-02-10-074456.png" width="70%"></p>
 <h1 id="循环神经网络模型">循环神经网络模型</h1>
 <h2 id="为什么不使用标准的神经网络">为什么不使用标准的神经网络</h2>
 <ul>
-<li>对于序列形式的样本，如果采用传统形式的神经网络，将存在以下几个问题：</li>
+<li>对于序列形式的样本，如果采用传统形式的神经网络，将存在以下几个问题：
+<ul>
 <li>对于不同的样本，<strong>输入与输出序列的长度不尽相同</strong>，因此网络的输入与输出长度无法确定
 <ul>
 <li>可以使用最大长度+zero padding来进行表达，但这不是一个很好的方式</li>
@@ -565,17 +568,17 @@
 <li>如果我们从文本的第一个位置中学习到某个词一般用于表示人名，我们希望在其他的位置这个词也能被识别为人名，但传统的网络结构无法做到这一点</li>
 </ul></li>
 <li>传统的网络结构还可能导致需要<strong>学习的参数过多</strong></li>
+</ul></li>
 <li>综上所述，我们需要使用一种新的网络结构来进行序列数据的学习，即<strong>循环神经网络</strong></li>
 </ul>
 <h2 id="模型概述">模型概述</h2>
 <ul>
-<li>一个输入与输出长度相同的 RNN 模型如下所示：</li>
-</ul>
-<p><img src="http://media.zjubiomedit.com/2019-02-10-074614.png" width="70%"></p>
-<ul>
+<li><p>一个输入与输出长度相同的 RNN 模型如下所示：</p>
+<p><img src="http://media.zjubiomedit.com/2019-02-10-074614.png" width="70%"></p></li>
 <li>RNN 的本质是将序列按顺序输入隐藏层，<strong>前一个元素所产生的激励会被传递到后一个元素</strong></li>
 <li>在每个时间步中使用到的参数是<strong>共享</strong>的（即该模型中实际上只有一个隐藏层）</li>
-<li>模型涉及到的参数如下：</li>
+<li>模型涉及到的参数如下：
+<ul>
 <li><span class="math inline">\(W_{ax}\)</span> ：表示将每个元素传入的隐藏层的参数
 <ul>
 <li>形状为 (NoOfHiddenNeurons, n<sub>x</sub>)</li>
@@ -588,18 +591,23 @@
 <ul>
 <li>形状为 (n<sub>y</sub>, NoOfHiddenNeurons)</li>
 </ul></li>
+</ul></li>
 <li>为了体现结构的完整性，常常会在网络的开端加入 <span class="math inline">\(a^{&lt;0&gt;}\)</span>（实际为0向量）</li>
 <li>一些论文和书籍中会将 RNN 表示为右图所示的结构，这与左图是等价的</li>
-<li>这种结构的 RNN 只考虑了序列中每个元素之前的元素对其的影响，而没有考虑之后的元素的影响</li>
-<li>示例： 'He Said, &quot;Teddy Roosevelt was a great president&quot;'</li>
+<li>这种结构的 RNN 只考虑了序列中每个元素之前的元素对其的影响，而没有考虑之后的元素的影响
+<ul>
+<li>示例： ‘He Said, “Teddy Roosevelt was a great president”’</li>
 <li>对于这个问题，我们可以使用 <strong>Bidirectional RNN</strong> 来解决（这里讨论单向的 RNN）</li>
+</ul></li>
 </ul>
 <h2 id="前向传播">前向传播</h2>
 <p><img src="http://media.zjubiomedit.com/2019-02-10-075220.png" width="70%"></p>
 <ul>
 <li>计算激励的激活函数一般为 tanh 或 ReLU</li>
-<li>计算输出的激活函数视具体任务而定，比如 sigmoid 或 softmax</li>
+<li>计算输出的激活函数视具体任务而定，比如 sigmoid 或 softmax
+<ul>
 <li>在命名实体识别任务中我们选择 sigmoid 函数（因为只有两个类）</li>
+</ul></li>
 <li>参数的下标的第一位表示计算输出的类型，第二位表示输入的类型</li>
 <li>通用的前向传播公式为：</li>
 </ul>
@@ -619,61 +627,70 @@ a^{&lt;t&gt;} &amp;= g(W_{a}[a^{&lt;t-1&gt;},x^{&lt;t&gt;}]+b_a)\\
 \end{align*}
 \]</span></p>
 <ul>
-<li><span class="math inline">\(W_{a}\)</span> ：将 <span class="math inline">\(W_{aa}\)</span> 和 <span class="math inline">\(W_{ax}\)</span> 水平组合</li>
+<li><span class="math inline">\(W_{a}\)</span> ：将 <span class="math inline">\(W_{aa}\)</span> 和 <span class="math inline">\(W_{ax}\)</span> 水平组合
+<ul>
 <li>形状为 (NoOfHiddenNeurons, NoOfHiddenNeurons + n<sub>x</sub>)</li>
-<li><span class="math inline">\([a^{&lt;t-1&gt;},x^{&lt;t&gt;}]\)</span> ：将 <span class="math inline">\(a^{&lt;t-1&gt;}\)</span> 和 <span class="math inline">\(x^{&lt;t&gt;}\)</span> 竖直组合</li>
+</ul></li>
+<li><span class="math inline">\([a^{&lt;t-1&gt;},x^{&lt;t&gt;}]\)</span> ：将 <span class="math inline">\(a^{&lt;t-1&gt;}\)</span> 和 <span class="math inline">\(x^{&lt;t&gt;}\)</span> 竖直组合
+<ul>
 <li>形状为 (NoOfHiddenNeurons + n<sub>x</sub>, 1)</li>
+</ul></li>
 </ul>
 <h2 id="通过时间的反向传播">通过时间的反向传播</h2>
 <p><img src="http://media.zjubiomedit.com/2019-02-10-075841.png" width="70%"></p>
 <ul>
 <li>一般深度学习框架会自动帮你完成反向传播，但了解其工作原理是很有价值的</li>
-<li>为了进行反向传播，需要先定义损失函数，这里使用传统的<strong>交叉熵函数</strong></li>
+<li>为了进行反向传播，需要先定义损失函数，这里使用传统的<strong>交叉熵函数</strong>
+<ul>
 <li>对于每个时间步，均有一个损失函数，总的损失函数为每个时间步对应的损失函数之和</li>
+</ul></li>
 <li>蓝色箭头表示前向传播的过程</li>
 <li>绿色箭头表示前向传播中使用到的相关参数（每一时间步共享参数）</li>
-<li>红色箭头表示反向传播，其在前向传播的反方向上进行传播</li>
+<li>红色箭头表示反向传播，其在前向传播的反方向上进行传播
+<ul>
 <li>通过反向传播，我们可以计算出各个参数的导数，从而使用梯度下降法进行优化</li>
+</ul></li>
 <li>在反向传播的过程中，最重要的信息传递（递归计算）是横向从右到左的的运算</li>
 <li>由于该部分是以与时间步相反的顺序进行传播的（时光倒流），因此这种反向传播又被称为<strong>通过时间的反向传播</strong></li>
 </ul>
 <h2 id="不同类型的循环神经网络">不同类型的循环神经网络</h2>
 <ul>
 <li>之前介绍的 RNN 结构输入与输出序列长度相等，其实还存在许多其他的情况</li>
-<li>下图给出了 RNN 常见的五种结构（图取自此<a href="http://karpathy.github.io/2015/05/21/rnn-effectiveness/" target="_blank" rel="noopener">文章</a>）</li>
-</ul>
-<p><img src="http://media.zjubiomedit.com/2019-02-10-075506.png" width="70%"></p>
-<ul>
+<li><p>下图给出了 RNN 常见的五种结构（图取自此<a href="http://karpathy.github.io/2015/05/21/rnn-effectiveness/" target="_blank" rel="noopener">文章</a>）</p>
+<p><img src="http://media.zjubiomedit.com/2019-02-10-075506.png" width="70%"></p></li>
 <li><strong>一对一结构</strong>：即传统的神经网络，这里不作赘述</li>
-<li><strong>一对多结构</strong>：这种结构的特点是仅在第一个时间步上有输入，例如音乐生成</li>
+<li><strong>一对多结构</strong>：这种结构的特点是仅在第一个时间步上有输入，例如音乐生成
+<ul>
 <li>具体实现时，这种结构还会将每一步的输出输入到下一步</li>
+</ul></li>
 <li><strong>多对一结构</strong>：即输出序列的长度为1，这种结构只在最后一个时间步上产生输出，例如情感分析</li>
 <li><strong>多对多结构a</strong>：之前所说的命名实体识别属于这种结构，其输入与输出长度相同</li>
-<li><strong>多对多结构b</strong>：输入与输出长度不同，例如机器翻译</li>
+<li><strong>多对多结构b</strong>：输入与输出长度不同，例如机器翻译
+<ul>
 <li>这种结构会分为两个部分：编码器和解码器，编码器只有输入，解码器只有输出</li>
+</ul></li>
 </ul>
 <p><img src="http://media.zjubiomedit.com/2019-02-10-075958.png" width="70%"></p>
 <h1 id="语言模型和序列生成">语言模型和序列生成</h1>
 <h2 id="语言模型是什么">语言模型是什么</h2>
 <ul>
 <li>一个语言模型的作用是<strong>计算某个特定的句子出现的概率</strong></li>
-<li>以语音识别为例，对于两句发音相同的话，语言模型能够计算出两句话的可能性，帮助语音识别系统做出选择：</li>
+<li>以语音识别为例，对于两句发音相同的话，语言模型能够计算出两句话的可能性，帮助语音识别系统做出选择：
+<ul>
 <li>The apple and <strong>pair</strong> salad</li>
 <li>The apple and <strong>pear</strong> salad</li>
+</ul></li>
 </ul>
 <h2 id="如何使用-rnn-构建语言模型">如何使用 RNN 构建语言模型</h2>
-<ol style="list-style-type: decimal">
+<ol type="1">
 <li>需要一个由目标语言组成的庞大<strong>语料库</strong>（训练集）</li>
-<li>对其中的句子进行标记化</li>
-</ol>
+<li>对其中的句子进行标记化
 <ul>
 <li>对照词典将每个词语转化为长度相同的向量</li>
 <li>对于每个句子的结尾，可以使用结束符<code>&lt;EOS&gt;</code>进行标记（也可以将句号收录进词典）</li>
 <li>对于词典中没有的词语，统一使用<code>&lt;UNK&gt;</code>进行表示</li>
-</ul>
-<ol start="3" style="list-style-type: decimal">
-<li>训练模型，网络结构如下图所示：</li>
-</ol>
+</ul></li>
+<li><p>训练模型，网络结构如下图所示：</p>
 <p><img src="http://media.zjubiomedit.com/2019-02-10-080341.png" width="70%"></p>
 <ul>
 <li>第一个时间步的输入为 0</li>
@@ -683,20 +700,18 @@ a^{&lt;t&gt;} &amp;= g(W_{a}[a^{&lt;t-1&gt;},x^{&lt;t&gt;}]+b_a)\\
 <ul>
 <li><code>i</code> 对应样本数，<code>t</code> 对应时间步数</li>
 </ul></li>
-</ul>
-<ol start="4" style="list-style-type: decimal">
-<li>使用模型：</li>
-</ol>
+</ul></li>
+<li>使用模型：
 <ul>
 <li>预测<strong>下一个词语</strong>：将已有的部分输入，得到最后一个时间步产生的输出，取概率最大的词语作为输出</li>
 <li>预测<strong>整个句子的概率</strong>：将整个句子输入，计算其各个时间步输出的概率并进行相乘（选择对应词语的概率），即可得出该句子的概率（公式如图所示）</li>
-</ul>
+</ul></li>
+</ol>
 <h2 id="对新序列采样">对新序列采样</h2>
 <ul>
 <li>在训练了一个序列模型（语言模型）后，要了解到这个模型学到了什么，一个非正式的方法就是进行<strong>新序列采样</strong></li>
-<li>下面给出对一个训练好的语言模型进行新序列采样的步骤：</li>
-</ul>
-<ol style="list-style-type: decimal">
+<li>下面给出对一个训练好的语言模型进行新序列采样的步骤：
+<ol type="1">
 <li><p>给定如下模型：</p>
 <p><img src="http://media.zjubiomedit.com/2019-02-10-080902.png" width="70%"></p></li>
 <li>输入 0 向量</li>
@@ -710,30 +725,35 @@ a^{&lt;t&gt;} &amp;= g(W_{a}[a^{&lt;t-1&gt;},x^{&lt;t&gt;}]+b_a)\\
 <li>仅第一个词语随机选择，之后选择概率最大的</li>
 </ul></li>
 <li><p>可以选择屏蔽 <code>&lt;UNK&gt;</code>，也可以不去管它</p></li>
-</ol>
+</ol></li>
+</ul>
 <h2 id="基于字符的语言模型">基于字符的语言模型</h2>
 <ul>
 <li>到目前为止我们训练的的是基于词语的语言模型，我们还可以构建一个<strong>基于字符的语言模型</strong></li>
 <li>基于字符的语言模型采用的字典相对简单，包括 <code>[a-zA-Z0-9]</code>、标点符号、特殊字符、<code>&lt;EOS&gt;</code>（针对英语来说）</li>
-<li>与基于词语的语言模型相比，基于字符的语言模型具有如下优缺点：</li>
+<li>与基于词语的语言模型相比，基于字符的语言模型具有如下优缺点：
+<ul>
 <li>优点：
-<ol style="list-style-type: decimal">
+<ol type="1">
 <li>不用担心出现未知的词语（针对英语）</li>
 </ol></li>
 <li>缺点：
-<ol style="list-style-type: decimal">
+<ol type="1">
 <li>序列过长</li>
 <li>难以捕捉句子前后相距较远的依赖关系</li>
 <li>计算成本比较高昂</li>
 </ol></li>
+</ul></li>
 <li>目前大部分应用采用的还是基于词汇的语言模型，而随着计算机性能的提升，在某些特殊应用（比如有很多未知词语或专有名词）中也开始使用基于字符的模型</li>
 </ul>
 <h1 id="循环神经网络的梯度消失">循环神经网络的梯度消失</h1>
 <ul>
 <li>在传统的 RNN 中，一个比较棘手的问题就是<strong>梯度消失</strong></li>
-<li>下面以一个例子解释梯度消失现象，给出如下两个模型需要学习的句子：</li>
-<li>&quot;The <strong>cat</strong>, which already ate ..., <strong>was</strong> full&quot;</li>
-<li>&quot;The <strong>cats</strong>, which already ate ..., <strong>were</strong> full&quot;</li>
+<li>下面以一个例子解释梯度消失现象，给出如下两个模型需要学习的句子：
+<ul>
+<li>“The <strong>cat</strong>, which already ate …, <strong>was</strong> full”</li>
+<li>“The <strong>cats</strong>, which already ate …, <strong>were</strong> full”</li>
+</ul></li>
 <li>如果这两个句子很长，由于隐藏层层数较多，那么反向传播时较后的词语所产生的变化将难以影响到较前词语的梯度计算（如图所示，梯度出现指数性的下降）</li>
 <li>因此梯度消失导致的问题就是传统 RNN 难以处理<strong>长期依赖</strong>（long-term dependencies)</li>
 </ul>
@@ -742,106 +762,112 @@ a^{&lt;t&gt;} &amp;= g(W_{a}[a^{&lt;t-1&gt;},x^{&lt;t&gt;}]+b_a)\\
 <ul>
 <li>除了梯度消失，深度网络还存在的一个问题就是<strong>梯度爆炸</strong></li>
 <li>即反向传播时，梯度不仅可能出现指数性的下降，还可能出现指数性的上升，引起某些参数的异常（超过上限）</li>
-<li>解决这个问题的方法是<strong>梯度修剪</strong></li>
+<li>解决这个问题的方法是<strong>梯度修剪</strong>
+<ul>
 <li>当梯度向量大于某个阈值时，对其进行缩放</li>
 <li><p>这是一种相对比较鲁棒的解决方法</p>
 <p><img src="http://media.zjubiomedit.com/2019-02-10-083016.png" width="70%"></p></li>
-<li><p>梯度消失相比梯度爆炸来说更加棘手</p></li>
+</ul></li>
+<li>梯度消失相比梯度爆炸来说更加棘手</li>
 </ul>
 <h1 id="门控循环单元gru">门控循环单元（GRU）</h1>
 <ul>
 <li><strong>门控循环单元</strong>改变了 RNN 的隐藏层，使其可以更好地捕捉深层连接，解决梯度消失问题</li>
-<li>基础的 RNN 隐藏层如下图所示，我们将使用了类似的图来解释门控循环单元</li>
-</ul>
-<p><img src="http://media.zjubiomedit.com/2019-02-10-083123.png" width="60%"></p>
+<li><p>基础的 RNN 隐藏层如下图所示，我们将使用了类似的图来解释门控循环单元</p>
+<p><img src="http://media.zjubiomedit.com/2019-02-10-083123.png" width="60%"></p></li>
+<li><strong>GRU</strong> 单元将会有一个新的变量称为 <span class="math inline">\(c\)</span>，代表记忆细胞
 <ul>
-<li><strong>GRU</strong> 单元将会有一个新的变量称为 <span class="math inline">\(c\)</span>，代表记忆细胞</li>
 <li>它的作用是提供了记忆的能力，比如记住一只猫是单数还是负数</li>
 <li>实际上记忆细胞的输出即为激活值（<span class="math inline">\(c^{&lt;t&gt;} = a^{&lt;t&gt;}\)</span>），这里用不同的符号表示（LSTM中两者将不同）</li>
-<li>GRU 单元的计算由以下公式完成：</li>
-</ul>
-<ol style="list-style-type: decimal">
+</ul></li>
+<li><p>GRU 单元的计算由以下公式完成：</p>
+<ol type="1">
 <li>用一个候选值 <span class="math inline">\(\tilde{c}^{&lt;t&gt;}\)</span> 重写记忆细胞：</li>
 </ol>
 <p><span class="math display">\[
-    \tilde{c}^{&lt;t&gt;} = \tanh (W_c[c^{&lt;t-1&gt;},x^{&lt;t&gt;}]+b_c) 
-  \]</span></p>
-<ol start="2" style="list-style-type: decimal">
+  \tilde{c}^{&lt;t&gt;} = \tanh (W_c[c^{&lt;t-1&gt;},x^{&lt;t&gt;}]+b_c) 
+\]</span></p>
+<ol start="2" type="1">
 <li>设置一个门 <span class="math inline">\(\Gamma_u\)</span>（u代表更新），其取值为0-1之间：</li>
 </ol>
 <p><span class="math display">\[
-    \Gamma_u = \sigma(W_u[c^{&lt;t-1},x^{&lt;t&gt;}]+b_u)
-  \]</span></p>
-<ol start="3" style="list-style-type: decimal">
+  \Gamma_u = \sigma(W_u[c^{&lt;t-1},x^{&lt;t&gt;}]+b_u)
+\]</span></p>
+<ol start="3" type="1">
 <li>基于候选值和门来更新记忆细胞的值：</li>
 </ol>
 <p><span class="math display">\[
-  c^{&lt;t&gt;} = \Gamma_u * \tilde{c}^{&lt;t&gt;}  + (1- \Gamma_u) * c^{&lt;t-1&gt;}
-  \]</span></p>
-<p><img src="http://media.zjubiomedit.com/2019-02-10-083254.png" width="40%"></p>
+c^{&lt;t&gt;} = \Gamma_u * \tilde{c}^{&lt;t&gt;}  + (1- \Gamma_u) * c^{&lt;t-1&gt;}
+\]</span></p>
+<p><img src="http://media.zjubiomedit.com/2019-02-10-083254.png" width="40%"></p></li>
+<li>GRU 的优点是通过门决定，当你从左到右扫描一个句子的时候，是否要更新记忆细胞，可以一直不更新直到你真的需要这些记忆细胞的时候
 <ul>
-<li>GRU 的优点是通过门决定，当你从左到右扫描一个句子的时候，是否要更新记忆细胞，可以一直不更新直到你真的需要这些记忆细胞的时候</li>
 <li>因为门较容易取到0（很接近0），所以细胞的值可以被较好地进行传递，从而解决因层数过多引起的梯度消失问题</li>
-<li>注意之前的公式中变量可能都是向量形式的，所以 <span class="math inline">\(*\)</span> 实际上是元素对应的乘积</li>
+</ul></li>
+<li>注意之前的公式中变量可能都是向量形式的，所以 <span class="math inline">\(*\)</span> 实际上是元素对应的乘积
+<ul>
 <li>这种情况下向量形式的门可以决定哪些维度的细胞要更新，哪些维度不用更新</li>
+</ul></li>
 <li><p>之前介绍的 GRU 实际上是简化的版本，下面给出完整的版本 <span class="math display">\[
-  \begin{aligned}
-  \tilde{c}^{&lt;t&gt;} &amp;= \tanh (W_c[\Gamma_r * c^{&lt;t-1&gt;},x^{&lt;t&gt;}]+b_c) \\
-  \Gamma_u &amp;= \sigma(W_u[c^{&lt;t-1},x^{&lt;t&gt;}]+b_u) \\
-  \Gamma_r &amp;= \sigma(W_r[c^{&lt;t-1},x^{&lt;t&gt;}]+b_r) \\
-  c^{&lt;t&gt;} &amp;= \Gamma_u * \tilde{c}^{&lt;t&gt;}  + (1- \Gamma_u) * c^{&lt;t-1&gt;}
-  \end{aligned}
-  \]</span></p></li>
+\begin{aligned}
+\tilde{c}^{&lt;t&gt;} &amp;= \tanh (W_c[\Gamma_r * c^{&lt;t-1&gt;},x^{&lt;t&gt;}]+b_c) \\
+\Gamma_u &amp;= \sigma(W_u[c^{&lt;t-1},x^{&lt;t&gt;}]+b_u) \\
+\Gamma_r &amp;= \sigma(W_r[c^{&lt;t-1},x^{&lt;t&gt;}]+b_r) \\
+c^{&lt;t&gt;} &amp;= \Gamma_u * \tilde{c}^{&lt;t&gt;}  + (1- \Gamma_u) * c^{&lt;t-1&gt;}
+\end{aligned}
+\]</span></p></li>
 <li>完整版本多了一个参数 <span class="math inline">\(\Gamma_r\)</span>，来表示 <span class="math inline">\(c^{&lt;t&gt;}\)</span> 和 <span class="math inline">\(c^{&lt;t-1&gt;}\)</span> 的相关性</li>
-<li>至于为什么要设置这样的参数，这是因为GRU 是研究者们多年研究出来的 RNN 标准改进版本之一，其被证明具有较高的鲁棒性实用性，你也可以使用自己的版本</li>
+<li>至于为什么要设置这样的参数，这是因为GRU 是研究者们多年研究出来的 RNN 标准改进版本之一，其被证明具有较高的鲁棒性实用性，你也可以使用自己的版本
+<ul>
 <li>而此外另一个常用的版本是 LSTM ，将在之后进行介绍</li>
+</ul></li>
 <li><p>注意，在一些学术文献中，GRU 使用的符号定义可能略有不同</p></li>
 </ul>
 <h1 id="长短期记忆lstm">长短期记忆（LSTM）</h1>
 <ul>
 <li>LSTM 可以说是一种比 GRU 更强大和通用的版本，用以解决梯度消失问题</li>
-<li>LSTM 的示意图如下：</li>
-</ul>
+<li><p>LSTM 的示意图如下：</p>
 <p><img src="http://media.zjubiomedit.com/2019-02-10-084122.png" width="55%"></p>
 <ul>
 <li>与 GRU 不同，LSTM 中 <span class="math inline">\(a^{&lt;t&gt;}\)</span> 与 <span class="math inline">\(c^{&lt;t&gt;}\)</span> 不再相等，且有三道门：更新门、遗忘门和输出门</li>
-<li>下面给出 LSTM 的计算公式：</li>
-</ul>
-<p><img src="http://media.zjubiomedit.com/2019-02-10-083619.png" width="70%"></p>
-<ul>
+</ul></li>
+<li><p>下面给出 LSTM 的计算公式：</p>
+<p><img src="http://media.zjubiomedit.com/2019-02-10-083619.png" width="70%"></p></li>
 <li>实际上，最常用的 LSTM 版本会在计算门时加入 <span class="math inline">\(c^{&lt;t-1&gt;}\)</span> ，这叫做<strong>窥视孔连接</strong>（peehole connections）</li>
-<li>关于 GRU 和 LSTM 的选择：GRU 更晚出现，可以说是 LSTM 的简化，其可以用于创建一个更大的网络，并且计算上更加迅速，而 LSTM 则更加灵活与强大</li>
+<li>关于 GRU 和 LSTM 的选择：GRU 更晚出现，可以说是 LSTM 的简化，其可以用于创建一个更大的网络，并且计算上更加迅速，而 LSTM 则更加灵活与强大
+<ul>
 <li>如果只能选一个的话，建议先选择 LSTM</li>
+</ul></li>
 </ul>
 <h1 id="双向循环神经网络">双向循环神经网络</h1>
 <ul>
 <li>除了上述方法外，还有两个方法可以帮助你构建更好的模型，第一个是双向 RNN 模型，第二个则是深层 RNN 模型</li>
 <li>双向 RNN 可以让你在序列的某点处不仅可以获取之前的信息，还可以获取未来的信息</li>
-<li>对于单向的RNN而言，不管隐藏层单元是标准的还是 GRU 还是 LSTM，其都无法接收未来的信息，而有些情况下，两边的信息都很重要</li>
-</ul>
-<p><img src="http://media.zjubiomedit.com/2019-02-10-084948.png" width="70%"></p>
-<ul>
-<li>BRNN 新增了反向连接，构成了一个无环图</li>
-</ul>
-<p><img src="http://media.zjubiomedit.com/2019-02-10-090724.png" width="50%"></p>
-<ul>
+<li><p>对于单向的RNN而言，不管隐藏层单元是标准的还是 GRU 还是 LSTM，其都无法接收未来的信息，而有些情况下，两边的信息都很重要</p>
+<p><img src="http://media.zjubiomedit.com/2019-02-10-084948.png" width="70%"></p></li>
+<li><p>BRNN 新增了反向连接，构成了一个无环图</p>
+<p><img src="http://media.zjubiomedit.com/2019-02-10-090724.png" width="50%"></p></li>
 <li>给定一个输入序列，首先进行从左向右的前向传播，然后进行从右到左的前向传播，然后基于前向与反向连接得到的激活值计算输出</li>
-<li>这里的隐藏层单元不仅可以是标准单元，也可以是 GRU 或 LSTM</li>
+<li>这里的隐藏层单元不仅可以是标准单元，也可以是 GRU 或 LSTM
+<ul>
 <li>在大量自然语言处理的应用中，经常使用有 LSTM 单元的 BRNN 模型</li>
-<li>BRNN 的缺点是你需要完整的数据序列，这样在某些领域中会存在局限性</li>
+</ul></li>
+<li>BRNN 的缺点是你需要完整的数据序列，这样在某些领域中会存在局限性
+<ul>
 <li>如在语音识别中你可能需要等待用户说完来得到整个语音表达，这种情况下我们会使用更加复杂的模块</li>
-<li>对于可以获取到整个序列的情况，BRNN 会是一个比较高效的模型</li>
+</ul></li>
+<li><p>对于可以获取到整个序列的情况，BRNN 会是一个比较高效的模型</p></li>
 </ul>
 <h1 id="深层循环神经网络">深层循环神经网络</h1>
 <ul>
-<li>为了学习更加复杂的函数，我们需要把 RNN 的多个层堆叠在一起来构建更深的模型</li>
-</ul>
-<p><img src="http://media.zjubiomedit.com/2019-02-10-090446.png" width="70%"></p>
-<ul>
+<li><p>为了学习更加复杂的函数，我们需要把 RNN 的多个层堆叠在一起来构建更深的模型</p>
+<p><img src="http://media.zjubiomedit.com/2019-02-10-090446.png" width="70%"></p></li>
 <li>上图展示了深度 RNN 的结构。参数新增了上标，表示层数，每一层的各时间步共享参数</li>
-<li>由于深度 RNN 较为复杂，训练起来较为耗时，所以一般不会有很多层</li>
+<li>由于深度 RNN 较为复杂，训练起来较为耗时，所以一般不会有很多层
+<ul>
 <li>但可以在竖直方向上堆叠一个普通的深层网络，用来计算输出，这些网络层并不水平连接</li>
-<li>注意隐藏层单元可以是标准、GRU 或 LSTM 中的任意一个，此外也可以构建深层双向 RNN 模型</li>
+</ul></li>
+<li><p>注意隐藏层单元可以是标准、GRU 或 LSTM 中的任意一个，此外也可以构建深层双向 RNN 模型</p></li>
 </ul>
 <h1 id="思维导图">思维导图</h1>
 <p><img src="http://media.zjubiomedit.com/2019-02-10-150840.png" width="85%"></p>
