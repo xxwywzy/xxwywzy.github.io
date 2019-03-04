@@ -105,7 +105,7 @@
 <meta property="og:description" content="本篇博客为《游戏引擎架构》的第一章读书笔记。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-135927.png">
-<meta property="og:updated_time" content="2019-02-22T02:07:18.000Z">
+<meta property="og:updated_time" content="2019-03-03T03:07:18.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《游戏引擎架构》读书笔记之一：导论">
 <meta name="twitter:description" content="本篇博客为《游戏引擎架构》的第一章读书笔记。">
@@ -539,34 +539,66 @@
 </ul></li>
 </ul>
 <h1 id="游戏是什么">游戏是什么</h1>
-<p>“游戏”是什么，每个人多半有自己非常直观的理解。“游戏”一词泛指棋类游戏、纸牌游戏、赌场游戏、军事战争游戏、计算机游戏、孩子们一起玩耍的多种游戏等。学术上还有个“博弈论”，它是指在一个明确的游戏规则框架下，多个代理人选择战略及战术，以求自身利益的最大化。</p>
-<p>在《快乐之道：游戏设计的黄金法则》一书中，拉夫·斯科特把游戏定义为一个互动体验，为玩家提供一连串渐进式挑战，玩家最终能通过学习而精通该游戏。基于本书的主旨，我们会集中讨论一些游戏的子集，子集里的游戏由二维或三维虚拟世界组成，并有少量的玩家。</p>
+<ul>
+<li>“游戏”一词泛指棋类游戏、纸牌游戏、赌场游戏、军事战争游戏、计算机游戏、孩子们一起玩耍的多种游戏
+<ul>
+<li>本书将聚焦于计算机游戏，其由二维或三维虚拟世界组成，并有少量的玩家</li>
+</ul></li>
+</ul>
 <h2 id="电子游戏作为软实时模拟">电子游戏作为软实时模拟</h2>
-<p>大部分二维或三维的电子游戏，会被计算机科学家称为<strong>软实时互动基于代理计算机模拟</strong>的例子。以下，我们会把这个词组分拆讨论，以便理解。</p>
-<p>在大部分电子游戏中，会用数学方式来为一些真实世界（或<strong>想象</strong>世界）的子集<strong>建模</strong>，从而使这些模型能在计算机中运行 。明显地，我们不可能囊括世界上的而所有细节，所以这些模型只是现实或想象世界的简化或近似版本。因此，数学模型是现实或虚拟世界的<strong>模拟</strong>。 <strong>近似化</strong>和<strong>简化</strong>是游戏开发者最有力的两个工具。若能巧妙地运用它们，就算是一个大量简化的模型，也能非常接近现实，难辨真假，而能带来的乐趣也比现实更多。</p>
-<p><strong>基于代理</strong>模拟是指，模拟中多个独立的实体（称为代理一起互动）。此术语非常符合三维电子游戏的描述，游戏中的载具、人物角色、火球、豆子等都可以视为代理，这也是多数游戏采用面向对象编程语言的原因。</p>
-<p>所有互动电子游戏都是<strong>时间性模拟</strong>，即游戏世界是动态的——随着游戏时间和故事的展开，游戏世界状态随着时间改变。游戏也必须回应人类玩家的输入，这些输入是游戏本身不可预知的，因而也说明游戏是<strong>互动时间性模拟</strong>。最后，多数游戏会描述游戏的故事，并实时回应玩家输入，这使游戏成为<strong>互动实时模拟</strong>。当然也有一些反例，不过基于本书的目标。将假设所有电子游戏至少都会有一些<strong>实时</strong>限制。</p>
-<p><strong>时限</strong>是所有实时模拟的核心概念。在电子游戏中，明显的例子是需要屏幕每秒最少更新24次，以制造运动的错觉。当然，电子游戏也有其他类型的期限。例如物理模拟可能需要每秒更新120次以保持稳定。</p>
-<p>“软”实时系统是指一些系统，即使错过期限却不会造成灾难性后果。因此，所有游戏都是<strong>软实时系统</strong>——如果帧数不足，人类玩家在现实中不会因此而死亡。与此相比，<strong>硬实时系统</strong>错过期限可能会导致操作者损伤甚至死亡。</p>
-<p>之前提到，模拟虚拟世界许多时候要用到数学模型。数学模型可分为<strong>解析式</strong>或<strong>数值式</strong>。例如，一个刚体因地心引力以恒定加速度落下，其解析式（闭合式） 数学模型可写为：</p>
-<p><span class="math display">\[
+<ul>
+<li>大部分二维或三维的电子游戏，会被计算机科学家称为<strong>软实时互动基于代理的计算机模拟</strong>（<em>soft real-time interactive agent-based computer simulations</em>）
+<ul>
+<li><strong>计算机模拟</strong>：大部分电子游戏会用数学方式来为一些真实世界（或<strong>想象</strong>世界）的子集<strong>建模</strong>，这些模型只是现实或想象世界的简化或近似版本</li>
+<li><strong>基于代理</strong>：模拟中多个独立的实体（称为代理）
+<ul>
+<li>三维游戏中的载具、人物角色、火球、豆子等都可以视为代理</li>
+</ul></li>
+<li><strong>实时互动</strong>：大部分互动电子游戏都是<strong>时间性模拟</strong>，并实时回应玩家输入
+<ul>
+<li><strong>时限</strong>是所有实时模拟的核心概念
+<ul>
+<li>在电子游戏中，一个明显的例子是屏幕需要每秒最少更新24次，以制造运动的错觉</li>
+</ul></li>
+</ul></li>
+<li><strong>软实时</strong>：即使错过期限也不会造成灾难性后果
+<ul>
+<li>所有游戏都是<strong>软实时系统</strong>——如果帧数不足，人类玩家在现实中不会因此而死亡</li>
+<li>与此相比，<strong>硬实时系统</strong>错过期限可能会导致操作者损伤甚至死亡</li>
+</ul></li>
+</ul></li>
+<li>模拟真实世界的数学模型可以分为<strong>解析式</strong>或<strong>数值式</strong>
+<ul>
+<li>解析式模型可为其自变量设任何值来求值
+<ul>
+<li>例如，一个刚体因地心引力以恒定加速度落下，其解析式（闭合式）数学模型可写为： <span class="math display">\[
 y(t) = \frac 1 2 gt^2 + v_0t + y_0
-\]</span></p>
-<p>解析式模型可为其自变量设任何值来求值。可是，大部分数学问题没有闭合式解。而且在电子游戏中，用户输入是不能预知的，因此我们不能期望可以对整个游戏完全用解析式建模。</p>
-<p>刚体受地心引力落下的数值式模型可以写为：</p>
-<p><span class="math display">\[
+\]</span></li>
+</ul></li>
+<li>但在实际情况下，大部分数学问题难以求出闭合解，此时就需要基于数值式模型
+<ul>
+<li><p>刚体受地心引力落下的数值式模型可以写为： <span class="math display">\[
 y(t+ \Delta t) = F(y(t), \dot{y(t)}, \ddot{y(t)},\ldots)
-\]</span></p>
-<p>即是说，该刚体在 <span class="math inline">\((t+ \Delta t)\)</span> 未来时间的高度，可以用目前的高度、高度的第一导数、高度的第二导数及目前时间 <span class="math inline">\(t\)</span> 为参数的函数来表示。为实现数值式模拟，通常要不断重复计算，以决定每个离散时步的系统状态。游戏也是如此运作的。</p>
-<h2 id="游戏引擎是什么">游戏引擎是什么</h2>
-<p>游戏引擎这个术语在20世纪90年代中期形成，与第一人称射击游戏如 id Software 公司非常受欢迎的游戏《毁灭战士》有关。《毁灭战士》的软件架构相当清楚地划分成核心软件组件（如三维图形渲染系统、碰撞检测系统和音频系统等）、美术资产、游戏世界、构成玩家体验的游戏规则。这么划分是很有价值的，若另一个开发商取得这类游戏的授权，只要制作新的美术、关卡布局、武器、角色、载具、游戏规则等，对引擎软件做出很少的修改，就可以把游戏打造成新产品。</p>
-<p>这一划分也引发mod社区的兴起。mod是指，一些特殊游戏玩家组成的小组，或小规模的独立游戏工作室，利用原开发商提供的工具箱修改现有的游戏，从而创作出新的游戏。在20世纪90年代末，一些游戏，如《雷神之锤Ⅲ竞技场》和《虚幻》，在设计时就照顾到复用性和mod。今天，游戏开发者可以取得一个游戏引擎的授权，复用其中大部分关键软件组件去制作游戏。</p>
-<p>通常，游戏和其引擎之间的分界线是很模糊的。一些引擎有相当清晰的划分，一些则没有尝试把两者分开。没有工作室可以完美地划分游戏和引擎，因为随着游戏设计的逐渐成形，这两个组件的定义会经常转移。</p>
-<p><strong>数据驱动架构</strong>或许可以用来分辨一个软件的哪些部分是引擎，哪些部分是游戏。若一个游戏包含硬编码逻辑或游戏规则，或使用特例代码去渲染特定种类的游戏对象，则复用该软件去制作新游戏就会变得困难甚至不可行。因此，这里说的“游戏引擎”是指可扩展的软件，而且不需要大量修改就能成为多款游戏软件的基础。</p>
-<p>很明显这不是一个非黑即白的区别方法。（意思是游戏和引擎不可能完全分离）我们可以根据每个引擎的可复用性，把引擎放置于一个连续谱之上。图 1.1 在这个连续谱上对几款知名的游戏/引擎进行定位。</p>
-<p><img src="http://media.zjubiomedit.com/2018-05-28-135927.png" width="90%" height="90%"></p>
-<p>有些人可能以为游戏引擎能变成一个通用软件，去运行几乎<strong>任何</strong>可以想象到的游戏内容。可是，这个设想至今尚未（或许永远不能）实现。大部分游戏引擎是针对特定游戏及特定硬件平台所精心制作及微调的。出现这种现象，是因为设计高效的软件总是需要取舍，而这些取舍是基于一些假设的，像是一个软件会如何使用及在哪个硬件上运行等。</p>
-<p>随着计算机硬件速度的提高及专用显卡的应用，再加上更高效的渲染算法及数据结构，不同游戏类型的图形引擎差异已经缩小。但是，通用性和最优性仍然需要取舍。按照游戏/硬件平台的特定需求及限制，经常可以通过微调引擎制作更精美的游戏。</p>
+\]</span></p></li>
+<li>在电子游戏中，用户输入是不能预知的，因此我们不能期望可以对整个游戏完全用解析式建模</li>
+<li><p>为实现数值式模拟，通常要不断重复计算，以决定每个离散时步的系统状态</p></li>
+</ul></li>
+</ul></li>
+</ul>
+<h1 id="游戏引擎是什么">游戏引擎是什么</h1>
+<ul>
+<li>游戏引擎这个术语在20世纪90年代中期形成，可以理解为一系列可以复用的软件组件
+<ul>
+<li>基于游戏引擎，只要制作新的美术、关卡布局、武器、角色、载具、游戏规则等，对引擎做出很少的修改，就可以开发一款新游戏</li>
+</ul></li>
+<li>通常，游戏和其引擎之间的分界线是很模糊的
+<ul>
+<li><p>我们可以根据每个引擎的可复用性，把引擎放置于一个连续谱之上</p>
+<p><img src="http://media.zjubiomedit.com/2018-05-28-135927.png" width="90%" height="90%"></p></li>
+<li>大部分游戏引擎是针对特定游戏及特定硬件平台所精心制作及微调的</li>
+<li><p>虽然随着技术的发展，不同游戏类型的引擎差异已经缩小，但通用性和最优性仍然需要取舍</p></li>
+</ul></li>
+</ul>
 <h1 id="不同游戏类型中的引擎差异">不同游戏类型中的引擎差异</h1>
 
       
@@ -717,7 +749,7 @@ y(t+ \Delta t) = F(y(t), \dot{y(t)}, \ddot{y(t)},\ldots)
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">23</span>
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -903,7 +935,7 @@ y(t+ \Delta t) = F(y(t), \dot{y(t)}, \ddot{y(t)},\ldots)
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#典型游戏团队的结构"><span class="nav-number">1.</span> <span class="nav-text">典型游戏团队的结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#工程师"><span class="nav-number">1.1.</span> <span class="nav-text">工程师</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#艺术家"><span class="nav-number">1.2.</span> <span class="nav-text">艺术家</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#游戏设计师"><span class="nav-number">1.3.</span> <span class="nav-text">游戏设计师</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#制作人"><span class="nav-number">1.4.</span> <span class="nav-text">制作人</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他职员"><span class="nav-number">1.5.</span> <span class="nav-text">其他职员</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#游戏是什么"><span class="nav-number">2.</span> <span class="nav-text">游戏是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#电子游戏作为软实时模拟"><span class="nav-number">2.1.</span> <span class="nav-text">电子游戏作为软实时模拟</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#游戏引擎是什么"><span class="nav-number">2.2.</span> <span class="nav-text">游戏引擎是什么</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#不同游戏类型中的引擎差异"><span class="nav-number">3.</span> <span class="nav-text">不同游戏类型中的引擎差异</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#典型游戏团队的结构"><span class="nav-number">1.</span> <span class="nav-text">典型游戏团队的结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#工程师"><span class="nav-number">1.1.</span> <span class="nav-text">工程师</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#艺术家"><span class="nav-number">1.2.</span> <span class="nav-text">艺术家</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#游戏设计师"><span class="nav-number">1.3.</span> <span class="nav-text">游戏设计师</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#制作人"><span class="nav-number">1.4.</span> <span class="nav-text">制作人</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他职员"><span class="nav-number">1.5.</span> <span class="nav-text">其他职员</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#游戏是什么"><span class="nav-number">2.</span> <span class="nav-text">游戏是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#电子游戏作为软实时模拟"><span class="nav-number">2.1.</span> <span class="nav-text">电子游戏作为软实时模拟</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#游戏引擎是什么"><span class="nav-number">3.</span> <span class="nav-text">游戏引擎是什么</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#不同游戏类型中的引擎差异"><span class="nav-number">4.</span> <span class="nav-text">不同游戏类型中的引擎差异</span></a></li></ol></div>
             
 
           </div>
