@@ -104,7 +104,7 @@
 <meta property="og:site_name" content="xxwywzy&#39;s Blog">
 <meta property="og:description" content="本篇博客为 coursera programming languages 课程的第一部分的课程作业。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-03-13T14:53:18.100Z">
+<meta property="og:updated_time" content="2019-03-14T03:10:59.433Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Progamming Languages 第一部分作业">
 <meta name="twitter:description" content="本篇博客为 coursera programming languages 课程的第一部分的课程作业。">
@@ -578,7 +578,7 @@
 <li>构建一个月份的 string list，使用问题 6 的结果将月份转换为 string</li>
 <li>年份和日期直接转换即可</li>
 </ul>
-<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun date_to_string (date : int * int * int) =</span><br><span class="line">    let </span><br><span class="line">        val names = [<span class="string">"January"</span>, <span class="string">"February"</span>, <span class="string">"March"</span>, <span class="string">"April"</span>, <span class="string">"May"</span>, <span class="string">"June"</span>,</span><br><span class="line">		    <span class="string">"July"</span>, <span class="string">"August"</span>, <span class="string">"September"</span>, <span class="string">"October"</span>, <span class="string">"November"</span>, <span class="string">"December"</span>]</span><br><span class="line">    <span class="keyword">in</span></span><br><span class="line">	    get_nth(names,<span class="comment">#2 date) ^ " " ^ Int.toString(#3 date) </span></span><br><span class="line">	    ^ <span class="string">", "</span> ^ Int.toString(<span class="comment">#1 date)</span></span><br><span class="line">    <span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun date_to_string (date : int * int * int) =</span><br><span class="line">    let</span><br><span class="line">        val names = [<span class="string">"January"</span>, <span class="string">"February"</span>, <span class="string">"March"</span>, <span class="string">"April"</span>, <span class="string">"May"</span>, <span class="string">"June"</span>, <span class="string">"July"</span>, <span class="string">"August"</span>, <span class="string">"September"</span>, <span class="string">"October"</span>, <span class="string">"November"</span>, <span class="string">"December"</span>]</span><br><span class="line">    <span class="keyword">in</span></span><br><span class="line">        get_nth(names,<span class="comment">#2 date) ^ " " ^ Int.toString(#3 date) ^ ", " ^ Int.toString(#1 date)</span></span><br><span class="line">    <span class="keyword">end</span></span><br></pre></td></tr></table></figure>
 <h2 id="问题-8">问题 8</h2>
 <ul>
 <li>完成一个函数 <code>number_before_reaching_sum</code>
@@ -614,7 +614,7 @@
 <ul>
 <li>构建一个每月日期的 list，使用问题 8 的结果计算所属月份</li>
 </ul>
-<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun what_month (day_of_year : int) =</span><br><span class="line">    let </span><br><span class="line">	     val month_lengths = [<span class="number">31</span>,<span class="number">28</span>,<span class="number">31</span>,<span class="number">30</span>,<span class="number">31</span>,<span class="number">30</span>,<span class="number">31</span>,<span class="number">31</span>,<span class="number">30</span>,<span class="number">31</span>,<span class="number">30</span>,<span class="number">31</span>]</span><br><span class="line">    <span class="keyword">in</span></span><br><span class="line">	     <span class="number">1</span> + number_before_reaching_sum(day_of_year, month_lengths)</span><br><span class="line">    <span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun what_month (day_of_year : int) =</span><br><span class="line">    let</span><br><span class="line">        val month_lengths = [<span class="number">31</span>,<span class="number">28</span>,<span class="number">31</span>,<span class="number">30</span>,<span class="number">31</span>,<span class="number">30</span>,<span class="number">31</span>,<span class="number">31</span>,<span class="number">30</span>,<span class="number">31</span>,<span class="number">30</span>,<span class="number">31</span>]</span><br><span class="line">    <span class="keyword">in</span></span><br><span class="line">        <span class="number">1</span> + number_before_reaching_sum(day_of_year, month_lengths)</span><br><span class="line">    <span class="keyword">end</span></span><br></pre></td></tr></table></figure>
 <h2 id="问题-10">问题 10</h2>
 <ul>
 <li>完成一个函数 <code>month_range</code>
@@ -654,7 +654,7 @@
 </ul></li>
 </ul></li>
 </ul>
-<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun oldest (dates : (int * int * int) list) =</span><br><span class="line">    <span class="keyword">if</span> null dates</span><br><span class="line">    <span class="keyword">then</span> NONE</span><br><span class="line">    <span class="keyword">else</span> let </span><br><span class="line">             fun f dates =</span><br><span class="line">		             <span class="keyword">if</span> null (tl dates)</span><br><span class="line">		             <span class="keyword">then</span> hd dates</span><br><span class="line">		             <span class="keyword">else</span> let </span><br><span class="line">                              val ans = f (tl dates)</span><br><span class="line">	              	      <span class="keyword">in</span> </span><br><span class="line">                              <span class="keyword">if</span> is_older(ans, hd dates)</span><br><span class="line">		                      <span class="keyword">then</span> ans</span><br><span class="line">		                      <span class="keyword">else</span> hd dates</span><br><span class="line">		                  <span class="keyword">end</span></span><br><span class="line">	       <span class="keyword">in</span> </span><br><span class="line">               SOME(f dates) </span><br><span class="line">         <span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun oldest (dates : (int * int * int) list) =</span><br><span class="line">    <span class="keyword">if</span> null dates</span><br><span class="line">    <span class="keyword">then</span> NONE</span><br><span class="line">    <span class="keyword">else</span> let </span><br><span class="line">             fun f dates =</span><br><span class="line">                 <span class="keyword">if</span> null (tl dates)</span><br><span class="line">                 <span class="keyword">then</span> hd dates</span><br><span class="line">                 <span class="keyword">else</span> let</span><br><span class="line">                          val ans = f (tl dates)</span><br><span class="line">                      <span class="keyword">in</span></span><br><span class="line">                          <span class="keyword">if</span> is_older(ans, hd dates)</span><br><span class="line">                          <span class="keyword">then</span> ans</span><br><span class="line">                          <span class="keyword">else</span> hd dates</span><br><span class="line">                      <span class="keyword">end</span></span><br><span class="line">          <span class="keyword">in</span></span><br><span class="line">              SOME(f dates)</span><br><span class="line">          <span class="keyword">end</span></span><br></pre></td></tr></table></figure>
 <h2 id="问题-12挑战问题">问题 12（挑战问题）</h2>
 <ul>
 <li>完成两个函数 <code>number_in_months_challenge</code> 和 <code>dates_in_months_challenge</code>
@@ -755,6 +755,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2019/03/15/cs224-1/" rel="prev" title="CS224N 学习笔记之一：词向量 1">
+                CS224N 学习笔记之一：词向量 1 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -831,7 +835,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">25</span>
+                    <span class="site-state-item-count">26</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -933,7 +937,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">16</span>
+                      
+                    
+                    <span class="site-state-item-count">17</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

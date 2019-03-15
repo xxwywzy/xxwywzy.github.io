@@ -1,0 +1,1657 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2"/>
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0"/>
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/favicon.png?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本篇博客为 CS224N 学习笔记第一部分，主题是：词向量（介绍，SVD 和 Word2Vec）。">
+<meta name="keywords" content="CS224N">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CS224N 学习笔记之一：词向量 1">
+<meta property="og:url" content="https://xxwywzy.github.io/2019/03/15/cs224-1/index.html">
+<meta property="og:site_name" content="xxwywzy&#39;s Blog">
+<meta property="og:description" content="本篇博客为 CS224N 学习笔记第一部分，主题是：词向量（介绍，SVD 和 Word2Vec）。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-05-033032.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-05-055909.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-05-060148.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-12-070940.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-14-064627.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-15-032628.jpg">
+<meta property="og:updated_time" content="2019-03-15T08:17:10.874Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CS224N 学习笔记之一：词向量 1">
+<meta name="twitter:description" content="本篇博客为 CS224N 学习笔记第一部分，主题是：词向量（介绍，SVD 和 Word2Vec）。">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2019-03-05-033032.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://xxwywzy.github.io/2019/03/15/cs224-1/"/>
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>CS224N 学习笔记之一：词向量 1 | xxwywzy's Blog</title>
+  
+
+
+
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a02b5462e7522b1ed191c4cea6b1d6e6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xxwywzy's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Long may the sunshine</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br/>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br/>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br/>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br/>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2019/03/15/cs224-1/"/>
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zheyu Wang"/>
+      <meta itemprop="description" content="更に向こうへ"/>
+      <meta itemprop="image" content="/images/avatar.png"/>
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xxwywzy's Blog"/>
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">CS224N 学习笔记之一：词向量 1
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-15 15:57:07" itemprop="dateCreated datePublished" datetime="2019-03-15T15:57:07+08:00">2019-03-15</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/人工智能/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/人工智能/深度学习/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <a href="/2019/03/15/cs224-1/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/03/15/cs224-1/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+            <span id="/2019/03/15/cs224-1/" class="leancloud_visitors" data-flag-title="CS224N 学习笔记之一：词向量 1">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <div class="note info">
+            本篇博客为 CS224N 学习笔记第一部分，主题是：词向量（介绍，SVD 和 Word2Vec）。 
+          </div>
+<a id="more"></a>
+<h1 id="自然语言处理简介">自然语言处理简介</h1>
+<h2 id="自然语言处理的特殊性">自然语言处理的特殊性</h2>
+<ul>
+<li>从处理的对象来看，NLP 与其他机器学习任务有很大区别
+<ul>
+<li>NLP 处理的对象是人类语言</li>
+</ul></li>
+<li>人类的语言是一种特定的用于传达意义的系统，并不由任何形式的物理表现产生
+<ul>
+<li>大部分词语只是一个表达某种意义的符号</li>
+<li>语言通过各种方式编码（语音、手势、写作等），以连续信号的形式传输给大脑</li>
+</ul></li>
+</ul>
+<h2 id="任务类型">任务类型</h2>
+<ul>
+<li>NLP 的目标是设计算法来让计算机“理解”自然语言，以执行某些任务</li>
+<li>这些任务可以划分为不同的难度等级，举例来说：
+<ul>
+<li><strong>简单难度</strong>：
+<ul>
+<li>拼写检查</li>
+<li>关键词搜索</li>
+<li>同义词寻找</li>
+</ul></li>
+<li><strong>中等难度</strong>：
+<ul>
+<li>从网站、文档中解析信息</li>
+</ul></li>
+<li><strong>困难难度</strong>：
+<ul>
+<li>机器翻译</li>
+<li>语义分析</li>
+<li>指代消解</li>
+<li>智能问答</li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="如何表示词语">如何表示词语</h2>
+<ul>
+<li>所有 NLP 任务的第一个议题就是如何表示词语以将其作为模型的输入
+<ul>
+<li>当前常见的做法是使用词向量来表示词语</li>
+</ul></li>
+</ul>
+<h1 id="传统词向量">传统词向量</h1>
+<ul>
+<li>最简单的词向量表示方法是 <strong>one-hot 向量</strong>
+<ol type="1">
+<li>构建一个大小为 <span class="math inline">\(|V|\)</span> 的词典（如果是表示所有英语词汇，则大小约为 1300 万）</li>
+<li>将每个词语表示为一个 <span class="math inline">\(\mathbb{R}^{|V|\times 1}\)</span> 的向量
+<ul>
+<li>该词语在词典中的位置所对应的分量为 1 ，其他分量均为 0</li>
+</ul>
+<span class="math display">\[
+w^{aardvark} = \left[\begin{array}{cc}
+1 \\
+0 \\
+0 \\
+\vdots \\
+0
+\end{array}\right], w^{a} = \left[\begin{array}{cc}
+0 \\
+1 \\
+0 \\
+\vdots \\
+0
+\end{array}\right], \cdots w^{zebra} = \left[\begin{array}{cc}
+0 \\
+0 \\
+0 \\
+\vdots \\
+1
+\end{array}\right]
+\]</span></li>
+</ol></li>
+<li><p>这种表示方法的缺陷是无法体现出词语之间的相关性 <span class="math display">\[
+(w^{hotel})^Tw^{motel} = (w^{hotel})^Tw^{cat} = 0
+\]</span></p>
+<ul>
+<li>我们希望减少向量空间的大小，找到一个能够表示词语间相关性的子空间</li>
+</ul></li>
+</ul>
+<h1 id="基于-svd-的方法">基于 SVD 的方法</h1>
+<ul>
+<li>我们可以利用奇异值分解来减小向量空间的大小
+<ul>
+<li>首先基于数据集构建关于词语共现次数的某种矩阵 <span class="math inline">\(X\)</span></li>
+<li>然后对 <span class="math inline">\(X\)</span> 进行奇异值分解得到 <span class="math inline">\(USV^T\)</span></li>
+<li>最后使用 <span class="math inline">\(U\)</span> 的某些行来表示词向量</li>
+</ul></li>
+<li>下面介绍两种可以选择的共现矩阵</li>
+</ul>
+<h2 id="词语-文档矩阵">词语-文档矩阵</h2>
+<ul>
+<li>词语-文档矩阵假定相关的词语一般出现在相同的文档中，其构建步骤如下：
+<ul>
+<li>遍历所有文档（数量为 <span class="math inline">\(M\)</span>）</li>
+<li>每一次词语 <span class="math inline">\(i\)</span> 出现在文档 <span class="math inline">\(j\)</span> ，<span class="math inline">\(X_{ij}\)</span> 加 1</li>
+</ul></li>
+<li>该矩阵的大小为 <span class="math inline">\(\mathbb{R}^{|V|\times M}\)</span>
+<ul>
+<li>这是一个非常大的矩阵，计算过于复杂</li>
+</ul></li>
+</ul>
+<h2 id="基于窗口的共现矩阵">基于窗口的共现矩阵</h2>
+<ul>
+<li>基于窗口的共现矩阵计算每个词语在给定词语的特定大小窗口范围内出现的次数
+<ul>
+<li>矩阵的大小为 <span class="math inline">\(|V| \times |V|\)</span></li>
+</ul></li>
+<li>下面给出一个例子：
+<ul>
+<li>该语料库由 3 个句子组成，且窗口大小设置为 1
+<ol type="1">
+<li>I enjoy flying.</li>
+<li>I like NLP.</li>
+<li>I like deep learning.</li>
+</ol></li>
+<li>按上述方法得到的矩阵为：</li>
+</ul></li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-03-05-033032.png" width="55%"></p>
+<h2 id="将-svd-应用到共现矩阵">将 SVD 应用到共现矩阵</h2>
+<ul>
+<li><p>观察 SVD 得到的奇异值（ <span class="math inline">\(S\)</span> 矩阵的对角线），按照所占的百分比选择适当的 <span class="math inline">\(k\)</span> <span class="math display">\[
+\frac {\sum_{i=1}^k \sigma_i} {\sum_{i=1}^{|V|} \sigma_i}
+\]</span></p></li>
+<li>然后选择矩阵 <span class="math inline">\(U\)</span> 的前 <span class="math inline">\(k\)</span> 行作为词向量
+<ul>
+<li>词向量的长度为 <span class="math inline">\(k\)</span></li>
+<li>该向量能够表示词语的语法和语义信息</li>
+</ul></li>
+<li>下面两张图给出了 SVD 的求解过程：
+<ul>
+<li><p>使用 SVD 分解共现矩阵：</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-05-055909.png" width="80%"></p></li>
+<li><p>通过选择前 k 个奇异向量减少维度：</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-05-060148.png" width="80%"></p></li>
+</ul></li>
+</ul>
+<h2 id="存在的问题">存在的问题</h2>
+<ul>
+<li>基于 SVD 的方法虽然减小了维数，但是存在很多的问题：
+<ul>
+<li>矩阵维数经常变化（随语料库变化）</li>
+<li>矩阵非常稀疏（因为大部分词语不存在共现）</li>
+<li>矩阵维数一般非常高（<span class="math inline">\(\approx 10^6 \times 10^6\)</span>）</li>
+<li>计算复杂度是平方级的（执行 SVD）</li>
+<li>需要一些技巧来处理词语频率间的极度不平衡</li>
+</ul></li>
+<li>下面提供了一些解决方案：
+<ul>
+<li>忽略一些功能性词语（如 the、he、has 等）</li>
+<li>使用一个有坡度的窗口（即基于词语之间的距离设置不同的共现权重）</li>
+<li>使用皮尔逊相关性并将负数置为 0</li>
+</ul></li>
+<li>接下来介绍能更优雅地解决上述诸多问题方案：基于迭代的方法</li>
+</ul>
+<h1 id="基于迭代的方法word2vec">基于迭代的方法：Word2vec</h1>
+<ul>
+<li>基于迭代的方法通过迭代逐渐学习词语的共现关系，而非基于 SVD 的方法那样一次性直接获取所有词语的共现关系
+<ul>
+<li>训练的过程是：设置一个目标函数，基于某种更新规则进行迭代。不断优化目标函数，最终学习得到词向量</li>
+<li>本节将介绍其中一种方法：word2vec</li>
+</ul></li>
+<li>Word2vec 是一个软件包，实际包括：
+<ul>
+<li><strong>两种算法</strong>：CBOW 和 skip-gram
+<ul>
+<li>CBOW 的目标是基于上下文预测中心词</li>
+<li>Skip-gram 的目标是基于中心词预测上下文</li>
+</ul></li>
+<li><strong>两种训练方法</strong>：negative sampling 和 hierarchical softmax
+<ul>
+<li>negative sampling 通过采集负样本定义目标函数</li>
+<li>hierarchical softmax 通过一个高效的树结构计算所有词语的概率来定义目标函数</li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="语言模型">语言模型</h2>
+<ul>
+<li><p>语言模型用于计算一个词语序列的概率</p>
+<ul>
+<li>如果这个序列是合理的（语义和语法上），其概率就会比较高</li>
+<li>否则输出的概率就会比较低</li>
+</ul></li>
+<li><p>该概率用数学公式可以表示为： <span class="math display">\[
+P(w_1,w_2,\ldots,w_n)
+\]</span></p></li>
+<li><p>如果将每个词语的出现看作完全独立，就可以得到 <strong>Unigram model</strong>： <span class="math display">\[
+P(w_1,w_2,\ldots,w_n) = \prod_{i=1}^n P(w_i)
+\]</span></p></li>
+<li><p>如果假设每个词语的出现于其前一个词语相关，就可以得到 <strong>Bigram model</strong>： <span class="math display">\[
+P(w_1,w_2,\ldots,w_n) = \prod_{i=2}^n P(w_i|w_{i-1})
+\]</span></p></li>
+<li><p>上述两种模型都过于理想化，实际情况下一个词语的出现概率受到更多因素的影响</p>
+<ul>
+<li>下面将介绍如何通过模型学习这些概率</li>
+<li>word2vec 可以理解为是语言模型的副产物</li>
+</ul></li>
+</ul>
+<h2 id="cbow">CBOW</h2>
+<ul>
+<li>第一种方法是给定一个单词的上下文，来预测或生成该单词
+<ul>
+<li>该模型称为连续词袋模型（CBOW）</li>
+</ul></li>
+</ul>
+<h3 id="符号定义">符号定义</h3>
+<ul>
+<li>为了具体描述 CBOW，需要明确以下定义：
+<ul>
+<li><span class="math inline">\(w_i\)</span>：来自词典 <span class="math inline">\(V\)</span> 的词语 <span class="math inline">\(i\)</span></li>
+<li><span class="math inline">\(\mathcal{V} \in \mathbb{R}^{n\times |V|}\)</span>：输入词语矩阵
+<ul>
+<li><span class="math inline">\(n\)</span> 是我们希望的词向量（嵌入）空间大小</li>
+</ul></li>
+<li><span class="math inline">\(v_i\)</span>：<span class="math inline">\(\mathcal{V}\)</span> 的第 i 列，词语 <span class="math inline">\(w_i\)</span> 的输入向量表示</li>
+<li><span class="math inline">\(\mathcal{U} \in \mathbb{R}^{|V|\times n}\)</span>：输出词语矩阵</li>
+<li><span class="math inline">\(u_i\)</span>：<span class="math inline">\(\mathcal{U}\)</span> 的第 <span class="math inline">\(i\)</span> 行，词语 <span class="math inline">\(w_i\)</span> 的输出向量表示</li>
+</ul></li>
+<li>CBOW 的目的是学习得到每一个词语 <span class="math inline">\(w_i\)</span> 的输入向量 <span class="math inline">\(v_i\)</span> 和输出向量 <span class="math inline">\(u_i\)</span></li>
+</ul>
+<h3 id="计算步骤">计算步骤</h3>
+<ul>
+<li><p>CBOW 的具体步骤如下：</p>
+<ol type="1">
+<li><p>基于输入上下文（大小为 m）生成 one-hot 词语向量： <span class="math display">\[
+x^{(c-m)},\ldots,x^{(c-1)},x^{(c+1)},\dots,x^{(c+m)} \in \mathbb{R}^{|V|}
+\]</span></p></li>
+<li><p>与输入词语矩阵相乘，得到上下文嵌入词向量： <span class="math display">\[
+v_{c-m} = \mathcal{V}x^{(c-m)},v_{c-m+1} = \mathcal{V}x^{(c-m+1)},\ldots,v_{c+m} = \mathcal{V}x^{(c+m)} \in \mathbb{R}^n
+\]</span></p>
+<ul>
+<li>由于 one-hot 向量的性质，得到的词向量即为 <span class="math inline">\(\mathcal{V}\)</span> 的每一列</li>
+</ul></li>
+<li><p>将这些向量进行平均： <span class="math display">\[
+\hat{v} = \frac {v_{c-m}+v_{c-m+1}+\ldots+v_{c+m}} {2m} \in \mathbb{R}^n
+\]</span></p>
+<ul>
+<li>可以理解为用该平均向量表示待预测的词语</li>
+</ul></li>
+<li><p>生成一个得分向量： <span class="math display">\[
+z = \mathcal{U}\hat{v} \in \mathbb{R}^{|V|}
+\]</span></p>
+<ul>
+<li>因为相似的向量的点积更大，所以该得分向量可以反映出每个词语与待预测词语的相似程度</li>
+</ul></li>
+<li><p>使用 softmax 将得分转换为概率： <span class="math display">\[
+\hat{y} = \text{softmax}(z) \in \mathbb{R}^{|V|}
+\]</span></p>
+<ul>
+<li>softmax 的具体形式为 <span class="math inline">\(\frac {e^{z_i}} {\sum_{k=1}^{|V|} e^{z_k}}\)</span></li>
+</ul></li>
+<li>我们希望生成的概率 <span class="math inline">\(\hat{y} \in \mathbb{R}^{|V|}\)</span> 能够匹配真实的概率 <span class="math inline">\(y \in \mathbb{R}^{|V|}\)</span>
+<ul>
+<li>该真实概率实际上就是一个 one-hot 向量（对应到待预测的中心词）</li>
+</ul></li>
+</ol></li>
+</ul>
+<h3 id="学习方法">学习方法</h3>
+<p><img src="http://media.zjubiomedit.com/2019-03-12-070940.png" width="35%"></p>
+<ul>
+<li>了解到模型的计算方法后，我们希望学习得到 <span class="math inline">\(\mathcal{V}\)</span> 和 <span class="math inline">\(\mathcal{U}\)</span>
+<ul>
+<li>我们需要构建一个目标函数来进行优化</li>
+<li>这里选择交叉熵函数 <span class="math inline">\(H(\hat{y},y)\)</span> <span class="math display">\[
+H(\hat{y},y) = - \sum_{j=1}^{|V|} y_j \log(\hat{y_j})
+\]</span></li>
+</ul></li>
+<li><p>由于 <span class="math inline">\(y\)</span> 是一个 one-hot 向量，所以实际的代价函数可以简化为： <span class="math display">\[
+H(\hat{y},y) = -y_c \log(\hat{y}_c)
+\]</span></p>
+<ul>
+<li>其中 <span class="math inline">\(c\)</span> 是中心词的位置（one-hot 向量分量为 1）</li>
+</ul></li>
+<li><p>因此，综合上述公式，可以得到待优化的目标函数为： <span class="math display">\[
+\begin{aligned}
+\text{minimize}\;J &amp;= -\log P(w_c | w_{c-m},\ldots, w_{c-1},w_{c+1},\ldots,w_{c+m}) \\
+&amp;= -\log P(u_c | \hat{v}) \\
+&amp;= -\log \frac {\exp(u_c^T\hat{v})} {\sum_{j=1}^{|V|} \exp(u_j^T\hat{v})} \\
+&amp;= -u_c^T\hat{v} + \log \sum_{j=1}^{|V|} \exp(u_j^T\hat{v})
+\end{aligned}
+\]</span></p>
+<ul>
+<li>我们可以使用随机梯度下降来更新所有相关的词向量 <span class="math inline">\(u_c\)</span> 和 <span class="math inline">\(\hat{v}\)</span>： <span class="math display">\[
+\mathcal{U}_{new} \leftarrow \mathcal{U}_{old} -\alpha \nabla_{\mathcal{U}} J \\
+\mathcal{V}_{new} \leftarrow \mathcal{V}_{old} -\alpha \nabla_{\mathcal{V}} J
+\]</span></li>
+</ul></li>
+</ul>
+<h2 id="skip-gram">Skip-Gram</h2>
+<ul>
+<li>另一种方法是给定一个中心词，去预测或生成周围的词语
+<ul>
+<li>该模型被称为 Skim-Gram 模型</li>
+</ul></li>
+</ul>
+<h3 id="符号定义-1">符号定义</h3>
+<ul>
+<li>Skim-Gram 模型的定义与 CBOW 基本相同，只是输入输出对调：
+<ul>
+<li><span class="math inline">\(w_i\)</span>：来自词典 <span class="math inline">\(V\)</span> 的词语 <span class="math inline">\(i\)</span></li>
+<li><span class="math inline">\(\mathcal{V} \in \mathbb{R}^{n\times |V|}\)</span>：输入词语矩阵
+<ul>
+<li><span class="math inline">\(n\)</span> 是我们希望的词向量（嵌入）空间大小</li>
+</ul></li>
+<li><span class="math inline">\(v_i\)</span>：<span class="math inline">\(\mathcal{V}\)</span> 的第 i 列，词语 <span class="math inline">\(w_i\)</span> 的输入向量表示</li>
+<li><span class="math inline">\(\mathcal{U} \in \mathbb{R}^{|V|\times n}\)</span>：输出词语矩阵</li>
+<li><span class="math inline">\(u_i\)</span>：<span class="math inline">\(\mathcal{U}\)</span> 的第 <span class="math inline">\(i\)</span> 行，词语 <span class="math inline">\(w_i\)</span> 的输出向量表示</li>
+</ul></li>
+</ul>
+<h3 id="计算步骤-1">计算步骤</h3>
+<ul>
+<li>Skip-Gram 的具体步骤如下：
+<ol type="1">
+<li>生成关于中心词的 one-hot 向量作为输入 <span class="math inline">\(x \in \mathbb{R}^{|V|}\)</span></li>
+<li><p>与输入词语矩阵相乘，得到中心词的嵌入词向量： <span class="math display">\[
+v_c = \mathcal{V}x \in  \mathbb{R}^{n}
+\]</span></p></li>
+<li><p>生成一个得分向量： <span class="math display">\[
+z = \mathcal{U}v_c \in \mathbb{R}^{|V|}
+\]</span></p></li>
+<li><p>将得分向量转换为概率： <span class="math display">\[
+\hat{y} = \text{softmax}(z) \in \mathbb{R}^{|V|}
+\]</span></p>
+<ul>
+<li>其中 <span class="math inline">\(\hat{y}_{c-m},\ldots, \hat{y}_{c-1},\hat{y}_{c+1},\ldots,\hat{y}_{c+m}\)</span> 对应为该中心词的周围词语的概率</li>
+</ul></li>
+<li><p>我们希望生成的概率与真实的概率 <span class="math inline">\(y^{(c-m)},\ldots, y^{(c-1)},y^{(c+1)},\ldots,y^{(c+m)}\)</span> 匹配（one-hot 向量）</p></li>
+</ol></li>
+</ul>
+<h3 id="学习方法-1">学习方法</h3>
+<p><img src="http://media.zjubiomedit.com/2019-03-14-064627.png" width="35%"></p>
+<ul>
+<li>在构建 skip-gram 模型的目标函数时，使用了贝叶斯假设（即条件独立假设）
+<ul>
+<li>给定中心词的情况下，所有输出词语都完全独立</li>
+</ul></li>
+<li><p>因此，代价函数如下： <span class="math display">\[
+\begin{aligned}
+    \text{minimize}\;J &amp;= -\log P( w_{c-m},\ldots, w_{c-1},w_{c+1},\ldots,w_{c+m} | w_c ) \\
+    &amp;= -\log \prod_{j=0,j \ne m}^{2m} P(w_{c-m+j} | w_c) \\
+    &amp;= -\log \prod_{j=0,j \ne m}^{2m} P(u_{c-m+j} | v_c) \\
+    &amp;= -\log \prod_{j=0,j \ne m}^{2m} \frac {\exp(u_{c-m+j}^Tv_c)} {\sum_{k=1}^{|V|} \exp(u_k^Tv_c)} \\
+    &amp;= - \sum_{j=0,j \ne m}^{2m} u_{c-m+j}^Tv_c + 2m \log \sum_{k=1}^{|V|} \exp(u_k^Tv_c)
+    \end{aligned}
+\]</span></p></li>
+<li><p>基于上述代价函数，可以通过随机梯度下降更新参数</p></li>
+<li><p>注意：代价函数还可以写成如下形式： <span class="math display">\[
+\begin{aligned}
+J &amp;= - \sum_{j=0,j \ne m}^{2m} \log P(u_{c-m+j}|v_c) \\
+&amp;= \sum_{j=0,j \ne m}^{2m} H(\hat{y},y_{c-m+j})
+\end{aligned}
+\]</span></p>
+<ul>
+<li>其中 <span class="math inline">\(H(\hat{y},y_{c-m+j})\)</span> 是概率向量 <span class="math inline">\(\hat{y}\)</span> 和 one-hot 向量 <span class="math inline">\(y_{c-m+j}\)</span> 的交叉熵</li>
+</ul></li>
+</ul>
+<h2 id="negative-sampling">Negative Sampling</h2>
+<ul>
+<li>对于上述的两种模型，其代价函数需要在 <span class="math inline">\(|V|\)</span> 上进行累加，其时间复杂度为 <span class="math inline">\(O(|V|)\)</span>
+<ul>
+<li>为了减少计算复杂度，在每一次迭代中，我们可以仅对部分负样本进行采样</li>
+<li>采样基于一个噪声分布 <span class="math inline">\(P_n(w)\)</span> 进行，其概率与词典中词频顺序匹配</li>
+</ul></li>
+</ul>
+<h3 id="新的目标函数">新的目标函数</h3>
+<ul>
+<li>实际上，负采样在优化一个不同的目标函数
+<ul>
+<li>考虑一个由一个词语和一个上下文组成的单词对：<span class="math inline">\((w,c)\)</span></li>
+<li>现在我们考虑的是该单词对是否出自训练数据：
+<ul>
+<li>定义 <span class="math inline">\(P(D=1|w,c)\)</span> 为 <span class="math inline">\((w,c)\)</span> 出自语料库的概率</li>
+<li>定义 <span class="math inline">\(P(D=0|w,c)\)</span> 为 <span class="math inline">\((w,c)\)</span> 不出自语料库的概率</li>
+</ul></li>
+<li><p>我们使用 sigmoid 函数来定义 <span class="math inline">\(P(D=1|w,c)\)</span>： <span class="math display">\[
+P(D=1|w,c) = \sigma(u_w^Tv_c) = \frac 1 {1+e^{(-u_w^Tv_c)}}
+\]</span></p>
+<ul>
+<li>sigmoid 即为 1 维版本的 softmax 函数</li>
+</ul></li>
+<li>新的目标函数希望最大化上述两个概率：
+<ul>
+<li>当单词对实际上出自语料库时，最大化 <span class="math inline">\(P(D=1|w,c)\)</span></li>
+<li><p>当单词对实际上并不出自语料库时，最大化 <span class="math inline">\(P(D=0|w,c)\)</span> <span class="math display">\[
+\begin{aligned}
+\theta &amp;= \arg\max_\theta \prod_{(w,c)\in D} P(D=1|w,c,\theta) \prod_{(w,c)\in \tilde{D}} P(D=0|w,c,\theta) \\
+&amp;= \arg\max_\theta \prod_{(w,c)\in D} P(D=1|w,c,\theta) \prod_{(w,c)\in \tilde{D}} (1-P(D=1|w,c,\theta)) \\
+&amp;= \arg\max_\theta \sum_{(w,c)\in D} \log P(D=1|w,c,\theta)  \sum_{(w,c)\in \tilde{D}} \log (1-P(D=1|w,c,\theta)) \\
+&amp;= \arg\max_\theta \sum_{(w,c)\in D} \log  \frac 1 {1+\exp(-u_w^Tv_c)}  \sum_{(w,c)\in \tilde{D}} \log (1- \frac 1 {1+\exp(-u_w^Tv_c)}) \\
+&amp;= \arg\max_\theta \sum_{(w,c)\in D} \log  \frac 1 {1+\exp(-u_w^Tv_c)}  \sum_{(w,c)\in \tilde{D}} \log (\frac 1 {1+\exp(u_w^Tv_c)}) \\
+\end{aligned}
+\]</span></p>
+<ul>
+<li>公式中使用 <span class="math inline">\(\theta\)</span> 表示模型的参数，实际上参数为 <span class="math inline">\(\mathcal{V}\)</span> 和 <span class="math inline">\(\mathcal{U}\)</span></li>
+</ul></li>
+</ul></li>
+<li><p>最大化似然函数与最小化负的似然函数等价，因此可以得到如下代价函数： <span class="math display">\[
+J = - \sum_{(w,c)\in D} \log  \frac 1 {1+\exp(-u_w^Tv_c)}  \sum_{(w,c)\in \tilde{D}} \log (\frac 1 {1+\exp(u_w^Tv_c)})
+\]</span></p>
+<ul>
+<li>其中 <span class="math inline">\(\tilde{D}\)</span> 指负语料库，即在实际情况中不太可能出现的句子</li>
+<li>一般我们使用基于某个噪声分布随机采样的方式生成 <span class="math inline">\(\tilde{D}\)</span></li>
+</ul></li>
+</ul></li>
+</ul>
+<h3 id="对两种模型的改进">对两种模型的改进</h3>
+<ul>
+<li><p>对于 skip-gram，基于中心词 <span class="math inline">\(c\)</span> 的某个上下文单词 <span class="math inline">\(c-m+j\)</span> 对应的代价函数为： <span class="math display">\[
+- u_{c-m+j}^Tv_c + \log \sum_{k=1}^{|V|} \exp(u_k^Tv_c)
+\]</span></p>
+<ul>
+<li>基于负采样的改进后的代价函数为： <span class="math display">\[
+- \log \sigma(u_{c-m+j}^T v_c) - \sum_{k=1}^{K} \log \sigma(-\tilde{u}_k^Tv_c)
+\]</span></li>
+</ul></li>
+<li><p>对于 CBOW，给定上下文向量 <span class="math inline">\(\hat{v}\)</span> 的中心词 <span class="math inline">\(u_c\)</span> 对应的代价函数为： <span class="math display">\[
+-u_c^T\hat{v} + \log \sum_{j=1}^{|V|} \exp(u_j^T\hat{v})
+\]</span></p>
+<ul>
+<li>基于负采样的改进后的代价函数为： <span class="math display">\[
+- \log \sigma(u_{c}^T \hat{v}) - \sum_{k=1}^{K} \log \sigma(-\tilde{u}_k^T\hat{v})
+\]</span></li>
+</ul></li>
+<li>在上述公式中，<span class="math inline">\(\{\tilde{u}_k | k=1\ldots k\}\)</span> 为负样本，随机采样自 <span class="math inline">\(P_n(w)\)</span>
+<ul>
+<li>文献中指出目前最有效的 <span class="math inline">\(P_n(w)\)</span> 是 Unigram Model 的 <span class="math inline">\(3/4\)</span> 次幂</li>
+</ul></li>
+</ul>
+<h2 id="hierarchical-softmax">Hierarchical Softmax</h2>
+<ul>
+<li>另一种优化代价函数计算的方法是 hierarchical softmax
+<ul>
+<li>在实际应用中，hierarchical softmax 对低频词的效果更好</li>
+<li>而负采样对常用词和低维词向量的效果更好</li>
+</ul></li>
+<li>Hierarchical softmax 使用一个<strong>二叉树</strong>来表示词典中的所有词语
+<ul>
+<li>每个叶子节点都是一个词语</li>
+<li><p>从根节点到叶子节点的路径唯一</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-15-032628.jpg" width="50%"></p></li>
+</ul></li>
+<li>在 Hierarchical softmax 中，给定一个词向量 <span class="math inline">\(w_i\)</span> ，一个词语 <span class="math inline">\(w\)</span> 的概率 <span class="math inline">\(P(w|w_i)\)</span> 等价于从根节点出发随机行走至 <span class="math inline">\(w\)</span> 对应的叶子节点的概率
+<ul>
+<li>其优点是其计算复杂度为 <span class="math inline">\(O((\log(|V|))\)</span></li>
+<li>在该训练方法中，<strong>没有词语的输出表达</strong>（即 <span class="math inline">\(\mathcal{U}\)</span> 矩阵）
+<ul>
+<li>取而代之的是每个节点（叶子节点除外）代表一个向量，模型需要去学习这些向量</li>
+</ul></li>
+</ul></li>
+</ul>
+<h3 id="符号定义-2">符号定义</h3>
+<ul>
+<li>为了更好地描述模型，给出如下定义：
+<ul>
+<li><span class="math inline">\(L(w)\)</span>：从根节点到叶子节点 <span class="math inline">\(w\)</span> 的节点数量（包括根节点但不包括叶子节点）
+<ul>
+<li>例如上图中，<span class="math inline">\(L(w_2)\)</span> 为 3</li>
+</ul></li>
+<li><span class="math inline">\(n(w,i)\)</span>：在该路径上的第 i 个节点，对应的向量为 <span class="math inline">\(v_{n(w,i)}\)</span>
+<ul>
+<li><span class="math inline">\(n(w,1)\)</span> 是根节点，<span class="math inline">\(n(w, L(w))\)</span> 是 <span class="math inline">\(w\)</span> 的父节点</li>
+</ul></li>
+<li>对于每个内部节点 <span class="math inline">\(n\)</span>，我们以某种规则选择其的一个孩子节点（二选一），称为 <span class="math inline">\(ch(n)\)</span>
+<ul>
+<li>例如总是选择左边的孩子节点</li>
+</ul></li>
+</ul></li>
+</ul>
+<h3 id="训练方法">训练方法</h3>
+<ul>
+<li><p>基于上述定义，<span class="math inline">\(P(w|w_i)\)</span> 可以表示为： <span class="math display">\[
+P(w|w_i) = \prod_{j=1}^{L(w)-1} \sigma ([n(w,j+1) = ch(n(w,j))] \cdot v_{n(w,j)}^Tv_{w_i})
+\]</span></p>
+<ul>
+<li>其中： <span class="math display">\[
+[x] = \left\{
+\begin{aligned}
+1 \;\text{if x is true}\\
+-1 \;\text{otherwise}
+\end{aligned}
+\right.
+\]</span></li>
+</ul></li>
+<li>下面对上述公式进行解释：
+<ul>
+<li>首先，我们基于从根节点 <span class="math inline">\(n(w,1)\)</span> 到叶子节点 <span class="math inline">\(n(w)\)</span> 的路径计算向量的点积
+<ul>
+<li>注意 <span class="math inline">\(v_{n(w,j)}\)</span> 是节点对应的向量，<span class="math inline">\(v_{w_i}\)</span> 是基于输入矩阵得到的向量，二者并不相关（都需要学习）</li>
+</ul></li>
+<li>然后，通过 sigmoid 函数得到每个节点的概率输出
+<ul>
+<li><p><span class="math inline">\([n(w,j+1) = ch(n(w,j))]\)</span> 保证了选择左边子节点和右边子节点的概率之和为 1： <span class="math display">\[
+\sigma(v_n^Tv_{w_i}) + \sigma(-v_n^Tv_{w_i}) = 1
+\]</span></p></li>
+<li>同时也保证了 <span class="math inline">\(\sum_{w=1}^{|V|} P(w|w_i) =1\)</span>（将概率沿树向上累加可以证明）</li>
+</ul></li>
+<li>最后，将节点概率相乘得到输出
+<ul>
+<li>以图中的 <span class="math inline">\(w_2\)</span> 为例，其概率为： <span class="math display">\[
+\begin{aligned}
+P(w_2|w_i) &amp;= p(n(w_2,1),\text{left}) \cdot p(n(w_2,2),\text{left}) \cdot p(n(w_2,3),\text{right}) \\
+&amp;= \sigma (v^T_{n(w_2,1)}v_{w_i})\cdot\sigma (v^T_{n(w_2,2)}v_{w_i})\cdot\sigma (-v^T_{n(w_2,3)}v_{w_i})
+\end{aligned}
+\]</span></li>
+</ul></li>
+</ul></li>
+<li>为了训练模型，我们的目标依然是最小化负对数似然函数 <span class="math inline">\(-\log P(w|w_i)\)</span>
+<ul>
+<li>学习的参数为节点对应的向量和输入矩阵</li>
+</ul></li>
+<li><p>该方法的速度取决于二叉树的构建，原论文使用了一个二叉霍夫曼树（给予常用词更短的路径）</p></li>
+</ul>
+<h2 id="word2vec-的输出">Word2vec 的输出</h2>
+<ul>
+<li>不管使用哪种模型或训练方法，最终都会得到训练完成后的输入矩阵 <span class="math inline">\(\mathcal{V}\)</span></li>
+<li>我们所需要的词向量通过 one-hot 向量与输入矩阵相乘得到（即为模型的隐藏层） <span class="math display">\[
+v_{output} = \mathcal{V}x_{input}
+\]</span></li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Zheyu Wang</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://xxwywzy.github.io/2019/03/15/cs224-1/" title="CS224N 学习笔记之一：词向量 1">https://xxwywzy.github.io/2019/03/15/cs224-1/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CS224N/" rel="tag"># CS224N</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/13/pl-1-hw/" rel="next" title="Progamming Languages 第一部分作业">
+                <i class="fa fa-chevron-left"></i> Progamming Languages 第一部分作业
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Zheyu Wang"/>
+            
+              <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+              <p class="site-description motion-element" itemprop="description">更に向こうへ</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">26</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">17</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/xxwywzy" title="GitHub &rarr; https://github.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://twitter.com/xxwywzy" title="Twitter &rarr; https://twitter.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="http://weibo.com/xxwywzy" title="Weibo &rarr; http://weibo.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://instagram.com/xxwywzy" title="Instagram &rarr; https://instagram.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#自然语言处理简介"><span class="nav-number">1.</span> <span class="nav-text">自然语言处理简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#自然语言处理的特殊性"><span class="nav-number">1.1.</span> <span class="nav-text">自然语言处理的特殊性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#任务类型"><span class="nav-number">1.2.</span> <span class="nav-text">任务类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何表示词语"><span class="nav-number">1.3.</span> <span class="nav-text">如何表示词语</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#传统词向量"><span class="nav-number">2.</span> <span class="nav-text">传统词向量</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基于-svd-的方法"><span class="nav-number">3.</span> <span class="nav-text">基于 SVD 的方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#词语-文档矩阵"><span class="nav-number">3.1.</span> <span class="nav-text">词语-文档矩阵</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于窗口的共现矩阵"><span class="nav-number">3.2.</span> <span class="nav-text">基于窗口的共现矩阵</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#将-svd-应用到共现矩阵"><span class="nav-number">3.3.</span> <span class="nav-text">将 SVD 应用到共现矩阵</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#存在的问题"><span class="nav-number">3.4.</span> <span class="nav-text">存在的问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基于迭代的方法word2vec"><span class="nav-number">4.</span> <span class="nav-text">基于迭代的方法：Word2vec</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#语言模型"><span class="nav-number">4.1.</span> <span class="nav-text">语言模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cbow"><span class="nav-number">4.2.</span> <span class="nav-text">CBOW</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#符号定义"><span class="nav-number">4.2.1.</span> <span class="nav-text">符号定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算步骤"><span class="nav-number">4.2.2.</span> <span class="nav-text">计算步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#学习方法"><span class="nav-number">4.2.3.</span> <span class="nav-text">学习方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#skip-gram"><span class="nav-number">4.3.</span> <span class="nav-text">Skip-Gram</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#符号定义-1"><span class="nav-number">4.3.1.</span> <span class="nav-text">符号定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算步骤-1"><span class="nav-number">4.3.2.</span> <span class="nav-text">计算步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#学习方法-1"><span class="nav-number">4.3.3.</span> <span class="nav-text">学习方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#negative-sampling"><span class="nav-number">4.4.</span> <span class="nav-text">Negative Sampling</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#新的目标函数"><span class="nav-number">4.4.1.</span> <span class="nav-text">新的目标函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对两种模型的改进"><span class="nav-number">4.4.2.</span> <span class="nav-text">对两种模型的改进</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hierarchical-softmax"><span class="nav-number">4.5.</span> <span class="nav-text">Hierarchical Softmax</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#符号定义-2"><span class="nav-number">4.5.1.</span> <span class="nav-text">符号定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#训练方法"><span class="nav-number">4.5.2.</span> <span class="nav-text">训练方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#word2vec-的输出"><span class="nav-number">4.6.</span> <span class="nav-text">Word2vec 的输出</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.5.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.0.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz',
+    appKey: 'IxP5URFEhxow4TfWyVNiowbH',
+    placeholder: '请在这里评论=￣ω￣=',
+    avatar: 'retro',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+</script>
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+  
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .fail(function ({ responseJSON }) {
+                console.log(`Failed to save Visitor num, with error message: ${responseJSON.error}`);
+              })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1 }))
+                .done(function() {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function() {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+        .fail(function ({ responseJSON }) {
+          console.log(`LeanCloud Counter Error: ${responseJSON.code} ${responseJSON.error}`);
+        });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz',
+                'X-LC-Key': 'IxP5URFEhxow4TfWyVNiowbH',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            addCount(Counter);
+          
+        });
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: "AMS"
+      }
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+      for (i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+<script src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+  overflow: auto hidden;
+}
+</style><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+    
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
