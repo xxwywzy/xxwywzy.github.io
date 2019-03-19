@@ -111,7 +111,7 @@
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-03-14-064627.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-03-15-032628.jpg">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-03-15-085129.png">
-<meta property="og:updated_time" content="2019-03-15T08:52:46.264Z">
+<meta property="og:updated_time" content="2019-03-19T14:56:22.795Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS224N 学习笔记之一：词向量 1">
 <meta name="twitter:description" content="本篇博客为 CS224N 学习笔记第一部分，主题是：词向量（介绍，SVD 和 Word2Vec）。">
@@ -670,7 +670,7 @@ P(w_1,w_2,\ldots,w_n) = \prod_{i=1}^n P(w_i)
 <li><p>如果假设每个词语的出现于其前一个词语相关，就可以得到 <strong>Bigram model</strong>： <span class="math display">\[
 P(w_1,w_2,\ldots,w_n) = \prod_{i=2}^n P(w_i|w_{i-1})
 \]</span></p></li>
-<li><p>上述两种模型都过于理想化，实际情况下一个词语的出现概率受到更多因素的影响</p>
+<li>上述两种模型都过于理想化，实际情况下一个词语的出现概率受到更多因素的影响
 <ul>
 <li>下面将介绍如何通过模型学习这些概率</li>
 <li>word2vec 可以理解为是语言模型的副产物</li>
