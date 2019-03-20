@@ -97,18 +97,19 @@
 
 
   <meta name="description" content="本篇博客为CS229第二篇学习笔记，主要内容包括线性回归模型的概率解释和局部加权线性回归。">
-<meta name="keywords" content="CS229,机器学习,线性回归">
+<meta name="keywords" content="CS229">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CS229学习笔记之二：线性回归的概率解释">
+<meta property="og:title" content="CS229学习笔记之二：分类与逻辑回归">
 <meta property="og:url" content="https://xxwywzy.github.io/2018/03/15/CS229-2/index.html">
 <meta property="og:site_name" content="xxwywzy&#39;s Blog">
 <meta property="og:description" content="本篇博客为CS229第二篇学习笔记，主要内容包括线性回归模型的概率解释和局部加权线性回归。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-133419.jpg">
-<meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-133438.png">
-<meta property="og:updated_time" content="2019-02-01T14:17:50.479Z">
+<meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-133612.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-133622.png">
+<meta property="og:updated_time" content="2019-03-20T01:55:06.517Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CS229学习笔记之二：线性回归的概率解释">
+<meta name="twitter:title" content="CS229学习笔记之二：分类与逻辑回归">
 <meta name="twitter:description" content="本篇博客为CS229第二篇学习笔记，主要内容包括线性回归模型的概率解释和局部加权线性回归。">
 <meta name="twitter:image" content="http://media.zjubiomedit.com/2018-05-28-133419.jpg">
 
@@ -127,7 +128,7 @@
   };
 </script>
 
-  <title>CS229学习笔记之二：线性回归的概率解释 | xxwywzy's Blog</title>
+  <title>CS229学习笔记之二：分类与逻辑回归 | xxwywzy's Blog</title>
   
 
 
@@ -357,7 +358,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">CS229学习笔记之二：线性回归的概率解释
+          <h1 class="post-title" itemprop="name headline">CS229学习笔记之二：分类与逻辑回归
 
               
             
@@ -405,6 +406,13 @@
 
                 
                 
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/人工智能/机器学习/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a></span>
+
+                
+                
               
             </span>
           
@@ -428,7 +436,7 @@
 
           
           
-            <span id="/2018/03/15/CS229-2/" class="leancloud_visitors" data-flag-title="CS229学习笔记之二：线性回归的概率解释">
+            <span id="/2018/03/15/CS229-2/" class="leancloud_visitors" data-flag-title="CS229学习笔记之二：分类与逻辑回归">
               <span class="post-meta-divider">|</span>
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
@@ -462,64 +470,111 @@
         <p><img src="http://media.zjubiomedit.com/2018-05-28-133419.jpg" width="75%" height="75%"></p>
 <p>本篇博客为CS229第二篇学习笔记，主要内容包括线性回归模型的概率解释和局部加权线性回归。</p>
 <a id="more"></a>
-<h3 id="线性回归模型的概率解释">线性回归模型的概率解释</h3>
-<p>在线性回归中，为什么要选择最小二乘函数作为代价函数？我们可以用概率模型来对其进行解释。</p>
-<h4 id="概率模型">概率模型</h4>
-<p>假设真实值与输入之间满足如下等式： <span class="math display">\[
-y^{(i)} = \theta^Tx^{(i)}+\epsilon^{(i)}
-\]</span> 其中<span class="math inline">\(\epsilon^{(i)}\)</span>是误差项，表示没有被建模的因素或是随机噪声。进一步假设误差项是独立同分布的，那么根据中心极限定理，大量相互独立的随机变量之和是符合正态分布（可以理解为大量独立随机变量的大部分误差会相互抵消），即<span class="math inline">\(\epsilon^{(i)}\sim {\cal N} (0,\sigma^2)\)</span>，那么有： <span class="math display">\[
-p(\epsilon^{(i)}) = \frac{1}{\sqrt{2\pi}\sigma}\text{exp}\left(-\frac{(\epsilon^{(i)})^2}{2\sigma^2}\right)
-\]</span> 因为误差的概率和预测出真实值的概率是一样的，因此： <span class="math display">\[
-p(y^{(i)} \,\rvert \,x^{(i)};\theta ) = \frac{1}{\sqrt{2\pi}\sigma}\text{exp}\left(-\frac{(y^{(i)} - \theta^Tx^{(i)})^2}{2\sigma^2}\right)
-\]</span> 注意，这里<span class="math inline">\(p(y^{(i)} \,\rvert \,x^{(i)};\theta )\)</span>不同于<span class="math inline">\(p(y^{(i)} \,\rvert \,x^{(i)},\theta )\)</span>，这里指给定<span class="math inline">\(x^{(i)}\)</span>，以<span class="math inline">\(\theta\)</span>为参数的<span class="math inline">\(y^{(i)}\)</span>的分布，因为对于训练集，<span class="math inline">\(\theta\)</span>是客观存在的，只是当前还不确定，所以有 <span class="math display">\[
-y^{(i)} \,\rvert \,x^{(i)};\theta\sim {\cal N }(\theta^Tx^{(i)},\sigma^2)
-\]</span> 即真实值应该是以预测值为中心的一个正态分布。</p>
-<h4 id="似然函数">似然函数</h4>
-<p>给定训练集<span class="math inline">\({X}\)</span>和参数<span class="math inline">\(\theta\)</span>，预测结果等于真实结果的概率，将其看作<span class="math inline">\(\theta\)</span>的函数，可以理解为<span class="math inline">\(\theta\)</span>为真实<span class="math inline">\(\theta\)</span>的可能性（似然性），即： <span class="math display">\[
-L(\theta)=L(\theta;X,\vec y)=p(\vec y  \,\rvert\, X;\theta)
-\]</span> 因为假设<span class="math inline">\(\epsilon^{(i)}\)</span>是独立的（即给定<span class="math inline">\(x^{(i)}\)</span>，<span class="math inline">\(y^{(i)}\)</span>也是独立的），所以有： <span class="math display">\[
-\begin{align*}
-L(\theta) &amp;= \prod_{i=1}^m p(y^{(i)}\,\lvert\,x^{(i)};\theta)\\
-&amp;=\prod_{i=1}^m  \frac{1}{\sqrt{2\pi}\sigma}\text{exp}\left(-\frac{(y^{(i)} - \theta^Tx^{(i)})^2}{2\sigma^2}\right)
-\end{align*}
-\]</span> 现在，我们可以通过<strong>最大似然法</strong>，即找出使<span class="math inline">\(L(\theta)\)</span>最大的那个<span class="math inline">\(\theta\)</span>，作为对参数<span class="math inline">\(\theta\)</span>的最佳取值。</p>
-<p>实际应用中，为了简化计算，通常不直接求似然函数的最大值，而是采用<strong>对数似然</strong>函数： <span class="math display">\[
-\begin{align*}
-\ell(\theta) &amp;= \text{log}L(\theta)\\
-&amp;= \text{log}\prod_{i=1}^m \frac{1}{\sqrt{2\pi}\sigma}\text{exp}\left(-\frac{(y^{(i)} - \theta^Tx^{(i)})^2}{2\sigma^2}\right)\\
-&amp;= \sum_{i=1}^m\text{log}\frac{1}{\sqrt{2\pi}\sigma}\text{exp}\left(-\frac{(y^{(i)} - \theta^Tx^{(i)})^2}{2\sigma^2}\right)\\
-&amp;=m\text{log}\frac{1}{\sqrt{2\pi}\sigma}-\frac{1}{\sigma^2} \cdot \frac 1 2 \sum_{i=1}^m(y^{(i)} - \theta^Tx^{(i)})^2
-\end{align*}
-\]</span> 因此，最大化<span class="math inline">\(l(\theta)\)</span>就是最小化： <span class="math display">\[
- \frac 1 2 \sum_{i=1}^m(y^{(i)} - \theta^Tx^{(i)})^2
-\]</span> 而这正是我们之前提出的<strong>最小二乘代价函数</strong>！</p>
-<p>注意点：</p>
 <ul>
-<li>概率解释只是对最小二乘法的一种合理解释，其实还有其他的解释方法</li>
-<li><span class="math inline">\(\theta\)</span>的选择并不依赖于<span class="math inline">\(\sigma^2\)</span>，即使它是未知的</li>
+<li>之前我们讨论的是<strong>回归问题</strong>，即输出是连续值，现在我们来讨论输出是离散值的<strong>分类问题</strong></li>
+<li>本节我们专注于<strong>二元分类</strong>问题，即输出 <span class="math inline">\(y\)</span> 只能取 <span class="math inline">\(0\)</span> 和 <span class="math inline">\(1\)</span> 两个值</li>
 </ul>
-<h3 id="局部加权线性回归">局部加权线性回归</h3>
-<h4 id="欠拟合与过拟合">欠拟合与过拟合</h4>
-<p>对于传统的线性回归，特征的选择极为重要，对于下面三幅图，我们称第一幅图的模型是<strong>欠拟合</strong>，第三幅图的模型则是<strong>过拟合</strong>。</p>
-<p><img src="http://media.zjubiomedit.com/2018-05-28-133438.png" width="75%" height="75%"></p>
-<p>可以看出，找到一个全局的线性模型去拟合整个训练集，并不是一件简单的事情，往往会引起欠拟合或是过拟合的发生，对于这种情况之后会给出解决方案，而这里我们提出了另外一种思路，即<strong>局部线性加权回归</strong>，这种方案可以使特征的选择的重要性降低。</p>
-<h4 id="算法思路">算法思路</h4>
-<p>局部线性加权回归的思路是并不去拟合整个训练集来产生全局的模型，而是在每次预测时，只去拟合给定输入x附近的一小段训练集，无论全局训练集是怎样的一条分布曲线，在局部小段数据上，都可以用线性去逼近。具体步骤如下： <span class="math display">\[
+<h1 id="逻辑回归">逻辑回归</h1>
+<ul>
+<li><p>如果将线性回归模型直接应用于分类问题，会产生取值不在 0 和 1 之间的问题，所以我们引入<strong>逻辑回归模型</strong>： <span class="math display">\[
+h_{\theta}(x) = g(\theta^Tx) = \frac 1 {1+e^{-\theta^Tx}}
+\]</span></p>
+<ul>
+<li><p>其中 <span class="math display">\[
+g(z) = \frac 1 {1+e^{-z}}
+\]</span></p>
+<ul>
+<li><p><span class="math inline">\(g(z)\)</span> 被称为<strong>逻辑函数</strong>或 <strong>S 型函数</strong>，其图像如下：</p>
+<p><img src="http://media.zjubiomedit.com/2018-05-28-133612.png" width="45%" height="45%"></p>
+<ul>
+<li>可以看到，当<span class="math inline">\(z \to +\infty\)</span>时<span class="math inline">\(g(z)\)</span>趋向于 <span class="math inline">\(1\)</span>， 当<span class="math inline">\(z \to -\infty\)</span>时<span class="math inline">\(g(z)\)</span>趋向于 <span class="math inline">\(0\)</span>，即<span class="math inline">\(g(z)\)</span>的值域为<span class="math inline">\((0,1)\)</span>，至于为什么要选择这个函数，在之后会作出解释。</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>首先给出一个关于 S 型函数求导的有用性质： <span class="math display">\[
 \begin{align*}
-1.\,&amp; \text{Fit} \;\theta\;\text{to minimize}\;\sum_i\omega^{(i)}(y^{(i)} - \theta^Tx^{(i)})^2\\
-2.\,&amp; \text{Output} \;\theta^Tx
+g\prime (z) &amp;= \frac d {dz} \frac 1 {1+e^{-z}} \\
+&amp;= \frac 1 {(1+e^{-z})^2} (e^{-z}) \\
+&amp;= \frac 1 {1+e^{-z}} \cdot \left( 1- \frac 1 {1+e^{-z}}\right) \\
+&amp;= g(z)(1-g(z))
+\end{align*}
+\]</span></p></li>
+<li><p>确定了模型之后，我们需要找到合适的 <span class="math inline">\(\theta\)</span> 的值</p>
+<ul>
+<li>这里采用之前使用的<strong>最大似然法</strong>来选择参数（假设函数可以直接看作概率分布）</li>
+</ul></li>
+<li><p>首先，二元分类符合<strong>伯努利分布</strong>，我们假设： <span class="math display">\[
+\begin{align*}
+P(y=1 \mid x ;\theta) &amp;= h_{\theta}(x)\\
+P(y=0 \mid x ;\theta)  &amp;= 1-h_{\theta}(x)
 \end{align*}
 \]</span></p>
-<p>这里<span class="math inline">\(\omega^{(i)}\)</span>是非负<strong>权重</strong>，一般取为</p>
-<p><span class="math display">\[
-\omega^{(i)}=exp\left(-\frac{(x^{(i)}-x)^2}{2\tau^2}\right)
-\]</span> （当x为向量时表达式有所不同）</p>
-<p>可以看出，离给定输入越近的样本点权重越大，拟合程度越高。</p>
-<p>注意：<span class="math inline">\(\omega^{(i)}\)</span>的定义与高斯分布类似，但并没有关系，分布曲线同为钟型。<span class="math inline">\(\tau\)</span>称为<strong>带宽参数</strong>，用来控制钟型曲线的顶峰下降速度，即权重变化的快慢，需要根据具体情况作出调整。</p>
-<h4 id="参数与非参数">参数与非参数</h4>
-<p>局部加权线性回归本质上是一种<strong>非参数学习算法</strong>，而传统的线性回归是一种<strong>参数学习算法</strong>。</p>
-<p>两者的区别在于参数学习算法有一组有限的、固定的参数，一旦完成拟合，只需要保存下参数值做预测，而不需要保存完整的训练集；而非参数学习算法由于参数不固定，所以需要保存完整的训练集来进行预测，而不仅仅是保存参数。</p>
-<p><strong>非参数</strong>导致的结果：为了表达假设h而保存的数据将随着训练集的大小而线性增长。</p>
+<ul>
+<li>将上面的公式合二为一，得到： <span class="math display">\[
+P(y \mid x ; \theta) = (h_{\theta}(x))^y(1-h_{\theta}(x))^{1-y}
+\]</span></li>
+</ul></li>
+<li><p>假定 <span class="math inline">\(m\)</span> 个样本之间相互独立，我们可以得到 <span class="math inline">\(\theta\)</span> 的似然函数如下： <span class="math display">\[
+\begin{align*}
+L(\theta) &amp;= p(\vec y \mid X; \theta) \\
+&amp;= \prod_{i=1}^m p(y^{(i)} \mid x^{(i)};\theta) \\
+&amp;= \prod_{i=1}^m  \left(h_{\theta}(x^{(i)})\right)^{y^{(i)}}\left(1-h_{\theta}(x^{(i)})\right)^{1-y^{(i)} }
+\end{align*}
+\]</span></p>
+<ul>
+<li>与之前类似，为了计算方便，我们使用对数似然函数来进行最大化分析： <span class="math display">\[
+\begin{align*}
+\ell(\theta) &amp;= \log L(\theta) \\
+&amp;= \sum_{i=1}^m y^{(i)}\log h(x^{(i)})+(1-y^{(i)} )\log (1-h(x^{(i)}))
+\end{align*}
+\]</span></li>
+</ul></li>
+<li>下面要做的是找到<span class="math inline">\(\theta\)</span>使得<span class="math inline">\(\ell(θ)\)</span>最大，由于这里是找最大值而非最小值，所以使用<strong>梯度上升</strong>（gradient ascent）
+<ul>
+<li>参数的更新规则是<span class="math inline">\(\theta := \theta +\alpha \nabla_\theta \ell(\theta)\)</span></li>
+<li><p>对于随机梯度上升（每次只考虑一个样本），求导过程如下： <span class="math display">\[
+\begin{align*}
+\frac{\partial}{\partial \theta_j}\ell(\theta) &amp;= \left(y \frac 1 {g(\theta^Tx)}-(1-y)\frac 1 {1-g(\theta^Tx)}\right)\frac{\partial}  {\partial \theta_j}g(\theta^Tx)\\
+&amp;= \left(y \frac 1 {g(\theta^Tx)}-(1-y)\frac 1 {1-  g(\theta^Tx)}\right)g(\theta^Tx)(1-g(\theta^Tx))\frac{\partial}{\partial   \theta_j}\theta^Tx \\
+&amp;= \left(y(1-g(\theta^Tx))-(1-y)g(\theta^Tx)\right)x_j\\
+&amp;= \left(y-h_\theta(x)\right)x_j
+\end{align*}
+\]</span></p></li>
+<li>在计算过程中使用到了 S 型函数的求导性质</li>
+</ul></li>
+<li><p>综上所述，我们得到随机梯度上升的更新规则是： <span class="math display">\[
+\theta_j := \theta_j +\alpha\left(y^{(i)}-h_\theta(x^{(i)})\right)x^{(i)}_j
+\]</span></p>
+<ul>
+<li>这个公式和线性回归中梯度下降的公式表面上看是一样的，但实际上两者的<span class="math inline">\(h_\theta(x)\)</span>有所不同</li>
+<li>关于更加深层次的讨论，请参看之后的 GLM 模型章节</li>
+</ul></li>
+</ul>
+<h1 id="牛顿方法">牛顿方法</h1>
+<p>下面我们介绍另外一种算法来求解<span class="math inline">\(\ell (\theta)\)</span>的最大值，称为<strong>牛顿方法</strong>。</p>
+<p>我们通过如下的几张图来理解牛顿方法：</p>
+<p><img src="http://media.zjubiomedit.com/2018-05-28-133622.png" width="70%" height="70%"></p>
+<p>对于梯度下降，每次只是在梯度方向上下降一小步（取决于学习速率），而牛顿方法是一直下降到导数（切线）和<span class="math inline">\(\theta\)</span>轴交界的那个<span class="math inline">\(\theta\)</span>。因此牛顿方法的更新规则是： <span class="math display">\[
+\theta := \theta - \frac {f(\theta)} {f&#39; (\theta)}
+\]</span> 下面我们将牛顿方法应用于逻辑回归，我们需要找到<span class="math inline">\(\ell (\theta)\)</span>的最大值，即<span class="math inline">\(\ell &#39;(\theta)=0\)</span>，因此令<span class="math inline">\(f(\theta)=\ell &#39;(\theta)\)</span>，我们可以得到逻辑回归的牛顿方法更新公式： <span class="math display">\[
+\theta := \theta - \frac {\ell &#39;(\theta)} {\ell &#39;&#39; (\theta)}
+\]</span> 而对于<span class="math inline">\(\theta\)</span>为向量的情况，牛顿方法的多维形式如下（又被称为<strong>牛顿-拉夫逊方法</strong>）： <span class="math display">\[
+\theta := \theta - H^{-1} \nabla_\theta \ell(\theta)
+\]</span> 其中<span class="math inline">\(\ \nabla_\theta \ell(\theta)\)</span>是<span class="math inline">\(\ell(\theta)\)</span>对于每个<span class="math inline">\(\theta_i\)</span>的偏导数构成的向量，<span class="math inline">\(H\)</span>是一个<span class="math inline">\((n+1)\times (n+1)\)</span>的矩阵（包括截距项），称为 <strong>海森矩阵</strong>，其中的每一项定义为： <span class="math display">\[
+H_{ij}=\frac {\partial^2 \ell(\theta)} {\partial \theta_i \partial \theta_j}
+\]</span> 和（批量）梯度下降相比，牛顿方法会带来更快的收敛速度和更少的迭代次数。虽然每次迭代由于要计算<span class="math inline">\(H^{-1}\)</span>，导致计算量较大，但对于参数数量不是特别大的情况，总的来说它还是更快的。将牛顿方法用于求解逻辑回归的对数似然函数最大值，也被称为<strong>费雪评分</strong>。</p>
+<h1 id="感知器学习算法">感知器学习算法</h1>
+<p>这里谈感知器，好像有些离题，但感知机的函数定义如下： <span class="math display">\[
+g(z)=\left\{
+\begin{align*}
+&amp; 1 \quad \text{if} \;\text{z} \ge 0\\
+&amp; 0 \quad  \text{if} \;\text{z} &lt; 0
+\end{align*}
+\right.
+\]</span> 可以看到它是逻辑回归的s型函数的简化形式，逻辑函数是连续的在 [0,1] 区间上，而感知器直接非0则1。如果我们令<span class="math inline">\(h_\theta(x)=g(\theta^Tx)\)</span>，得到如下的更新规则： <span class="math display">\[
+\theta_j := \theta_j +\alpha\left(y^{(i)}-h_\theta(x^{(i)})\right)x^{(i)}_j
+\]</span> 即<strong>感知器学习算法</strong>。</p>
+<p>19世纪60年代，感知器被看作是大脑工作中独立神经元的粗糙的模型，由于简单，会用作后面介绍的学习理论的起点。虽然直观看上去，感知器和之前看到的逻辑回归或线性回归很像，但是其实是非常不一样的算法。 因为，对于感知器，很难赋予一种有意义的概率解释，或使用最大似然估计算法来进行推导。</p>
 
       
     </div>
@@ -553,7 +608,7 @@ L(\theta) &amp;= \prod_{i=1}^m p(y^{(i)}\,\lvert\,x^{(i)};\theta)\\
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
     
-    <a href="https://xxwywzy.github.io/2018/03/15/CS229-2/" title="CS229学习笔记之二：线性回归的概率解释">https://xxwywzy.github.io/2018/03/15/CS229-2/</a>
+    <a href="https://xxwywzy.github.io/2018/03/15/CS229-2/" title="CS229学习笔记之二：分类与逻辑回归">https://xxwywzy.github.io/2018/03/15/CS229-2/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
@@ -567,10 +622,6 @@ L(\theta) &amp;= \prod_{i=1}^m p(y^{(i)}\,\lvert\,x^{(i)};\theta)\\
         <div class="post-tags">
           
             <a href="/tags/CS229/" rel="tag"># CS229</a>
-          
-            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
-          
-            <a href="/tags/线性回归/" rel="tag"># 线性回归</a>
           
         </div>
       
@@ -865,7 +916,7 @@ L(\theta) &amp;= \prod_{i=1}^m p(y^{(i)}\,\lvert\,x^{(i)};\theta)\\
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#线性回归模型的概率解释"><span class="nav-number">1.</span> <span class="nav-text">线性回归模型的概率解释</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#概率模型"><span class="nav-number">1.1.</span> <span class="nav-text">概率模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#似然函数"><span class="nav-number">1.2.</span> <span class="nav-text">似然函数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#局部加权线性回归"><span class="nav-number">2.</span> <span class="nav-text">局部加权线性回归</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#欠拟合与过拟合"><span class="nav-number">2.1.</span> <span class="nav-text">欠拟合与过拟合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#算法思路"><span class="nav-number">2.2.</span> <span class="nav-text">算法思路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参数与非参数"><span class="nav-number">2.3.</span> <span class="nav-text">参数与非参数</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#逻辑回归"><span class="nav-number">1.</span> <span class="nav-text">逻辑回归</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#牛顿方法"><span class="nav-number">2.</span> <span class="nav-text">牛顿方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#感知器学习算法"><span class="nav-number">3.</span> <span class="nav-text">感知器学习算法</span></a></li></ol></div>
             
 
           </div>
