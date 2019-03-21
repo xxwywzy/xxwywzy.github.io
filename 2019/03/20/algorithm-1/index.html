@@ -104,14 +104,30 @@
 <meta property="og:site_name" content="xxwywzy&#39;s Blog">
 <meta property="og:description" content="本篇博客为《算法（第4版）》的读书笔记第一部分，主题是：基础编程模型。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-18-023743.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-03-18-025406.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-03-19-014914.png">
-<meta property="og:updated_time" content="2019-03-20T01:12:28.268Z">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-20-062417.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-20-084921.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-21-014507.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-21-015056.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-21-015510.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-21-022601.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-21-020719.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-21-021001.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-21-023008.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-21-030050.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-21-031458.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-21-032649.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-21-033041.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-21-033433.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-21-033607.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-18-023743.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-21-063428.png">
+<meta property="og:updated_time" content="2019-03-21T06:39:40.104Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="算法第一章读书笔记：基础编程模型">
 <meta name="twitter:description" content="本篇博客为《算法（第4版）》的读书笔记第一部分，主题是：基础编程模型。">
-<meta name="twitter:image" content="http://media.zjubiomedit.com/2019-03-18-023743.png">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2019-03-18-025406.png">
 
 
 
@@ -488,8 +504,6 @@
 <li>输入输出</li>
 <li>数据抽象</li>
 </ul></li>
-<li><p>下面给出了一个完整的 Java 程序：</p>
-<p><img src="http://media.zjubiomedit.com/2019-03-18-023743.png" width="70%"></p></li>
 </ul>
 <h1 id="原始数据类型和表达式">原始数据类型和表达式</h1>
 <ul>
@@ -616,12 +630,315 @@
 <p><img src="http://media.zjubiomedit.com/2019-03-19-014914.png" width="75%"></p></li>
 </ul>
 <h1 id="数组">数组</h1>
+<ul>
+<li>数组能够顺序存储相同类型的多个数据</li>
+<li>如果我们有 N 个值，对于 0 到 N-1 之间的任意的 i，我们就能够使用 <code>a[i]</code> 唯一的表示第 i 个元素的值</li>
+</ul>
+<h2 id="创建并初始化数组">创建并初始化数组</h2>
+<ul>
+<li>在 Java 中创建一个数组需要三步：
+<ul>
+<li>声明数组的名字和类型</li>
+<li>创建数组</li>
+<li>初始化数组元素</li>
+</ul></li>
+</ul>
+<h2 id="简化写法">简化写法</h2>
+<ul>
+<li>为了精简代码，我们常常会利用 Java 对数组默认的初始化来将三个步骤合为一条语句
+<ul>
+<li>数值类型的默认初始值是 0</li>
+<li>布尔型的默认 初始值是 false</li>
+</ul></li>
+<li><p>如果想要不同的初始值，可以使用花括号将一列由逗号分隔的值在编译时将数组初始化</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-20-062417.png" width="40%"></p></li>
+</ul>
+<h2 id="使用数组">使用数组</h2>
+<ul>
+<li>数组一经创建，其大小就是固定的
+<ul>
+<li>程序能够通过 <code>a.length</code> 获取数组 a[] 的长度</li>
+</ul></li>
+<li>Java 会自动进行边界检查</li>
+</ul>
+<h2 id="别名">别名</h2>
+<ul>
+<li>数组名表示的是整个数组
+<ul>
+<li><p>如果我们将一个数组变量赋予另一个变量，那么两个变量将会指向同一个数组</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span>[] a = <span class="keyword">new</span> <span class="keyword">int</span>[N];</span><br><span class="line">...</span><br><span class="line">a[i] = <span class="number">1234</span>;</span><br><span class="line">...</span><br><span class="line"><span class="keyword">int</span>[] b = a;</span><br><span class="line">...</span><br><span class="line">b[i] = <span class="number">5678</span>;   <span class="comment">// a[i] is now 5678.</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>这种情况叫做别名，有时可能会导致难以察觉的问题（可变性的锅）</li>
+</ul></li>
+</ul></li>
+<li>如果想复制数组，应该声明、创建并初始化一个少数族，然后将原数组中的元素挨个复制到新数组</li>
+</ul>
+<h2 id="二维数组">二维数组</h2>
+<ul>
+<li>在 Java 中二维数组就是一维数组的数组</li>
+<li>二维数组可以是参差不齐的
+<ul>
+<li>元素数组的长度可以不一致</li>
+</ul></li>
+<li>大多数情况下我们都会使用 <span class="math inline">\(M\times N\)</span>，即 M 行长度为 N 的数组的二维数组</li>
+<li>在 Java 中访问二维数组 <code>a[][]</code> 的第 i 行第 j 列的元素可以写作 <code>a[i][j]</code></li>
+</ul>
 <h1 id="静态方法">静态方法</h1>
+<ul>
+<li>静态方法是一组在调用时会被顺序执行的语句</li>
+<li>在许多语言中，静态方法被称为函数
+<ul>
+<li>因为它们和数学函数的性质类似</li>
+</ul></li>
+</ul>
+<h2 id="定义静态方法">定义静态方法</h2>
+<ul>
+<li>方法封装了一系列语句所描述的运算</li>
+<li>方法需要<strong>参数</strong>（某种类型的值）并根据参数计算出某种数据类型的<strong>返回值</strong>或者产生某种<strong>副作用</strong></li>
+<li><p>每个静态方法都是由<strong>签名</strong>和<strong>函数体</strong>组成的</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-20-084921.png" width="50%"></p></li>
+</ul>
+<h2 id="调用静态方法">调用静态方法</h2>
+<ul>
+<li>调用静态方法的方法是写出方法名并在后面的括号中列出参数值，用逗号分隔
+<ul>
+<li>调用方法时，它的参数变量将被初始化为调用时所给出的相应表达式的值</li>
+</ul></li>
+<li>返回语句将结束静态方法并将控制权交还给调用者
+<ul>
+<li>如果静态方法的目的是计算某个值，返回语句应该指定这个值</li>
+</ul></li>
+</ul>
+<h2 id="方法的性质">方法的性质</h2>
+<ul>
+<li>Java 方法拥有以下几个特点：
+<ul>
+<li><strong>方法的参数按值传递</strong>：当调用一个函数时，其参数对应的值将被拷贝至参数变量
+<ul>
+<li>这意味着数组参数将会是原数组的别名（原数组的内容可能会被改变）</li>
+</ul></li>
+<li><strong>方法名可以被重载</strong>：一个类中的方法名称可以相同，只要签名不同即可</li>
+<li><strong>方法只能返回一个值，但可以包含多个返回句</strong>：一个 Java 方法只能返回一个值
+<ul>
+<li>第一次执行到一条返回语句时控制权将会回到调用代码中</li>
+</ul></li>
+<li><strong>方法可以产生副作用</strong>：方法的返回值可以是 void，这表示该方法没有返回值
+<ul>
+<li>void 类型的方法会产生副作用（接受输入、产生输出、修改数组或者改变系统状态）</li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="递归">递归</h2>
+<ul>
+<li>递归方法是一种直接或间接调用自己的方法，编写递归代码时最重要的有以下三点：
+<ul>
+<li>递归总有一个<strong>最简单</strong>的情况</li>
+<li>递归调用总是去尝试解决一个<strong>规模更小</strong>的子问题，这样递归才能收敛到最简单的情况</li>
+<li>递归调用尝试解决的子问题之间不应该有<strong>交集</strong></li>
+</ul></li>
+</ul>
+<h2 id="基础编程模型">基础编程模型</h2>
+<ul>
+<li>静态方法库是定义在一个 Java 类中的一组静态方法</li>
+<li>Java 开发的一个基本模型是通过创建一个静态方法库（包含一个 main 方法）编写一个程序来完成一个特定的计算任务</li>
+</ul>
+<h2 id="模块化编程">模块化编程</h2>
+<ul>
+<li>静态方法库实现了模块化编程
+<ul>
+<li>一个库中的静态方法也能够调用另一个库中定义的静态方法</li>
+</ul></li>
+<li>模块化编程能够带来很多好处：
+<ul>
+<li>处理的模块大小适中</li>
+<li>可以共享和重用代码而无需重新实现</li>
+<li>很容易用改进的实现替换老的实现</li>
+<li>可以为解决编程问题建立合适的抽象模型</li>
+<li>缩小调试范围</li>
+</ul></li>
+</ul>
+<h2 id="单元测试">单元测试</h2>
+<ul>
+<li>Java 编程的最佳实践之一就是每个静态方法库中都包含一个 main 函数来测试库中的所有方法</li>
+</ul>
+<h2 id="外部库">外部库</h2>
+<ul>
+<li>我们会使用来自 4 个不同类型的库中的静态方法，重用每种库代码的方式稍有不同
+<ul>
+<li>系统标准库 <code>java.lang</code>：包括 <code>java.lang.Math</code>，<code>java.lang.Integer</code> 和 <code>java.lang.Double</code></li>
+<li>导入的系统库，例如 <code>java.utils.Arrays</code>
+<ul>
+<li>需要在程序的开头使用 <code>import</code> 语句导入</li>
+</ul></li>
+<li>本书中的其他库：需要下载并放入你的工作目录中（或下载 jar 包添加路径）
+<ul>
+<li>放入同一目录中不需要 import，添加路径需要 import</li>
+</ul></li>
+<li>本书提供的标准库：同上</li>
+</ul></li>
+<li>要调用另一个库中的方法，需要在方法前指定库的名称
+<ul>
+<li>如 <code>Math.sqrt()</code>，<code>BinarySearch.rank()</code>，<code>StdIn.readInt()</code></li>
+</ul></li>
+</ul>
 <h1 id="api">API</h1>
+<ul>
+<li>我们会统一使用<strong>应用程序编程接口</strong>（API）的方式来列出本书中使用的每个方法库名称、签名和简短的描述
+<ul>
+<li>API 的目的是将调用和实现分离</li>
+</ul></li>
+<li>我们用客户端（client）来指代调用另一个库中方法的程序
+<ul>
+<li>用实现（implementation）来描述实现了某个 API 方法的 Java 代码</li>
+</ul></li>
+<li><p>下面给出一个 API 的样例：</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-21-014507.png" width="70%"></p></li>
+</ul>
 <h1 id="字符串">字符串</h1>
+<ul>
+<li>字符串是由一串字符组成的
+<ul>
+<li>一个 String 类型的字面量包括一对双引号和其中的字符</li>
+</ul></li>
+<li>String 类型是 Java 的一个数据类型，但并不是原始数据类型</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-03-21-015056.png" width="70%"></p>
+<h2 id="字符串拼接">字符串拼接</h2>
+<ul>
+<li>Java 内置了一个串联 String 类型字符串的运算符（+）</li>
+<li>拼接两个 String 类型的字符串将得到一个新的 String 值
+<ul>
+<li>其中第一个字符串在前，第二个字符串在后</li>
+</ul></li>
+</ul>
+<h2 id="类型转换-1">类型转换</h2>
+<ul>
+<li>字符串的两个主要用途分别是：
+<ul>
+<li>将用户从键盘输入的内容转换成相应数据类型的值</li>
+<li>将各种数据类型的值转化成能够在屏幕上显示的内容</li>
+</ul></li>
+<li><p>举例来说，Integer 和 Double 库包含了分别和 String 类型相互转化的方法</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-21-015510.png" width="70%"></p></li>
+</ul>
+<h2 id="自动转换">自动转换</h2>
+<ul>
+<li>Java 在连接字符串的时候会自动将任意数据类型的值转换为字符串
+<ul>
+<li>我们能够通过一个空字符串将任意数据类型的值转换为字符串值</li>
+</ul></li>
+</ul>
+<h1 id="命令行参数">命令行参数</h1>
+<ul>
+<li>在 Java 中字符串的一个重要的用途就是使程序能够接收到从命令行传递来的信息</li>
+<li>当你输入命令 <code>java</code> 和一个库名以及一系列字符串后
+<ul>
+<li><p>Java 系统会调用库的 main 方法并将那<strong>一系列字符串变成一个数据</strong>作为参数传递给它</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-21-022601.png" width="40%"></p></li>
+</ul></li>
+</ul>
 <h1 id="输入输出">输入输出</h1>
+<ul>
+<li>在我们的模型中，Java 程序可以从<strong>命令行参数</strong>或者一个名为<strong>标准输入流</strong>的抽象字符流中获得输入
+<ul>
+<li>并将输出写入另一个名为<strong>标准输出流</strong>的字符流中</li>
+</ul>
+<img src="http://media.zjubiomedit.com/2019-03-21-020719.png" width="40%"></li>
+</ul>
+<h2 id="命令和参数">命令和参数</h2>
+<ul>
+<li>终端窗口包含一个提示符，通过它我们能够向操作系统输入命令和参数</li>
+<li><p>本书中会使用到如下几个命令：</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-21-021001.png" width="55%"></p></li>
+</ul>
+<h2 id="标准输出">标准输出</h2>
+<ul>
+<li>系统默认会将标准输出打印到终端窗口</li>
+<li><p>本书将使用自己编写的 StdOut 库</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-21-023008.png" width="60%"></p></li>
+</ul>
+<h2 id="格式化输出">格式化输出</h2>
+<ul>
+<li>在最简单的情况下 printf 方法接收两个参数
+<ul>
+<li>第一个参数是一个格式字符串
+<ul>
+<li>描述第二个参数应该如何在输出中被转换为一个字符串</li>
+</ul></li>
+<li>第二个参数是待转换的数据</li>
+</ul></li>
+<li>最简单的格式字符串的第一个字符是 % 并紧跟一个字符表示的转换代码
+<ul>
+<li>在 % 和转换代码之间可以插入一个整数来表示转换之后的值的宽度</li>
+<li>在宽度之后还可以插入一个小数点以及数值来指定保留的小数位数或是字符串截取长度</li>
+</ul></li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-03-21-030050.png" width="65%"></p>
+<h2 id="标准输入">标准输入</h2>
+<ul>
+<li>我们的 StdIn 库从标准输入流中获取数据
+<ul>
+<li>这些数据可能为空，也可能是一系列由空白字符分隔的值(空格、制表符、换行符等)</li>
+<li>输入流由 <code>&lt;ctrl-d&gt;</code> 或 <code>&lt;ctrl-z&gt;</code> 结束，取决于你的终端</li>
+</ul></li>
+<li><p>标准输入流最重要的特点是这些值会在你的程序读取它们之后消失</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-21-031458.png" width="60%"></p></li>
+</ul>
+<h2 id="重定向与管道">重定向与管道</h2>
+<ul>
+<li>只需要向启动程序的命令中加入一个简单的提示符，就可以将它的标准输出或输入<strong>重定向</strong>至一个文件</li>
+<li>将一个程序的输出重定向为另一个程序的输入叫做<strong>管道</strong></li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-03-21-032649.png" width="50%"></p>
+<h2 id="基于文件的输入输出">基于文件的输入输出</h2>
+<ul>
+<li>我们的 In 和 Out 库提供了一些静态方法，来实现向文件中写入或从文件中读取一个原始数据类型（或 String 类型）的数组的抽象</li>
+<li>借此我们可以在同一个程序中分别使用文件和标准输入输出达到两种不同的目的</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-03-21-033041.png" width="70%"></p>
+<h2 id="标准绘图库">标准绘图库</h2>
+<ul>
+<li><p>我们使用 StrDraw 来绘制图像，其基本方法如下：</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-21-033433.png" width="60%"></p></li>
+<li><p>标准绘图库中还包含一些控制方法，用以改变画布大小、字体、颜色等</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-21-033607.png" width="60%"></p></li>
+</ul>
 <h1 id="二分查找">二分查找</h1>
+<ul>
+<li>下面的程序实现了一个被称为<strong>二分查找</strong>的经典算法，并通过<strong>白名单过滤</strong>进行了测试
+<ul>
+<li>算法是由静态方法 <code>rank()</code> 实现的
+<ul>
+<li>它接收一个整数键和一个已经有序的 int 数组作为参数</li>
+<li>如果该键存在于数组中则返回它的索引，否则返回 -1</li>
+</ul></li>
+<li>算法使用两个变量 lo 和 hi，并保证如果键在数组中则它一定在 <code>a[lo..hi]</code> 中，然后方法进入一个循环
+<ul>
+<li>不断地将数组的中间键（索引为 mid）和被查找的键比较
+<ul>
+<li>如果被查找的键等于 <code>a[mid]</code> ，返回 mid</li>
+<li>否则算法就将查找范围缩小一半
+<ul>
+<li>如果被查找的键小于 <code>a[mid]</code> 就继续在左半边查找</li>
+<li>如果被查找的键大于 <code>a[mid]</code> 就继续在右半边查找</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>算法找到被查找的键或是查找范围为空时则该过程结束</li>
+</ul></li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-03-18-023743.png" width="70%"></p>
+<ul>
+<li>白名单过滤的过程如下：
+<ul>
+<li>将客户的账号保存在一个文件中，我们称它为<strong>白名单</strong></li>
+<li>从标准输入中得到每笔交易的账号</li>
+<li>使用这个测试用例在标准输出中打印所有与任何客户无关的账号，拒绝此类交易</li>
+</ul></li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-03-21-063428.png" width="40%"></p>
 <h1 id="练习">练习</h1>
+<p><a href="https://algs4.cs.princeton.edu/11model/" target="_blank" rel="noopener">待完成</a></p>
 
       
     </div>
@@ -959,7 +1276,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#java-程序的基本结构"><span class="nav-number">1.</span> <span class="nav-text">Java 程序的基本结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#原始数据类型和表达式"><span class="nav-number">2.</span> <span class="nav-text">原始数据类型和表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#表达式"><span class="nav-number">2.1.</span> <span class="nav-text">表达式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类型转换"><span class="nav-number">2.2.</span> <span class="nav-text">类型转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#比较"><span class="nav-number">2.3.</span> <span class="nav-text">比较</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他原始类型"><span class="nav-number">2.4.</span> <span class="nav-text">其他原始类型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#语句"><span class="nav-number">3.</span> <span class="nav-text">语句</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数组"><span class="nav-number">4.</span> <span class="nav-text">数组</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#静态方法"><span class="nav-number">5.</span> <span class="nav-text">静态方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#api"><span class="nav-number">6.</span> <span class="nav-text">API</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#字符串"><span class="nav-number">7.</span> <span class="nav-text">字符串</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#输入输出"><span class="nav-number">8.</span> <span class="nav-text">输入输出</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二分查找"><span class="nav-number">9.</span> <span class="nav-text">二分查找</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#练习"><span class="nav-number">10.</span> <span class="nav-text">练习</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#java-程序的基本结构"><span class="nav-number">1.</span> <span class="nav-text">Java 程序的基本结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#原始数据类型和表达式"><span class="nav-number">2.</span> <span class="nav-text">原始数据类型和表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#表达式"><span class="nav-number">2.1.</span> <span class="nav-text">表达式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类型转换"><span class="nav-number">2.2.</span> <span class="nav-text">类型转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#比较"><span class="nav-number">2.3.</span> <span class="nav-text">比较</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他原始类型"><span class="nav-number">2.4.</span> <span class="nav-text">其他原始类型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#语句"><span class="nav-number">3.</span> <span class="nav-text">语句</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数组"><span class="nav-number">4.</span> <span class="nav-text">数组</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建并初始化数组"><span class="nav-number">4.1.</span> <span class="nav-text">创建并初始化数组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简化写法"><span class="nav-number">4.2.</span> <span class="nav-text">简化写法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用数组"><span class="nav-number">4.3.</span> <span class="nav-text">使用数组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#别名"><span class="nav-number">4.4.</span> <span class="nav-text">别名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二维数组"><span class="nav-number">4.5.</span> <span class="nav-text">二维数组</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#静态方法"><span class="nav-number">5.</span> <span class="nav-text">静态方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#定义静态方法"><span class="nav-number">5.1.</span> <span class="nav-text">定义静态方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调用静态方法"><span class="nav-number">5.2.</span> <span class="nav-text">调用静态方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法的性质"><span class="nav-number">5.3.</span> <span class="nav-text">方法的性质</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#递归"><span class="nav-number">5.4.</span> <span class="nav-text">递归</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基础编程模型"><span class="nav-number">5.5.</span> <span class="nav-text">基础编程模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模块化编程"><span class="nav-number">5.6.</span> <span class="nav-text">模块化编程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单元测试"><span class="nav-number">5.7.</span> <span class="nav-text">单元测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#外部库"><span class="nav-number">5.8.</span> <span class="nav-text">外部库</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#api"><span class="nav-number">6.</span> <span class="nav-text">API</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#字符串"><span class="nav-number">7.</span> <span class="nav-text">字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#字符串拼接"><span class="nav-number">7.1.</span> <span class="nav-text">字符串拼接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类型转换-1"><span class="nav-number">7.2.</span> <span class="nav-text">类型转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自动转换"><span class="nav-number">7.3.</span> <span class="nav-text">自动转换</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#命令行参数"><span class="nav-number">8.</span> <span class="nav-text">命令行参数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#输入输出"><span class="nav-number">9.</span> <span class="nav-text">输入输出</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#命令和参数"><span class="nav-number">9.1.</span> <span class="nav-text">命令和参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#标准输出"><span class="nav-number">9.2.</span> <span class="nav-text">标准输出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#格式化输出"><span class="nav-number">9.3.</span> <span class="nav-text">格式化输出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#标准输入"><span class="nav-number">9.4.</span> <span class="nav-text">标准输入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重定向与管道"><span class="nav-number">9.5.</span> <span class="nav-text">重定向与管道</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于文件的输入输出"><span class="nav-number">9.6.</span> <span class="nav-text">基于文件的输入输出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#标准绘图库"><span class="nav-number">9.7.</span> <span class="nav-text">标准绘图库</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二分查找"><span class="nav-number">10.</span> <span class="nav-text">二分查找</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#练习"><span class="nav-number">11.</span> <span class="nav-text">练习</span></a></li></ol></div>
             
 
           </div>
