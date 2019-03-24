@@ -96,22 +96,22 @@
 
 
 
-  <meta name="description" content="本篇博客为CS229第二篇学习笔记，主要内容包括线性回归模型的概率解释和局部加权线性回归。">
-<meta name="keywords" content="CS229">
+  <meta name="description" content="本篇博客为 CS229 学习笔记第二部分，主题是：分类与逻辑回归。">
+<meta name="keywords" content="CS229,逻辑回归">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CS229学习笔记之二：分类与逻辑回归">
 <meta property="og:url" content="https://xxwywzy.github.io/2018/03/15/CS229-2/index.html">
 <meta property="og:site_name" content="xxwywzy&#39;s Blog">
-<meta property="og:description" content="本篇博客为CS229第二篇学习笔记，主要内容包括线性回归模型的概率解释和局部加权线性回归。">
+<meta property="og:description" content="本篇博客为 CS229 学习笔记第二部分，主题是：分类与逻辑回归。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-133419.jpg">
 <meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-133612.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-133622.png">
-<meta property="og:updated_time" content="2019-03-20T01:55:06.000Z">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-101558.png">
+<meta property="og:updated_time" content="2019-03-24T10:16:40.748Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS229学习笔记之二：分类与逻辑回归">
-<meta name="twitter:description" content="本篇博客为CS229第二篇学习笔记，主要内容包括线性回归模型的概率解释和局部加权线性回归。">
-<meta name="twitter:image" content="http://media.zjubiomedit.com/2018-05-28-133419.jpg">
+<meta name="twitter:description" content="本篇博客为 CS229 学习笔记第二部分，主题是：分类与逻辑回归。">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2018-05-28-133612.png">
 
 
 
@@ -467,8 +467,9 @@
       
 
       
-        <p><img src="http://media.zjubiomedit.com/2018-05-28-133419.jpg" width="75%" height="75%"></p>
-<p>本篇博客为CS229第二篇学习笔记，主要内容包括线性回归模型的概率解释和局部加权线性回归。</p>
+        <div class="note info">
+            本篇博客为 CS229 学习笔记第二部分，主题是：分类与逻辑回归。 
+          </div>
 <a id="more"></a>
 <ul>
 <li>之前我们讨论的是<strong>回归问题</strong>，即输出是连续值，现在我们来讨论输出是离散值的<strong>分类问题</strong></li>
@@ -480,16 +481,14 @@
 h_{\theta}(x) = g(\theta^Tx) = \frac 1 {1+e^{-\theta^Tx}}
 \]</span></p>
 <ul>
-<li><p>其中 <span class="math display">\[
+<li>其中 <span class="math display">\[
 g(z) = \frac 1 {1+e^{-z}}
-\]</span></p>
-<ul>
+\]</span></li>
+</ul></li>
 <li><p><span class="math inline">\(g(z)\)</span> 被称为<strong>逻辑函数</strong>或 <strong>S 型函数</strong>，其图像如下：</p>
 <p><img src="http://media.zjubiomedit.com/2018-05-28-133612.png" width="45%" height="45%"></p>
 <ul>
-<li>可以看到，当<span class="math inline">\(z \to +\infty\)</span>时<span class="math inline">\(g(z)\)</span>趋向于 <span class="math inline">\(1\)</span>， 当<span class="math inline">\(z \to -\infty\)</span>时<span class="math inline">\(g(z)\)</span>趋向于 <span class="math inline">\(0\)</span>，即<span class="math inline">\(g(z)\)</span>的值域为<span class="math inline">\((0,1)\)</span>，至于为什么要选择这个函数，在之后会作出解释。</li>
-</ul></li>
-</ul></li>
+<li>可以看到，当<span class="math inline">\(z \to +\infty\)</span>时<span class="math inline">\(g(z)\)</span>趋向于 <span class="math inline">\(1\)</span>， 当<span class="math inline">\(z \to -\infty\)</span>时<span class="math inline">\(g(z)\)</span>趋向于 <span class="math inline">\(0\)</span>，即<span class="math inline">\(g(z)\)</span>的值域为<span class="math inline">\((0,1)\)</span>，至于为什么要选择这个函数，在之后会作出解释</li>
 </ul></li>
 <li><p>首先给出一个关于 S 型函数求导的有用性质： <span class="math display">\[
 \begin{align*}
@@ -499,7 +498,7 @@ g\prime (z) &amp;= \frac d {dz} \frac 1 {1+e^{-z}} \\
 &amp;= g(z)(1-g(z))
 \end{align*}
 \]</span></p></li>
-<li><p>确定了模型之后，我们需要找到合适的 <span class="math inline">\(\theta\)</span> 的值</p>
+<li>确定了模型之后，我们需要找到合适的 <span class="math inline">\(\theta\)</span> 的值
 <ul>
 <li>这里采用之前使用的<strong>最大似然法</strong>来选择参数（假设函数可以直接看作概率分布）</li>
 </ul></li>
@@ -551,30 +550,58 @@ L(\theta) &amp;= p(\vec y \mid X; \theta) \\
 </ul></li>
 </ul>
 <h1 id="牛顿方法">牛顿方法</h1>
-<p>下面我们介绍另外一种算法来求解<span class="math inline">\(\ell (\theta)\)</span>的最大值，称为<strong>牛顿方法</strong>。</p>
-<p>我们通过如下的几张图来理解牛顿方法：</p>
-<p><img src="http://media.zjubiomedit.com/2018-05-28-133622.png" width="70%" height="70%"></p>
-<p>对于梯度下降，每次只是在梯度方向上下降一小步（取决于学习速率），而牛顿方法是一直下降到导数（切线）和<span class="math inline">\(\theta\)</span>轴交界的那个<span class="math inline">\(\theta\)</span>。因此牛顿方法的更新规则是： <span class="math display">\[
+<ul>
+<li>下面我们介绍另外一种算法来求解 <span class="math inline">\(\ell (\theta)\)</span> 的最大值，称为<strong>牛顿方法</strong></li>
+<li><p>我们通过如下的几张图来理解牛顿方法：</p>
+<p><img src="http://media.zjubiomedit.com/2018-05-28-133622.png" width="70%" height="70%"></p></li>
+<li>对于梯度下降，每次只是在梯度方向上下降一小步（取决于学习速率）</li>
+<li><p>而牛顿方法是一直下降到导数（切线）和<span class="math inline">\(\theta\)</span>轴交界的那个<span class="math inline">\(\theta\)</span>。因此牛顿方法的更新规则是： <span class="math display">\[
 \theta := \theta - \frac {f(\theta)} {f&#39; (\theta)}
-\]</span> 下面我们将牛顿方法应用于逻辑回归，我们需要找到<span class="math inline">\(\ell (\theta)\)</span>的最大值，即<span class="math inline">\(\ell &#39;(\theta)=0\)</span>，因此令<span class="math inline">\(f(\theta)=\ell &#39;(\theta)\)</span>，我们可以得到逻辑回归的牛顿方法更新公式： <span class="math display">\[
+\]</span></p></li>
+<li><p>下面我们将牛顿方法应用于逻辑回归，我们需要找到 <span class="math inline">\(\ell (\theta)\)</span> 的最大值，即 <span class="math inline">\(\ell &#39;(\theta)=0\)</span>，因此令 <span class="math inline">\(f(\theta)=\ell &#39;(\theta)\)</span>，我们可以得到逻辑回归的牛顿方法更新公式： <span class="math display">\[
 \theta := \theta - \frac {\ell &#39;(\theta)} {\ell &#39;&#39; (\theta)}
-\]</span> 而对于<span class="math inline">\(\theta\)</span>为向量的情况，牛顿方法的多维形式如下（又被称为<strong>牛顿-拉夫逊方法</strong>）： <span class="math display">\[
+\]</span></p></li>
+<li><p>而对于 <span class="math inline">\(\theta\)</span> 为向量的情况，牛顿方法的多维形式如下（又被称为<strong>牛顿-拉夫逊方法</strong>）： <span class="math display">\[
 \theta := \theta - H^{-1} \nabla_\theta \ell(\theta)
-\]</span> 其中<span class="math inline">\(\ \nabla_\theta \ell(\theta)\)</span>是<span class="math inline">\(\ell(\theta)\)</span>对于每个<span class="math inline">\(\theta_i\)</span>的偏导数构成的向量，<span class="math inline">\(H\)</span>是一个<span class="math inline">\((n+1)\times (n+1)\)</span>的矩阵（包括截距项），称为 <strong>海森矩阵</strong>，其中的每一项定义为： <span class="math display">\[
+\]</span></p>
+<ul>
+<li>其中 <span class="math inline">\(\ \nabla_\theta \ell(\theta)\)</span> 是 <span class="math inline">\(\ell(\theta)\)</span> 对于每个<span class="math inline">\(\theta_i\)</span>的偏导数构成的向</li>
+<li><span class="math inline">\(H\)</span> 是一个 <span class="math inline">\((n+1)\times (n+1)\)</span> 的矩阵（包括截距项），称为<strong>海森矩阵</strong>，其中的每一项定义为： <span class="math display">\[
 H_{ij}=\frac {\partial^2 \ell(\theta)} {\partial \theta_i \partial \theta_j}
-\]</span> 和（批量）梯度下降相比，牛顿方法会带来更快的收敛速度和更少的迭代次数。虽然每次迭代由于要计算<span class="math inline">\(H^{-1}\)</span>，导致计算量较大，但对于参数数量不是特别大的情况，总的来说它还是更快的。将牛顿方法用于求解逻辑回归的对数似然函数最大值，也被称为<strong>费雪评分</strong>。</p>
+\]</span></li>
+</ul></li>
+<li>和（批量）梯度下降相比，牛顿方法会带来更快的收敛速度和更少的迭代次数
+<ul>
+<li>虽然每次迭代由于要计算 <span class="math inline">\(H^{-1}\)</span>，导致计算量较大，但对于参数数量不是特别大的情况，总的来说它还是更快的</li>
+<li>将牛顿方法用于求解逻辑回归的对数似然函数最大值，也被称为<strong>费雪评分</strong></li>
+</ul></li>
+</ul>
 <h1 id="感知器学习算法">感知器学习算法</h1>
-<p>这里谈感知器，好像有些离题，但感知机的函数定义如下： <span class="math display">\[
-g(z)=\left\{
+<ul>
+<li>下面介绍另一种二分类方法：<strong>感知器学习算法</strong></li>
+<li><p>感知器学习算法的假设函数为： <span class="math display">\[
+h_\theta(x)=g(\theta^Tx)=\left\{
 \begin{align*}
-&amp; 1 \quad \text{if} \;\text{z} \ge 0\\
-&amp; 0 \quad  \text{if} \;\text{z} &lt; 0
+&amp; 1 \quad \text{if} \;\theta^Tx \ge 0\\
+&amp; 0 \quad  \text{if} \;\theta^T x &lt; 0
 \end{align*}
 \right.
-\]</span> 可以看到它是逻辑回归的s型函数的简化形式，逻辑函数是连续的在 [0,1] 区间上，而感知器直接非0则1。如果我们令<span class="math inline">\(h_\theta(x)=g(\theta^Tx)\)</span>，得到如下的更新规则： <span class="math display">\[
-\theta_j := \theta_j +\alpha\left(y^{(i)}-h_\theta(x^{(i)})\right)x^{(i)}_j
-\]</span> 即<strong>感知器学习算法</strong>。</p>
-<p>19世纪60年代，感知器被看作是大脑工作中独立神经元的粗糙的模型，由于简单，会用作后面介绍的学习理论的起点。虽然直观看上去，感知器和之前看到的逻辑回归或线性回归很像，但是其实是非常不一样的算法。 因为，对于感知器，很难赋予一种有意义的概率解释，或使用最大似然估计算法来进行推导。</p>
+\]</span></p>
+<ul>
+<li>可以看到 <span class="math inline">\(g(z)\)</span> 是逻辑回归的 s 型函数的简化形式</li>
+<li>逻辑函数是连续的在 [0,1] 区间上，而感知器直接非0则1</li>
+</ul></li>
+<li><p>感知器学习算法的参数更新规则如下： <span class="math display">\[
+\theta_j := \theta_j +\alpha\left(y^{(i)}-  h_\theta(x^{(i)})\right)x^{(i)}_j
+\]</span></p></li>
+<li>19世纪60年代，感知器被看作是大脑工作中独立神经元的粗糙的模型</li>
+<li>虽然直观看上去，感知器和之前看到的逻辑回归或线性回归很像，但是其实是非常不一样的算法
+<ul>
+<li>因为，对于感知器，很难赋予一种有意义的概率解释，或使用最大似然估计算法来进行推导</li>
+</ul></li>
+</ul>
+<h1 id="思维导图">思维导图</h1>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-101558.png" width="100%"></p>
 
       
     </div>
@@ -622,6 +649,8 @@ g(z)=\left\{
         <div class="post-tags">
           
             <a href="/tags/CS229/" rel="tag"># CS229</a>
+          
+            <a href="/tags/逻辑回归/" rel="tag"># 逻辑回归</a>
           
         </div>
       
@@ -916,7 +945,7 @@ g(z)=\left\{
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#逻辑回归"><span class="nav-number">1.</span> <span class="nav-text">逻辑回归</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#牛顿方法"><span class="nav-number">2.</span> <span class="nav-text">牛顿方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#感知器学习算法"><span class="nav-number">3.</span> <span class="nav-text">感知器学习算法</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#逻辑回归"><span class="nav-number">1.</span> <span class="nav-text">逻辑回归</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#牛顿方法"><span class="nav-number">2.</span> <span class="nav-text">牛顿方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#感知器学习算法"><span class="nav-number">3.</span> <span class="nav-text">感知器学习算法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#思维导图"><span class="nav-number">4.</span> <span class="nav-text">思维导图</span></a></li></ol></div>
             
 
           </div>

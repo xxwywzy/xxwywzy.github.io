@@ -105,7 +105,7 @@
 <meta property="og:description" content="本篇博客为《游戏引擎架构》的第一章读书笔记。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-135927.png">
-<meta property="og:updated_time" content="2019-03-03T03:07:18.000Z">
+<meta property="og:updated_time" content="2019-03-24T10:34:36.826Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《游戏引擎架构》读书笔记之一：导论">
 <meta name="twitter:description" content="本篇博客为《游戏引擎架构》的第一章读书笔记。">
@@ -600,6 +600,147 @@ y(t+ \Delta t) = F(y(t), \dot{y(t)}, \ddot{y(t)},\ldots)
 </ul></li>
 </ul>
 <h1 id="不同游戏类型中的引擎差异">不同游戏类型中的引擎差异</h1>
+<ul>
+<li>通常在某种程度上游戏引擎是为某种游戏类型而设的</li>
+<li>但各种引擎也有很大的重叠部分
+<ul>
+<li>例如无论是什么类型的三维游戏，都需要某形式的低阶用户输入、某形式的三维网格渲染等</li>
+</ul></li>
+<li>下面介绍几个常见的游戏类型，并探讨每个类型的技术需求</li>
+</ul>
+<h2 id="第一人称射击fps">第一人称射击（FPS）</h2>
+<ul>
+<li>FPS 是开发技术难度极高的游戏类型之一
+<ul>
+<li>游戏业界的巨大技术创新都来自这种游戏</li>
+</ul></li>
+<li>FPS 游戏常会注重技术，例如：
+<ul>
+<li>高效地渲染大型三维虚拟世界
+<ul>
+<li>其使用地渲染技术几乎总是经过高度优化，并且按特定地场景类型仔细调整过的</li>
+</ul></li>
+<li>快速反应地摄像机控制及瞄准机制</li>
+<li>各种各样地手持武器</li>
+<li>宽容的玩家角色运动及碰撞模型
+<ul>
+<li>通常使游戏有种“漂浮”的感觉</li>
+</ul></li>
+<li>NPC 的逼真动画和人工智能</li>
+<li>小规模在线多人游戏的能力</li>
+</ul></li>
+<li>FPS 的技术需求时业界里最严格，也是最全面的
+<ul>
+<li>其要让玩家面对一个精细而超现实的世界时感到身临其境</li>
+</ul></li>
+</ul>
+<h2 id="平台游戏及其他第三人称游戏">平台游戏及其他第三人称游戏</h2>
+<ul>
+<li>平台游戏是指基于人物角色的第三人称游戏
+<ul>
+<li>在这类游戏中，主要的游戏机制是在平台之间跳跃</li>
+</ul></li>
+<li>从技术需求上说，平台游戏通常可以和第三人称射击/动作/冒险游戏类型一起考虑</li>
+<li>第三人称游戏和第一人称射击游戏有许多共通之处
+<ul>
+<li>但第三人称游戏比较看重主角的能力和运动模式</li>
+<li>此外，这个类型游戏的主角化身需要高度逼真的全身动画</li>
+</ul></li>
+<li>在平台游戏中，游戏主角通常是比较卡通而不是很真实或细腻的
+<ul>
+<li>但第三人称射击通常使用非常真实的人形玩家角色</li>
+<li>这两种类型都需要非常丰富的行为和动画</li>
+</ul></li>
+<li>第三人称游戏特别注重的技术如下：
+<ul>
+<li>移动平台、梯子、绳子、棚架及其他有趣的运动模式</li>
+<li>用来解谜的环境元素</li>
+<li>第三人称的“跟踪摄像机”会一直注视玩家角色
+<ul>
+<li>通常也会让玩家自己旋转摄像机（右摇杆或鼠标）</li>
+<li>注意：虽然 PC 上有很多流行的第三人称射击游戏，但平台游戏几乎是游戏主机上独有的（著名的）</li>
+</ul></li>
+<li>复杂的摄像机碰撞系统
+<ul>
+<li>保证视点不会穿过背景几何物体或动态的前景物体</li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="格斗游戏">格斗游戏</h2>
+<ul>
+<li>格斗游戏通常是两个玩家控制角色在一个擂台上互相对打</li>
+<li>传统的格斗游戏注重以下技术：
+<ul>
+<li>丰富的格斗动画</li>
+<li>准确的攻击判定</li>
+<li>能侦测复杂按钮及摇杆组合的玩家输入系统</li>
+<li>人群，或相对静态的背景</li>
+</ul></li>
+<li>由于这些游戏的三维世界较小，且摄像机一直位于动作的中心，以往这些游戏只有很少甚至不需要世界细分或遮挡删除
+<ul>
+<li>同样，这些游戏不要求使用高阶的三维音频传播模型</li>
+</ul></li>
+<li>现代的格斗游戏把技术提升到另一个层次，其有如下特点：
+<ul>
+<li>高清的角色图形
+<ul>
+<li>包括仿真的皮肤着色器，着色器模拟了次表面散射及冒汗效果</li>
+</ul></li>
+<li>照片般逼真的光影和粒子效果</li>
+<li>逼真的角色动画</li>
+<li>基于物理的布料及头发模拟</li>
+</ul></li>
+<li>值得注意的是，一些格斗游戏是在一个大型的环境下而不是受限的竞技场进行的
+<ul>
+<li>实际上很多人认为这是另一个游戏类比，有时称其为 brawler</li>
+<li>这种格斗游戏的技术需求比较近似于第三人称射击或策略游戏</li>
+</ul></li>
+</ul>
+<h2 id="竞速游戏">竞速游戏</h2>
+<ul>
+<li>竞速游戏包括所有以赛道上驾驶车辆或其他载具为主要任务的游戏</li>
+<li>这个游戏类型有几个子类别：
+<ul>
+<li>着重模拟的竞速游戏：力求模仿真实的驾驶体验</li>
+<li>街机竞速游戏：偏好娱乐性多于真实感</li>
+<li>街头竞速亚文化：采用可改装汽车</li>
+<li>卡丁赛车：使用一些平台游戏或电视卡通角色为主角，驾驶怪诞的汽车</li>
+</ul></li>
+<li>竞速游戏也不一定是和时间有关的比赛
+<ul>
+<li>例如一些卡丁车游戏让玩家去射击对手、收集物品，或参与其他计时或不计时的任务</li>
+</ul></li>
+<li>竞速游戏通常是非常线性的，类似于旧式的 FPS 游戏
+<ul>
+<li>但移动速度一般比 FPS 游戏快许多</li>
+</ul></li>
+<li>这类游戏经常使用非常长的走廊式赛道和环形赛道
+<ul>
+<li>有时候加入一些可选分支或捷径</li>
+</ul></li>
+<li>竞速游戏把图形的细节集中在载具、赛道及近景
+<ul>
+<li>卡丁车游戏还需要投放足够的渲染及动画资源到驾驶角色上</li>
+</ul></li>
+<li>典型竞速游戏具有如下技术特性：
+<ul>
+<li>使用多种“窍门”去渲染遥远的背景
+<ul>
+<li>例如使用二维纸板形式的树木、山岳和山脉</li>
+</ul></li>
+<li>赛道通常切开成较简单的二维区域，称为“分区”
+<ul>
+<li>这些数据结构用来实现渲染优化、可见性判断，帮助非玩家操控车辆的人工智能及路径搜寻，以及解决很多其他技术问题</li>
+</ul></li>
+<li>第三人称视角摄像机通常追随在车辆背后，第一人称摄像机有时候会置于驾驶舱里</li>
+<li>如果赛道经过天桥底及其他狭窄空间，必须花精力防止摄像机和背景几何物体碰撞</li>
+</ul></li>
+</ul>
+<h2 id="实时策略游戏rts">实时策略游戏（RTS）</h2>
+<h2 id="大型多人在线游戏mmog">大型多人在线游戏（MMOG）</h2>
+<h2 id="玩家创作内容">玩家创作内容</h2>
+<h2 id="虚拟增强以及混合现实">虚拟、增强以及混合现实</h2>
+<h2 id="其他游戏类型">其他游戏类型</h2>
 
       
     </div>
@@ -941,7 +1082,7 @@ y(t+ \Delta t) = F(y(t), \dot{y(t)}, \ddot{y(t)},\ldots)
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#典型游戏团队的结构"><span class="nav-number">1.</span> <span class="nav-text">典型游戏团队的结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#工程师"><span class="nav-number">1.1.</span> <span class="nav-text">工程师</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#艺术家"><span class="nav-number">1.2.</span> <span class="nav-text">艺术家</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#游戏设计师"><span class="nav-number">1.3.</span> <span class="nav-text">游戏设计师</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#制作人"><span class="nav-number">1.4.</span> <span class="nav-text">制作人</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他职员"><span class="nav-number">1.5.</span> <span class="nav-text">其他职员</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#游戏是什么"><span class="nav-number">2.</span> <span class="nav-text">游戏是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#电子游戏作为软实时模拟"><span class="nav-number">2.1.</span> <span class="nav-text">电子游戏作为软实时模拟</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#游戏引擎是什么"><span class="nav-number">3.</span> <span class="nav-text">游戏引擎是什么</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#不同游戏类型中的引擎差异"><span class="nav-number">4.</span> <span class="nav-text">不同游戏类型中的引擎差异</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#典型游戏团队的结构"><span class="nav-number">1.</span> <span class="nav-text">典型游戏团队的结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#工程师"><span class="nav-number">1.1.</span> <span class="nav-text">工程师</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#艺术家"><span class="nav-number">1.2.</span> <span class="nav-text">艺术家</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#游戏设计师"><span class="nav-number">1.3.</span> <span class="nav-text">游戏设计师</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#制作人"><span class="nav-number">1.4.</span> <span class="nav-text">制作人</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他职员"><span class="nav-number">1.5.</span> <span class="nav-text">其他职员</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#游戏是什么"><span class="nav-number">2.</span> <span class="nav-text">游戏是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#电子游戏作为软实时模拟"><span class="nav-number">2.1.</span> <span class="nav-text">电子游戏作为软实时模拟</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#游戏引擎是什么"><span class="nav-number">3.</span> <span class="nav-text">游戏引擎是什么</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#不同游戏类型中的引擎差异"><span class="nav-number">4.</span> <span class="nav-text">不同游戏类型中的引擎差异</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#第一人称射击fps"><span class="nav-number">4.1.</span> <span class="nav-text">第一人称射击（FPS）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#平台游戏及其他第三人称游戏"><span class="nav-number">4.2.</span> <span class="nav-text">平台游戏及其他第三人称游戏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#格斗游戏"><span class="nav-number">4.3.</span> <span class="nav-text">格斗游戏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#竞速游戏"><span class="nav-number">4.4.</span> <span class="nav-text">竞速游戏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实时策略游戏rts"><span class="nav-number">4.5.</span> <span class="nav-text">实时策略游戏（RTS）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#大型多人在线游戏mmog"><span class="nav-number">4.6.</span> <span class="nav-text">大型多人在线游戏（MMOG）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#玩家创作内容"><span class="nav-number">4.7.</span> <span class="nav-text">玩家创作内容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#虚拟增强以及混合现实"><span class="nav-number">4.8.</span> <span class="nav-text">虚拟、增强以及混合现实</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他游戏类型"><span class="nav-number">4.9.</span> <span class="nav-text">其他游戏类型</span></a></li></ol></li></ol></div>
             
 
           </div>
