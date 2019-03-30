@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2"/>
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0"/>
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/favicon.png?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本篇博客为 CS224N 学习笔记第二部分，主题是：词向量（GloVe，评估和训练）。">
+<meta name="keywords" content="CS224N">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CS224N 学习笔记之二：词向量 2">
+<meta property="og:url" content="https://xxwywzy.github.io/2019/03/30/cs224-2/index.html">
+<meta property="og:site_name" content="xxwywzy&#39;s Blog">
+<meta property="og:description" content="本篇博客为 CS224N 学习笔记第二部分，主题是：词向量（GloVe，评估和训练）。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-23-033019.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-23-051033.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-23-051236.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-25-085105.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-25-085549.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-25-090544.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-25-090313.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-28-013434.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-28-015017.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-30-040220.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-30-040427.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-30-122722.png">
+<meta property="og:updated_time" content="2019-03-30T12:39:10.580Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CS224N 学习笔记之二：词向量 2">
+<meta name="twitter:description" content="本篇博客为 CS224N 学习笔记第二部分，主题是：词向量（GloVe，评估和训练）。">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2019-03-23-033019.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://xxwywzy.github.io/2019/03/30/cs224-2/"/>
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>CS224N 学习笔记之二：词向量 2 | xxwywzy's Blog</title>
+  
+
+
+
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a02b5462e7522b1ed191c4cea6b1d6e6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xxwywzy's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Long may the sunshine</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br/>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br/>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br/>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br/>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2019/03/30/cs224-2/"/>
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zheyu Wang"/>
+      <meta itemprop="description" content="更に向こうへ"/>
+      <meta itemprop="image" content="/images/avatar.png"/>
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xxwywzy's Blog"/>
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">CS224N 学习笔记之二：词向量 2
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-30 20:39:07" itemprop="dateCreated datePublished" datetime="2019-03-30T20:39:07+08:00">2019-03-30</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/人工智能/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/人工智能/深度学习/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <a href="/2019/03/30/cs224-2/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/03/30/cs224-2/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+            <span id="/2019/03/30/cs224-2/" class="leancloud_visitors" data-flag-title="CS224N 学习笔记之二：词向量 2">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <div class="note info">
+            本篇博客为 CS224N 学习笔记第二部分，主题是：词向量（GloVe，评估和训练）。 
+          </div>
+<a id="more"></a>
+<h1 id="glove">GloVe</h1>
+<h2 id="与之前方法的比较">与之前方法的比较</h2>
+<ul>
+<li>之前我们介绍了两种表示词向量的方法：
+<ul>
+<li>基于数量的矩阵分解方法（<a href="https://blog.csdn.net/abcjennifer/article/details/45419591" target="_blank" rel="noopener">HAL，LSA</a>）</li>
+<li>基于窗口的概率方法（word2vec）</li>
+</ul></li>
+<li>第二种方法明显优于第一种，但其只考虑了一个较小窗口内的词语信息
+<ul>
+<li>没有利用好全局的词语共现数据</li>
+</ul></li>
+<li>Glove 结合了上述两种方法的优点
+<ul>
+<li>其使用全局数据来基于上下文 <span class="math inline">\(i\)</span> 预测一个词语 <span class="math inline">\(j\)</span> 的概率</li>
+<li>目标函数为最小二乘函数</li>
+</ul></li>
+</ul>
+<h2 id="共现矩阵">共现矩阵</h2>
+<ul>
+<li>首先我们需要计算词语的共现矩阵，现给出如下定义：
+<ul>
+<li><span class="math inline">\(X\)</span>：表示词语之间的共现矩阵</li>
+<li><span class="math inline">\(X_{ij}\)</span>：表示词语 <span class="math inline">\(j\)</span> 与上下文词语 <span class="math inline">\(i\)</span> 的共现次数</li>
+<li><span class="math inline">\(X_i= \sum_k X_{ik}\)</span>：表示任意词语 <span class="math inline">\(k\)</span> 与上下文词语 <span class="math inline">\(i\)</span> 的共现次数</li>
+<li><span class="math inline">\(P_{ij} = P(w_j | w_i) = \frac {X_{ij}} {X_i}\)</span>：表示词语 <span class="math inline">\(j\)</span> 以词语 <span class="math inline">\(i\)</span> 为上下文的概率</li>
+</ul></li>
+<li>虽然当语料库很大时，该矩阵的计算十分复杂，但这是一次性的工作，所以可以接受</li>
+</ul>
+<h2 id="最小二乘目标函数">最小二乘目标函数</h2>
+<ul>
+<li><p>在 word2vec 中，我们使用 softmax 来计算给定上下文词语 <span class="math inline">\(i\)</span> 的词语 <span class="math inline">\(j\)</span> 的概率： <span class="math display">\[
+Q_{ij} = \frac {\exp (u_j^Tv_i)} {\sum_{w=1}^W \exp(u_w^Tv_i)}
+\]</span></p>
+<ul>
+<li><p>之前的训练都是使用随机梯度下降，如果计算全局的代价函数，则为： <span class="math display">\[
+J = - \sum_{i \in corpus} \sum_{j \in context(i)} \log Q_{ij}
+\]</span></p>
+<ul>
+<li>这里使用了对数最大似然（可以理解为 softmax 向量与 one-hot 向量的交叉熵）
+<ul>
+<li>注意该交叉熵与下一步得到的交叉熵并不是相同
+<ul>
+<li>分类问题的交叉熵函数与最大似然函数等价</li>
+</ul></li>
+</ul></li>
+<li>上式中相同的 <span class="math inline">\(i\)</span> 和 <span class="math inline">\(j\)</span> 的组合可能出现多次（多次共现）</li>
+</ul></li>
+</ul></li>
+<li><p>我们可以利用共现矩阵将相同的 <span class="math inline">\(i\)</span> 和 <span class="math inline">\(j\)</span> 先累加起来，以减少运算 <span class="math display">\[
+J = -\sum_{i=1}^W\sum_{j=1}^W X_{ij} \log{Q_{ij}}
+\]</span></p>
+<ul>
+<li><p>使用之前的定义，我们可以将上式改写为： <span class="math display">\[
+J = -\sum_{i=1}^W X_i \sum_{j=1}^W P_{ij} \log{Q_{ij}} =-\sum_{i=1}^W X_iH(P_i,Q_i)
+\]</span></p>
+<ul>
+<li>其中 <span class="math inline">\(H(P_i, Q_i)\)</span> 是分布 <span class="math inline">\(P_i\)</span> 和 <span class="math inline">\(Q_i\)</span> 的交叉熵</li>
+</ul></li>
+</ul></li>
+<li>交叉熵代价函数的不足之处在于其分布需要归一化，即在整个语料库上进行求和
+<ul>
+<li><p>为了避免这一复杂的运算，我们使用非归一化的分布的最小二乘函数来取代交叉熵函数： <span class="math display">\[
+\hat{J} = -\sum_{i=1}^W \sum_{j=1}^W X_{i}（\hat{P}_{ij} - \hat{Q}_{ij})^2
+\]</span></p>
+<ul>
+<li>其中 <span class="math inline">\(\hat{P}_{ij} = X_{ij}\)</span>，<span class="math inline">\(\hat{Q}_{ij} = \exp(u_j^Tv_i)\)</span></li>
+</ul></li>
+</ul></li>
+<li>上述代价函数的一个新问题是 <span class="math inline">\(X_{ij}\)</span> 经常过大，导致优化困难
+<ul>
+<li>我们通过取对数来解决这一问题： <span class="math display">\[
+\begin{aligned}
+\hat{J} &amp;= -\sum_{i=1}^W \sum_{j=1}^W X_{i}（\log(\hat{P}_{ij}) - \log(\hat{Q}_{ij})^2 \\
+&amp;= -\sum_{i=1}^W \sum_{j=1}^W X_{i}（u_j^Tv_i - \log X_{ij})^2
+\end{aligned}
+\]</span></li>
+</ul></li>
+<li>上述代价函数中，根据观测，<span class="math inline">\(X_i\)</span> 并不是一个最佳的选择
+<ul>
+<li>我们将使用一个更一般化的权重函数，其依赖于上下文单词 <span class="math display">\[
+\hat{J} = -\sum_{i=1}^W \sum_{j=1}^W f(X_{ij})（u_j^Tv_i - \log X_{ij})^2
+\]</span></li>
+</ul></li>
+</ul>
+<h2 id="结论">结论</h2>
+<ul>
+<li>GloVe 模型高效地使用了全局信息
+<ul>
+<li>其只训练词语共现矩阵中不为零的元素</li>
+<li>输出一个较有意义的子空间向量</li>
+</ul></li>
+<li>GloVe 在词语类比任务上比 word2vec 表现更好，且速度更快</li>
+</ul>
+<h1 id="词向量的评估">词向量的评估</h1>
+<ul>
+<li>本节将定量评估生成的词向量的质量</li>
+</ul>
+<h2 id="内在评估">内在评估</h2>
+<ul>
+<li>内在评估是指用某种具体的中间任务（比如类比补全）来评估词向量
+<ul>
+<li>这些子任务一般比较简单，计算复杂度较低，可以帮助我们快速理解该系统的好坏</li>
+<li>该评估方法应该与词向量的最终应用正相关（能反映出词向量应用到下游系统时的表现）</li>
+</ul></li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-03-23-033019.png" width="40%"></p>
+<h2 id="外在评估">外在评估</h2>
+<ul>
+<li>外在评估即基于实际任务的评估
+<ul>
+<li>这种评估通常计算复杂度较高，训练时间长</li>
+</ul></li>
+<li>一般来说，对整个系统的评估难以确定是哪个子系统发生了问题
+<ul>
+<li>这时还需要借助内在评估来确定问题
+<ul>
+<li>基于内在评估替换不同的子系统，如果整体表现提升，则保持替换</li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="内在评估案例词向量类比">内在评估案例：词向量类比</h2>
+<ul>
+<li>一个经典的内在评估方法就是词向量类比补全
+<ul>
+<li>在一个词向量类比中，我们会给出如下形式的不完全类比： <span class="math display">\[
+a:b::c:?
+\]</span></li>
+</ul></li>
+<li><p>内在评估系统希望找出能够最大化如下余弦相似度的词向量： <span class="math display">\[
+d = \arg \max_i \frac {(x_b-x_a+x_c)^Tx_i}{||x_b-x_a+x_c||}
+\]</span></p>
+<ul>
+<li>直观上来看，理想情况下我们希望 <span class="math inline">\(x_b - x_a = x_d - x_c\)</span>，即 <span class="math inline">\(x_b - x_a + x_c = x_d\)</span></li>
+<li>因此我们要找到最大化两个向量夹角的词向量
+<ul>
+<li>注意这里默认 <span class="math inline">\(x_d\)</span> 已经进行归一化处理，所以不用除以其模</li>
+</ul></li>
+</ul></li>
+<li>词向量的类比可以是语义层面的，也可以是语法层面的
+<ul>
+<li>有时候由于语料库的影响，语义类比可能产生导致不同的结果，需要注意
+<ul>
+<li><p>下面的例子中，一个国家的首都在不同时期可能不同</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-23-051033.png" width="50%"></p></li>
+</ul></li>
+<li><p>语法层面的例子：类比形容词和其最高级</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-23-051236.png" width="40%"></p></li>
+</ul></li>
+</ul>
+<h2 id="内在评估调整案例类比评估">内在评估调整案例：类比评估</h2>
+<ul>
+<li>我们可以基于内在评估系统来调整词向量模型的超参数，包括：
+<ul>
+<li>词向量维数</li>
+<li>语料库大小</li>
+<li>语料库来源/类型</li>
+<li>上下文窗口大小</li>
+<li>上下文对称性</li>
+</ul></li>
+<li><p>下表给出了不同模型使用不同超参数在类比问题上的表现对比：</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-25-085105.png" width="50%"></p></li>
+<li>基于该表可以得出以下三点结论：
+<ul>
+<li><strong>表现非常依赖于模型</strong>
+<ul>
+<li>即不同的方法得出的词向量表现差距较大</li>
+</ul></li>
+<li><strong>随着语料库的增加，表现逐渐提升</strong>
+<ul>
+<li><p>这即表示可以学习的经验变多了</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-25-085549.png" width="50%"></p></li>
+</ul></li>
+<li><strong>对于非常低维的词向量，表现较差</strong>
+<ul>
+<li>低维词向量难以捕捉到词语之间的不同含义
+<ul>
+<li>这可以理解为模型复杂度不同导致的高偏差问题</li>
+</ul></li>
+<li>直观上来看，非常高维的词向量会导致高偏差问题
+<ul>
+<li>即捕捉到了语料库的噪声，结果不具有可推广性</li>
+<li>但研究表明 skip-gram、Glove 方法得出的词向量对过拟合具有鲁棒性</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>下图给出了不同超参数对 Glove 表现的影响</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-25-090544.png" width="90%"></p></li>
+<li><p>除了上述因素，训练时间也对表现的提升有一定影响</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-25-090313.png" width="40%"></p></li>
+</ul>
+<h2 id="内在评估案例相关性评估">内在评估案例：相关性评估</h2>
+<ul>
+<li>另一种评估词向量质量的简单方法是将人工标注的词语相似度（如 0-10）与词向量之间的余弦相似度比较
+<ul>
+<li>这种方法需要基于人工标注的数据集</li>
+</ul></li>
+<li>下表展示了不同的词向量生成方法在不同的人工判断数据集上的表现：</li>
+</ul>
+<h2 id="扩展阅读处理歧义">扩展阅读：处理歧义</h2>
+<ul>
+<li>对于某些词语，其在不同的上下文中意义不同</li>
+<li>对于这种情况，可以采取如下做法（来自<a href="http://www.aclweb.org/anthology/P12-1092" target="_blank" rel="noopener">这篇文章</a>）
+<ol type="1">
+<li>对于所有出现的词语，以固定的窗口大小收集其上下文（如前 5 个单词加后 5 个单词）</li>
+<li>对于每个上下文，使用上下文词向量的加权平均表示（idf 加权）</li>
+<li>使用球面 K-means 对这些上下文表示聚类</li>
+<li>最后，每个词语都会重新标记为与其关联的类，基于这个类训练其词向量
+<ul>
+<li>这样对于同时属于不同类的词语，就会得到多个词向量</li>
+</ul></li>
+</ol></li>
+</ul>
+<h1 id="外在任务训练">外在任务训练</h1>
+<ul>
+<li>大部分现实世界问题的最终目标是将词向量用于某些外在任务
+<ul>
+<li>下面我们介绍处理外在任务的一般方法</li>
+</ul></li>
+</ul>
+<h2 id="问题的提出">问题的提出</h2>
+<ul>
+<li>大部分 NLP 的外在任务都可以看作分类问题
+<ul>
+<li>比如情感分类，命名实体识别等</li>
+</ul></li>
+<li><p>对于这些问题，我们一般有如下的训练集形式： <span class="math display">\[
+\{x^{(i)},y^{(i)}\}_1^N
+\]</span></p>
+<ul>
+<li>其中 <span class="math inline">\(x^{(i)}\)</span> 是一个 d-维的词向量，通过某种词嵌入技术生成</li>
+<li><span class="math inline">\(y^{(i)}\)</span> 是一个 C-维的 one-hot 向量，表示我们希望预测的标签（类别）</li>
+</ul></li>
+<li>在经典的机器学习任务中，我们通常保持输入数据与输出标签<strong>不变</strong>，使用优化方法来训练参数（权重）
+<ul>
+<li>但是在 NLP 任务中，我们在训练外在任务时可能会<strong>重新训练</strong>输入词向量</li>
+</ul></li>
+</ul>
+<h2 id="重新训练词向量">重新训练词向量</h2>
+<ul>
+<li>在执行一个外在任务时，词向量通常先基于一个简单的内在任务进行优化
+<ul>
+<li>很多情况下，初始词向量都是一个不错的选择，可以取得较好的表现</li>
+</ul></li>
+<li>如果<strong>训练集足够大</strong>，那么有时候进一步训练词向量可能会得到更好的结果
+<ul>
+<li>这一操作是有风险的</li>
+</ul></li>
+<li>如果训练集不够大，重新训练词向量可能会使得表现变差
+<ul>
+<li>因为 Word2Vec 或 GloVe 得到的语义相关的词向量在向量空间中距离较近
+<ul>
+<li>如果在一个小词库中重新训练，可能会导致词向量出现偏移</li>
+</ul></li>
+</ul></li>
+<li>下面介绍一个二维词向量分类的例子
+<ul>
+<li><p>首先是没有重新训练情况下分类正确的情况：</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-28-013434.png" width="30%"></p>
+<ul>
+<li>在这些词语中，telly 和 TV 位于外在任务的训练集中，而 televison 只位于测试集中（图示为测试集结果）</li>
+</ul></li>
+<li><p>然后是重新训练后分类不正确的情况：</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-28-015017.png" width="30%"></p>
+<ul>
+<li>重新训练后 telly 和 TV 发生了偏移，而 television 没有变化，但决策边界发生了变化，因此导致分类出现了错误</li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="softmax-分类和正则化">Softmax 分类和正则化</h2>
+<ul>
+<li><p>考虑使用如下形式的 softmax 分类函数： <span class="math display">\[
+p(y_j=1|x) = \frac {\exp(W_jx)}{\sum_{c=1}^C\exp(W_cx)}
+\]</span></p>
+<ul>
+<li>这里计算的是词向量 <span class="math inline">\(x\)</span> 属于类别 <span class="math inline">\(j\)</span> 的概率</li>
+<li><p>使用交叉熵损失函数，可以得到一个训练样本的损失如下： <span class="math display">\[
+-\sum_{j=1}^C y_j \log(p(y_j=1|x)) = -\sum_{j=1}^C y_j \log \left(\frac {\exp(W_jx)}{\sum_{c=1}^C\exp(W_cx)} \right)
+\]</span></p>
+<ul>
+<li>因为 <span class="math inline">\(y_j\)</span> 只有一个 index 为 1（一般情况下），所以定义 <span class="math inline">\(k\)</span> 为正确类别的 index，则上述损失可以简写为： <span class="math display">\[
+- \log \left(\frac {\exp(W_kx)}{\sum_{c=1}^C\exp(W_cx)}\right)
+\]</span></li>
+</ul></li>
+<li><p>对于由 N 个点构成的数据集，代价函数为： <span class="math display">\[
+-\sum_{i=1}^N \log \left(\frac {\exp(W_{k(i)}x)}{\sum_{c=1}^C\exp(W_cx)}\right)
+\]</span></p>
+<ul>
+<li>其中 <span class="math inline">\(k(i)\)</span> 为一个函数，返回样本 <span class="math inline">\(x^{(i)}\)</span> 的正确分类 index</li>
+</ul></li>
+</ul></li>
+<li>对于上述代价函数，如果要训练模型权重 <span class="math inline">\(W\)</span> 和词向量 <span class="math inline">\(x\)</span>，需要更新的参数量是多少呢？
+<ul>
+<li>对于一个简单的线性分类器，假设其输入为一个 <span class="math inline">\(d\)</span> 维词向量，输出为一个含有 <span class="math inline">\(C\)</span> 个类别的分布
+<ul>
+<li>关于模型权重需要更新 <span class="math inline">\(C \cdot d\)</span> 个参数</li>
+<li>关于所有词向量需要更新 <span class="math inline">\(|V| \cdot d\)</span> 个参数</li>
+</ul></li>
+<li><p>因此，总的更新参数为 <span class="math inline">\(C \cdot d + |V| \cdot d\)</span> 个： <span class="math display">\[
+\nabla_\theta J(\theta) = \left[\begin{array}{cc}
+\nabla _{W_{\cdot 1}} \\
+\vdots \\
+\nabla _{W_{\cdot d}} \\
+\nabla _{x_{aardvark}} \\
+\vdots \\
+\nabla _{x_{zebra}}
+\end{array} 
+\right]
+\]</span></p>
+<ul>
+<li>如此大的参数量很容易引起过拟合</li>
+</ul></li>
+</ul></li>
+<li>为了减小过拟合的风险，我们引入一个正则项
+<ul>
+<li><p>其利用了贝叶斯学派的理论，对参数的规模进行了限制 <span class="math display">\[
+-\sum_{i=1}^N \log \left(\frac {\exp(W_{k(i)}x)}{\sum_{c=1}^C\exp(W_cx)}\right) + \lambda \sum_{k=1}^{C\cdot d + |V| \cdot d} \theta_k^2
+\]</span></p>
+<ul>
+<li>最小化上述的代价函数可以减小参数规模过大引起过拟合的可能性</li>
+<li>如果相关权重 <span class="math inline">\(\lambda\)</span> 调整适当，能够提升模型的可推广性</li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="窗口分类">窗口分类</h2>
+<ul>
+<li>之前我们使用的输入是单个词向量
+<ul>
+<li>实际上，在不同的上下文中相同词语有着不同的含义（语义或语法层面）</li>
+</ul></li>
+<li>因此，我们一般使用一个词语序列作为输入
+<ul>
+<li>该序列包含一个中心词及其上下文</li>
+<li>上下文的单词数量由上下文窗口大小决定</li>
+</ul></li>
+<li>对于不同的问题，上下文窗口的大小会发生变化，一般来说：
+<ul>
+<li>较小的窗口在语法层面上的表现更好</li>
+<li>较大的窗口在语义层面上的表现更好</li>
+</ul></li>
+<li><p>为了修改之前提到的 softmax 函数，用于基于窗口的词语分类，我们将 <span class="math inline">\(x^{(i)}\)</span> 用 <span class="math inline">\(x^{(i)}_{window}\)</span> 代替： <span class="math display">\[
+x^{(i)}_{window} = \left[\begin{array}{cc}
+x^{(i-2)} \\
+x^{(i-1)} \\
+x^{(i)} \\
+x^{(i+1)} \\
+x^{(i+2)}
+\end{array} 
+\right]
+\]</span></p>
+<ul>
+<li><p>计算关于词语的损失梯度如下所示： <span class="math display">\[
+\delta_{window} = \left[\begin{array}{cc}
+\nabla _{x^{(i-2)}} \\
+\nabla _{x^{(i-1)}} \\
+\nabla _{x^{(i)}} \\
+\nabla _{x^{(i+1)}} \\
+\nabla _{x^{(i+2)}}
+\end{array} 
+\right]
+\]</span></p>
+<ul>
+<li>实现时需要分配梯度来更新相应的词向量</li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="非线性分类器">非线性分类器</h2>
+<ul>
+<li><p>线性分类器能力有限，难以处理非线性的边界</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-30-040220.png" width="30%"></p></li>
+<li><p>下节开始我们将介绍神经网络，用以处理非线性的决策边界</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-30-040427.png" width="30%"></p></li>
+</ul>
+<h1 id="思维导图">思维导图</h1>
+<p><img src="http://media.zjubiomedit.com/2019-03-30-122722.png" width="100%"></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Zheyu Wang</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://xxwywzy.github.io/2019/03/30/cs224-2/" title="CS224N 学习笔记之二：词向量 2">https://xxwywzy.github.io/2019/03/30/cs224-2/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CS224N/" rel="tag"># CS224N</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/20/algorithm-1/" rel="next" title="《算法》第一章笔记：基础编程模型">
+                <i class="fa fa-chevron-left"></i> 《算法》第一章笔记：基础编程模型
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Zheyu Wang"/>
+            
+              <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+              <p class="site-description motion-element" itemprop="description">更に向こうへ</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">28</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">18</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/xxwywzy" title="GitHub &rarr; https://github.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://twitter.com/xxwywzy" title="Twitter &rarr; https://twitter.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="http://weibo.com/xxwywzy" title="Weibo &rarr; http://weibo.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://instagram.com/xxwywzy" title="Instagram &rarr; https://instagram.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#glove"><span class="nav-number">1.</span> <span class="nav-text">GloVe</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#与之前方法的比较"><span class="nav-number">1.1.</span> <span class="nav-text">与之前方法的比较</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#共现矩阵"><span class="nav-number">1.2.</span> <span class="nav-text">共现矩阵</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最小二乘目标函数"><span class="nav-number">1.3.</span> <span class="nav-text">最小二乘目标函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结论"><span class="nav-number">1.4.</span> <span class="nav-text">结论</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#词向量的评估"><span class="nav-number">2.</span> <span class="nav-text">词向量的评估</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#内在评估"><span class="nav-number">2.1.</span> <span class="nav-text">内在评估</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#外在评估"><span class="nav-number">2.2.</span> <span class="nav-text">外在评估</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内在评估案例词向量类比"><span class="nav-number">2.3.</span> <span class="nav-text">内在评估案例：词向量类比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内在评估调整案例类比评估"><span class="nav-number">2.4.</span> <span class="nav-text">内在评估调整案例：类比评估</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内在评估案例相关性评估"><span class="nav-number">2.5.</span> <span class="nav-text">内在评估案例：相关性评估</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#扩展阅读处理歧义"><span class="nav-number">2.6.</span> <span class="nav-text">扩展阅读：处理歧义</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#外在任务训练"><span class="nav-number">3.</span> <span class="nav-text">外在任务训练</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题的提出"><span class="nav-number">3.1.</span> <span class="nav-text">问题的提出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重新训练词向量"><span class="nav-number">3.2.</span> <span class="nav-text">重新训练词向量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#softmax-分类和正则化"><span class="nav-number">3.3.</span> <span class="nav-text">Softmax 分类和正则化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#窗口分类"><span class="nav-number">3.4.</span> <span class="nav-text">窗口分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#非线性分类器"><span class="nav-number">3.5.</span> <span class="nav-text">非线性分类器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#思维导图"><span class="nav-number">4.</span> <span class="nav-text">思维导图</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.5.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.0.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz',
+    appKey: 'IxP5URFEhxow4TfWyVNiowbH',
+    placeholder: '请在这里评论=￣ω￣=',
+    avatar: 'retro',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+</script>
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+  
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .fail(function ({ responseJSON }) {
+                console.log(`Failed to save Visitor num, with error message: ${responseJSON.error}`);
+              })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1 }))
+                .done(function() {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function() {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+        .fail(function ({ responseJSON }) {
+          console.log(`LeanCloud Counter Error: ${responseJSON.code} ${responseJSON.error}`);
+        });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz',
+                'X-LC-Key': 'IxP5URFEhxow4TfWyVNiowbH',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            addCount(Counter);
+          
+        });
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: "AMS"
+      }
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+      for (i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+<script src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+  overflow: auto hidden;
+}
+</style><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+    
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
