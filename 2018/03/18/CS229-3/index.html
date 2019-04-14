@@ -96,22 +96,20 @@
 
 
 
-  <meta name="description" content="本篇博客为CS229第三篇学习笔记，主要内容包括逻辑回归、感知器学习算法以及牛顿方法。">
-<meta name="keywords" content="CS229,机器学习,逻辑回归">
+  <meta name="description" content="本篇博客为 CS229 学习笔记第三部分，主题是：广义线性模型。">
+<meta name="keywords" content="CS229">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CS229学习笔记之三：逻辑回归">
+<meta property="og:title" content="CS229学习笔记之三：广义线性模型">
 <meta property="og:url" content="https://xxwywzy.github.io/2018/03/18/CS229-3/index.html">
 <meta property="og:site_name" content="xxwywzy&#39;s Blog">
-<meta property="og:description" content="本篇博客为CS229第三篇学习笔记，主要内容包括逻辑回归、感知器学习算法以及牛顿方法。">
+<meta property="og:description" content="本篇博客为 CS229 学习笔记第三部分，主题是：广义线性模型。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-133603.jpg">
-<meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-133612.png">
-<meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-133622.png">
-<meta property="og:updated_time" content="2019-02-01T14:17:59.599Z">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-14-062359.png">
+<meta property="og:updated_time" content="2019-04-14T06:31:53.337Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CS229学习笔记之三：逻辑回归">
-<meta name="twitter:description" content="本篇博客为CS229第三篇学习笔记，主要内容包括逻辑回归、感知器学习算法以及牛顿方法。">
-<meta name="twitter:image" content="http://media.zjubiomedit.com/2018-05-28-133603.jpg">
+<meta name="twitter:title" content="CS229学习笔记之三：广义线性模型">
+<meta name="twitter:description" content="本篇博客为 CS229 学习笔记第三部分，主题是：广义线性模型。">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2019-04-14-062359.png">
 
 
 
@@ -128,7 +126,7 @@
   };
 </script>
 
-  <title>CS229学习笔记之三：逻辑回归 | xxwywzy's Blog</title>
+  <title>CS229学习笔记之三：广义线性模型 | xxwywzy's Blog</title>
   
 
 
@@ -358,7 +356,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">CS229学习笔记之三：逻辑回归
+          <h1 class="post-title" itemprop="name headline">CS229学习笔记之三：广义线性模型
 
               
             
@@ -406,6 +404,13 @@
 
                 
                 
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/人工智能/机器学习/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a></span>
+
+                
+                
               
             </span>
           
@@ -429,7 +434,7 @@
 
           
           
-            <span id="/2018/03/18/CS229-3/" class="leancloud_visitors" data-flag-title="CS229学习笔记之三：逻辑回归">
+            <span id="/2018/03/18/CS229-3/" class="leancloud_visitors" data-flag-title="CS229学习笔记之三：广义线性模型">
               <span class="post-meta-divider">|</span>
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
@@ -460,83 +465,333 @@
       
 
       
-        <p><img src="http://media.zjubiomedit.com/2018-05-28-133603.jpg" width="75%" height="75%"></p>
-<p>本篇博客为CS229第三篇学习笔记，主要内容包括逻辑回归、感知器学习算法以及牛顿方法。</p>
+        <div class="note info">
+            本篇博客为 CS229 学习笔记第三部分，主题是：广义线性模型。 
+          </div>
 <a id="more"></a>
-<p>之前我们讨论的是<strong>回归问题</strong>，即输出是连续值，现在我们来讨论输出是离散值的<strong>分类问题</strong>。首先，我们专注于<strong>二元分类</strong>问题，即输出 <span class="math inline">\(y\)</span> 只能取 <span class="math inline">\(0\)</span> 和 <span class="math inline">\(1\)</span> 两个值。</p>
-<h3 id="逻辑回归">逻辑回归</h3>
-<p>如果将线性回归模型直接应用于分类问题，会产生取值不在 0 和 1 之间的问题，所以我们引入<strong>逻辑回归模型</strong>：</p>
-<p><span class="math display">\[
-h_{\theta}(x) = g(\theta^Tx) = \frac 1 {1+e^{-\theta^Tx}}
-\]</span> 其中 <span class="math display">\[
-g(z) = \frac 1 {1+e^{-z}}
-\]</span> 被称为<strong>逻辑函数</strong>或 <strong>S 型函数</strong>，其图像如下：</p>
-<p><img src="http://media.zjubiomedit.com/2018-05-28-133612.png" width="45%" height="45%"></p>
-<p>可以看到，当<span class="math inline">\(z \to +\infty\)</span>时<span class="math inline">\(g(z)\)</span>趋向于 <span class="math inline">\(1\)</span>， 当<span class="math inline">\(z \to -\infty\)</span>时<span class="math inline">\(g(z)\)</span>趋向于 <span class="math inline">\(0\)</span>，即<span class="math inline">\(g(z)\)</span>的值域为<span class="math inline">\((0,1)\)</span>，至于为什么要选择这个函数，在之后会作出解释。</p>
-<p>首先给出一个关于 S 型函数求导的有用性质： <span class="math display">\[
+<ul>
+<li>在前两章我们分别介绍了线性回归与逻辑回归
+<ul>
+<li>线性回归问题符合正态分布 <span class="math inline">\(y\mid x;\theta \sim {\cal N}\left( \mu ,\sigma ^{2}\right)\)</span></li>
+<li>逻辑回归问题符合伯努利分布 <span class="math inline">\(y\mid x;\theta \sim \text {Bernoulli}( \phi)\)</span></li>
+</ul></li>
+<li>实际上这些模型都是一个更为广泛的模型族的特例，这个模型族被称为<strong>广义线性模型</strong>（Generalized Linear Models）</li>
+</ul>
+<h1 id="指数族">指数族</h1>
+<ul>
+<li>为了引出广义线性模型，我们首先需要介绍<strong>指数族分布</strong></li>
+<li><p>如果一个分布可以被表示成如下形式，我们就称其属于指数分布族： <span class="math display">\[
+p(y;\eta) =b(y) \exp \left( \eta ^{T}T(y)-a(\eta)\right) \tag{1}
+\]</span></p>
+<ul>
+<li><span class="math inline">\(\eta\)</span> 被称为分布的<strong>自然参数</strong>（或者称为<strong>典范参数</strong>）</li>
+<li><span class="math inline">\(T(y)\)</span> 被称为<strong>充分统计量</strong>，通常 <span class="math inline">\(T(y)=y\)</span></li>
+<li><span class="math inline">\(a(\eta)\)</span> 被称为<strong>对数分割函数</strong></li>
+<li><span class="math inline">\(e^{-a(\eta)}\)</span> 本质上是一个归一化常数，确保概率 <span class="math inline">\(p(y;\eta)\)</span> 和为 1</li>
+</ul></li>
+<li>当选定 <span class="math inline">\(T,a,b\)</span> 时，我们就得到了一种以 <span class="math inline">\(\eta\)</span> 为参数的分布</li>
+<li><p>下面我们来证明伯努利和高斯分布属于指数分布族</p></li>
+</ul>
+<h2 id="伯努利分布的证明">伯努利分布的证明</h2>
+<ul>
+<li><p>伯努利分布可以表示为： <span class="math display">\[
 \begin{align*}
-g\prime (z) &amp;= \frac d {dz} \frac 1 {1+e^{-z}} \\
-&amp;= \frac 1 {(1+e^{-z})^2} (e^{-z}) \\
-&amp;= \frac 1 {1+e^{-z}} \cdot \left( 1- \frac 1 {1+e^{-z}}\right) \\
-&amp;= g(z)(1-g(z))
-\end{align*}
-\]</span> 确定了模型之后，我们需要找到合适的 <span class="math inline">\(\theta\)</span> 的值。这里采用之前使用的<strong>最大似然法</strong>来选择参数。（假设函数可以直接看作概率分布）</p>
-<p>首先，二元分类符合<strong>伯努利分布</strong>，我们假设： <span class="math display">\[
-\begin{align*}
-P(y=1 \mid x ;\theta) &amp;= h_{\theta}(x)\\
-P(y=0 \mid x ;\theta)  &amp;= 1-h_{\theta}(x)
-\end{align*}
-\]</span> 将上面的公式合二为一，得到： <span class="math display">\[
-P(y \mid x ; \theta) = (h_{\theta}(x))^y(1-h_{\theta}(x))^{1-y}
-\]</span> 假定 <span class="math inline">\(m\)</span> 个样本之间相互独立，我们可以得到 <span class="math inline">\(\theta\)</span> 的似然函数如下： <span class="math display">\[
-\begin{align*}
-L(\theta) &amp;= p(\vec y \mid X; \theta) \\
-&amp;= \prod_{i=1}^m p(y^{(i)} \mid x^{(i)};\theta) \\
-&amp;= \prod_{i=1}^m  \left(h_{\theta}(x^{(i)})\right)^{y^{(i)}}\left(1-h_{\theta}(x^{(i)})\right)^{1-y^{(i)} }
-\end{align*}
-\]</span> 与之前类似，为了计算方便，我们使用对数似然函数来进行最大化分析： <span class="math display">\[
-\begin{align*}
-\ell(\theta) &amp;= \log L(\theta) \\
-&amp;= \sum_{i=1}^m y^{(i)}\log h(x^{(i)})+(1-y^{(i)} )\log (1-h(x^{(i)}))
-\end{align*}
-\]</span> 下面要做的是找到<span class="math inline">\(\theta\)</span>使得<span class="math inline">\(\ell(θ)\)</span>最大，由于这里是找最大值而非最小值，所以使用<strong>梯度上升</strong>（gradient ascent），更新规则是<span class="math inline">\(\theta := \theta +\alpha \nabla_\theta \ell(\theta)\)</span>，对于随机梯度上升（每次只考虑一个样本），求导过程如下： <span class="math display">\[
-\begin{align*}
-\frac{\partial}{\partial \theta_j}\ell(\theta) &amp;= \left(y \frac 1 {g(\theta^Tx)}-(1-y)\frac 1 {1-g(\theta^Tx)}\right)\frac{\partial}{\partial \theta_j}g(\theta^Tx)\\
-&amp;= \left(y \frac 1 {g(\theta^Tx)}-(1-y)\frac 1 {1-g(\theta^Tx)}\right)g(\theta^Tx)(1-g(\theta^Tx))\frac{\partial}{\partial \theta_j}\theta^Tx \\
-&amp;= \left(y(1-g(\theta^Tx))-(1-y)g(\theta^Tx)\right)x_j\\
-&amp;= \left(y-h_\theta(x)\right)x_j
+p(y;\phi) &amp;= \phi^y(1-\phi)^{1-y} \\
+&amp;= \exp\left(y\log \phi+(1-y)\log (1-\phi)\right) \\
+&amp;= \exp \left(\left(\log\left(\frac \phi {1-\phi}\right)\right)y+\log(1-\phi)\right)
 \end{align*}
 \]</span></p>
-<p>在计算过程中使用到了 S 型函数的求导性质。综上所述，我们得到随机梯度上升的更新规则是：</p>
-<p><span class="math display">\[
-\theta_j := \theta_j +\alpha\left(y^{(i)}-h_\theta(x^{(i)})\right)x^{(i)}_j
-\]</span></p>
-<p>这个公式和线性回归中梯度下降的公式表面上看是一样的，但实际上两者的<span class="math inline">\(h_\theta(x)\)</span>有所不同。关于更加深层次的讨论，请参看之后的 GLM 模型章节。</p>
-<h3 id="感知器学习算法">感知器学习算法</h3>
-<p>这里谈感知器，好像有些离题，但感知机的函数定义如下： <span class="math display">\[
-g(z)=\left\{
+<ul>
+<li>自然参数 <span class="math inline">\(\eta=\log\left(\frac \phi {1-\phi}\right)\)</span>（这里自然参数不是向量，所以其转置不变）
+<ul>
+<li>从该式可以导出 <span class="math inline">\(\phi = \frac 1 {1+e^{-\eta}}\)</span>，这正是我们熟悉的 sigmoid 函数！</li>
+<li>之后我们推导逻辑回归是广义线性模型时会再提到这个</li>
+</ul></li>
+<li><p>现在，我们可以得到： <span class="math display">\[
 \begin{align*}
-&amp; 1 \quad \text{if} \;\text{z} \ge 0\\
-&amp; 0 \quad  \text{if} \;\text{z} &lt; 0
+T(y) &amp;= y \\
+a(\eta) &amp;= -\log(1-\phi)\\
+&amp;=\log(1+e^{\eta})\\
+b(y) &amp;= 1
 \end{align*}
-\right.
-\]</span> 可以看到它是逻辑回归的s型函数的简化形式，逻辑函数是连续的在 [0,1] 区间上，而感知器直接非0则1。如果我们令<span class="math inline">\(h_\theta(x)=g(\theta^Tx)\)</span>，得到如下的更新规则： <span class="math display">\[
-\theta_j := \theta_j +\alpha\left(y^{(i)}-h_\theta(x^{(i)})\right)x^{(i)}_j
-\]</span> 即<strong>感知器学习算法</strong>。</p>
-<p>19世纪60年代，感知器被看作是大脑工作中独立神经元的粗糙的模型，由于简单，会用作后面介绍的学习理论的起点。虽然直观看上去，感知器和之前看到的逻辑回归或线性回归很像，但是其实是非常不一样的算法。 因为，对于感知器，很难赋予一种有意义的概率解释，或使用最大似然估计算法来进行推导。</p>
-<h3 id="牛顿方法">牛顿方法</h3>
-<p>下面我们介绍另外一种算法来求解<span class="math inline">\(\ell (\theta)\)</span>的最大值，称为<strong>牛顿方法</strong>。</p>
-<p>我们通过如下的几张图来理解牛顿方法：</p>
-<p><img src="http://media.zjubiomedit.com/2018-05-28-133622.png" width="70%" height="70%"></p>
-<p>对于梯度下降，每次只是在梯度方向上下降一小步（取决于学习速率），而牛顿方法是一直下降到导数（切线）和<span class="math inline">\(\theta\)</span>轴交界的那个<span class="math inline">\(\theta\)</span>。因此牛顿方法的更新规则是： <span class="math display">\[
-\theta := \theta - \frac {f(\theta)} {f&#39; (\theta)}
-\]</span> 下面我们将牛顿方法应用于逻辑回归，我们需要找到<span class="math inline">\(\ell (\theta)\)</span>的最大值，即<span class="math inline">\(\ell &#39;(\theta)=0\)</span>，因此令<span class="math inline">\(f(\theta)=\ell &#39;(\theta)\)</span>，我们可以得到逻辑回归的牛顿方法更新公式： <span class="math display">\[
-\theta := \theta - \frac {\ell &#39;(\theta)} {\ell &#39;&#39; (\theta)}
-\]</span> 而对于<span class="math inline">\(\theta\)</span>为向量的情况，牛顿方法的多维形式如下（又被称为<strong>牛顿-拉夫逊方法</strong>）： <span class="math display">\[
-\theta := \theta - H^{-1} \nabla_\theta \ell(\theta)
-\]</span> 其中<span class="math inline">\(\ \nabla_\theta \ell(\theta)\)</span>是<span class="math inline">\(\ell(\theta)\)</span>对于每个<span class="math inline">\(\theta_i\)</span>的偏导数构成的向量，<span class="math inline">\(H\)</span>是一个<span class="math inline">\((n+1)\times (n+1)\)</span>的矩阵（包括截距项），称为 <strong>海森矩阵</strong>，其中的每一项定义为： <span class="math display">\[
-H_{ij}=\frac {\partial^2 \ell(\theta)} {\partial \theta_i \partial \theta_j}
-\]</span> 和（批量）梯度下降相比，牛顿方法会带来更快的收敛速度和更少的迭代次数。虽然每次迭代由于要计算<span class="math inline">\(H^{-1}\)</span>，导致计算量较大，但对于参数数量不是特别大的情况，总的来说它还是更快的。将牛顿方法用于求解逻辑回归的对数似然函数最大值，也被称为<strong>费雪评分</strong>。</p>
+\]</span></p>
+<ul>
+<li>这表明通过设定适当的 <span class="math inline">\(T,a,b\)</span> ，伯努利分布可以写成等式 (1) 的形式，即其属于指数族分布</li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="正态分布的证明">正态分布的证明</h2>
+<ul>
+<li><p>之前我们推导线性回归时得出了 <span class="math inline">\(\sigma\)</span> 的值对 <span class="math inline">\(\theta\)</span> 的选择没有影响，所以为了简化推导，这里设定<span class="math inline">\(\sigma^2=1\)</span>，于是我们有： <span class="math display">\[
+\begin{align*} 
+ p\left( y;\mu \right) &amp;=\dfrac {1} {\sqrt {2\pi }}\exp \left( -\dfrac {1} {2}\left( y-\mu \right) ^{2}\right) \\ 
+ &amp; =\dfrac {1} {\sqrt {2\pi }}\exp \left( -\dfrac {1} {2}y^{2}\right) \cdot \exp \left( \mu y-\frac 1 2 \mu^2\right) \end{align*}
+\]</span></p>
+<ul>
+<li>因此，通过如下选择，我们可以证明高斯分布属于指数族分布： <span class="math display">\[
+\begin{align*} 
+\eta &amp;= \mu\\
+T(y) &amp;= y\\
+a(\eta) &amp;= \mu^2/2 \\
+&amp;= \eta^2 \\
+b(y) &amp;= ( 1/\sqrt{2\pi}) \exp( -y^2/2)
+\end{align*}
+\]</span></li>
+</ul></li>
+<li><p>其实，还有许多其他的分布属于指数族，比如多项式分布、泊松分布、伽马分布等</p></li>
+</ul>
+<h1 id="构建广义线性模型">构建广义线性模型</h1>
+<ul>
+<li>首先，广义线性模型的构建需要基于以下三条假设：
+<ol type="1">
+<li><span class="math inline">\(y\mid x;\theta\)</span> 符合以 <span class="math inline">\(\eta\)</span> 为参数的指数族分布</li>
+<li>给定 <span class="math inline">\(x\)</span>，我们的目标是预测 <span class="math inline">\(T(y)\)</span> 的理想值，而在大多数的案例中，<span class="math inline">\(T(y) = y\)</span>
+<ul>
+<li>这意味着我们的假设 <span class="math inline">\(h\)</span> 应该满足 <span class="math inline">\(h(x)=E[y\mid x]\)</span>（可以从期望的定义上来进行理解，即反映随机变量平均取值的大小）</li>
+</ul></li>
+<li>自然参数 <span class="math inline">\(\eta\)</span> 和 输入 <span class="math inline">\(x\)</span> 满足线性关系 <span class="math inline">\(\eta=\theta^T x\)</span>（如果 <span class="math inline">\(\eta\)</span> 是向量，那么 <span class="math inline">\(\eta_i=\theta_i^T x\)</span> )</li>
+</ol></li>
+<li>基于上面三条假设，我们就可以利用广义线性模型来优雅地解决问题</li>
+<li>下面，我们将用广义线性模型来推导线性回归和逻辑回归的假设函数，并引出 softmax 回归</li>
+</ul>
+<h2 id="线性回归">线性回归</h2>
+<ul>
+<li>线性回归的目标变量（在 GLM 术语集中也称为<strong>反应变量</strong>）满足<strong>高斯分布</strong>：<span class="math inline">\(y\mid x;\theta \sim {\cal N}\left( \mu ,\sigma ^{2}\right)\)</span>
+<ul>
+<li>这里 <span class="math inline">\(\mu\)</span> 与 x 相关</li>
+</ul></li>
+<li><p>根据之前推导的结果，我们有： <span class="math display">\[
+\begin{align*}
+h_\theta(x) &amp;= E[y|x;\theta] \\
+&amp;= \mu \\
+&amp;= \eta \\
+&amp;= \theta^Tx
+\end{align*}
+\]</span></p>
+<ul>
+<li>第一个等式来源于假设 2</li>
+<li>第二个等式是高斯分布的性质</li>
+<li>第三个等式是之前推导过高斯分布属于指数族分布的条件</li>
+<li>最后一个等式则来源于假设 3</li>
+</ul></li>
+</ul>
+<h2 id="逻辑回归">逻辑回归</h2>
+<ul>
+<li>逻辑回归的反映变量满足<strong>伯努利分布</strong>：<span class="math inline">\(y\mid x;\theta \sim \text {Bernoulli}( \phi)\)</span>
+<ul>
+<li>之前我们在证明伯努利分布属于指数族分布时已经推导出了<span class="math inline">\(\phi = \frac 1 {1+e^{-\eta}}\)</span></li>
+<li><p>因此，与线性回归类似，我们有： <span class="math display">\[
+\begin{align*}
+h_\theta(x) &amp;= E[y|x;\theta] \\
+&amp;= \phi \\
+&amp;=\frac 1 {1+e^{-\eta}} \\
+&amp;=\frac 1 {1+e^{-\theta^Tx}}
+\end{align*}
+\]</span></p>
+<ul>
+<li>上式证明了为什么逻辑回归的假设函数是 sigmod 函数
+<ul>
+<li>当反应变量满足伯努利分布时，这是广义线性模型的定义导出的结果</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>此外，我们将表示分布均值（期望）与自然参数 <span class="math inline">\(\eta\)</span> 关系的函数 <span class="math inline">\(g(\eta) = E[T(y);\eta]\)</span> 称为<strong>正则响应函数</strong>（canonical response function）
+<ul>
+<li>将其反函数称为<strong>正则关联函数</strong>（canonical link function）</li>
+<li>因此，高斯分布的正则响应函数即为其本身，伯努利分布的正则响应函数即为逻辑函数</li>
+</ul></li>
+</ul>
+<h2 id="softmax-回归">softmax 回归</h2>
+<ul>
+<li>如果对于分类问题，<span class="math inline">\(y\)</span> 可以取 <span class="math inline">\(k\)</span> 个值（<span class="math inline">\(k&gt;2\)</span>），那么这就是一个多元分类问题
+<ul>
+<li>此时反应变量的条件概率分布模型为<strong>多项分布</strong></li>
+</ul></li>
+<li>下面让我们推导出多项分布数据的广义线性模型
+<ul>
+<li>在这之前，需要首先将多项式分布表示为指数族分布</li>
+</ul></li>
+<li>假设多项式分布有 <span class="math inline">\(k\)</span> 个输出，一般我们应该定义 <span class="math inline">\(k\)</span> 个参数 <span class="math inline">\(\phi_1, \ldots \phi_k\)</span> 来表示每个输出的概率，但这其实存在冗余，因为第 <span class="math inline">\(k\)</span> 个输出的概率可以用其他 <span class="math inline">\(k-1\)</span> 个输出的概率来表示（概率之和必定为 1 ）
+<ul>
+<li>因此，我们只定义 <span class="math inline">\(k-1\)</span> 个参数 <span class="math inline">\(\phi_1, \ldots \phi_{k-1}\)</span> ，其中 <span class="math inline">\(\phi_i = p(y=i;\phi)\)</span>，则 <span class="math inline">\(\phi_k = 1- \sum_{i=1}^{k-1}\phi_i\)</span>，
+<ul>
+<li>注意其并不是一个参数，而是由 <span class="math inline">\(\phi_1, \ldots \phi_{k-1}\)</span> 确定的</li>
+</ul></li>
+</ul></li>
+<li><p>为了将多项分布表示为指数族分布，我们首先定义 <span class="math inline">\(T(y) \in \mathbb{R}^{k-1}\)</span> 如下： <span class="math display">\[
+T(1) = \left[
+ \begin{matrix}
+   1  \\
+   0  \\
+   0  \\
+   \vdots \\
+   0
+  \end{matrix}
+  \right],
+  T(2) = \left[
+ \begin{matrix}
+   0  \\
+   1  \\
+   0  \\
+   \vdots \\
+   0
+  \end{matrix}
+  \right],
+  T(3) = \left[
+ \begin{matrix}
+   0  \\
+   0  \\
+   1  \\
+   \vdots \\
+   0
+  \end{matrix}
+  \right],\cdots
+  T(k-1) = \left[
+ \begin{matrix}
+   0  \\
+   0  \\
+   0  \\
+   \vdots \\
+   1
+  \end{matrix}
+  \right],
+  T(k) = \left[
+ \begin{matrix}
+   0  \\
+   0  \\
+   0  \\
+   \vdots \\
+   0
+  \end{matrix}
+  \right]
+\]</span></p>
+<ul>
+<li>与之前不同，<span class="math inline">\(T(y)\)</span> 与 <span class="math inline">\(y\)</span> 并不相等，<span class="math inline">\(T(y)\)</span> 是一个 <span class="math inline">\(k-1\)</span> 维的向量而非一个实数</li>
+<li>我们将用 <span class="math inline">\((T(y))_i\)</span> 来表示向量 <span class="math inline">\(T(y)\)</span> 的第 <span class="math inline">\(i\)</span> 个元素</li>
+</ul></li>
+<li><p>下面我们将再介绍一个有用的操作符：<span class="math inline">\(1\{\cdot\}\)</span>，其运算法则为： <span class="math display">\[
+1\{\text{True}\} =1, 1\{\text{False}\} =0
+\]</span></p>
+<ul>
+<li>例如：<span class="math inline">\(1\{2=3\} =0, 1\{3=5-2\} =1\)</span></li>
+</ul></li>
+<li><p>因此，我们可以得到如下等式： <span class="math display">\[
+(T(y))_i = 1\{y=i\}
+\]</span></p>
+<ul>
+<li>即只有当 <span class="math inline">\(y=i\)</span> 时，第 <span class="math inline">\(i\)</span> 个元素才为 1，其他都为 0</li>
+<li><p>进一步可以得到： <span class="math display">\[
+\text{E}[(T(y))_i] = P(y=i) = \phi_i
+\]</span></p>
+<ul>
+<li>因为求期望时，只有当 <span class="math inline">\(y=i\)</span> 时，乘积不为0</li>
+</ul></li>
+</ul></li>
+<li><p>基于上述结论，我们可以将多项分布表示为指数族分布： <span class="math display">\[
+\begin{align*}
+p(y;\phi) &amp;= \phi_1^{1\{y=1\}} \phi_2^{1\{y=2\}} \cdots  \phi_k^{1\{y=k\}}\\
+&amp;=\phi_1^{1\{y=1\}} \phi_2^{1\{y=2\}} \cdots  \phi_k^{1-\sum_{i=1}^{k-1}1\{y=i\}}\\
+&amp;= \phi_1^{(T(y))_1}\phi_2^{(T(y))_2} \cdots  \phi_k^{1-\sum_{i=1}^{k-1}(T(y))_i}\\
+&amp;=\exp\left(\left(T(y)\right)_1\log(\phi_1)+\left(T(y)\right)_2\log(\phi_2)+\cdots+\left(1-\sum_{i=1}^{k-1}\left(T(y)\right)_i\right)\log(\phi_k)\right)\\
+&amp;=\exp\left(\left(T(y)\right)_1\log\left(\phi_1/\phi_k\right)+\left(T(y)\right)_2\log\left(\phi_2/\phi_k\right)+\cdots+\left(T(y)\right)_{k-1}\log\left(\phi_{k-1}/\phi_k\right)+\log(\phi_k)\right)\\
+&amp;= b(y) \exp \left( \eta ^{T}T(y)-a(\eta)\right)
+\end{align*}
+\]</span></p>
+<ul>
+<li>其中： <span class="math display">\[
+\begin{align*}
+\eta &amp;=\left[
+ \begin{matrix}
+   \log\left(\phi_1/\phi_k\right)  \\
+  \log\left(\phi_1/\phi_k\right)  \\
+   \vdots \\
+   \log\left(\phi_{k-1}/\phi_k\right)
+  \end{matrix}
+  \right] \\
+  a(\eta) &amp;= -\log(\phi_k) \\
+  b(y) &amp;= 1
+\end{align*}
+\]</span></li>
+</ul></li>
+<li><p>上述推导表明了多项分布属于指数族分布，并得到了<strong>关联函数</strong>如下（前面已经证明了期望值即为 <span class="math inline">\(\phi_i\)</span> ）： <span class="math display">\[
+\eta_i = \log \frac{\phi_i}{\phi_k}
+\]</span></p></li>
+<li><p>类似地，我们定义 <span class="math inline">\(\eta_k = \log(\phi_k/\phi_k) = 0\)</span>。下面我们将推导出<strong>响应函数</strong>： <span class="math display">\[
+\begin{align*}
+e^{\eta_i} &amp;= \frac{\phi_i}{\phi_k} \\
+\phi_ke^{\eta_i} &amp;= \phi_i  \tag{2} \\
+\phi_k \sum_{i=1}^k e^{\eta_i} &amp;= \sum_{i=1}^k\phi_i = 1
+\end{align*}
+\]</span></p>
+<ul>
+<li><p>这表明 <span class="math inline">\(\phi_k = 1/\sum_{i=1}^k e^{\eta_i}\)</span>，将其代回（2）式，即可得到响应函数为： <span class="math display">\[
+\phi_i = \frac{e^{\eta_i}}{\sum_{j=1}^k e^{\eta_j} }
+\]</span></p>
+<ul>
+<li>这个将 <span class="math inline">\(\eta\)</span> 映射到 <span class="math inline">\(\phi\)</span> 的函数又被称为 <strong>softmax</strong>（柔性最大值）函数</li>
+</ul></li>
+</ul></li>
+<li>根据之前的假设 3，我们有 <span class="math inline">\(\eta_i=\theta_i^T x \ (i=1,\ldots,k-1)\)</span> ，其中 <span class="math inline">\(\phi_1,\ldots,\phi_{k-1} \in\mathbb{R}^{n+1}\)</span>
+<ul>
+<li><p>为了方便，我们定义<span class="math inline">\(\theta_k = 0\)</span>，这样 <span class="math inline">\(\eta_k = \theta_k^T x = 0\)</span>，因此，我们的模型给出 y 的条件分布如下： <span class="math display">\[
+\begin{align*}
+p(y=i \mid x;\theta) &amp;= \phi_i \\
+&amp;=  \frac{e^{\eta_i}}{\sum_{j=1}^k e^{\eta_j} } \\
+&amp;=  \frac{e^{\theta_i^T x}}{\sum_{j=1}^k e^{\theta_j^T x} } 
+\end{align*}
+\]</span></p></li>
+<li>这个模型可以应用于多元分类问题 <span class="math inline">\(y \in \{1,\ldots k\}\)</span>，被称为 <strong>softmax 回归</strong>，它是逻辑回归的推广</li>
+</ul></li>
+<li><p>综上，我们的假设函数为： <span class="math display">\[
+\begin{align*}
+h_{\theta}(x) &amp;= E[T(y)\mid x;\theta]\\
+ &amp;=E \left [
+ \begin{array}{c|c}
+    1\{y=1\}  \\
+ 1\{y=2\}  \\
+   \vdots &amp; x;\theta \\
+   1\{y=k-1\} 
+  \end{array}
+  \right] \\
+ &amp;= \left [
+ \begin{matrix}
+    \phi_1  \\
+ \phi_2  \\
+   \vdots \\
+   \phi_{k-1} 
+  \end{matrix}
+  \right] \\
+  &amp;= \left [
+ \begin{matrix}
+    \frac{e^{\theta_1^T x}}{\sum_{j=1}^k e^{\theta_j^T x} }   \\
+ \frac{e^{\theta_2^T x}}{\sum_{j=1}^k e^{\theta_j^T x} }   \\
+   \vdots \\
+   \frac{e^{\theta_{k-1}^T x}}{\sum_{j=1}^k e^{\theta_j^T x} } 
+  \end{matrix}
+  \right] 
+\end{align*}
+\]</span></p>
+<ul>
+<li>该假设函数给出了 <span class="math inline">\(y\)</span> 取每个可能的值的条件概率（<span class="math inline">\(i = 1,\ldots , k\)</span>）
+<ul>
+<li>其中 <span class="math inline">\(p(y=k \mid x;\theta)\)</span> 由 <span class="math inline">\(1-\sum_{i=1}^{k-1} \phi_i\)</span> 得到</li>
+</ul></li>
+</ul></li>
+<li>最后，我们来讨论 softmax 回归的参数拟合：
+<ul>
+<li><p>与之前类似，如果我们有一个训练集 <span class="math inline">\(\{(x^{(i)},y^{(i)}); i=1,\ldots,m\}\)</span>，希望学习出这个模型的参数 <span class="math inline">\(\theta_i\)</span>，我们首先会给出其对数似然函数： <span class="math display">\[
+\begin{align*}
+\ell(\theta) &amp;=\sum_{i=1}^m \log p(y^{(i)} \mid x^{(i)};\theta) \\
+&amp;= \sum_{i=1}^m \log \prod_{l=1}^k \left(\frac{e^{\theta_{l}^T x^{(i)}}}{\sum_{j=1}^k e^{\theta_j^T x^{(i)}} } \right)^{ 1\{y^{(i)}=l\} }
+\end{align*}
+\]</span></p>
+<ul>
+<li>下面我们就可以通过最大似然分析求出参数 <span class="math inline">\(\theta\)</span>，使用梯度上升或牛顿方法</li>
+</ul></li>
+</ul></li>
+</ul>
+<h1 id="思维导图">思维导图</h1>
+<p><img src="http://media.zjubiomedit.com/2019-04-14-062359.png" width="80%"></p>
 
       
     </div>
@@ -570,7 +825,7 @@ H_{ij}=\frac {\partial^2 \ell(\theta)} {\partial \theta_i \partial \theta_j}
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
     
-    <a href="https://xxwywzy.github.io/2018/03/18/CS229-3/" title="CS229学习笔记之三：逻辑回归">https://xxwywzy.github.io/2018/03/18/CS229-3/</a>
+    <a href="https://xxwywzy.github.io/2018/03/18/CS229-3/" title="CS229学习笔记之三：广义线性模型">https://xxwywzy.github.io/2018/03/18/CS229-3/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
@@ -584,10 +839,6 @@ H_{ij}=\frac {\partial^2 \ell(\theta)} {\partial \theta_i \partial \theta_j}
         <div class="post-tags">
           
             <a href="/tags/CS229/" rel="tag"># CS229</a>
-          
-            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
-          
-            <a href="/tags/逻辑回归/" rel="tag"># 逻辑回归</a>
           
         </div>
       
@@ -882,7 +1133,7 @@ H_{ij}=\frac {\partial^2 \ell(\theta)} {\partial \theta_i \partial \theta_j}
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#逻辑回归"><span class="nav-number">1.</span> <span class="nav-text">逻辑回归</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#感知器学习算法"><span class="nav-number">2.</span> <span class="nav-text">感知器学习算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#牛顿方法"><span class="nav-number">3.</span> <span class="nav-text">牛顿方法</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#指数族"><span class="nav-number">1.</span> <span class="nav-text">指数族</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#伯努利分布的证明"><span class="nav-number">1.1.</span> <span class="nav-text">伯努利分布的证明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#正态分布的证明"><span class="nav-number">1.2.</span> <span class="nav-text">正态分布的证明</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#构建广义线性模型"><span class="nav-number">2.</span> <span class="nav-text">构建广义线性模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#线性回归"><span class="nav-number">2.1.</span> <span class="nav-text">线性回归</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#逻辑回归"><span class="nav-number">2.2.</span> <span class="nav-text">逻辑回归</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#softmax-回归"><span class="nav-number">2.3.</span> <span class="nav-text">softmax 回归</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#思维导图"><span class="nav-number">3.</span> <span class="nav-text">思维导图</span></a></li></ol></div>
             
 
           </div>
