@@ -1,0 +1,1657 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2"/>
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0"/>
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/favicon.png?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本篇博客为 CS229 学习笔记第十三部分，主题是：决策树与集成方法。">
+<meta name="keywords" content="CS229">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CS229 学习笔记之十三：决策树与集成方法">
+<meta property="og:url" content="https://xxwywzy.github.io/2019/04/19/cs229-13/index.html">
+<meta property="og:site_name" content="xxwywzy&#39;s Blog">
+<meta property="og:description" content="本篇博客为 CS229 学习笔记第十三部分，主题是：决策树与集成方法。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-14-070139.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-14-074357.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-14-082819.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-14-085228.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-15-125938.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-15-125221.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-19-072905.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-19-073940.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-19-075929.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-19-085823.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-20-043542.png">
+<meta property="og:updated_time" content="2019-04-20T04:36:12.439Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CS229 学习笔记之十三：决策树与集成方法">
+<meta name="twitter:description" content="本篇博客为 CS229 学习笔记第十三部分，主题是：决策树与集成方法。">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2019-04-14-070139.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://xxwywzy.github.io/2019/04/19/cs229-13/"/>
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>CS229 学习笔记之十三：决策树与集成方法 | xxwywzy's Blog</title>
+  
+
+
+
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a02b5462e7522b1ed191c4cea6b1d6e6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xxwywzy's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Long may the sunshine</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br/>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br/>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br/>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br/>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2019/04/19/cs229-13/"/>
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zheyu Wang"/>
+      <meta itemprop="description" content="更に向こうへ"/>
+      <meta itemprop="image" content="/images/avatar.png"/>
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xxwywzy's Blog"/>
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">CS229 学习笔记之十三：决策树与集成方法
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-19 09:32:13" itemprop="dateCreated datePublished" datetime="2019-04-19T09:32:13+08:00">2019-04-19</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/人工智能/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/人工智能/机器学习/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <a href="/2019/04/19/cs229-13/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/04/19/cs229-13/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+            <span id="/2019/04/19/cs229-13/" class="leancloud_visitors" data-flag-title="CS229 学习笔记之十三：决策树与集成方法">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <div class="note info">
+            本篇博客为 CS229 学习笔记第十三部分，主题是：决策树与集成方法。 
+          </div>
+<a id="more"></a>
+<h1 id="决策树">决策树</h1>
+<ul>
+<li>本节将介绍决策树，一种简单而灵活的算法
+<ul>
+<li>首先将介绍决策树的非线性与基于区域的特征</li>
+<li>然后对基于区域的损失函数进行定义与对比</li>
+<li>最后给出这些方法的优缺点（进而引出集成方法）</li>
+</ul></li>
+</ul>
+<h2 id="非线性">非线性</h2>
+<ul>
+<li>决策树是一种天生支持<strong>非线性</strong>的机器学习算法</li>
+<li><p>正式来说，如果一个方法是线性的，则其输入 <span class="math inline">\(x \in \mathbb{R}^n\)</span> 会输出下面形式的假设函数： <span class="math display">\[
+h(x)=\theta^{T}x
+\]</span></p>
+<ul>
+<li>其中 <span class="math inline">\(\theta \in \mathbb{R}^{n}\)</span></li>
+<li>截距项内置（<span class="math inline">\(x_0 = 1\)</span>）</li>
+</ul></li>
+<li>不能被化简为上述形式的假设函数即称为非线性
+<ul>
+<li>如果一个方法输出非线性的假设函数，则该方法也为非线性</li>
+<li>之前我们介绍了对线性方法引入核函数，通过特征映射可以得到非线性的假设函数</li>
+</ul></li>
+<li>与核方法相比，决策树则可以直接输出非线性的假设函数
+<ul>
+<li><p>下图给出了基于时间与地点判断该地区能否滑雪的数据</p>
+<p><img src="http://media.zjubiomedit.com/2019-04-14-070139.png" width="70%"></p>
+<ul>
+<li>可以看到该数据无法找出线性决策边界</li>
+<li>但是我们可以将输入空间 <span class="math inline">\(\mathcal{X}\)</span> 划分为不同的区域 <span class="math inline">\(R_i\)</span>： <span class="math display">\[
+\begin{aligned} \mathcal{X} &amp;=\bigcup_{i=0}^{n} R_{i} \\ \text { s.t. } &amp; R_{i} \cap R_{j}=\emptyset \text { for } i \neq j \end{aligned}
+\]</span></li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="选择区域">选择区域</h2>
+<ul>
+<li>一般来说，选择最优的区域是较困难的</li>
+<li>决策树通过<strong>贪婪、自顶向下，递归的分割</strong>来进行区域的选择
+<ul>
+<li>具体来说，我们首先从原始的输入空间 <span class="math inline">\(\mathcal{X}\)</span> 开始，基于单个特征的某个阈值将其划分为两个子区域</li>
+<li>然后再选择其中一个子区域，基于新的阈值进行划分</li>
+<li>我们持续以这种递归的方式训练模型：选择叶子节点（区域）、特征和阈值来形成一次新的分割</li>
+<li>形式上说，给定一个父区域 <span class="math inline">\(R_p\)</span>，一个特征索引 <span class="math inline">\(j\)</span> 和一个阈值 <span class="math inline">\(t \in \mathbb{R}\)</span>，我们可以得到如下的两个子区域 <span class="math inline">\(R_1\)</span> 和 <span class="math inline">\(R_2\)</span>： <span class="math display">\[
+\begin{array}{l}{R_{1}=\left\{X | X_{j}&lt;t, X \in R_{p}\right\}} \\ {R_{2}=\left\{X | X_{j} \geq t, X \in R_{p}\right\}}\end{array}
+\]</span></li>
+</ul></li>
+<li><p>对于之前的滑雪数据集，决策树的执行过程如下图所示：</p>
+<p><img src="http://media.zjubiomedit.com/2019-04-14-074357.png" width="70%"></p>
+<ul>
+<li>这一过程将持续至满足某个停止条件（之后细说）</li>
+<li>然后对每个叶子区域预测其所属类别</li>
+</ul></li>
+</ul>
+<h2 id="定义一个损失函数">定义一个损失函数</h2>
+<ul>
+<li>对于上面的过程，一个自然的问题是如何选择分割
+<ul>
+<li>我们可以基于区域集来定义损失函数 <span class="math inline">\(L\)</span></li>
+</ul></li>
+<li><p>给定一个父区域 <span class="math inline">\(R_p\)</span> 和两个子区域 <span class="math inline">\(R_1\)</span> 和 <span class="math inline">\(R_2\)</span>，我们可以计算父区域的损失 <span class="math inline">\(L(R_p)\)</span> 和子区域的基数加权损失： <span class="math display">\[
+\frac{\left|R_{1}\right| L\left(R_{1}\right)+\left|R_{2}\right| L\left(R_{2}\right)}{\left|R_{1}\right|+\left|R_{2}\right|}
+\]</span></p></li>
+<li><p>在我们的贪婪分割框架中，我们希望选择区域、特征和阈值来使得损失减少最大化： <span class="math display">\[
+L\left(R_{p}\right)-\frac{\left|R_{1}\right| L\left(R_{1}\right)+\left|R_{2}\right| L\left(R_{2}\right)}{\left|R_{1}\right|+\left|R_{2}\right|}
+\]</span></p></li>
+</ul>
+<h3 id="错误分类损失">错误分类损失</h3>
+<ul>
+<li>对于一个分类问题，我们感兴趣的是<strong>错误分类的损失</strong> <span class="math inline">\(L_{misclass}\)</span>
+<ul>
+<li>对于一个区域 <span class="math inline">\(R\)</span>，令 <span class="math inline">\(\hat{p}_{c}\)</span> 为区域中类别为 c 的样本比例</li>
+<li><p>则 <span class="math inline">\(R\)</span> 的错误分类损失可以写作： <span class="math display">\[
+L_{misclass}(R)=1-\max _{c}\left(\hat{p}_{c}\right)
+\]</span></p>
+<ul>
+<li>该公式可以理解为我们将区域中样本数量最多的类作为希望该区域分割出的类别，则剩余的样本即为错误分类的样本</li>
+</ul></li>
+</ul></li>
+<li><p>然而，虽然错误分类损失是分类好坏的最终体现，但其对类别的概率并不敏感</p>
+<ul>
+<li><p>下面的二分类例子体现了这一点：</p>
+<p><img src="http://media.zjubiomedit.com/2019-04-14-082819.png" width="80%"></p>
+<ul>
+<li><p>左侧的分割方式可以孤立出更多的正样本，看上去更好，但是： <span class="math display">\[
+L\left(R_{p}\right)=\frac{\left|R_{1}\right| L\left(R_{1}\right)+\left|R_{2}\right| L\left(R_{2}\right)}{\left|R_{1}\right|+\left|R_{2}\right|}=\frac{\left|R_{1}^{\prime}\right| L\left(R_{1}^{\prime}\right)+\left|R_{2}^{\prime}\right| L\left(R_{2}^{\prime}\right)}{\left|R_{1}^{\prime}\right|+\left|R_{2}^{\prime}\right|}= \frac 1 5
+\]</span></p>
+<ul>
+<li>可以看到，在错误分类损失函数下，两种分割方式的损失相同，而且也不能降低父区域的损失</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+<h3 id="交叉熵损失">交叉熵损失</h3>
+<ul>
+<li><p>因此，我们需要定义一个更加敏感的损失函数，这里将使用<strong>交叉熵损失</strong> <span class="math inline">\(L_{cross}\)</span>： <span class="math display">\[
+L_{cross}(R)=-\sum_{c} \hat{p}_{c} \log _{2} \hat{p}_{c}
+\]</span></p>
+<ul>
+<li>其中 <span class="math inline">\(\hat{p} \log _{2} \hat{p} \equiv 0 \text { if } \hat{p}=0\)</span></li>
+<li>从信息论的角度看，交叉熵测量了在分布已知的情况下，为了特定输出所需要的比特的数量
+<ul>
+<li>进一步来说，从父区域到子区域的损失的减少可以看做是信息的增加</li>
+</ul></li>
+</ul></li>
+<li>为了理解上述两种损失函数之间的敏感性的差别，我们将上面的二分类的例子的损失函数进行作图表述
+<ul>
+<li><p>对于该例，我们可以将损失函数简化为仅依赖于正样本 <span class="math inline">\(\hat{p}_i\)</span> （在区域 <span class="math inline">\(R_i\)</span> 中） <span class="math display">\[
+\begin{array}{l}{L_{misclass}(R)=L_{misclass}(\hat{p})=1-\max (\hat{p}, 1-\hat{p})} \\ {L_{cross}(R)=L_{cross}(\hat{p})=-\hat{p} \log \hat{p}-(1-\hat{p}) \log (1-\hat{p})}\end{array}
+\]</span></p></li>
+<li><p>两个函数的图像如下：</p>
+<p><img src="http://media.zjubiomedit.com/2019-04-14-085228.png" width="80%"></p>
+<ul>
+<li>在左图中，我们标出了之前例子中的左边的分割
+<ul>
+<li>因为交叉熵损失严格凹，所以可以看出只要 <span class="math inline">\(\hat{p}_{1} \neq \hat{p}_{2}\)</span> 且子区域非空，则其加权损失一定比起父区域的损失要小</li>
+</ul></li>
+<li>而对于右图，由于函数不是严格凹，因此不能保证子区域的加权损失一定小于父区域</li>
+<li>基于这种敏感性，在决策树分类时通常使用交叉熵损失函数</li>
+</ul></li>
+</ul></li>
+</ul>
+<h3 id="平方损失">平方损失</h3>
+<ul>
+<li>对于回归问题，则不能使用上述的损失函数
+<ul>
+<li>对每个数据点 <span class="math inline">\(x_i\)</span>，我们现在都会有一个对应的值 <span class="math inline">\(y_{i} \in \mathbb{R}\)</span> 希望去预测</li>
+</ul></li>
+<li><p>与分类问题对比，决策树的训练过程大体相同，区别在于对于一个区域 <span class="math inline">\(R\)</span>，最终输出为其中所有值的平均： <span class="math display">\[
+\hat{y}=\frac{\sum_{i \in R} y_{i}}{|R|}
+\]</span></p>
+<ul>
+<li>这种情况下我们可以直接使用<strong>平方损失</strong>来选择分割： <span class="math display">\[
+L_{squared}(R)=\frac{\sum_{i \in R}\left(y_{i}-\hat{y}\right)^{2}}{|R|}
+\]</span></li>
+</ul></li>
+</ul>
+<h2 id="其他考量">其他考量</h2>
+<ul>
+<li>决策树的流行很大程度上归功于其原理的简单易懂，以及其高度的可解释性
+<ul>
+<li>我们可以查看生成的阈值集来了解为什么模型作出了该预测</li>
+</ul></li>
+<li>然而，这并不是决策树的全部
+<ul>
+<li>下面将介绍一些关于决策树的值得注意的点</li>
+</ul></li>
+</ul>
+<h3 id="分类变量">分类变量</h3>
+<ul>
+<li>决策树的另一个优点是其可以轻松地处理类别变量（指输入）</li>
+<li><p>以之前的滑雪数据为例，将位置变量表示为类别变量（南半球、北半球或赤道） <span class="math display">\[
+\operatorname{loc} \in\{N, S, E\}
+\]</span></p>
+<ul>
+<li>其他算法可能需要先进行预处理（如独热编码），将类别变量转化为定量特征</li>
+<li><p>而对于决策树，我们可以直接处理分类变量，如下图所示：</p>
+<p><img src="http://media.zjubiomedit.com/2019-04-15-125938.png" width="50%"></p></li>
+</ul></li>
+<li>需要注意的是，我们要防止类别过多的情况出现
+<ul>
+<li>这会导致计算过于复杂，以及过拟合的出现</li>
+<li>这时应该考虑将类别变量进行低维度的定量表达</li>
+</ul></li>
+</ul>
+<h3 id="正则化">正则化</h3>
+<ul>
+<li>之前我们提到了需要一些停止规则来判定何时停止树的生长</li>
+<li>最简单的停止规则即为直到每个区域只包含一个训练数据点
+<ul>
+<li>很明显，这种规则会引起模型的高方差与低偏差（过拟合）</li>
+</ul></li>
+<li>我们需要一些启发性的停止规则来进行正则化，常用的规则包括：
+<ul>
+<li><strong>最小化叶子规模</strong>：当区域的基数低于某个阈值时，停止分割该区域</li>
+<li><strong>最小化深度</strong>：如果某个区域进行的分割次数超过了某个阈值，则停止分割</li>
+<li><strong>最小化节点数量：</strong>当一个树拥有了超过某个阈值的叶子节点，则停止生长</li>
+</ul></li>
+<li>除了上述规则外，还可能想到的一个启发式规则是使得每次切分后的损失降低最小
+<ul>
+<li>这种方法是存在问题的，因为决策树是基于单个特征的贪婪算法，可能导致遗失某些高阶的互动</li>
+<li>如果基于多个特征设定阈值来获得更好的分割，则可能难以在初期的分割中获得较好的损失下降，最终导致算法过早地终止
+<ul>
+<li>这里不太懂笔记里的意思，我的理解是这个规则和之前最大化损失降低的原则相违背</li>
+</ul></li>
+</ul></li>
+<li>还有一种较好的方法是将树完全生长出来，然后基于验证集修剪那些使得错误分类或平方误差减少最小的叶子节点</li>
+</ul>
+<h3 id="运行时间">运行时间</h3>
+<ul>
+<li>下面简单介绍决策树的运行时间
+<ul>
+<li>为了简化分析，这里考虑二元分类问题，其中包含 <span class="math inline">\(n\)</span> 个样本、<span class="math inline">\(f\)</span> 个特征以及一个深度为 <span class="math inline">\(d\)</span> 的树</li>
+</ul></li>
+<li>在测试时，对于一个样本点，我们搜索树直到一个叶子节点，然后输出预测，运行时间为 <span class="math inline">\(O(d)\)</span>
+<ul>
+<li>如果我们的树是平衡的，则 <span class="math inline">\(d = O(\log n)\)</span>
+<ul>
+<li>这种情况下，测试时间一般来说是相当快的</li>
+</ul></li>
+</ul></li>
+<li>在训练时，每个数据点最多只会在 <span class="math inline">\(O(d)\)</span> 个节点中出现
+<ul>
+<li>通过排序和对中间值的智能缓存，我们可以使得针对每个节点的每个数据点的每个特征，其分摊运行时间为 <span class="math inline">\(O(1)\)</span></li>
+<li>因此，总的运行时间为 <span class="math inline">\(O(nfd)\)</span>
+<ul>
+<li>对于一个维数为 <span class="math inline">\(n \times f\)</span> 的数据矩阵来说，这是一个相当快的运行时间</li>
+</ul></li>
+</ul></li>
+</ul>
+<h3 id="加性结构的缺失">加性结构的缺失</h3>
+<ul>
+<li>决策树的一个缺点是其不能轻易地捕捉加性结构</li>
+<li><p>在下面的例子中，决策树每一次分割只能考虑一个特征，而线性模型则可以直接导出右图所示的边界：</p>
+<p><img src="http://media.zjubiomedit.com/2019-04-15-125221.png" width="70%"></p>
+<ul>
+<li>一些研究对决策树进行了改进使其能够同时考虑多个特征
+<ul>
+<li>但还是存在增加方差和减少可解释性的缺点</li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="总结">总结</h2>
+<ul>
+<li>决策树的主要优点是：
+<ul>
+<li>易于理解</li>
+<li>可解释性</li>
+<li>支持分类变量</li>
+<li>速度快</li>
+</ul></li>
+<li>决策树的缺点包括：
+<ul>
+<li>高方差</li>
+<li>对加性模型的建模支持较差</li>
+</ul></li>
+<li>上述缺点会导致单个决策树的整体预测准确率较低
+<ul>
+<li>解决这个问题的常见方法是使用<strong>集成学习</strong>（下一章介绍）</li>
+</ul></li>
+</ul>
+<h1 id="集成方法">集成方法</h1>
+<ul>
+<li>集成方法就是将多个训练模型的输出结合起来
+<ul>
+<li>我们将使用偏差-方差分析以及以决策树为例来探究集成方法的利弊</li>
+</ul></li>
+<li>首先，让我们用一个基础概率论的例子证明集成方法的优势所在
+<ul>
+<li>假设我们有 n 个独立同分布的随机变量 <span class="math inline">\(X_i\)</span></li>
+<li>假定对于所有 <span class="math inline">\(X_i\)</span> 均有 <span class="math inline">\(\operatorname{Var}\left(X_{i}\right)=\sigma^{2}\)</span>
+<ul>
+<li>则平均值的方差为： <span class="math display">\[
+\operatorname{Var}(\bar{X})=\operatorname{Var}\left(\frac{1}{n} \sum_{i} X_{i}\right)=\frac{\sigma^{2}}{n}
+\]</span></li>
+</ul></li>
+<li>如果我们抛弃了独立假设，即变量仅为同分布
+<ul>
+<li>相对地，<span class="math inline">\(X_i\)</span> 之间的关联系数为 <span class="math inline">\(\rho\)</span></li>
+<li><p>则平均值的方差为： <span class="math display">\[
+\begin{aligned} \operatorname{Var}(\bar{X}) &amp;=\operatorname{Var}\left(\frac{1}{n} \sum_{i} X_{i}\right) \\ &amp;=\frac{1}{n^{2}} \sum_{i, j} \operatorname{Cov}\left(X_{i}, X_{j}\right) \\ &amp;=\frac{n \sigma^{2}}{n^{2}}+\frac{n(n-1) \rho \sigma^{2}}{n^{2}} \\ &amp;=\rho \sigma^{2}+\frac{1-\rho}{n} \sigma^{2} \end{aligned}
+\]</span></p>
+<ul>
+<li>在第三步中，使用了皮尔逊相关系数的定义 <span class="math inline">\(\rho_{X, Y}=\frac{\operatorname{Cov}(X, Y)}{\sigma_{x} \sigma_{y}}\)</span> 以及 <span class="math inline">\(\operatorname{Cov}(X, X)=\operatorname{Var}(X)\)</span></li>
+</ul></li>
+</ul></li>
+<li>现在，如果我们将每个随机变量想象为一个给定模型的误差
+<ul>
+<li>则增加模型数量以及降低模型之间的相关性都可以减少集成后的模型误差的方差
+<ul>
+<li>增加模型数量减少第二项的值</li>
+<li>降低模型之间的相关性减少第一项的值，使得各变量回归独立同分布</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>生成不相关的模型的方法有很多种，包括：
+<ul>
+<li>使用不同的算法</li>
+<li>使用不同的训练集</li>
+<li>装袋法（Bagging）</li>
+<li>提升法（Boosting）</li>
+</ul></li>
+<li>虽然前两种方法很直接，但其需要较大的工作量
+<ul>
+<li>下面将介绍后两种方法：装袋法与提升法
+<ul>
+<li>以及他们在决策树中的特殊应用</li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="装袋法">装袋法</h2>
+<ul>
+<li>Bagging 代表 Boostrap Aggregation
+<ul>
+<li>是一种<strong>减少方差</strong>的集成方法</li>
+</ul></li>
+</ul>
+<h3 id="自助bootstrap">自助（Bootstrap）</h3>
+<ul>
+<li>自助法是一种来源于统计学的方法
+<ul>
+<li>其最初的目的是测量某些估计量（如均值）的不确定性</li>
+</ul></li>
+<li>假定我们有一个总体 <span class="math inline">\(P\)</span>，希望去计算其的某个估计量
+<ul>
+<li>以及一个采样自 <span class="math inline">\(P\)</span> 的训练集 <span class="math inline">\(S\)</span>（<span class="math inline">\(S \sim P\)</span>）</li>
+</ul></li>
+<li>虽然我们可以通过计算 <span class="math inline">\(S\)</span> 的估计量来近似 <span class="math inline">\(P\)</span> 的估计量
+<ul>
+<li>但我们无法得知其与真实值的误差</li>
+<li>为了做到这一点我们需要采样自 <span class="math inline">\(P\)</span> 的多个独立训练集 <span class="math inline">\(S_{1}, S_{2}, \dots\)</span></li>
+</ul></li>
+<li>自助法的思路是假设 <span class="math inline">\(S=P\)</span>，则我们可以生成一个新的 bootstrap 集 <span class="math inline">\(Z\)</span> 采样自 <span class="math inline">\(S\)</span>（<span class="math inline">\(Z \sim S,|Z|=|S|\)</span>）
+<ul>
+<li>我们可以生成多个这样的样本 <span class="math inline">\(Z_{1}, Z_{2}, \dots, Z_{M}\)</span></li>
+<li>然后通过这些自助集上的估计量的方差来得到对误差的估计</li>
+</ul></li>
+</ul>
+<h3 id="聚合aggregation">聚合（Aggregation）</h3>
+<ul>
+<li><p>对于集成方法，我们可以用每个样本 <span class="math inline">\(Z_m\)</span> 去训练一个机器学习模型 <span class="math inline">\(G_m\)</span>，然后定义如下的聚合模型： <span class="math display">\[
+G(X)=\sum_{m} \frac{G_{m}(x)}{M}
+\]</span></p>
+<ul>
+<li>这一过程即称为 <strong>bagging</strong></li>
+<li><p>在之前的推到中，我们得出 <span class="math inline">\(M\)</span> 个相关模型的方差为： <span class="math display">\[
+\operatorname{Var}(\bar{X})=\rho \sigma^{2}+\frac{1-\rho}{M} \sigma^{2}
+\]</span></p>
+<ul>
+<li>bagging 通过在不同数据集上训练模型来减少模型之间的关联性 <span class="math inline">\(\rho\)</span></li>
+<li>虽然单个模型的偏差会增加因为其没有使用全部训练集
+<ul>
+<li>但是方差的减少弥补了偏差增加的影响</li>
+</ul></li>
+<li>此外，增加模型的数量并不会导致额外的过拟合，因为 <span class="math inline">\(\rho\)</span> 对 <span class="math inline">\(M\)</span> 不敏感
+<ul>
+<li>因此总体方差只会下降</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>bagging 的另外一个好处是<strong>袋外估计</strong>（out-of-bag estimation）
+<ul>
+<li>可以证明每个 bootstrap 样本都只包含大概 <span class="math inline">\(\frac 2 3\)</span> 的样本
+<ul>
+<li>因此可以用剩下的 <span class="math inline">\(\frac 1 3\)</span> 样本来进行误差估计，称为袋外误差</li>
+<li>在极限情况下，<span class="math inline">\(M \rightarrow \infty\)</span>，袋外误差就等价于留一较差验证</li>
+</ul></li>
+</ul></li>
+</ul>
+<h3 id="装袋法-决策树">装袋法 + 决策树</h3>
+<ul>
+<li>完全生长的决策树具有高方差、低偏差的特点
+<ul>
+<li>因此 bagging 降低方差的效果可以很好的弥补上述不足</li>
+</ul></li>
+<li>此外，bagging 还可以处理缺失特征
+<ul>
+<li>如果一个特征有缺失，则排除在分割中使用到该特征的树
+<ul>
+<li>不过当该特征是重要的预测依据时，它仍然会保留在大部分的树中</li>
+</ul></li>
+</ul></li>
+<li>袋装决策树的一个缺点是失去了单个决策树的内在可解释性
+<ul>
+<li>我们可以通过一种叫<strong>变量重要性测量</strong>的方法来一定程度上恢复模型的洞察力
+<ul>
+<li>对于每个特征，找出在集成中使用到该特征的每一个分割</li>
+<li>并将所有这些分割导致的损失函数的降低进行平均</li>
+<li>这种方法与衡量缺少该特征会引起多少性能下降有所不同
+<ul>
+<li>因为这些分割中也包含了其他特征</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>关于袋装决策树的最后一个重要内容是<strong>随机森林</strong>方法
+<ul>
+<li>如果我们的数据集包含了一个非常强的预测器（特征）
+<ul>
+<li>则我们的袋装树总会使用该特征来进行分割，导致了模型之间的关联性上升</li>
+</ul></li>
+<li>而随机森林算法中每次分割我们只允许使用特征的一个子集
+<ul>
+<li>这样可以降低关联性 <span class="math inline">\(\rho\)</span>，从而导致方差的下降</li>
+<li>这种方法同时也会导致方差的上升，由于对特征空间的限制
+<ul>
+<li>但是与常规的袋装决策树一样这并不会有什么影响</li>
+</ul></li>
+</ul></li>
+<li>最终，即便是非常有用的特征也不会出现在每个树中
+<ul>
+<li>假设树的数量足够且每次分割对特征有充分的限制</li>
+<li>这种方法同时还能更优雅地处理缺失特征</li>
+</ul></li>
+</ul></li>
+</ul>
+<h3 id="总结-1">总结</h3>
+<ul>
+<li>对于决策树，装袋法的主要优点有：
+<ul>
+<li>降低方差（决策森林更加显著）</li>
+<li>更好的准确性</li>
+<li>自由的验证集</li>
+<li>支持缺失值</li>
+</ul></li>
+<li>其缺点包括：
+<ul>
+<li>偏差的增加（决策森林更加显著）</li>
+<li>可解释性差</li>
+<li>依然缺乏加性</li>
+<li>计算成本更高</li>
+</ul></li>
+</ul>
+<h2 id="提升法">提升法</h2>
+<h3 id="直观理解">直观理解</h3>
+<ul>
+<li>装袋法是一种降低方差的技术，而提升法则是一种<strong>降低偏差</strong>的技术
+<ul>
+<li>因此，我们需要高偏差低方差的模型来使用提升法
+<ul>
+<li>这种模型即<strong>弱学习模型</strong>（weak learners）</li>
+</ul></li>
+</ul></li>
+<li>对决策树来说，通过只允许每个树在预测前进行一次决策，可以将其变为弱学习模型
+<ul>
+<li>这种决策树也称为<strong>决策树桩</strong>（decision stumps）</li>
+</ul></li>
+<li><p>以下图为例，原始数据集如最左侧的图所示</p>
+<p><img src="http://media.zjubiomedit.com/2019-04-19-072905.png" width="80%"></p>
+<ul>
+<li>我们先训练一个决策树桩（中间图）</li>
+<li>再找出其中分类错误的样本，提升其权重</li>
+<li>然后训练一个新的决策树桩，更加趋向于对这些错误样本进行正确分类</li>
+<li>持续上述过程，每一步对样本权重进行重新评估</li>
+<li>最终输出上述弱学习模型的结合，作为一个集成分类器</li>
+</ul></li>
+</ul>
+<h3 id="adaboost">Adaboost</h3>
+<ul>
+<li><p>下面介绍一种最流行的提升算法：Adaboost，其流程如下图所示：</p>
+<p><img src="http://media.zjubiomedit.com/2019-04-19-073940.png" width="70%"></p>
+<ul>
+<li>每个样本的权重最开始均匀分配，而错误分类样本在每一步中提升权重</li>
+<li>最终的聚合分类器是所有弱学习模型的加权求和
+<ul>
+<li>因为是求和后再预测，因此该集成方法能够处理加性数据，提升整个模型的能力（以及方差）</li>
+<li>每个弱学习模型不再与之前的模型独立，因此提升模型数量 <span class="math inline">\(M\)</span> 有导致过拟合的风险</li>
+</ul></li>
+<li>Adaboost 中使用的权重公式看上去以后一些随意，但事实证明该公式是合理的</li>
+</ul></li>
+</ul>
+<h3 id="forward-stagewise-additive-modeling">Forward Stagewise Additive Modeling</h3>
+<ul>
+<li><p>前向分步算法的流程如下：</p>
+<p><img src="http://media.zjubiomedit.com/2019-04-19-075929.png" width="70%"></p>
+<ul>
+<li>可以看到该算法进行了较少的假设
+<ul>
+<li>仅使用了集成方法的可加性质以及在一个给定步骤后对所有之前的权重和参数的固定</li>
+</ul></li>
+<li>对于弱分类器 <span class="math inline">\(G(x)\)</span>，每一步我们尝试去找到下一个弱分类器的参数和权重，来最大程度减小当前集成模型的剩余误差</li>
+</ul></li>
+<li>关于损失函数，可以选择平方损失函数
+<ul>
+<li>相当于将单个分类器拟合至残差 <span class="math inline">\(y_{i}-f_{m-1}\left(x_{i}\right)\)</span></li>
+</ul></li>
+<li><p>进一步来说，可以证明 Adaboost 是前向分布算法的特例，当针对二分类及指数损失时： <span class="math display">\[
+L(y, \hat{y})=\exp (-y \hat{y})
+\]</span></p>
+<ul>
+<li>细节可参考 ESL 第 10.4 节</li>
+</ul></li>
+</ul>
+<h3 id="gradient-boosting">Gradient Boosting</h3>
+<p><img src="http://media.zjubiomedit.com/2019-04-19-085823.png" width="60%"></p>
+<ul>
+<li>一般来说，前向分布算法中的最小化问题很难求出闭合解
+<ul>
+<li>像 xgboost 这样的高效算法通常会采用数值优化来解决该问题</li>
+</ul></li>
+<li>一种最常见的做法是对损失函数求导并进行梯度下降
+<ul>
+<li>但是，参数 <span class="math inline">\(\gamma\)</span> 被限制在模型中进行梯度下降
+<ul>
+<li>我们只能在参数化的弱学习模型 <span class="math inline">\(G(x, \gamma)\)</span> 中进行操作，而不是在输入空间中进行任意的移动</li>
+</ul></li>
+</ul></li>
+<li><p>在梯度提升中，我们选择计算每个训练样本关于其当前预测模型的梯度 <span class="math display">\[
+g_{i}=\frac{\partial L\left(y, f\left(x_{i}\right)\right)}{\partial f\left(x_{i}\right)}
+\]</span></p>
+<ul>
+<li>然后训练一个新的回归预测模型来匹配这一梯度，并将其用于权重 <span class="math inline">\(\beta\)</span> 的最小化</li>
+<li>在前向分布算法中，对应的公式为： <span class="math display">\[
+\gamma_{i}=\operatorname{argmin}_{\gamma} \sum_{i=1}^{N}\left(g_{i}-G\left(x_{i} ; \gamma\right)\right)^{2}
+\]</span></li>
+</ul></li>
+</ul>
+<h2 id="总结-2">总结</h2>
+<ul>
+<li>提升法的主要优点有：
+<ul>
+<li>减少偏差</li>
+<li>更好的准确性</li>
+<li>加性建模</li>
+</ul></li>
+<li>提升法的缺点包括：
+<ul>
+<li>方差的提升</li>
+<li>容易过拟合</li>
+</ul></li>
+</ul>
+<h1 id="思维导图">思维导图</h1>
+<p><img src="http://media.zjubiomedit.com/2019-04-20-043542.png" width="100%"></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Zheyu Wang</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://xxwywzy.github.io/2019/04/19/cs229-13/" title="CS229 学习笔记之十三：决策树与集成方法">https://xxwywzy.github.io/2019/04/19/cs229-13/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CS229/" rel="tag"># CS229</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/30/cs224-2/" rel="next" title="CS224N 学习笔记之二：词向量 2">
+                <i class="fa fa-chevron-left"></i> CS224N 学习笔记之二：词向量 2
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Zheyu Wang"/>
+            
+              <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+              <p class="site-description motion-element" itemprop="description">更に向こうへ</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">29</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">18</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/xxwywzy" title="GitHub &rarr; https://github.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://twitter.com/xxwywzy" title="Twitter &rarr; https://twitter.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="http://weibo.com/xxwywzy" title="Weibo &rarr; http://weibo.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://instagram.com/xxwywzy" title="Instagram &rarr; https://instagram.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#决策树"><span class="nav-number">1.</span> <span class="nav-text">决策树</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#非线性"><span class="nav-number">1.1.</span> <span class="nav-text">非线性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#选择区域"><span class="nav-number">1.2.</span> <span class="nav-text">选择区域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定义一个损失函数"><span class="nav-number">1.3.</span> <span class="nav-text">定义一个损失函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#错误分类损失"><span class="nav-number">1.3.1.</span> <span class="nav-text">错误分类损失</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#交叉熵损失"><span class="nav-number">1.3.2.</span> <span class="nav-text">交叉熵损失</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#平方损失"><span class="nav-number">1.3.3.</span> <span class="nav-text">平方损失</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他考量"><span class="nav-number">1.4.</span> <span class="nav-text">其他考量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分类变量"><span class="nav-number">1.4.1.</span> <span class="nav-text">分类变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#正则化"><span class="nav-number">1.4.2.</span> <span class="nav-text">正则化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行时间"><span class="nav-number">1.4.3.</span> <span class="nav-text">运行时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加性结构的缺失"><span class="nav-number">1.4.4.</span> <span class="nav-text">加性结构的缺失</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">1.5.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#集成方法"><span class="nav-number">2.</span> <span class="nav-text">集成方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#装袋法"><span class="nav-number">2.1.</span> <span class="nav-text">装袋法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#自助bootstrap"><span class="nav-number">2.1.1.</span> <span class="nav-text">自助（Bootstrap）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#聚合aggregation"><span class="nav-number">2.1.2.</span> <span class="nav-text">聚合（Aggregation）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#装袋法-决策树"><span class="nav-number">2.1.3.</span> <span class="nav-text">装袋法 + 决策树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结-1"><span class="nav-number">2.1.4.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#提升法"><span class="nav-number">2.2.</span> <span class="nav-text">提升法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#直观理解"><span class="nav-number">2.2.1.</span> <span class="nav-text">直观理解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#adaboost"><span class="nav-number">2.2.2.</span> <span class="nav-text">Adaboost</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#forward-stagewise-additive-modeling"><span class="nav-number">2.2.3.</span> <span class="nav-text">Forward Stagewise Additive Modeling</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gradient-boosting"><span class="nav-number">2.2.4.</span> <span class="nav-text">Gradient Boosting</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结-2"><span class="nav-number">2.3.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#思维导图"><span class="nav-number">3.</span> <span class="nav-text">思维导图</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.5.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.0.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz',
+    appKey: 'IxP5URFEhxow4TfWyVNiowbH',
+    placeholder: '请在这里评论=￣ω￣=',
+    avatar: 'retro',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+</script>
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+  
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .fail(function ({ responseJSON }) {
+                console.log(`Failed to save Visitor num, with error message: ${responseJSON.error}`);
+              })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1 }))
+                .done(function() {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function() {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+        .fail(function ({ responseJSON }) {
+          console.log(`LeanCloud Counter Error: ${responseJSON.code} ${responseJSON.error}`);
+        });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz',
+                'X-LC-Key': 'IxP5URFEhxow4TfWyVNiowbH',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            addCount(Counter);
+          
+        });
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: "AMS"
+      }
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+      for (i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+<script src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+  overflow: auto hidden;
+}
+</style><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+    
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
