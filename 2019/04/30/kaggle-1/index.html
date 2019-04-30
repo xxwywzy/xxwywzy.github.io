@@ -96,29 +96,32 @@
 
 
 
-  <meta name="description" content="本篇博客为 CS229 学习笔记第十一部分，主题是：主成分分析。">
-<meta name="keywords" content="CS229">
+  <meta name="description" content="本篇博客为 Coursera 上一门关于 kaggle 的公开课的第一周学习笔记。">
+<meta name="keywords" content="Kaggle">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CS229 学习笔记之十一：主成分分析">
-<meta property="og:url" content="https://xxwywzy.github.io/2019/02/28/cs229-11/index.html">
+<meta property="og:title" content="Coursera-Kaggle Week1 学习笔记">
+<meta property="og:url" content="https://xxwywzy.github.io/2019/04/30/kaggle-1/index.html">
 <meta property="og:site_name" content="xxwywzy&#39;s Blog">
-<meta property="og:description" content="本篇博客为 CS229 学习笔记第十一部分，主题是：主成分分析。">
+<meta property="og:description" content="本篇博客为 Coursera 上一门关于 kaggle 的公开课的第一周学习笔记。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://media.zjubiomedit.com/2019-02-27-013445.png">
-<meta property="og:image" content="http://media.zjubiomedit.com/2019-02-27-015435.png">
-<meta property="og:image" content="http://media.zjubiomedit.com/2019-02-28-024212.png">
-<meta property="og:updated_time" content="2019-03-01T02:29:55.000Z">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-29-024844.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-29-025849.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-29-075548.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-12-061319.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-12-062659.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-12-063359.png">
+<meta property="og:updated_time" content="2019-04-30T01:57:36.659Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CS229 学习笔记之十一：主成分分析">
-<meta name="twitter:description" content="本篇博客为 CS229 学习笔记第十一部分，主题是：主成分分析。">
-<meta name="twitter:image" content="http://media.zjubiomedit.com/2019-02-27-013445.png">
+<meta name="twitter:title" content="Coursera-Kaggle Week1 学习笔记">
+<meta name="twitter:description" content="本篇博客为 Coursera 上一门关于 kaggle 的公开课的第一周学习笔记。">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2019-03-29-024844.png">
 
 
 
 
 
 
-  <link rel="canonical" href="https://xxwywzy.github.io/2019/02/28/cs229-11/"/>
+  <link rel="canonical" href="https://xxwywzy.github.io/2019/04/30/kaggle-1/"/>
 
 
 
@@ -128,7 +131,7 @@
   };
 </script>
 
-  <title>CS229 学习笔记之十一：主成分分析 | xxwywzy's Blog</title>
+  <title>Coursera-Kaggle Week1 学习笔记 | xxwywzy's Blog</title>
   
 
 
@@ -341,7 +344,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2019/02/28/cs229-11/"/>
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2019/04/30/kaggle-1/"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Zheyu Wang"/>
@@ -358,7 +361,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">CS229 学习笔记之十一：主成分分析
+          <h1 class="post-title" itemprop="name headline">Coursera-Kaggle Week1 学习笔记
 
               
             
@@ -384,7 +387,7 @@
                 
               
 
-              <time title="创建时间：2019-02-28 10:27:08" itemprop="dateCreated datePublished" datetime="2019-02-28T10:27:08+08:00">2019-02-28</time>
+              <time title="创建时间：2019-04-30 09:43:18" itemprop="dateCreated datePublished" datetime="2019-04-30T09:43:18+08:00">2019-04-30</time>
             
 
             
@@ -406,13 +409,6 @@
 
                 
                 
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/人工智能/机器学习/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a></span>
-
-                
-                
               
             </span>
           
@@ -427,8 +423,8 @@
                   <i class="fa fa-comment-o"></i>
                 </span>
             
-                <a href="/2019/02/28/cs229-11/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/02/28/cs229-11/" itemprop="commentCount"></span>
+                <a href="/2019/04/30/kaggle-1/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/04/30/kaggle-1/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -436,7 +432,7 @@
 
           
           
-            <span id="/2019/02/28/cs229-11/" class="leancloud_visitors" data-flag-title="CS229 学习笔记之十一：主成分分析">
+            <span id="/2019/04/30/kaggle-1/" class="leancloud_visitors" data-flag-title="Coursera-Kaggle Week1 学习笔记">
               <span class="post-meta-divider">|</span>
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
@@ -468,151 +464,309 @@
 
       
         <div class="note info">
-            本篇博客为 CS229 学习笔记第十一部分，主题是：主成分分析。 
+            本篇博客为 Coursera 上一门关于 kaggle 的公开课的第一周学习笔记。 
           </div>
 <a id="more"></a>
-<h1 id="引入">引入</h1>
+<p><a href="https://www.coursera.org/learn/competitive-data-science/home/welcome" target="_blank" rel="noopener">课程地址</a></p>
+<h1 id="竞赛基础">竞赛基础</h1>
 <ul>
-<li>在上一章，我们介绍了因子分析，其给出了一种将 <span class="math inline">\(n\)</span> 维数据 <span class="math inline">\(x\)</span> 在 <span class="math inline">\(k\)</span> 维子空间中建模的方法
+<li>一个竞赛涉及的主要概念包括：
 <ul>
-<li>其基于概率模型，通过 EM 算法来估计参数</li>
+<li>数据</li>
+<li>模型</li>
+<li>提交</li>
+<li>评估</li>
+<li>排行榜</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-03-29-024844.png" width="60%"></p></li>
+<li>竞赛平台：
+<ul>
+<li>Kaggle</li>
+<li>DrivenData</li>
+<li>CrowdAnalityx</li>
+<li>天池 &amp; 科赛</li>
 </ul></li>
-<li>本章我们将介绍另一种降维方法：<strong>主成分分析</strong>法（PCA）
+<li>竞赛和实际应用的区别：
 <ul>
-<li>该方法更加直接，只需要特征向量的计算，不需要 EM 求解</li>
-</ul></li>
-<li>给定一个数据集 <span class="math inline">\(\{x^{(i)};i=1,\ldots,m\}\)</span>，其中 <span class="math inline">\(x^{(i)} \in \mathbb{R}^n (n \ll m)\)</span>
+<li>实际问题往往更加复杂</li>
+<li>竞赛是一种很好的学习方式
 <ul>
-<li>假定该数据集来自对无线电控制直升机飞行员的调查，而其中的两个属性分别为飞行员的技能评估和其对飞行的感兴趣长度</li>
-<li>考虑到飞行的特殊性，这两个属性是存在正相关关系的，即实际上数据的信息量是 n-1 维的</li>
-<li>PCA 解决的就是如何将多余属性去除的问题</li>
-</ul></li>
-<li><p>将上述两个属性使用坐标图进行展示，得到：</p>
-<p><img src="http://media.zjubiomedit.com/2019-02-27-013445.png" width="50%"></p>
-<ul>
-<li>可以看到，<span class="math inline">\(u1\)</span> 展示出了数据之间的相关性，称之为“主方向”</li>
-<li><span class="math inline">\(u2\)</span> 则代表主方向之外的噪声</li>
-<li>PCA 要做的就是找到主方向，并将数据投影到该方向，达到降维的目的</li>
+<li>但其不涉及提出问题、部署模型以及测试等步骤</li>
 </ul></li>
 </ul>
-<h1 id="算法流程">算法流程</h1>
-<h2 id="预处理">预处理</h2>
-<ul>
-<li>在运行 PCA 算法之前，需要首先进行预处理来归一化数据均值及方差：
-<ol type="1">
-<li>令 <span class="math inline">\(\mu = \frac 1 m \sum_{i=1}^m x^{(i)}\)</span></li>
-<li>使用 <span class="math inline">\(x^{(i)} -\mu\)</span> 来替代 <span class="math inline">\(x^{(i)}\)</span></li>
-<li>令 <span class="math inline">\(\sigma_j^2 = \frac 1 m \sum_i (x_j^{(i)})^2\)</span></li>
-<li>使用 <span class="math inline">\(x^{(i)}_j / \sigma_j\)</span> 来替代 <span class="math inline">\(x^{(i)}\)</span></li>
-</ol></li>
-<li>前两步将数据的均值变为 0（已知均值为 0 时可以省略）</li>
-<li>后两步将数据每个维度的方差变为 1（已知数据各维度处于同一尺度下时可以省略）</li>
+<p><img src="http://media.zjubiomedit.com/2019-03-29-025849.png" width="60%"></p></li>
 </ul>
-<h2 id="计算主方向">计算主方向</h2>
+<h1 id="算法回顾">算法回顾</h1>
 <ul>
-<li>计算主方向的方法之一是找到单位向量 <span class="math inline">\(u\)</span>，使得数据在该方向上的投影的<strong>方差最大化</strong>
+<li>在竞赛中，常用的 ML 算法可以分为四类（以下解释基于分类问题）：
 <ul>
-<li>直观上来看，原始数据必然存在一定的方差（信息），而我们希望投影后的数据（降维后）在子空间尽量保留原始数据的信息，即方差最大化</li>
+<li>线性模型
+<ul>
+<li>线性模型将空间分为两个子空间</li>
 </ul></li>
-<li><p>以如下数据集为例（归一化已完成）：</p>
-<p><img src="http://media.zjubiomedit.com/2019-02-27-015435.png" width="80%"></p>
+<li>基于树的方法
 <ul>
-<li>可以看到，图 2 方向上的投影相比图 3 距离原点更远，方差更大</li>
-<li>我们希望能够自动找到类似图 2 的方向</li>
+<li>基于树的方法将空间分为盒子</li>
 </ul></li>
-<li>下面给出寻找该方向的方法：
+<li>K近邻方法
 <ul>
-<li>给定一个单位向量 <span class="math inline">\(u\)</span> 和一个点 <span class="math inline">\(x\)</span>，其投影长度（距离原点）为 <span class="math inline">\(x^Tu\)</span></li>
-<li><p>因此，为了最大化投影的方差，即最大化： <span class="math display">\[
-\begin{aligned}
-\frac 1 m \sum_{i=1}^m (x^{(i)^T}u)^2 &amp;= \frac 1 m \sum_{i=1}^m u^Tx^{(i)}x^{(i)^T}u \\ &amp;= u^T\left(\frac 1 m \sum_{i=1}^m x^{(i)}x^{(i)^T}\right) u
-\end{aligned}
-\]</span></p>
-<ul>
-<li>对于归一化后的数据，其投影点的均值也为 0，因此方差计算为直接平方</li>
-<li>该公式有一个约束条件：<span class="math inline">\(||u||_2 =1\)</span></li>
+<li>k近邻方法主要取决于如何测量点之间的距离</li>
 </ul></li>
-<li>利用拉格朗日方程，可以求得该最大化问题的解即为经验协方差矩阵 <span class="math inline">\(\Sigma = \frac 1 m \sum_{i=1}^m x^{(i)}x^{(i)^T}\)</span> 的<strong>主要特征向量</strong>
+<li>神经网络
 <ul>
-<li><p>构建如下拉格朗日方程： <span class="math display">\[
-\ell = u^T\Sigma u - \lambda(u^Tu-1)
+<li>神经网络方法产生平滑的非线性决策边界</li>
+</ul></li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-03-29-075548.png" width="100%"></p></li>
+<li>没有完美适用于所有问题的算法
+<ul>
+<li>一般情况下，最有效的方法是<strong>梯度提升决策树</strong>和<strong>神经网络</strong></li>
+</ul></li>
+<li>关于 GBDT 和 RF 的问题
+<ul>
+<li>如果训练一个 GBDT 或 RF 模型，并丢弃模型中的第一棵树或最后一棵树
+<ul>
+<li>对于 GBDT，其每一棵树之间互相关联，后面的树提升前面所有树的结果
+<ul>
+<li>如果丢弃第一棵树，后面所有的树都会出现偏差，总的表现会明显下降（学习率较大时）</li>
+<li>如果丢弃最后一棵树，之前所有树的结果不会受到影响，总的表现变化不大</li>
+</ul></li>
+<li>对于 RF，每一棵树之间相互独立，最后只是取平均
+<ul>
+<li>因此去除一棵树对结果并无较大影响</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+<h1 id="软硬件需求">软硬件需求</h1>
+<ul>
+<li>硬件配置（GPU 未提及）：
+<ul>
+<li>内存：越大越好</li>
+<li>核心：越多越好</li>
+<li>存储：SSD 最佳</li>
+</ul></li>
+<li>云训练平台：
+<ul>
+<li>Amazon AWS</li>
+<li>Microsoft Azure</li>
+<li>Google Cloud</li>
+</ul></li>
+<li>软件推荐：
+<ul>
+<li>语言：Python！</li>
+<li>基本软件栈：
+<ul>
+<li>numpy：线性代数库</li>
+<li>pandas：数据读取与处理</li>
+<li>sckit-learn：机器学习算法库</li>
+<li>matplotlib：可视化</li>
+</ul></li>
+<li>IDE：jupyter notebook</li>
+<li>特别软件包：
+<ul>
+<li>XGBoost：基于决策树的梯度提升</li>
+<li>LightGBM：同上</li>
+<li>tsne：降维可视化</li>
+<li>libFM：分解机</li>
+</ul></li>
+<li>深度学习：
+<ul>
+<li>tensorflow</li>
+<li>keras</li>
+<li>pytorch</li>
+</ul></li>
+</ul></li>
+</ul>
+<h1 id="特征预处理与生成">特征预处理与生成</h1>
+<ul>
+<li>三个主要观点：
+<ul>
+<li>特征预处理非常必要</li>
+<li>特征生成是一个有力工具</li>
+<li>预处理和特征生成的流水线取决于模型的类型</li>
+</ul></li>
+</ul>
+<h2 id="数值特征">数值特征</h2>
+<ul>
+<li>对于树模型和非树模型，数值特征的预处理有所不同
+<ul>
+<li>树模型并不依赖于特征缩放与分级</li>
+<li>非树模型非常依赖于特征缩放与分级</li>
+</ul></li>
+<li>最常使用的预处理方法有：
+<ul>
+<li><p>基于最大最小值的缩放：缩放至 <span class="math inline">\([0,1]\)</span>：<code>sklearn.preprocessing.MinMaxScaler</code> <span class="math display">\[
+X=(X-X.min ( )) /(X.max ( )-X.min ( ))
 \]</span></p></li>
-<li><p>对 <span class="math inline">\(u\)</span> 求导，得到： <span class="math display">\[
-\begin{aligned}
-\nabla_u \ell &amp;= \nabla_u u^T\Sigma u - \nabla_u u^Tu \\
-&amp;= \nabla_u \text{tr}(u^T\Sigma u) - \nabla_u \text{tr}(u^Tu) \\
-&amp;= \left(\nabla_{u^T} \text{tr}(u^T\Sigma u)\right)^T - \left(\nabla_{u^T} \text{tr}(u^Tu)\right)^T \\
-&amp;= (\Sigma u)^{T^T} - \lambda u^{T^T} \\
-&amp;= \Sigma u - \lambda u
-\end{aligned}
-\]</span></p>
+<li><p>基于标准差的缩放：缩放至平均值为 0，标准差为 1：<code>sklearn.preprocessing.StandardScaler</code> <span class="math display">\[
+X=(X-X .mean( )) / X . std( )
+\]</span></p></li>
+<li>异常值处理：采用剪切的方法（设置上下阈值）</li>
+<li>分级：使有序变量之间的距离相等：<code>scipy.stats.rankdata</code>
 <ul>
-<li>令导数为 0，得 <span class="math inline">\(\Sigma u = \lambda u\)</span>，即 <span class="math inline">\(u\)</span> 为 <span class="math inline">\(\Sigma\)</span> 的特征向量，其特征值为 <span class="math inline">\(\lambda\)</span></li>
+<li>可以在缩放的同时处理异常值</li>
+</ul></li>
+<li>对数与幂处理：<code>np.log(1+x)</code> 以及 <code>np.sqrt(1+x)</code>
+<ul>
+<li>使得过大的数值更加趋向于平均值，同时也使得在原点附近的数据更容易区分</li>
+<li>适用于神经网络等非线性模型</li>
 </ul></li>
 </ul></li>
-<li>综上所述，如果我们需要将数据降至 1 维，则应该选择 <span class="math inline">\(\Sigma\)</span> 的主要特征向量 <span class="math inline">\(u\)</span> 作为主方向（特征值最大）</li>
-<li>当需要将数据降为 k 维时（<span class="math inline">\(k&lt;n\)</span>），我们应该选择 <span class="math inline">\(\Sigma\)</span> 的前 k 个特征向量 <span class="math inline">\(u_1, \ldots, u_k\)</span> 作为主方向（因为 <span class="math inline">\(\Sigma\)</span> 是对称矩阵，所以其可以得到 n 个相互正交的特征向量）
+<li>特征生成的驱动力为：
 <ul>
-<li>前 k 个即最大的 k 个特征值所对应的特征向量</li>
-<li>这些特征向量形成了一个新的正交基底（k 维）</li>
+<li>先验知识</li>
+<li>探索性数据分析（EDA）</li>
 </ul></li>
-<li><p>基于该基底，可以将 <span class="math inline">\(x^{(i)}\)</span> 进行降维： <span class="math display">\[
-y^{(i)} = \left[\begin{array}{cc}
-u_1^Tx^{(i)} \\
-u_2^Tx^{(i)} \\
-\vdots \\
-u_k^Tx^{(i)}
-\end{array} 
-\right] \in \mathbb{R}^k
-\]</span></p>
+</ul>
+<h2 id="分类和序数特征">分类和序数特征</h2>
 <ul>
-<li>向量 <span class="math inline">\(u_1, \ldots, u_k\)</span> 被称为数据的前 k 个<strong>主成分</strong></li>
+<li>序数特征是一种特殊的分类特征，其中的值按某种有意义的顺序排列
+<ul>
+<li>比如船票等级、驾照等级等</li>
+</ul></li>
+<li>标签编码可以将分类变量映射为数字
+<ul>
+<li>可以按照字母表顺序映射：<code>sklearn.preprocessing.LabelEncoder</code></li>
+<li>也可以按照在数据集中出现的顺序映射：<code>Pandas.factorize</code></li>
+</ul></li>
+<li><p>频率编码可以将分类变量映射为其出现频率</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">encoding = titanic.groupby(‘Embarked’).size()</span><br><span class="line">encoding = encoding/len(titanic)</span><br><span class="line">titanic[‘enc’] = titanic.Embarked.map(encoding)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>对于多个频率重复的情况，可以使用 <code>scipy.stats.rankdata</code></li>
+</ul></li>
+<li>标签和频率编码通常对基于树的模型很有用
+<ul>
+<li>有时也对线性模型有用</li>
+</ul></li>
+<li><p>对于非树模型，通常使用独热编码处理分类变量</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pandas.get_dummies</span><br><span class="line">sklearn.preprocessing.OneHotEncoder</span><br></pre></td></tr></table></figure>
+<ul>
+<li>如果分类变量类别过多，考虑使用稀疏矩阵</li>
+</ul></li>
+<li><p>基于分类变量的融合的特征生成可以对线性模型和 KNN 产生帮助</p></li>
+</ul>
+<h2 id="时间与坐标特征">时间与坐标特征</h2>
+<ul>
+<li>时间特征的常见类型
+<ul>
+<li>周期性特征：如 day of week</li>
+<li>自从（或距离）某个事件的时间
+<ul>
+<li>行不相关事件：如距离某个共同时刻的时间</li>
+<li>行相关事件：如距离下一个假日的时间（每行对应的假日时间不同）</li>
+</ul></li>
+<li>两个日期之间的差值</li>
+</ul></li>
+<li>坐标特征的常见类型
+<ul>
+<li>来自数据中的有趣的地点</li>
+<li>坐标聚类的中心</li>
+<li>聚合数据（如某个地点周边的垃圾桶数量）</li>
+</ul></li>
+<li>对于树模型，可以对坐标适当旋转作为一个新的特征，提高准确率</li>
+</ul>
+<h2 id="缺失值">缺失值</h2>
+<ul>
+<li>对于 NaN（Not a Number）变量，其填充方法的选择取决于具体情况
+<ul>
+<li>通常使用超出范围的特征来替代（如 -999）
+<ul>
+<li>也可以使用均值或中位数</li>
+</ul></li>
+<li>有时候可以重新构建缺失值</li>
+</ul></li>
+<li>有时候缺失值可能已经被数据提供者进行了处理</li>
+<li>可以使用二元特征 isnull 来表明哪些数据含有缺失值</li>
+<li>一般来说，在进行特征生成时，避免对 NaN 进行填充
+<ul>
+<li>直接忽略这些缺失值</li>
+</ul></li>
+<li>XgBoost 可以直接处理 NaN 变量</li>
+</ul>
+<h1 id="从文字和图片中提取特征">从文字和图片中提取特征</h1>
+<h2 id="词袋模型">词袋模型</h2>
+<p><img src="http://media.zjubiomedit.com/2019-04-12-061319.png" width="60%"></p>
+<ul>
+<li>使用词袋模型的流水线：
+<ol type="1">
+<li>预处理：
+<ul>
+<li>大小写处理、词干提取、词形还原、停用词过滤</li>
+</ul></li>
+<li>建立词袋模型：基于词语出现次数
+<ul>
+<li>行对应一个句子，列对应一个词语</li>
+<li>可以使用 Ngrams 体现上下文信息</li>
+</ul></li>
+<li>后处理：TFIDF</li>
+</ol></li>
+</ul>
+<h2 id="词向量">词向量</h2>
+<p><img src="http://media.zjubiomedit.com/2019-04-12-062659.png" width="60%"></p>
+<ul>
+<li>与词袋模型相比，得到的向量维度相对小
+<ul>
+<li>常见的词向量构建方法包括 Word2vec、Glove、FastText、BERT 等
+<ul>
+<li>还有句向量的构建方法如 Doc2vec 等</li>
+</ul></li>
+<li>词向量通常是预训练好的模型
+<ul>
+<li>其向量的各维度的值可能无法解释（词袋模型可以）</li>
+<li>相似语义的词语通常有相似的向量表达</li>
 </ul></li>
 </ul></li>
 </ul>
-<h1 id="算法应用">算法应用</h1>
+<h2 id="图片">图片</h2>
+<p><img src="http://media.zjubiomedit.com/2019-04-12-063359.png" width="60%"></p>
 <ul>
-<li>数据可视化
+<li>通常使用卷积神经网络来处理图片
 <ul>
-<li>将数据降至2-3维后进行可视化</li>
+<li>可以通过不同的层来提取图片特征</li>
 </ul></li>
-<li>数据预处理
+<li>谨慎地选择预训练网络能够对特征提取提供帮助
 <ul>
-<li>在运行算法之前对数据进行降维，不仅能够提升计算速度，还能够降低假设的复杂性，避免过拟合</li>
-<li>对线性分类器即意味着 VC 维的减小</li>
+<li>对预训练模型的微调可以帮助提升效果</li>
 </ul></li>
-<li>降噪
+<li>对于数据量不够的情况，通过一些手段增加数据能够提升模型表现
 <ul>
-<li>去除数据中的无关干扰因素</li>
+<li>如对图片进行旋转操作</li>
+<li>在测试时也可以使用数据增加来平均预测结果</li>
 </ul></li>
 </ul>
-<h1 id="总结">总结</h1>
+<h1 id="作业pandas-基础">作业：Pandas 基础</h1>
+<p><a href="https://www.kaggle.com/c/competitive-data-science-final-project/data" target="_blank" rel="noopener">数据说明</a></p>
+<ol type="1">
+<li>求 2014 年 9 月所有商店的收益的最大值
 <ul>
-<li>关于目前所学的降维与聚类方法可以总结为如下表格：</li>
+<li>第一步：筛选出 2014 年 9 月的数据</li>
+<li>第二步：对收益按商店进行分组，然后求和求最大</li>
 </ul>
-<table>
-<thead>
-<tr class="header">
-<th></th>
-<th>密度估计（概率方法）</th>
-<th>非概率方法</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>降维</td>
-<td>因子分析</td>
-<td>主成分分析</td>
-</tr>
-<tr class="even">
-<td>聚类</td>
-<td>混合高斯模型</td>
-<td>K 均值</td>
-</tr>
-</tbody>
-</table>
-<h1 id="思维导图">思维导图</h1>
-<p><img src="http://media.zjubiomedit.com/2019-02-28-024212.png" width="100%"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">tran_1 = transactions[transactions[<span class="string">"date_block_num"</span>] == <span class="number">20</span>]</span><br><span class="line">max_revenue = (tran_1[<span class="string">"item_price"</span>] * tran_1[<span class="string">"item_cnt_day"</span>]).groupby(tran_1[<span class="string">"shop_id"</span>]).sum().max()</span><br></pre></td></tr></table></figure></li>
+<li>哪一个商品类别在 2014 年夏季的收益最大？
+<ul>
+<li>第一步：筛选出 2014 年 6-8 月的数据</li>
+<li>第二步：将销售记录数据与商品类别数据合并</li>
+<li>第三步：对收益按照商品类别分组， 然后求和求参数最大</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">tran_2 = transactions[(transactions[<span class="string">"date_block_num"</span>] &gt;= <span class="number">17</span>) &amp; (transactions[<span class="string">"date_block_num"</span>] &lt;= <span class="number">19</span>)]</span><br><span class="line">tran_2 = pd.merge(tran_2, items, how=<span class="string">"left"</span>, on=<span class="string">"item_id"</span>)</span><br><span class="line">category_id_with_max_revenue = (tran_2[<span class="string">"item_price"</span>] * tran_2[<span class="string">"item_cnt_day"</span>]).groupby(tran_2[<span class="string">"item_category_id"</span>]).sum().argmax()</span><br></pre></td></tr></table></figure></li>
+<li>有多少商品的价格一直没有发生过变化？
+<ul>
+<li>按商品 id 进行分组，并判断 <code>nunique()</code> 是否为 1（即只有一个独特的值）
+<ul>
+<li>对其求和即可得到商品的数量（True 为 1，False 为 0）</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">num_items_constant_price = (transactions[<span class="string">"item_price"</span>].groupby(transactions[<span class="string">"item_id"</span>]).nunique() == <span class="number">1</span>).sum()</span><br></pre></td></tr></table></figure></li>
+</ul></li>
+<li>计算 <code>shop_id</code> 为 25 的商店在 2014 年 12 月每天卖出的商品的<a href="https://math.stackexchange.com/questions/496627/the-difference-between-unbiased-biased-estimator-variance" target="_blank" rel="noopener">无偏方差</a>
+<ul>
+<li>第一步：筛选出该商店的数据</li>
+<li>第二步：对每天销售的商品数按日期分组，并求和</li>
+<li>第三步：使用 <code>var()</code> 求出方差</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">tran_3 = transactions[transactions[<span class="string">"date_block_num"</span>] == <span class="number">23</span>]</span><br><span class="line">tran_3 = tran_3[tran_3[<span class="string">"shop_id"</span>] == shop_id]</span><br><span class="line">tran_3 = tran_3[<span class="string">"item_cnt_day"</span>].groupby(tran_3[<span class="string">"date"</span>]).sum()</span><br><span class="line">total_num_items_sold_var = tran_3.var()</span><br></pre></td></tr></table></figure></li>
+</ol>
 
       
     </div>
@@ -646,7 +800,7 @@ u_k^Tx^{(i)}
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
     
-    <a href="https://xxwywzy.github.io/2019/02/28/cs229-11/" title="CS229 学习笔记之十一：主成分分析">https://xxwywzy.github.io/2019/02/28/cs229-11/</a>
+    <a href="https://xxwywzy.github.io/2019/04/30/kaggle-1/" title="Coursera-Kaggle Week1 学习笔记">https://xxwywzy.github.io/2019/04/30/kaggle-1/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
@@ -659,7 +813,7 @@ u_k^Tx^{(i)}
       
         <div class="post-tags">
           
-            <a href="/tags/CS229/" rel="tag"># CS229</a>
+            <a href="/tags/Kaggle/" rel="tag"># Kaggle</a>
           
         </div>
       
@@ -672,8 +826,8 @@ u_k^Tx^{(i)}
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/02/19/cs229-10/" rel="next" title="CS229 学习笔记之十：因子分析">
-                <i class="fa fa-chevron-left"></i> CS229 学习笔记之十：因子分析
+              <a href="/2019/04/19/cs229-13/" rel="next" title="CS229 学习笔记之十三：决策树与集成方法">
+                <i class="fa fa-chevron-left"></i> CS229 学习笔记之十三：决策树与集成方法
               </a>
             
           </div>
@@ -681,10 +835,6 @@ u_k^Tx^{(i)}
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/02/28/game-ai-pro-1/" rel="prev" title="《Game AI Pro》第一章笔记：What is Game AI?">
-                《Game AI Pro》第一章笔记：What is Game AI? <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -956,7 +1106,7 @@ u_k^Tx^{(i)}
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#引入"><span class="nav-number">1.</span> <span class="nav-text">引入</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#算法流程"><span class="nav-number">2.</span> <span class="nav-text">算法流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#预处理"><span class="nav-number">2.1.</span> <span class="nav-text">预处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#计算主方向"><span class="nav-number">2.2.</span> <span class="nav-text">计算主方向</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#算法应用"><span class="nav-number">3.</span> <span class="nav-text">算法应用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#思维导图"><span class="nav-number">5.</span> <span class="nav-text">思维导图</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#竞赛基础"><span class="nav-number">1.</span> <span class="nav-text">竞赛基础</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#算法回顾"><span class="nav-number">2.</span> <span class="nav-text">算法回顾</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#软硬件需求"><span class="nav-number">3.</span> <span class="nav-text">软硬件需求</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#特征预处理与生成"><span class="nav-number">4.</span> <span class="nav-text">特征预处理与生成</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数值特征"><span class="nav-number">4.1.</span> <span class="nav-text">数值特征</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分类和序数特征"><span class="nav-number">4.2.</span> <span class="nav-text">分类和序数特征</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#时间与坐标特征"><span class="nav-number">4.3.</span> <span class="nav-text">时间与坐标特征</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缺失值"><span class="nav-number">4.4.</span> <span class="nav-text">缺失值</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#从文字和图片中提取特征"><span class="nav-number">5.</span> <span class="nav-text">从文字和图片中提取特征</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#词袋模型"><span class="nav-number">5.1.</span> <span class="nav-text">词袋模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#词向量"><span class="nav-number">5.2.</span> <span class="nav-text">词向量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#图片"><span class="nav-number">5.3.</span> <span class="nav-text">图片</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#作业pandas-基础"><span class="nav-number">6.</span> <span class="nav-text">作业：Pandas 基础</span></a></li></ol></div>
             
 
           </div>
