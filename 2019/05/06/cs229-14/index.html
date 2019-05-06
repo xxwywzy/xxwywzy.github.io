@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2"/>
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0"/>
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/favicon.png?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本篇博客为 CS229 学习笔记第十四部分，主题是：隐马尔可夫模型。">
+<meta name="keywords" content="CS229">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CS229 学习笔记之十四：隐马尔可夫模型基础">
+<meta property="og:url" content="https://xxwywzy.github.io/2019/05/06/cs229-14/index.html">
+<meta property="og:site_name" content="xxwywzy&#39;s Blog">
+<meta property="og:description" content="本篇博客为 CS229 学习笔记第十四部分，主题是：隐马尔可夫模型。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-25-061642.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/blog/20190505/eMkGQ6k6gWsu.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/blog/20190505/R51oMqIqrES6.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/blog/20190506/hXIjs5SntGHp.png">
+<meta property="og:updated_time" content="2019-05-06T11:01:49.650Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CS229 学习笔记之十四：隐马尔可夫模型基础">
+<meta name="twitter:description" content="本篇博客为 CS229 学习笔记第十四部分，主题是：隐马尔可夫模型。">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2019-04-25-061642.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://xxwywzy.github.io/2019/05/06/cs229-14/"/>
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>CS229 学习笔记之十四：隐马尔可夫模型基础 | xxwywzy's Blog</title>
+  
+
+
+
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a02b5462e7522b1ed191c4cea6b1d6e6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xxwywzy's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Long may the sunshine</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br/>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br/>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br/>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br/>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2019/05/06/cs229-14/"/>
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zheyu Wang"/>
+      <meta itemprop="description" content="更に向こうへ"/>
+      <meta itemprop="image" content="/images/avatar.png"/>
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xxwywzy's Blog"/>
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">CS229 学习笔记之十四：隐马尔可夫模型基础
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-05-06 18:49:23" itemprop="dateCreated datePublished" datetime="2019-05-06T18:49:23+08:00">2019-05-06</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/人工智能/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/人工智能/机器学习/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <a href="/2019/05/06/cs229-14/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/05/06/cs229-14/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+            <span id="/2019/05/06/cs229-14/" class="leancloud_visitors" data-flag-title="CS229 学习笔记之十四：隐马尔可夫模型基础">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <div class="note info">
+            本篇博客为 CS229 学习笔记第十四部分，主题是：隐马尔可夫模型。 
+          </div>
+<a id="more"></a>
+<h1 id="马尔可夫模型">马尔可夫模型</h1>
+<ul>
+<li>马尔可夫模型是一种推理时间序列上状态变化的形式</li>
+<li>给定一个状态集 <span class="math inline">\(S=\left\{s_{1}, s_{2}, \ldots s_{|S|}\right\}\)</span>
+<ul>
+<li>我们可以观察出一个随时间变化的序列 <span class="math inline">\(\vec{z} \in S^{T}\)</span></li>
+<li>以一个天气系统的状态 <span class="math inline">\(S = \{sun, cloud, rain\}\)</span> 为例
+<ul>
+<li>我们可以观察出一个 5 天（<span class="math inline">\(T= 5\)</span>）的天气变化序列 <span class="math display">\[
+\{z_1 = s_{sun}, z_2 = s_{cloud},z_3 = s_{cloud},z_4 = s_{rain},z_5 = s_{cloud}\}
+\]</span></li>
+</ul></li>
+</ul></li>
+<li>如果不进行某些限定，则时间 <span class="math inline">\(t\)</span> 的状态 <span class="math inline">\(s_j\)</span> 将会是任意数量变量的函数，将难以建模
+<ul>
+<li>因此，我们会提出两个马尔可夫假设来便于我们建模</li>
+</ul></li>
+<li>第一个假设是<strong>有限地平线假设</strong>（limited horizon assumption）
+<ul>
+<li>该假设指出时间 <span class="math inline">\(t\)</span> 的状态的概率分布只取决于 <span class="math inline">\(t-1\)</span> 时刻的状态
+<ul>
+<li>直观的理解就是时刻 <span class="math inline">\(t\)</span> 状态代表了对过去的“足够”总结，可以合理地预测未来</li>
+</ul>
+<span class="math display">\[
+P\left(z_{t} | z_{t-1}, z_{t-2}, \ldots, z_{1}\right)=P\left(z_{t} | z_{t-1}\right)
+\]</span></li>
+</ul></li>
+<li>第二个假设是<strong>平稳过程假设</strong>（stationary process assumption）
+<ul>
+<li>该假设指出给定当前状态，下一个状态的条件分布不随时间变化，即： <span class="math display">\[
+P\left(z_{t} | z_{t-1}\right)=P\left(z_{2} | z_{1}\right) ; t \in 2 \ldots T
+\]</span></li>
+</ul></li>
+<li>为了方便，我们会假定存在一个初始状态和初始观察 <span class="math inline">\(z_{0} \equiv s_{0}\)</span>
+<ul>
+<li>其中 <span class="math inline">\(s_0\)</span> 表示时刻 0 时状态的初始概率分布（可以理解为一个未知状态）</li>
+<li>这种符号定义可以允许我们将真实初始状态 <span class="math inline">\(z_1\)</span> 的先验分布用 <span class="math inline">\(P\left(z_{1} | z_{0}\right)\)</span> 来表示</li>
+<li>因为对于任何状态序列都有 <span class="math inline">\(z_0 = s_0\)</span>，所以： <span class="math display">\[
+P\left(z_{t} | z_{t-1}, \ldots, z_{1}\right)=P\left(z_{t} | z_{t-1}, \ldots, z_{1}, z_{0}\right)
+\]</span></li>
+</ul></li>
+<li>我们通过定义一个状态转移矩阵 $A ^{(|S|+1) (|S|+1)} $ 来参数化这些转变
+<ul>
+<li><span class="math inline">\(A_{i j}\)</span> 的值表示在任意时刻 <span class="math inline">\(t\)</span> 从状态 <span class="math inline">\(i\)</span> 转移到状态 <span class="math inline">\(j\)</span> 的概率</li>
+<li><p>下面给出关于天气状态的转换矩阵：</p>
+<p><img src="http://media.zjubiomedit.com/2019-04-25-061642.png" width="45%"></p>
+<ul>
+<li>从概率可以看出天气是自相关的
+<ul>
+<li>即晴天趋向于保持晴天，多云趋向于保持多云</li>
+</ul></li>
+<li>这种模式出现在很多马尔可夫模型中，可以总结为转换矩阵的强对角性</li>
+<li>此外，在矩阵中，由初始状态转换为其他三个状态的概率是相同的</li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="马尔可夫模型的两个问题">马尔可夫模型的两个问题</h2>
+<ul>
+<li>基于上述两个假设以及状态转移矩阵 <span class="math inline">\(A\)</span> ，针对一个马尔可夫链中的状态序列，我们可以提出两个问题：
+<ol type="1">
+<li>一个特定的状态序列 <span class="math inline">\(\vec{z}\)</span> 的概率是多少？</li>
+<li>我们如何估计 <span class="math inline">\(A\)</span> 的参数来最大化一个观测序列 <span class="math inline">\(\vec{z}\)</span> 的概率？</li>
+</ol></li>
+</ul>
+<h2 id="一个状态序列的概率">一个状态序列的概率</h2>
+<ul>
+<li><p>我们可以通过概率的链式法则来计算一个特定状态序列 <span class="math inline">\(\vec{z}\)</span> 的概率： <span class="math display">\[
+\begin{aligned} P(\vec{z}) &amp;=P\left(z_{t}, z_{t-1}, \ldots, z_{1} ; A\right) \\ &amp;=P\left(z_{t}, z_{t-1}, \ldots, z_{1}, z_{0} ; A\right) \\ &amp;=P\left(z_{t} | z_{t-1}, z_{t-2}, \ldots, z_{1} ; A\right) P\left(z_{t-1} | z_{t-2}, \ldots, z_{1} ; A\right) \ldots P\left(z_{1} | z_{0} ; A\right) \\ &amp;=P\left(z_{t} | z_{t-1} ; A\right) P\left(z_{t-1} | z_{t-2} ; A\right) \ldots P\left(z_{2} | z_{1} ; A\right) P\left(z_{1} | z_{0} ; A\right) \\ &amp;=\prod_{t=1}^{T} P\left(z_{t} | z_{t-1} ; A\right) \\&amp;= \prod_{t=1}^{T} A_{z_{t-1} z_{t}}\end{aligned}
+\]</span></p>
+<ul>
+<li>第三行使用了链式法则（也可以理解为贝叶斯定理的重复）
+<ul>
+<li><span class="math inline">\(P(z_1 |z_0)\)</span> 实际上是先验分布</li>
+</ul></li>
+<li>以之前的天气序列为例，我们可以将 <span class="math inline">\(P\left(z_{1}=s_{s u n}, z_{2}=s_{c l o u d}, z_{3}=s_{r a i n}, z_{4}=s_{r a i n}, z_{5}=s_{c l o u d}\right)\)</span> 表示为： <span class="math display">\[
+P\left(s_{s u n} | s_{0}\right) P\left(s_{c l o u d} | s_{s u n}\right) P\left(s_{r a i n} | s_{c l o u d}\right) P\left(s_{r a i n} | s_{r a i n}\right) P\left(s_{c l o u d} | s_{r a i n}\right) \\= .33 \times .1 \times .2 \times .7 \times .2
+\]</span></li>
+</ul></li>
+</ul>
+<h2 id="最大似然参数赋值">最大似然参数赋值</h2>
+<ul>
+<li>从学习的观点来看，我们希望找到 <span class="math inline">\(A\)</span> 的参数来最大化观测序列 <span class="math inline">\(\vec{z}\)</span> 的对数似然函数
+<ul>
+<li><p>一个马尔可夫模型的对数似然函数定义如下： <span class="math display">\[
+\begin{aligned} l(A) &amp;=\log P(\vec{z} ; A) \\ &amp;=\log \prod_{t=1}^{T} A_{z_{t-1} z_{t}} \\ &amp;=\sum_{t=1}^{T} \log A_{z_{t-1} z_{t}} \\ &amp;=\sum_{i=1}^{|S|} \sum_{j=1}^{|S|} \sum_{t=1}^{T} 1\left\{z_{t-1}=s_{i} \wedge z_{t}=s_{j}\right\} \log A_{i j} \end{aligned}
+\]</span></p>
+<ul>
+<li>对于该优化问题，存在两个约束条件：
+<ul>
+<li>每个状态向下一个状态转变的概率之和为 1</li>
+<li><span class="math inline">\(A\)</span> 的所有元素都是非负的</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>基于以上两个约束，我们可以构建拉格朗日乘子： <span class="math display">\[
+\begin{align*} 
+\max_{A} &amp;\quad l(A) \\ \text{s.t.} &amp;\quad \sum_{j=1}^{|S|} A_{i j}=1,\;i=1 . .|S| \\ &amp;\quad 
+A_{i j} \geq 0, \; i, j=1 . .|S|
+\end{align*}
+\]</span></p>
+<ul>
+<li>我们将等式约束用到乘子构建中，而不等式约束可以被忽略
+<ul>
+<li>因为解总是为正数</li>
+</ul></li>
+<li><p>构建后的拉格朗日乘子为： <span class="math display">\[
+\mathcal{L}(A, \alpha)=\sum_{i=1}^{|S|} \sum_{j=1}^{|S|} \sum_{t=1}^{T} 1\left\{z_{t-1}=s_{i} \wedge z_{t}=s_{j}\right\} \log A_{i j}+\sum_{i=1}^{|S|} \alpha_{i}\left(1-\sum_{j=1}^{|S|} A_{i j}\right)
+\]</span></p>
+<ul>
+<li><p>求偏导可以得到： <span class="math display">\[
+\begin{aligned} \frac{\partial \mathcal{L}(A, \alpha)}{\partial A_{i j}} &amp;=\frac{\partial}{\partial A_{i j}}\left(\sum_{t=1}^{T} 1\left\{z_{t-1}=s_{i} \wedge z_{t}=s_{j}\right\} \log A_{i j}\right)+\frac{\partial}{\partial A_{i j}} \alpha_{i}\left(1-\sum_{j=1}^{|S|} A_{i j}\right) \\ &amp;=\frac{1}{A_{i j}} \sum_{t=1}^{T} 1\left\{z_{t-1}=s_{i} \wedge z_{t}=s_{j}\right\}-\alpha_{i} \equiv 0 \\ &amp; \Rightarrow A_{i j} =\frac{1}{\alpha_{i}} \sum_{t=1}^{T} 1\left\{z_{t-1}=s_{i} \wedge z_{t}=s_{j}\right\}  \end{aligned}
+\]</span></p></li>
+<li><p>将上式代回再对 <span class="math inline">\(\alpha\)</span> 求偏导可得： <span class="math display">\[
+\begin{aligned} \frac{\partial \mathcal{L}(A, \beta)}{\partial \alpha_{i}} &amp;=1-\sum_{j=1}^{|S|} A_{i j} \\ &amp;=1-\sum_{j=1}^{|S|} \frac{1}{\alpha_{i}} \sum_{t=1}^{T} 1\left\{z_{t-1}=s_{i} \wedge z_{t}=s_{j}\right\} \equiv 0 \\ \Rightarrow \alpha &amp;=\sum_{j=1}^{|S|} \sum_{t=1}^{T} 1\left\{z_{t-1}=s_{i} \wedge z_{t}=s_{j}\right\} \\ &amp;=\sum_{t=1}^{T} 1\left\{z_{t-1}=s_{i}\right\} \end{aligned}
+\]</span></p></li>
+<li><p>将上式代回 <span class="math inline">\(A_{ij}\)</span> 的表达式可以得到最终的输出为： <span class="math display">\[
+\hat{A}_{i j}=\frac{\sum_{t=1}^{T} 1\left\{z_{t-1}=s_{i} \wedge z_{t}=s_{j}\right\}}{\sum_{t=1}^{T} 1\left\{z_{t-1}=s_{i}\right\}}
+\]</span></p>
+<ul>
+<li>对上式的直观理解：从状态 <span class="math inline">\(i\)</span> 转换至状态 <span class="math inline">\(j\)</span> 的最大似然概率即为 <span class="math inline">\(i\)</span> 向 <span class="math inline">\(j\)</span> 转移的实际次数除以我们处于状态 <span class="math inline">\(i\)</span> 的总次数</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+<h1 id="隐马尔可夫模型">隐马尔可夫模型</h1>
+<ul>
+<li>马尔可夫模型是对时间序列数据的有力抽象
+<ul>
+<li>但是如果我们无法观测到序列的状态，就无法进行抽象</li>
+</ul></li>
+<li>隐马尔可夫模型可以用来解决这个问题
+<ul>
+<li>我们无法观测到实际的状态序列，而是观测到由状态生成的某个输出序列</li>
+</ul></li>
+<li>正式来说，在一个隐马尔可夫模型中，我们有如下序列：
+<ul>
+<li><p>一个<strong>观测输出序列</strong>： <span class="math display">\[
+x=\left\{x_{1}, x_{2}, \dots, x_{T}\right\}
+\]</span></p>
+<ul>
+<li>其取值自输出字典 <span class="math inline">\(V=\left\{v_{1}, v_{2}, \dots, v_{|V|}\right\}\)</span></li>
+<li>即 <span class="math inline">\(x_{t} \in V, t=1 .. T\)</span></li>
+</ul></li>
+<li><p>一个<strong>状态序列</strong>： <span class="math display">\[
+z=\left\{z_{1}, z_{2}, \dots, z_{T}\right\}
+\]</span></p>
+<ul>
+<li>其取值自状态字典 <span class="math inline">\(S=\left\{s_{1}, s_{2}, \dots s_{|S|}\right\}\)</span></li>
+<li>即 <span class="math inline">\(z_{t} \in S, t=1 \ldots T\)</span></li>
+<li>该序列是<strong>未知</strong>的（无法观测）</li>
+</ul></li>
+</ul></li>
+<li>在隐马尔可夫模型模型中，包含有两个矩阵：
+<ul>
+<li>一个是之前提到的状态转移矩阵 <span class="math inline">\(A\)</span>
+<ul>
+<li><span class="math inline">\(A_{ij}\)</span> 表示从状态 <span class="math inline">\(i\)</span> 转移到状态 <span class="math inline">\(j\)</span> 的概率</li>
+</ul></li>
+<li>另一个矩阵 <span class="math inline">\(B\)</span> 用于对由隐藏状态生成观测输出的概率建模
+<ul>
+<li><p>我们需要提出<strong>输出独立性假设</strong>： <span class="math display">\[
+P\left(x_{t}=v_{k} | z_{t}=s_{j}\right)=P\left(x_{t}=v_{k} | x_{1}, \ldots, x_{T}, z_{1}, \ldots, z_{T}\right) = B_{jk}
+\]</span></p>
+<ul>
+<li><span class="math inline">\(B_{jk}\)</span> 表示给定当前时间的状态 <span class="math inline">\(s_j\)</span>，由该状态生成输出 <span class="math inline">\(v_k\)</span> 的概率</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="隐马尔可夫模型的三个问题">隐马尔可夫模型的三个问题</h2>
+<ul>
+<li>对于隐马尔可夫模型，我们可以提出三个基本问题：
+<ol type="1">
+<li>观测序列的概率是多少？</li>
+<li>最可能生成该观测序列的状态序列是什么？</li>
+<li>给定一些数据，我们如何学习出矩阵 <span class="math inline">\(A\)</span> 和 <span class="math inline">\(B\)</span> 的参数？</li>
+</ol></li>
+</ul>
+<h2 id="观测序列的概率前向算法">观测序列的概率：前向算法</h2>
+<ul>
+<li>在 HMM 中，我们假设观测序列是通过如下流程生成的：
+<ul>
+<li>假设存在一个基于时间序列的状态序列 <span class="math inline">\(\vec{z}\)</span>
+<ul>
+<li>该序列由马尔可夫模型生成，以状态转移矩阵 <span class="math inline">\(A\)</span> 为参数</li>
+</ul></li>
+<li>在每个时间步 <span class="math inline">\(t\)</span>，我们选择一个输出 <span class="math inline">\(x_t\)</span> 作为状态 <span class="math inline">\(z_t\)</span> 的函数</li>
+</ul></li>
+<li><p>因此，为了计算观测序列的概率，我们需要将给定所有可能状态序列的 <span class="math inline">\(\vec{x}\)</span> 的似然概率相加： <span class="math display">\[
+\begin{aligned} P(\vec{x} ; A, B) &amp;=\sum_{\vec{z}} P(\vec{x}, \vec{z} ; A, B) \\ &amp;=\sum_{\vec{z}} P(\vec{x} | \vec{z} ; A, B) P(\vec{z} ; A, B) \end{aligned}
+\]</span></p>
+<ul>
+<li>上述公式对任何概率分布均成立</li>
+<li><p>HMM 假设可以让我们对上述表达式进行简化： <span class="math display">\[
+\begin{aligned} P(\vec{x} ; A, B) &amp;=\sum_{\vec{z}} P(\vec{x} | \vec{z} ; A, B) P(\vec{z} ; A, B) \\ &amp;=\sum_{\vec{z}}\left(\prod_{t=1}^{T} P\left(x_{t} | z_{t} ; B\right)\right)\left(\prod_{t=1}^{T} P\left(z_{t} | z_{t-1} ; A\right)\right) \\ &amp;=\sum_{\vec{z}}\left(\prod_{t=1}^{T} B_{z_{t} x_{t}}\right)\left(\prod_{t=1}^{T} A_{z_{t-1} z_{t}}\right) \end{aligned}
+\]</span></p>
+<ul>
+<li>上述推导基于输出独立性假设及马尔可夫模型中提到的两个假设</li>
+<li>然而，该求和是基于所有可能的状态序列，而 <span class="math inline">\(z_t\)</span> 有 <span class="math inline">\(|S|\)</span> 个可能的取值
+<ul>
+<li>所以直接求和的时间复杂度为 <span class="math inline">\(O(|S|^T)\)</span> （<span class="math inline">\(T\)</span> 是总时间步数）</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>幸运的是，我们可以通过一种动态规划算法：<strong>前向算法</strong>来更快地计算 <span class="math inline">\(P(\vec{x} ; A, B)\)</span>
+<ul>
+<li>首先我们定义一个量：<span class="math inline">\(\alpha_{i}(t)=P\left(x_{1}, x_{2}, \ldots, x_{t}, z_{t}=s_{i} ; A, B\right)\)</span>
+<ul>
+<li>其代表时间长度为 <span class="math inline">\(t\)</span> 的所有观测值（状态不限）以及在时刻 <span class="math inline">\(t\)</span> 状态为 <span class="math inline">\(s_i\)</span> 的联合概率</li>
+<li>通过这样一个量，我们可以将之前的公式表示为： <span class="math display">\[
+\begin{aligned} P(\vec{x} ; A, B) &amp;=P\left(x_{1}, x_{2}, \ldots, x_{T} ; A, B\right) \\ &amp;=\sum_{i=1}^{|S|} P\left(x_{1}, x_{2}, \ldots, x_{T}, z_{T}=s_{i} ; A, B\right) \\ &amp;=\sum_{i=1}^{|S|} \alpha_{i}(T) \end{aligned}
+\]</span></li>
+</ul></li>
+<li><p>我们可以通过如下算法来快速地进行求解</p>
+<p><img src="http://media.zjubiomedit.com/blog/20190505/eMkGQ6k6gWsu.png" width="70%"></p>
+<ul>
+<li>每个时间步地时间复杂度仅为 <span class="math inline">\(O(|S|)\)</span>
+<ul>
+<li>算法总体时间复杂度为 <span class="math inline">\(O(|S| \cdot T)\)</span></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>除了前向算法之外，还有一个类似的<strong>后向算法</strong>用来计算如下概率： <span class="math display">\[
+\beta_{i}(t)=P\left(x_{T}, x_{T-1}, . ., x_{t+1}, z_{t}=s_{i} ; A, B\right)
+\]</span></p></li>
+</ul>
+<h2 id="最大似然状态序列维特比算法">最大似然状态序列：维特比算法</h2>
+<ul>
+<li>HMM 最常见的一个问题是：给定一个观测序列输出 <span class="math inline">\(\vec{x} \in V^{T}\)</span>，最可能的状态序列 <span class="math inline">\(\vec{z} \in S^{T}\)</span> 是什么？
+<ul>
+<li><p>该问题可以用如下公式表达： <span class="math display">\[
+\arg \max _{\vec{z}} P(\vec{z} | \vec{x} ; A, B)=\arg \max _{\vec{z}} \frac{P(\vec{x}, \vec{z} ; A, B)}{\sum_{\vec{z}} P(\vec{x}, \vec{z} ; A, B)}=\arg \max _{\vec{z}} P(\vec{x}, \vec{z} ; A, B)
+\]</span></p>
+<ul>
+<li>第一步运用了贝叶斯法则</li>
+<li>第二步的依据是分母不与 <span class="math inline">\(\vec{z}\)</span> 直接相关</li>
+</ul></li>
+<li>我们可以通过枚举法进行求解，但时间复杂度为 <span class="math inline">\(O(|S|^T)\)</span>
+<ul>
+<li>与之前类似，我们可以使用动态规划的方法来简化运算</li>
+</ul></li>
+</ul></li>
+<li>用于求解上述问题的动态规划方法被称为<strong>维特比算法</strong>（Viterbi algorithm）
+<ul>
+<li>其与前向算法十分类似</li>
+<li>区别在于这里不需要追踪概率之和，而是追踪最大概率并记录其对应的状态序列</li>
+</ul></li>
+</ul>
+<h2 id="参数学习基于-em-算法的-hmm">参数学习：基于 EM 算法的 HMM</h2>
+<ul>
+<li>关于 HMM 的最后一个问题是：给定一个状态序列集，如何求解矩阵 <span class="math inline">\(A\)</span> 和 <span class="math inline">\(B\)</span> 中的参数？
+<ul>
+<li><p>本节将使用 <a href="https://xxwywzy.github.io/2019/02/12/cs229-9/">EM 算法</a>来进行求解，下图给出了算法的基本流程（针对单个样本）</p>
+<p><img src="http://media.zjubiomedit.com/blog/20190505/R51oMqIqrES6.png" width="70%"></p>
+<ul>
+<li>注意 M-step 中包含了约束条件（因为 <span class="math inline">\(A\)</span> 和 <span class="math inline">\(B\)</span> 中含有概率）
+<ul>
+<li>我们将使用拉格朗日乘子来求解上述优化问题</li>
+</ul></li>
+<li>此外，注意到在 E-step 和 M-step 中均需要枚举所有的状态序列，导致过大的时间复杂度
+<ul>
+<li>因此我们将使用之前提到的前向和后向算法来简化计算</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>首先，使用马尔可夫假设来重写目标函数： <span class="math display">\[
+\begin{aligned}
+A,B &amp;= \arg \max _{A, B} \sum_{\vec{z}} Q(\vec{z}) \log \frac{P(\vec{x}, \vec{z} ; A, B)}{Q(\vec{z})} \\
+&amp;= \arg \max _{A, B} \sum_{\vec{z}} Q(\vec{z}) \log P(\vec{x}, \vec{z} ; A, B)\\
+&amp;= \arg \max _{A, B} \sum_{\vec{z}} Q(\vec{z}) \log \left(\prod_{t=1}^{T} P\left(x_{t} | z_{t} ; B\right)\right)\left(\prod_{t=1}^{T} P\left(z_{t} | z_{t-1} ; A\right)\right)\\
+&amp;= \arg \max _{A, B} \sum_{\vec{z}} Q(\vec{z}) \sum_{t=1}^{T} \log B_{z_{t} x_{t}}+\log A_{z_{t-1} z_{t}}\\
+&amp;= \arg \max _{A, B} \sum_{\vec{z}} Q(\vec{z}) \sum_{i=1}^{|S|} \sum_{j=1}^{|S|} \sum_{k=1}^{|V|}\sum_{t=1}^{T} 1\left\{z_{t}=s_{j} \wedge x_{t}=v_{k}\right\} \log B_{j k}+1\left\{z_{t-1}=s_{i} \wedge z_{t}=s_{j}\right\} \log A_{i j}\\
+\end{aligned}
+\]</span></p>
+<ul>
+<li>第二行去除了分母，因为其与 <span class="math inline">\(A\)</span> 和 <span class="math inline">\(B\)</span> 无关</li>
+<li>第三行应用了马尔可夫假设</li>
+<li>第五行使用指示函数来按状态索引 <span class="math inline">\(A\)</span> 和 <span class="math inline">\(B\)</span></li>
+</ul></li>
+<li>下面构建拉格朗日乘子：
+<ul>
+<li>与之前一样，因为解必为非负，所以不等约束可以忽略</li>
+</ul>
+<p><span class="math display">\[
+\begin{aligned} \mathcal{L}(A, B, \delta, \epsilon)=&amp; \sum_{\vec{z}} Q(\vec{z}) \sum_{i=1}^{|S|} \sum_{j=1}^{|S|} \sum_{k=1}^{|V|} \sum_{t=1}^{T} 1\left\{z_{t}=s_{j} \wedge x_{t}=v_{k}\right\} \log B_{j k}+1\left\{z_{t-1}=s_{i}\wedge z_{t}=s_{j}\right\}\log A_{i j}\\ &amp;+\sum_{j=1}^{|S|} \epsilon_{j}\left(1-\sum_{k=1}^{|V|} B_{j k}\right)+\sum_{i=1}^{|S|} \delta_{i}\left(1-\sum_{j=1}^{|S|} A_{i j}\right) \end{aligned}
+\]</span></p>
+<ul>
+<li><p>求偏导并将其设为 0 可得： <span class="math display">\[
+\begin{aligned} \frac{\partial \mathcal{L}(A, B, \delta, \epsilon)}{\partial A_{i j}} &amp;=\sum_{\vec{z}} Q(\vec{z}) \frac{1}{A_{i j}} \sum_{t=1}^{T} 1\left\{z_{t-1}=s_{i} \wedge z_{t}=s_{j}\right\}-\delta_{i} \equiv 0 \\ A_{i j} &amp;=\frac{1}{\delta_{i}} \sum_{\vec{z}} Q(\vec{z}) \sum_{t=1}^{T} 1\left\{z_{t-1}=s_{i} \wedge z_{t}=s_{j}\right\} \end{aligned}
+\]</span></p>
+<p><span class="math display">\[
+\begin{aligned} \frac{\partial \mathcal{L}(A, B, \delta, \epsilon)}{\partial B_{j k}} &amp;=\sum_{\vec{z}} Q(\vec{z}) \frac{1}{B_{j k}} \sum_{t=1}^{T} 1\left\{z_{t}=s_{j} \wedge x_{t}=v_{k}\right\}-\epsilon_{j} \equiv 0 \\ B_{j k} &amp;=\frac{1}{\epsilon_{j}} \sum_{\vec{z}} Q(\vec{z}) \sum_{t=1}^{T} 1\left\{z_{t}=s_{j} \wedge x_{t}=v_{k}\right\} \end{aligned}
+\]</span></p></li>
+<li><p>将上述结果代回并关于拉格朗日乘子求偏导可得： <span class="math display">\[
+\begin{aligned} \frac{\partial \mathcal{L}(A, B, \delta, \epsilon)}{\partial \delta_{i}} &amp;=1-\sum_{j=1}^{|S|} A_{i j} \\ &amp;=1-\sum_{j=1}^{|S|} \frac{1}{\delta_{i}} \sum_{\vec{z}} Q(\vec{z}) \sum_{t=1}^{T} 1\left\{z_{t-1}=s_{i} \wedge z_{t}=s_{j}\right\} \equiv 0  \\
+\delta_{i} &amp;=\sum_{j=1}^{|S|} \sum_{\vec{z}} Q(\vec{z}) \sum_{t=1}^{T} 1\left\{z_{t-1}=s_{i} \wedge z_{t}=s_{j}\right\} \\ &amp;=\sum_{\vec{z}} Q(\vec{z}) \sum_{t=1}^{T} 1\left\{z_{t-1}=s_{i}\right\} 
+\end{aligned}
+\]</span></p>
+<p><span class="math display">\[
+\begin{aligned} \frac{\partial \mathcal{L}(A, B, \delta, \epsilon)}{\partial \epsilon_{j}} &amp;=1-\sum_{k=1}^{|V|} B_{j k} \\ &amp;=1-\sum_{k=1}^{|V|} \frac{1}{\epsilon_{j}} \sum_{\vec{z}} Q(\vec{z}) \sum_{t=1}^{T} 1\left\{z_{t}=s_{j} \wedge x_{t}=v_{k}\right\} \equiv 0 \\
+\epsilon_{j} &amp;=\sum_{k=1}^{|V|} \sum_{\vec{z}} Q(\vec{z}) \sum_{t=1}^{T} 1\left\{z_{t}=s_{j} \wedge x_{t}=v_{k}\right\} \\ &amp;=\sum_{\vec{z}} Q(\vec{z}) \sum_{t=1}^{T} 1\left\{z_{t}=s_{j}\right\} 
+\end{aligned}
+\]</span></p></li>
+<li><p>将上述结果代回，可以解得： <span class="math display">\[
+\begin{aligned} \hat{A}_{i j} &amp;=\frac{\sum_{\vec{z}} Q(\vec{z}) \sum_{t=1}^{T} 1\left\{z_{t-1}=s_{i} \wedge z_{t}=s_{j}\right\}}{\sum_{\vec{z}} Q(\vec{z}) \sum_{t=1}^{T} 1\left\{z_{t-1}=s_{i}\right\}} \\ \hat{B}_{j k} &amp;=\frac{\sum_{\vec{z}} Q(\vec{z}) \sum_{t=1}^{T} 1\left\{z_{t}=s_{j} \wedge x_{t}=v_{k}\right\}}{\sum_{\vec{z}} Q(\vec{z}) \sum_{t=1}^{T} 1\left\{z_{t}=s_{j}\right\}} \end{aligned}
+\]</span></p></li>
+</ul></li>
+<li>上述公式需要遍历所有状态序列，我们可以使用前向和后向概率来进行化简
+<ul>
+<li><p>首先对 <span class="math inline">\(\hat{A}_{i j}\)</span> 的分子进行化简： <span class="math display">\[
+\begin{aligned}
+&amp; \sum_{\vec{z}} Q(\vec{z}) \sum_{t=1}^{T} 1\left\{z_{t-1}=s_{i} \wedge z_{t}=s_{j}\right\} \\
+= &amp; \sum_{t=1}^{T} \sum_{\vec{z}} 1\left\{z_{t-1}=s_{i} \wedge z_{t}=s_{j}\right\} Q(\vec{z}) \\
+= &amp; \sum_{t=1}^{T} \sum_{\vec{z}} 1\left\{z_{t-1}=s_{i} \wedge z_{t}=s_{j}\right\} P(\vec{z} | \vec{x} ; A, B)\\
+= &amp; \frac{1}{P(\vec{x} ; A, B)} \sum_{t=1}^{T} \sum_{\vec{z}} 1\left\{z_{t-1}=s_{i} \wedge z_{t}=s_{j}\right\} P(\vec{z}, \vec{x} ; A, B)\\
+= &amp; \frac{1}{P(\vec{x} ; A, B)} \sum_{t=1}^{T} \alpha_{i}(t) A_{i j} B_{j x_{t}} \beta_{j}(t+1)\\
+\end{aligned}
+\]</span></p>
+<ul>
+<li>前两步进行了重新排列并引入了 <span class="math inline">\(Q\)</span> 的定义</li>
+<li>第三步使用了贝叶斯法则</li>
+<li>第四步使用了各元素的定义</li>
+</ul></li>
+<li><p>类似地，分母也可以进行化简： <span class="math display">\[
+\begin{aligned} &amp; \sum_{\vec{z}} Q(\vec{z}) \sum_{t=1}^{T} 1\left\{z_{t-1}=s_{i}\right\} \\=&amp; \sum_{j=1}^{|S|} \sum_{\vec{z}} Q(\vec{z}) \sum_{t=1}^{T} 1\left\{z_{t-1}=s_{i} \wedge z_{t}=s_{j}\right\} \\=&amp; \frac{1}{P(\vec{x} ; A, B)} \sum_{j=1}^{|S|} \sum_{t=1}^{T} \alpha_{i}(t) A_{i j} B_{j x_{t}} \beta_{j}(t+1) \end{aligned}
+\]</span></p></li>
+<li><p>将上述结果综合，可以得到： <span class="math display">\[
+\hat{A}_{i j}=\frac{\sum_{t=1}^{T} \alpha_{i}(t) A_{i j} B_{j x_{t}} \beta_{j}(t+1)}{\sum_{j=1}^{|S|} \sum_{t=1}^{T} \alpha_{i}(t) A_{i j} B_{j x_{t}} \beta_{j}(t+1)}
+\]</span></p></li>
+<li><p>类似地，对 <span class="math inline">\(\hat{B}_{j k}\)</span> 的分子进行如下化简： <span class="math display">\[
+\begin{aligned}
+&amp;  \sum_{\vec{z}} Q(\vec{z}) \sum_{t=1}^{T} 1\left\{z_{t}=s_{j} \wedge x_{t}=v_{k}\right\}\\
+= &amp;  \frac{1}{P(\vec{x} ; A, B)} \sum_{t=1}^{T} \sum_{\vec{z}} 1\left\{z_{t}=s_{j} \wedge x_{t}=v_{k}\right\} P(\vec{z}, \vec{x} ; A, B)\\
+= &amp; \frac{1}{P(\vec{x} ; A, B)} \sum_{i=1}^{|S|} \sum_{t=1}^{T} \sum_{\vec{z}}1\left\{z_{t-1}=s_{i} \wedge z_{t}=s_{j} \wedge x_{t}=v_{k}\right\} P(\vec{z}, \vec{x} ; A, B)\\
+= &amp; \frac{1}{P(\vec{x} ; A, B)} \sum_{i=1}^{|S|} \sum_{t=1}^{T} 1\left\{x_{t}=v_{k}\right\} \alpha_{i}(t) A_{i j} B_{j x_{t}} \beta_{j}(t+1)\\
+\end{aligned}
+\]</span></p></li>
+<li><p>同理，其分母可以表示为： <span class="math display">\[
+\begin{aligned} &amp; \sum_{\vec{z}} Q(\vec{z}) \sum_{t=1}^{T} 1\left\{z_{t}=s_{j}\right\} \\=&amp; \frac{1}{P(\vec{x} ; A, B)} \sum_{i=1}^{|S|} \sum_{t=1}^{T} \sum_{\vec{z}}1\left\{z_{t-1}=s_{i} \wedge z_{t}=s_{j}\right\} P(\vec{z}, \vec{x} ; A, B) \\=&amp; \frac{1}{P(\vec{x} ; A, B)} \sum_{i=1}^{|S|} \sum_{t=1}^{T} \alpha_{i}(t) A_{i j} B_{j x_{t}} \beta_{j}(t+1) \end{aligned}
+\]</span></p></li>
+<li><p>将上述结果综合，可以得到： <span class="math display">\[
+\hat{B}_{j k}=\frac{\sum_{i=1}^{|S|} \sum_{t=1}^{T} 1\left\{x_{t}=v_{k}\right\} \alpha_{i}(t) A_{i j} B_{j x_{t}} \beta_{j}(t+1)}{\sum_{i=1}^{|S|} \sum_{t=1}^{T} \alpha_{i}(t) A_{i j} B_{j x_{t}} \beta_{j}(t+1)}
+\]</span></p></li>
+</ul></li>
+<li>基于上述结果，可以提出用于 HMM 参数学习的前向-后向算法
+<ul>
+<li>该算法也被称为 Baum-Welch 算法</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/blog/20190506/hXIjs5SntGHp.png" width="70%"></p>
+<ul>
+<li>与许多 EM 算法的应用类似，该算法是一个非凸优化问题，存在许多局部最优解
+<ul>
+<li>EM 算法将基于初始值收敛至最大值
+<ul>
+<li>因此可以考虑多次运行算法</li>
+</ul></li>
+<li>此外，对由 <span class="math inline">\(A\)</span> 和 <span class="math inline">\(B\)</span> 表示的概率分布进行平滑处理也十分重要
+<ul>
+<li>即没有转移或生成为 0 概率（除去初始情况）</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+<h1 id="思维导图">思维导图</h1>
+<p>待完成</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Zheyu Wang</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://xxwywzy.github.io/2019/05/06/cs229-14/" title="CS229 学习笔记之十四：隐马尔可夫模型基础">https://xxwywzy.github.io/2019/05/06/cs229-14/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CS229/" rel="tag"># CS229</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/30/kaggle-1/" rel="next" title="Coursera-Kaggle Week1 学习笔记">
+                <i class="fa fa-chevron-left"></i> Coursera-Kaggle Week1 学习笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Zheyu Wang"/>
+            
+              <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+              <p class="site-description motion-element" itemprop="description">更に向こうへ</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">31</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/xxwywzy" title="GitHub &rarr; https://github.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://twitter.com/xxwywzy" title="Twitter &rarr; https://twitter.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="http://weibo.com/xxwywzy" title="Weibo &rarr; http://weibo.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://instagram.com/xxwywzy" title="Instagram &rarr; https://instagram.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#马尔可夫模型"><span class="nav-number">1.</span> <span class="nav-text">马尔可夫模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#马尔可夫模型的两个问题"><span class="nav-number">1.1.</span> <span class="nav-text">马尔可夫模型的两个问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一个状态序列的概率"><span class="nav-number">1.2.</span> <span class="nav-text">一个状态序列的概率</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最大似然参数赋值"><span class="nav-number">1.3.</span> <span class="nav-text">最大似然参数赋值</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#隐马尔可夫模型"><span class="nav-number">2.</span> <span class="nav-text">隐马尔可夫模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#隐马尔可夫模型的三个问题"><span class="nav-number">2.1.</span> <span class="nav-text">隐马尔可夫模型的三个问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#观测序列的概率前向算法"><span class="nav-number">2.2.</span> <span class="nav-text">观测序列的概率：前向算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最大似然状态序列维特比算法"><span class="nav-number">2.3.</span> <span class="nav-text">最大似然状态序列：维特比算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参数学习基于-em-算法的-hmm"><span class="nav-number">2.4.</span> <span class="nav-text">参数学习：基于 EM 算法的 HMM</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#思维导图"><span class="nav-number">3.</span> <span class="nav-text">思维导图</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.5.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.0.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz',
+    appKey: 'IxP5URFEhxow4TfWyVNiowbH',
+    placeholder: '请在这里评论=￣ω￣=',
+    avatar: 'retro',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+</script>
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+  
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .fail(function ({ responseJSON }) {
+                console.log(`Failed to save Visitor num, with error message: ${responseJSON.error}`);
+              })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1 }))
+                .done(function() {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function() {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+        .fail(function ({ responseJSON }) {
+          console.log(`LeanCloud Counter Error: ${responseJSON.code} ${responseJSON.error}`);
+        });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz',
+                'X-LC-Key': 'IxP5URFEhxow4TfWyVNiowbH',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            addCount(Counter);
+          
+        });
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: "AMS"
+      }
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+      for (i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+<script src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+  overflow: auto hidden;
+}
+</style><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+    
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

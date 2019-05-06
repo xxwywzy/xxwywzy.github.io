@@ -96,27 +96,23 @@
 
 
 
-  <meta name="description" content="本篇博客为 CS229 学习笔记第十二部分，主题是：独立成分分析。">
-<meta name="keywords" content="CS229">
-<meta property="og:type" content="article">
-<meta property="og:title" content="CS229 学习笔记之十二：独立成分分析">
-<meta property="og:url" content="https://xxwywzy.github.io/2019/03/01/cs229-12/index.html">
+  <meta name="description" content="更に向こうへ">
+<meta property="og:type" content="website">
+<meta property="og:title" content="xxwywzy&#39;s Blog">
+<meta property="og:url" content="https://xxwywzy.github.io/page/7/index.html">
 <meta property="og:site_name" content="xxwywzy&#39;s Blog">
-<meta property="og:description" content="本篇博客为 CS229 学习笔记第十二部分，主题是：独立成分分析。">
+<meta property="og:description" content="更に向こうへ">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-04-065522.png">
-<meta property="og:updated_time" content="2019-03-04T08:49:29.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CS229 学习笔记之十二：独立成分分析">
-<meta name="twitter:description" content="本篇博客为 CS229 学习笔记第十二部分，主题是：独立成分分析。">
-<meta name="twitter:image" content="http://media.zjubiomedit.com/2019-03-04-065522.png">
+<meta name="twitter:title" content="xxwywzy&#39;s Blog">
+<meta name="twitter:description" content="更に向こうへ">
 
 
 
 
 
 
-  <link rel="canonical" href="https://xxwywzy.github.io/2019/03/01/cs229-12/"/>
+  <link rel="canonical" href="https://xxwywzy.github.io/page/7/"/>
 
 
 
@@ -126,7 +122,7 @@
   };
 </script>
 
-  <title>CS229 学习笔记之十二：独立成分分析 | xxwywzy's Blog</title>
+  <title>xxwywzy's Blog</title>
   
 
 
@@ -184,7 +180,8 @@
     
   
 
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left 
+  page-home">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -322,9 +319,9 @@
           
           <div id="content" class="content">
             
-
-  <div id="posts" class="posts-expand">
+  <section id="posts" class="posts-expand">
     
+      
 
   
 
@@ -339,7 +336,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2019/03/01/cs229-12/"/>
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2018/03/14/CS229-1/"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Zheyu Wang"/>
@@ -356,8 +353,10 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">CS229 学习笔记之十二：独立成分分析
-
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/03/14/CS229-1/" class="post-title-link" itemprop="url">CS229 学习笔记之一：线性回归</a>
               
             
           </h1>
@@ -382,7 +381,7 @@
                 
               
 
-              <time title="创建时间：2019-03-01 09:32:13" itemprop="dateCreated datePublished" datetime="2019-03-01T09:32:13+08:00">2019-03-01</time>
+              <time title="创建时间：2018-03-14 22:06:32" itemprop="dateCreated datePublished" datetime="2018-03-14T22:06:32+08:00">2018-03-14</time>
             
 
             
@@ -425,8 +424,8 @@
                   <i class="fa fa-comment-o"></i>
                 </span>
             
-                <a href="/2019/03/01/cs229-12/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/03/01/cs229-12/" itemprop="commentCount"></span>
+                <a href="/2018/03/14/CS229-1/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/03/14/CS229-1/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -434,7 +433,7 @@
 
           
           
-            <span id="/2019/03/01/cs229-12/" class="leancloud_visitors" data-flag-title="CS229 学习笔记之十二：独立成分分析">
+            <span id="/2018/03/14/CS229-1/" class="leancloud_visitors" data-flag-title="CS229 学习笔记之一：线性回归">
               <span class="post-meta-divider">|</span>
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
@@ -465,159 +464,20 @@
       
 
       
-        <div class="note info">
-            本篇博客为 CS229 学习笔记第十二部分，主题是：独立成分分析。 
+        
+          <div class="note info">
+            本篇博客为 CS229 学习笔记第一部分，主题是：线性回归。 
           </div>
-<a id="more"></a>
-<h1 id="问题的提出">问题的提出</h1>
-<ul>
-<li>ICA 与 PCA 类似，也会找到一个新基底来表示数据，但两者的目标完全不同</li>
-<li>ICA 的一个典型案例是“鸡尾酒宴会问题“：
-<ul>
-<li>在一个宴会上有 n 个人同时说话，并且房间里的麦克风只接收到了这 n 个声音的叠加</li>
-<li>假定该房间有 n 个麦克风，则每个麦克风记录了说话者声音的不同叠加（由于距离不同）</li>
-<li>我们希望基于这些麦克风记录的声音，来还原原始的 n 名说话者的声音信号</li>
-</ul></li>
-<li>该问题可以用如下数学公式进行表达：
-<ul>
-<li><p>给定 <span class="math inline">\(n\)</span> 个独立信号源 <span class="math inline">\(s \in \mathbb{R}^n\)</span>，我们观察到的数据为： <span class="math display">\[
-x = As
-\]</span></p>
-<ul>
-<li>其中 <span class="math inline">\(A\)</span> 是一个未知的方阵，称为<strong>混合矩阵</strong></li>
-<li>重复的观察可以得到一个数据集 <span class="math inline">\(\{x^{(i)}; i=1, \ldots, m\}\)</span></li>
-<li>我们的目标是通过观察数据恢复出原始数据 <span class="math inline">\(s^{(i)}\)</span>（<span class="math inline">\(x^{(i)} = A s^{(i)}\)</span>）</li>
-</ul></li>
-<li>在鸡尾酒宴会问题中：
-<ul>
-<li><span class="math inline">\(s^{(i)}\)</span> 是一个 <span class="math inline">\(n\)</span> 维向量，<span class="math inline">\(s_j^{(i)}\)</span> 是说话者 <span class="math inline">\(j\)</span> 在 时间 <span class="math inline">\(i\)</span> 发出的声音</li>
-<li><span class="math inline">\(x^{(i)}\)</span> 是一个 <span class="math inline">\(n\)</span> 维向量，<span class="math inline">\(x_j^{(i)}\)</span> 是麦克风 <span class="math inline">\(j\)</span> 在 时间 <span class="math inline">\(i\)</span> 记录的声音</li>
-</ul></li>
-<li><p>定义 <span class="math inline">\(W = A^{-1}\)</span> 为<strong>分离矩阵</strong>，则我们的目标是找到 <span class="math inline">\(W\)</span> ，从而给定麦克风的记录 <span class="math inline">\(x^{(i)}\)</span>，我们通过下式恢复出原始数据： <span class="math display">\[
-s^{(i)} = W x^{(i)}
-\]</span></p>
-<ul>
-<li><p>为了符号方便，我们令 <span class="math inline">\(w_i^T\)</span> 表示 <span class="math inline">\(W\)</span> 的第 <span class="math inline">\(i\)</span> 行，则 <span class="math display">\[
-W= \left[\begin{array}{cc}
-—w^T_1— \\
-\vdots \\
-—w^T_n—
-\end{array} 
-\right]
-\]</span></p></li>
-<li><p>因此，<span class="math inline">\(w_i \in \mathbb{R}^n\)</span> ，原始数据的第 j 个分量可以表示为 <span class="math inline">\(s_j^{(i)} = w_j^T x^{(i)}\)</span></p></li>
-</ul></li>
-</ul></li>
-</ul>
-<h1 id="ica-的不确定性">ICA 的不确定性</h1>
-<ul>
-<li>实际上，如果仅给定观察数据而缺乏相关的先验知识，则恢复的原始数据会存在不确定性
-<ul>
-<li>第一点不确定性是原始数据的<strong>排列</strong>（permutation）
-<ul>
-<li>仅给定 <span class="math inline">\(x^{(i)}\)</span>，我们无法区分求得的分离矩阵是 <span class="math inline">\(W\)</span> 还是 <span class="math inline">\(PW\)</span>
-<ul>
-<li><span class="math inline">\(P\)</span> 是置换矩阵，每行每列均只包含 1 个 1，用于变换向量中元素的排列顺序</li>
-</ul></li>
-<li>大部分情况下，原始数据的排列顺序对结果并没有影响</li>
-</ul></li>
-<li>第二点不确定性是原始数据的<strong>规模</strong>（scaling）
-<ul>
-<li>如果将 <span class="math inline">\(A\)</span> 的某一列乘以系数 <span class="math inline">\(\alpha\)</span>，则对应的而原始数据分量会变为原来的 <span class="math inline">\(1/\alpha\)</span>
-<ul>
-<li>仅给定 <span class="math inline">\(x^{(i)}\)</span> 的情况下，我们同样无法发现这一点</li>
-</ul></li>
-<li>与之前类似，这对最终结果的影响并不大（鸡尾酒问题中只是音量发生了变化）</li>
-</ul></li>
-</ul></li>
-<li>除了上面两点不确定性之外，原始数据 <span class="math inline">\(s\)</span> 还需要是<strong>非高斯分布</strong>的
-<ul>
-<li>假定 <span class="math inline">\(n =2\)</span>，<span class="math inline">\(s\)</span> 满足多元高斯分布 <span class="math inline">\(s \in \mathcal{N}(0,I)\)</span>（多元高斯分布的各分量也是独立的）
-<ul>
-<li>则其密度函数的图像是一个以原点为中心旋转对称的圆形</li>
-<li><p>假定我们观测到了某个 <span class="math inline">\(x = As\)</span>，则 x 也满足高斯分布 <span class="math inline">\(x \in \mathcal{N}(0, AA^T)\)</span> <span class="math display">\[
-\text{E}(xx^T) = \text{E}[Ass^TA^T] = AA^TI = AA^T
-\]</span></p></li>
-<li>令 R 是一个任意正交矩阵（旋转矩阵），则令 <span class="math inline">\(A&#39; = AR\)</span>，基于 <span class="math inline">\(A&#39;\)</span> 观测得到的 <span class="math inline">\(x&#39; = A&#39;s\)</span> 将满足同样的正态分布 <span class="math inline">\(x&#39; \in \mathcal{N}(0, AA^T)\)</span>
-<ul>
-<li>这会导致我们无法求解出准确的混合矩阵</li>
-</ul></li>
-</ul></li>
-<li>只要数据是非高斯分布且数据量足够，就有可能恢复出其 <span class="math inline">\(n\)</span> 个独立的原始数据</li>
-</ul></li>
-</ul>
-<h1 id="密度函数与线性变换">密度函数与线性变换</h1>
-<ul>
-<li>在推导 ICA 算法之前，先简单介绍一下概率密度函数的线性变换
-<ul>
-<li>概率密度函数的积分为 1（表示概率之和）</li>
-</ul></li>
-<li><p>一般来说，如果 <span class="math inline">\(s\)</span> 是一个密度为 <span class="math inline">\(p_s\)</span> 的向量值分布，<span class="math inline">\(x = As\)</span> 且 <span class="math inline">\(A\)</span> 是一个可逆方阵，那么 <span class="math inline">\(x\)</span> 的密度函数为： <span class="math display">\[
-p_x(x) = p_s(Wx)|W|
-\]</span></p>
-<ul>
-<li>其中 <span class="math inline">\(W = A^{-1}\)</span></li>
-<li>利用逆矩阵与行列式的关系以及概率密度函数的性质可以证明</li>
-</ul></li>
-</ul>
-<h1 id="ica-算法">ICA 算法</h1>
-<ul>
-<li>下面将正式介绍 ICA 算法
-<ul>
-<li>这里使用极大似然估计进行推导，原始论文中使用了更加复杂的方法（informax principal）</li>
-</ul></li>
-<li><p>假定每个数据源 <span class="math inline">\(s_j\)</span> 的概率密度函数为 <span class="math inline">\(p_s\)</span> ，则数据源 <span class="math inline">\(s\)</span> 的联合分布为： <span class="math display">\[
-p(s) = \prod_{j=1}^n p_s(s_j)
-\]</span></p>
-<ul>
-<li>上式还保证了各个数据源是独立的</li>
-</ul></li>
-<li><p>利用上一节的结论，我们有： <span class="math display">\[
-p(x) = \prod_{j=1}^n p_s(w_j^Tx)\cdot|W|
-\]</span></p></li>
-<li><p>我们知道，给定一个实数随机变量 <span class="math inline">\(z\)</span> ，其累积分布函数（cdf）定义为： <span class="math display">\[
-F(z_0) = P(z \le z_0) = \int_{-\infty}^{z_0} p_z(z)dz
-\]</span></p>
-<ul>
-<li>且密度函数与累计分布函数的关系为：<span class="math inline">\(p_z(z) = F&#39;(z)\)</span></li>
-</ul></li>
-<li>因此，为了确定 <span class="math inline">\(s_j\)</span> 的密度函数，我们只需要确定其累计分布函数
-<ul>
-<li>累计分布函数是一个从 0 到 1 的单增函数</li>
-<li><p>我们不能选择累计分布函数为高斯分布的 cdf 函数，这里将选择 sigmoid 函数（并没有什么特别的理由） <span class="math display">\[
-g(s) = \frac 1 {(1+e^{-s})}
-\]</span></p>
-<ul>
-<li>此处默认了原始数据的均值为 0</li>
-</ul></li>
-</ul></li>
-<li><p>在我们的模型中，待优化的参数为分离矩阵 <span class="math inline">\(W\)</span>，给定一个训练集 <span class="math inline">\(\{x^{(i)}; i=1, \ldots, m\}\)</span>，其对数似然函数为： <span class="math display">\[
-\ell(W) = \sum_{i=1}^m \left(\sum_{j=1}^n \log g&#39;(w_j^Tx) + \log|W|\right)
-\]</span></p>
-<ul>
-<li><p>利用 <span class="math inline">\(\nabla_W |W| = |W|(W^{-1})^T\)</span> 进行求导，可得到如下随机梯度上升的更新规则： <span class="math display">\[
-W := W + \alpha \left(\left[\begin{array}{cc}
-1-2g(w_1^Tx^{(i)}) \\
-1-2g(w_2^Tx^{(i)}) \\
-\vdots \\
-1-2g(w_n^Tx^{(i)}) \\
-\end{array} 
-\right] x^{(i)^T} + (W^T)^{-1}\right)
-\]</span></p>
-<ul>
-<li><span class="math inline">\(\alpha\)</span> 是学习速率</li>
-</ul></li>
-</ul></li>
-<li>最后，当算法收敛后，通过 <span class="math inline">\(s^{(i)} = Wx^{(i)}\)</span> 即可恢复出原始数据</li>
-<li>注意：在计算似然函数时我们假设了各个训练样本（不是每个训练样本的分量）之间相互独立，然而对于语音信号等数据来说，该假设并不能成立
-<ul>
-<li>然而在数据量足够大时，算法仍然能取得不错的效果</li>
-<li>这种情况下（不独立），在运行随机梯度上升前事先打乱原始数据，能够提升收敛的速度</li>
-</ul></li>
-</ul>
-<h1 id="思维导图">思维导图</h1>
-<p><img src="http://media.zjubiomedit.com/2019-03-04-065522.png" width="100%"></p>
-
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2018/03/14/CS229-1/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
       
     </div>
 
@@ -635,66 +495,17 @@ W := W + \alpha \left(\left[\begin{array}{cc}
     
 
     
-      <div>
-        
-
-
-
-  
-
-
-
-<ul class="post-copyright">
-  <li class="post-copyright-author">
-    <strong>本文作者： </strong>Zheyu Wang</li>
-  <li class="post-copyright-link">
-    <strong>本文链接：</strong>
-    
-    <a href="https://xxwywzy.github.io/2019/03/01/cs229-12/" title="CS229 学习笔记之十二：独立成分分析">https://xxwywzy.github.io/2019/03/01/cs229-12/</a>
-  </li>
-  <li class="post-copyright-license">
-    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
-</ul>
-
-      </div>
-    
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/CS229/" rel="tag"># CS229</a>
-          
-        </div>
+
+      
+
       
 
       
       
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2019/02/28/game-ai-pro-1/" rel="next" title="《Game AI Pro》第一章笔记：What is Game AI?">
-                <i class="fa fa-chevron-left"></i> 《Game AI Pro》第一章笔记：What is Game AI?
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/03/13/pl-1-hw/" rel="prev" title="Progamming Languages 第一部分作业">
-                Progamming Languages 第一部分作业 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
+        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -704,19 +515,18 @@ W := W + \alpha \left(\left[\begin{array}{cc}
   </article>
 
 
-  </div>
+    
+  </section>
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/page/6/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span>
+  </nav>
+
 
 
           </div>
           
-
-  
-    <div class="comments" id="comments">
-    </div>
-
-  
-
-
 
         </div>
         
@@ -737,17 +547,8 @@ W := W + \alpha \left(\left[\begin{array}{cc}
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <div class="site-overview-wrap sidebar-panel">
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -950,23 +751,6 @@ W := W + \alpha \left(\left[\begin{array}{cc}
       </div>
 
       
-      <!--noindex-->
-        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-            
-            
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#问题的提出"><span class="nav-number">1.</span> <span class="nav-text">问题的提出</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ica-的不确定性"><span class="nav-number">2.</span> <span class="nav-text">ICA 的不确定性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#密度函数与线性变换"><span class="nav-number">3.</span> <span class="nav-text">密度函数与线性变换</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ica-算法"><span class="nav-number">4.</span> <span class="nav-text">ICA 算法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#思维导图"><span class="nav-number">5.</span> <span class="nav-text">思维导图</span></a></li></ol></div>
-            
-
-          </div>
-        </div>
-      <!--/noindex-->
-      
 
       
 
@@ -1098,10 +882,6 @@ W := W + \alpha \left(\left[\begin{array}{cc}
 
 
   
-  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
-<script src="/js/src/post-details.js?v=7.0.0"></script>
-
-
 
   
 
@@ -1142,8 +922,6 @@ W := W + \alpha \left(\left[\begin{array}{cc}
 
 
 
-  
-
 
   
 
@@ -1155,35 +933,38 @@ W := W + \alpha \left(\left[\begin{array}{cc}
   
   <script>
     
-    function addCount(Counter) {
+    function showTime(Counter) {
+      var entries = [];
       var $visitors = $('.leancloud_visitors');
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
 
-      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+      $visitors.each(function() {
+        entries.push( $(this).attr('id').trim() );
+      });
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url: { '$in': entries } }) })
         .done(function({ results }) {
-          if (results.length > 0) {
-            var counter = results[0];
-            
-              var $element = $(document.getElementById(url));
-              $element.find('.leancloud-visitors-count').text(counter.time + 1);
-            
-            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
-            
-              .fail(function ({ responseJSON }) {
-                console.log(`Failed to save Visitor num, with error message: ${responseJSON.error}`);
-              })
-          } else {
-            
-              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1 }))
-                .done(function() {
-                  var $element = $(document.getElementById(url));
-                  $element.find('.leancloud-visitors-count').text(1);
-                })
-                .fail(function() {
-                  console.log('Failed to create');
-                });
-            
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.url;
+            var time = item.time;
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for (var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if (countSpan.text() == '') {
+              countSpan.text(0);
+            }
           }
         })
         .fail(function ({ responseJSON }) {
@@ -1208,7 +989,9 @@ W := W + \alpha \left(\left[\begin{array}{cc}
             });
           };
           
-            addCount(Counter);
+            if ($('.post-title-link').length >= 1) {
+              showTime(Counter);
+            }
           
         });
     });
@@ -1226,6 +1009,10 @@ W := W + \alpha \left(\left[\begin{array}{cc}
   
 
   
+  
+    
+      
+    
   
 
   
