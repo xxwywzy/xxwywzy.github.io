@@ -110,7 +110,7 @@
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-04-12-061319.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-04-12-062659.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-04-12-063359.png">
-<meta property="og:updated_time" content="2019-04-30T01:57:36.000Z">
+<meta property="og:updated_time" content="2019-05-09T02:49:22.357Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Coursera-Kaggle Week1 学习笔记">
 <meta name="twitter:description" content="本篇博客为 Coursera 上一门关于 kaggle 的公开课的第一周学习笔记。">
@@ -668,7 +668,7 @@ X=(X-X .mean( )) / X . std( )
 </ul>
 <h2 id="缺失值">缺失值</h2>
 <ul>
-<li>对于 NaN（Not a Number）变量，其填充方法的选择取决于具体情况
+<li>对于 NaN（Not a Number）变量，其<strong>填充</strong>方法的选择取决于具体情况
 <ul>
 <li>通常使用超出范围的特征来替代（如 -999）
 <ul>
@@ -682,7 +682,11 @@ X=(X-X .mean( )) / X . std( )
 <ul>
 <li>直接忽略这些缺失值</li>
 </ul></li>
-<li>XgBoost 可以直接处理 NaN 变量</li>
+<li>XgBoost 可以<strong>直接处理</strong> NaN 变量
+<ul>
+<li>树模型算法本身对缺失值不敏感，但实际的工具需要有专门的缺失值处理函数</li>
+</ul></li>
+<li>有时候如果缺失值比例较大，可以考虑<strong>删除</strong>样本或特征</li>
 </ul>
 <h1 id="从文字和图片中提取特征">从文字和图片中提取特征</h1>
 <h2 id="词袋模型">词袋模型</h2>
