@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2"/>
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0"/>
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/favicon.png?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本篇博客为 CS229 学习笔记第十五部分，主题是：强化学习。">
+<meta name="keywords" content="CS229">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CS229 学习笔记之十五：强化学习与控制">
+<meta property="og:url" content="https://xxwywzy.github.io/2019/05/28/cs229-15/index.html">
+<meta property="og:site_name" content="xxwywzy&#39;s Blog">
+<meta property="og:description" content="本篇博客为 CS229 学习笔记第十五部分，主题是：强化学习。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-05-27-110936.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-05-27-112359.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-05-27-114156.jpg">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-05-28-121303.png">
+<meta property="og:updated_time" content="2019-05-28T12:14:08.379Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CS229 学习笔记之十五：强化学习与控制">
+<meta name="twitter:description" content="本篇博客为 CS229 学习笔记第十五部分，主题是：强化学习。">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2019-05-27-110936.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://xxwywzy.github.io/2019/05/28/cs229-15/"/>
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>CS229 学习笔记之十五：强化学习与控制 | xxwywzy's Blog</title>
+  
+
+
+
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a02b5462e7522b1ed191c4cea6b1d6e6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xxwywzy's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Long may the sunshine</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br/>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br/>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br/>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br/>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2019/05/28/cs229-15/"/>
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zheyu Wang"/>
+      <meta itemprop="description" content="更に向こうへ"/>
+      <meta itemprop="image" content="/images/avatar.png"/>
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xxwywzy's Blog"/>
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">CS229 学习笔记之十五：强化学习与控制
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-05-28 18:49:23" itemprop="dateCreated datePublished" datetime="2019-05-28T18:49:23+08:00">2019-05-28</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/人工智能/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/人工智能/机器学习/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <a href="/2019/05/28/cs229-15/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/05/28/cs229-15/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+            <span id="/2019/05/28/cs229-15/" class="leancloud_visitors" data-flag-title="CS229 学习笔记之十五：强化学习与控制">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <div class="note info">
+            本篇博客为 CS229 学习笔记第十五部分，主题是：强化学习。 
+          </div>
+<a id="more"></a>
+<ul>
+<li>本章将开始介绍强化学习与适应性控制</li>
+<li>在监督学习中，对于训练集我们均有明确的标签
+<ul>
+<li>算法只需要模仿训练集中的标签来给出预测即可</li>
+</ul></li>
+<li>但对于某些情况，例如序列性的决策过程和控制问题，我们无法构建含有标签的训练集
+<ul>
+<li>即无法提供一个明确的监督学习算法来进行模仿</li>
+</ul></li>
+<li>在强化学习的框架下，我们只会给出一个奖励函数（reward function）
+<ul>
+<li>该函数会告知学习程序（leaning agent）什么时候的动作是好的，什么时候的是不好的</li>
+<li>算法的工作是找出随着时间推移如何选择动作来得到最大的奖励</li>
+</ul></li>
+<li>强化学习已经成功用于多种场景，包括：
+<ul>
+<li>无人直升机的自主飞行</li>
+<li>机器人行走</li>
+<li>手机网络路由</li>
+<li>市场策略选择</li>
+<li>工厂控制</li>
+<li>高效率的网页索引</li>
+</ul></li>
+<li>我们将从<strong>马尔可夫决策过程</strong>开始介绍强化学习，其给出了强化学习问题的常见形式</li>
+</ul>
+<h1 id="马尔可夫决策过程">马尔可夫决策过程</h1>
+<ul>
+<li>一个马尔可夫决策过程是一个五元组 <span class="math inline">\(\left(S, A,\left\{P_{s a}\right\}, \gamma, R\right)\)</span>，其中：
+<ul>
+<li><span class="math inline">\(S\)</span> 是一个<strong>状态</strong>集
+<ul>
+<li>例如在无人直升机的自主飞行中，<span class="math inline">\(S\)</span> 可以是直升机所有可能的位置与方向</li>
+</ul></li>
+<li><span class="math inline">\(A\)</span> 是一个<strong>动作</strong>集
+<ul>
+<li>例如你可以推动直升机控制摇杆的所有方向</li>
+</ul></li>
+<li><span class="math inline">\(P_{sa}\)</span> 是状态转移概率
+<ul>
+<li>对于每个状态 <span class="math inline">\(s \in S\)</span> 以及动作 <span class="math inline">\(a \in A\)</span>，<span class="math inline">\(P_{sa}\)</span> 为状态空间上的分布</li>
+<li>简单来说，<span class="math inline">\(P_{sa}\)</span> 给出当我们在状态 <span class="math inline">\(s\)</span> 采取了行动 <span class="math inline">\(a\)</span> 时，下一个状态的分布</li>
+</ul></li>
+<li><span class="math inline">\(\gamma \in[0,1)\)</span> 被称为<strong>折扣因子</strong>（discount factor）</li>
+<li><span class="math inline">\(R : S \times A \mapsto \mathbb{R}\)</span> 为<strong>奖励函数</strong>
+<ul>
+<li>有时候奖励函数被写作仅与状态 <span class="math inline">\(S\)</span> 相关，即 <span class="math inline">\(R : S \mapsto \mathbb{R}\)</span></li>
+</ul></li>
+</ul></li>
+<li>马尔可夫决策过程（MDP）的执行如下：
+<ul>
+<li>我们从某个状态 <span class="math inline">\(s_0\)</span> 开始，选择某个动作 <span class="math inline">\(a_{0} \in A\)</span> 来执行 MDP</li>
+<li>作为选择的结果，MDP 的状态将随机转移到某个后继状态 <span class="math inline">\(s_{1} \sim P_{s_{0} a_{0}}\)</span></li>
+<li>然后，我们需要选择另一个动作 <span class="math inline">\(a_1\)</span></li>
+<li>作为结果，状态会转移至 <span class="math inline">\(s_{2} \sim P_{s_{1} a_{1}}\)</span></li>
+<li>接下来再选择一个动作 <span class="math inline">\(a_2\)</span>，以此类推</li>
+<li>该过程可以用下图表示： <span class="math display">\[
+s_{0} \stackrel{a_{0}}{\longrightarrow} s_{1} \stackrel{a_{1}}{\longrightarrow} s_{2} \stackrel{a_{2}}{\longrightarrow} s_{3} \stackrel{a_{3}}{\longrightarrow} \ldots
+\]</span></li>
+</ul></li>
+<li><p>遍历序列中的所有状态和动作，总的收益为： <span class="math display">\[
+R\left(s_{0}, a_{0}\right)+\gamma R\left(s_{1}, a_{1}\right)+\gamma^{2} R\left(s_{2}, a_{2}\right)+\cdots
+\]</span></p>
+<ul>
+<li>当将奖励函数仅与状态相关时，收益变为： <span class="math display">\[
+R\left(s_{0}\right)+\gamma R\left(s_{1}\right)+\gamma^{2} R\left(s_{2}\right)+\cdots
+\]</span></li>
+</ul></li>
+<li>本章将主要使用简单的状态奖励函数 <span class="math inline">\(R(s)\)</span>
+<ul>
+<li>推广至 <span class="math inline">\(R(s, a)\)</span> 并不难</li>
+</ul></li>
+<li><p>在强化学习中，我们的目标就是找到一组动作，来最大化总收益的期望： <span class="math display">\[
+\mathrm{E}\left[R\left(s_{0}\right)+\gamma R\left(s_{1}\right)+\gamma^{2} R\left(s_{2}\right)+\cdots\right]
+\]</span></p>
+<ul>
+<li>注意在时间步 <span class="math inline">\(t\)</span> 的奖励通过参数 <span class="math inline">\(\gamma^t\)</span> 进行了缩减</li>
+<li>因此，为了使得期望较大，我们希望尽可能早地积累正奖励，尽可能推迟负奖励</li>
+</ul></li>
+<li><strong>策略</strong>（policy）指的是将状态映射为动作的任意函数 <span class="math inline">\(\pi : S \mapsto A\)</span>
+<ul>
+<li>任意时刻，当我们处在状态 <span class="math inline">\(s\)</span>，我们采取了行动 <span class="math inline">\(a=\pi(s)\)</span>，则我们执行了策略 <span class="math inline">\(\pi\)</span></li>
+</ul></li>
+<li><p>我们定义一个策略 <span class="math inline">\(\pi\)</span> 的<strong>值函数</strong>为： <span class="math display">\[
+V^{\pi}(s)=\mathrm{E}\left[R\left(s_{0}\right)+\gamma R\left(s_{1}\right)+\gamma^{2} R\left(s_{2}\right)+\cdots | s_{0}=s, \pi\right]
+\]</span></p>
+<ul>
+<li><span class="math inline">\(V^{\pi}(s)\)</span> 即为从状态 <span class="math inline">\(s\)</span> 开始，根据策略 <span class="math inline">\(\pi\)</span> 选择动作所积累的折扣奖励函数的期望
+<ul>
+<li><span class="math inline">\(\pi\)</span> 并非随机变量，上述表示只是习惯</li>
+</ul></li>
+</ul></li>
+<li><p>给定一个策略 <span class="math inline">\(\pi\)</span>，其值函数满足<strong>贝尔曼等式</strong>： <span class="math display">\[
+V^{\pi}(s)=R(s)+\gamma \sum_{s^{\prime} \in S} P_{s \pi(s)}\left(s^{\prime}\right) V^{\pi}\left(s^{\prime}\right)
+\]</span></p>
+<ul>
+<li>这表示期望和由两部分组成：
+<ul>
+<li>即时奖励 <span class="math inline">\(R(s)\)</span></li>
+<li>未来的折扣奖励的期望和（第一步之后）
+<ul>
+<li>也可以写作 <span class="math inline">\(\mathrm{E}_{s^{\prime} \sim P_{s \pi(s)}}\left[V^{\pi}\left(s^{\prime}\right)\right]\)</span></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>贝尔曼等式可以用于求解 <span class="math inline">\(V^{\pi}\)</span>
+<ul>
+<li>在一个有限状态的 MDP 中，我们可以对于每个状态 <span class="math inline">\(s\)</span> 写出其 <span class="math inline">\(V^{\pi}(s)\)</span> 的等式</li>
+<li>这可以给出一个含有 <span class="math inline">\(|S|\)</span> 个变量的 <span class="math inline">\(|S|\)</span> 个线性方程，可以进行求解
+<ul>
+<li>变量即每个状态的未知 <span class="math inline">\(V^{\pi}(s)\)</span></li>
+</ul></li>
+</ul></li>
+<li><p>我们定义<strong>最优值函数</strong>为： <span class="math display">\[
+V^{*}(s)=\max _{\pi} V^{\pi}(s) \tag{1}
+\]</span></p>
+<ul>
+<li>其表示在所有策略中，可以得到的最大期望和</li>
+<li><p>其也满足贝尔曼等式： <span class="math display">\[
+V^{*}(s)=R(s)+\max _{a \in A} \gamma \sum_{s^{\prime} \in S} P_{s a}\left(s^{\prime}\right) V^{*}\left(s^{\prime}\right) \tag{2}
+\]</span></p>
+<ul>
+<li>第一部分与之前一样，为即时奖励</li>
+<li>第二部分为所有动作中最大的未来期望和</li>
+</ul></li>
+</ul></li>
+<li><p>我们可以定义策略 <span class="math inline">\(\pi^{*} : S \mapsto A\)</span> 为： <span class="math display">\[
+\pi^{*}(s)=\arg \max _{a \in A} \sum_{s^{\prime} \in S} P_{s a}\left(s^{\prime}\right) V^{*}\left(s^{\prime}\right) \tag{3}
+\]</span></p>
+<ul>
+<li><span class="math inline">\(\pi^{*}(s)\)</span> 给出了动作 <span class="math inline">\(a\)</span> 来使得 <span class="math inline">\((2)\)</span> 式最大化</li>
+</ul></li>
+<li><p>根据上述定义，我们可以推导出如下事实：对于每一个状态 <span class="math inline">\(s\)</span> 和每一种策略 <span class="math inline">\(\pi\)</span>，都有： <span class="math display">\[
+V^{*}(s)=V^{\pi^{*}}(s) \geq V^{\pi}(s)
+\]</span></p>
+<ul>
+<li>这个公式表明 <span class="math inline">\((3)\)</span> 式中定义的策略即为最优策略</li>
+<li>注意 <span class="math inline">\(\pi^{*}\)</span> 有一个有趣的特性：其为所有状态 <span class="math inline">\(s\)</span> 的最优策略
+<ul>
+<li>因为其定义为状态集到动作集的映射</li>
+<li>这意味着无论 MDP 的初始状态是什么，我们都可以使用同样的最优策略 <span class="math inline">\(\pi^{*}\)</span></li>
+</ul></li>
+</ul></li>
+</ul>
+<h1 id="值迭代和策略迭代">值迭代和策略迭代</h1>
+<ul>
+<li>下面介绍求解有限状态 MDP 的两种高效算法
+<ul>
+<li>注意：我们目前只考虑有限状态和动作空间的 MDP</li>
+</ul></li>
+</ul>
+<h2 id="值迭代">值迭代</h2>
+<ul>
+<li>值迭代算法的流程为：
+<ol type="1">
+<li>对于每个状态 <span class="math inline">\(s\)</span>，初始化 <span class="math inline">\(V(s) :=0\)</span></li>
+<li>重复下述过程直至收敛：
+<ul>
+<li>对于每个状态 <span class="math inline">\(s\)</span>，更新 <span class="math inline">\(V(s) :=R(s)+\max _{a \in A} \gamma \sum_{s^{\prime}} P_{s a}\left(s^{\prime}\right) V\left(s^{\prime}\right)\)</span></li>
+</ul></li>
+</ol></li>
+<li>该算法可以理解为不断更新 <span class="math inline">\((2)\)</span> 式中的值函数</li>
+<li>算法的内循环有两种更新方法：
+<ol type="1">
+<li>计算所有状态的 <span class="math inline">\(V(s)\)</span>，然后全部替换旧的值
+<ul>
+<li>这种方法称为<strong>同步</strong>更新</li>
+</ul></li>
+<li>按某种顺序遍历状态，一次更新一个值
+<ul>
+<li>这种方法称为<strong>异步</strong>更新</li>
+</ul></li>
+</ol></li>
+<li>不论是异步还是同步更新，值迭代算法最终都会使 <span class="math inline">\(V\)</span> 收敛至 <span class="math inline">\(V^*\)</span>
+<ul>
+<li>得到了 <span class="math inline">\(V^*\)</span>，我们就可以利用 <span class="math inline">\((3)\)</span> 式来找出最优策略</li>
+</ul></li>
+</ul>
+<h2 id="策略迭代">策略迭代</h2>
+<ul>
+<li>策略迭代的流程为：
+<ol type="1">
+<li>随机初始化 <span class="math inline">\(\pi\)</span></li>
+<li>重复下述过程直至收敛：
+<ul>
+<li>令 <span class="math inline">\(V :=V^{\pi}\)</span></li>
+<li>对于每个状态 <span class="math inline">\(s\)</span>，更新 <span class="math inline">\(\pi(s) :=\arg \max _{a \in A} \sum_{s^{\prime}} P_{s a}\left(s^{\prime}\right) V\left(s^{\prime}\right)\)</span></li>
+</ul></li>
+</ol></li>
+<li>可以看到，该算法在内循环中计算当前策略的值函数，然后使用当前值函数更新策略
+<ul>
+<li>该步骤中找出的策略也被称为关于 <span class="math inline">\(V\)</span> 的<strong>贪婪策略</strong></li>
+<li>注意：在第一步中值函数的求解方式如之前所述，为含有 <span class="math inline">\(|S|\)</span> 个变量的线性方程组</li>
+</ul></li>
+<li>在有限次数的迭代后，<span class="math inline">\(V\)</span> 将收敛至 <span class="math inline">\(V^*\)</span>，<span class="math inline">\(\pi\)</span> 将收敛至 <span class="math inline">\(\pi^*\)</span></li>
+<li>值迭代和策略迭代是求解 MDP 的标准算法，目前没有好坏之分
+<ul>
+<li>一般对于较小的 MDP，策略迭代往往更快，迭代次数较少</li>
+<li>而对于较大状态空间的 MDP，求解 <span class="math inline">\(V^{\pi}\)</span> 相对较难，通常使用值迭代
+<ul>
+<li>在实际应用中，值迭代比策略迭代要使用得更加频繁（因为实际问题中状态通常较多）</li>
+</ul></li>
+</ul></li>
+</ul>
+<h1 id="马尔可夫过程的模型学习">马尔可夫过程的模型学习</h1>
+<ul>
+<li>在实际问题中，我们无法得知状态转移概率和奖励函数
+<ul>
+<li>因此需要基于数据来进行估计</li>
+</ul></li>
+<li><p>例如我们进行了一系列实验，得到如下所示的一系列马尔可夫过程： <span class="math display">\[
+\begin{array}{l}{s_{0}^{(1)} \stackrel{a_{0}^{(1)}}{\longrightarrow} s_{1}^{(1)} \stackrel{a_{1}^{(1)}}{\longrightarrow} s_{2}^{(1)} \stackrel{a_{2}^{(1)}}{\longrightarrow} s_{3}^{(1)} \stackrel{a_{3}^{(1)}}{\longrightarrow} \ldots} \\ {s_{0}^{(2)} \stackrel{a_{0}^{(2)}}{\longrightarrow} s_{1}^{(2)} \stackrel{a_{1}^{(2)}}{\longrightarrow} s_{2}^{(2)} \stackrel{a_{2}^{(2)}}{\longrightarrow} s_{3}^{(2)} \stackrel{a_{3}^{(2)}}{\longrightarrow} \ldots} \\ {\ldots}\end{array}
+\]</span></p>
+<ul>
+<li>其中 <span class="math inline">\(s_{i}^{(j)}\)</span> 表示实验 <span class="math inline">\(j\)</span> 的时间点 <span class="math inline">\(i\)</span> 的状态，其对应的动作为 <span class="math inline">\(s_{i}^{(j)}\)</span></li>
+<li>在实际中，每个实验可以运行至马尔可夫过程终止，或某个较大但有限的时间点</li>
+</ul></li>
+<li><p>基于上述“经验”，我们可以利用极大似然估计来求出状态转移概率： <span class="math display">\[
+P_{s a}\left(s^{\prime}\right)=\frac{\# \text { times took we action } a \text { in state } s \text { and got to } s^{\prime}}{\# \text { times we took action a in state } s} \tag{4}
+\]</span></p>
+<ul>
+<li>如果比例为 <span class="math inline">\(0/0\)</span>，则使用 <span class="math inline">\(1/|S|\)</span> 替代</li>
+</ul></li>
+<li>当我们进行更多的实验，得到更多的“经验”时，我们可以用一种较高效的方法来更新状态转移概率：
+<ul>
+<li>具体来说，我们可以记录上式的分子与分母值，新的数据直接在旧数据的基础上累加即可</li>
+</ul></li>
+<li>类似地，如果奖励函数 <span class="math inline">\(R\)</span> 未知，我们可以用状态 <span class="math inline">\(s\)</span> 的期望即时奖励估计 <span class="math inline">\(R(s)\)</span> 来作为其平均奖励</li>
+<li>在学习出 MDP 的模型后，我们可以使用值迭代或策略迭代来求解 MDP，找出最佳策略
+<ul>
+<li>例如，将模型学习和值迭代结合在一起，我们可以得出下面的算法：
+<ul>
+<li>用于未知概率转移矩阵的 MDP 的学习
+<ol type="1">
+<li>随机初始化 <span class="math inline">\(\pi\)</span></li>
+<li>重复下述过程：
+<ul>
+<li>在 MDP 中执行 <span class="math inline">\(\pi\)</span> 若干次来得到样本（下一步的状态通过观察得到）</li>
+<li>使用 MDP 中的累加经验来估计 <span class="math inline">\(P_{sa}\)</span> (以及 <span class="math inline">\(R\)</span>，如果需要)</li>
+<li>基于估计的状态转移概率和奖励函数应用值迭代算法，得到一个新的 <span class="math inline">\(V\)</span> 的估计</li>
+<li>更新 <span class="math inline">\(\pi\)</span> 为关于 <span class="math inline">\(V\)</span> 的贪婪策略</li>
+</ul></li>
+</ol></li>
+<li>对于该算法，可以通过下述手段来使其运行更快：
+<ul>
+<li>在第二步的值迭代的内循环中，每次不初始化 <span class="math inline">\(V\)</span> 为 0，而初始化为上一次外循环中得到的结果</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+<h1 id="连续状态马尔可夫决策过程">连续状态马尔可夫决策过程</h1>
+<ul>
+<li>到目前为止，我们都在讨论有限数量状态下的 MDP
+<ul>
+<li>现在我们将开始讨论无限状态下的 MDP (<span class="math inline">\(S=\mathbb{R}^{n}\)</span>)</li>
+</ul></li>
+</ul>
+<h2 id="离散化">离散化</h2>
+<ul>
+<li>求解连续状态 MDP 的最简单的方法就是<strong>离散化状态空间</strong>
+<ul>
+<li>然后使用之前提到的值迭代或状态迭代算法</li>
+</ul></li>
+<li><p>例如，对于一个二维状态 <span class="math inline">\((s_1,s_2)\)</span>，我们可以用一个网格来进行离散化：</p>
+<p><img src="http://media.zjubiomedit.com/2019-05-27-110936.png" width="35%"></p>
+<ul>
+<li>每一个网格细胞代表一个独立的离散状态 <span class="math inline">\(\bar{s}\)</span></li>
+<li>然后我们就可以用一个离散状态的 MDP <span class="math inline">\(\left(\bar{S}, A,\left\{P_{\overline{s} a}\right\}, \gamma, R\right)\)</span> 来估计连续状态下的 MDP
+<ul>
+<li>使用值迭代或策略迭代来求解 <span class="math inline">\(V^{\star}(\bar{s})\)</span> 和 <span class="math inline">\(\pi^{\star}(\bar{s})\)</span></li>
+</ul></li>
+<li>当实际的系统处于某个连续值的状态 <span class="math inline">\(s \in S\)</span> 时，我们先计算其对应的离散状态 <span class="math inline">\(\bar{s}\)</span>，然后执行最优策略 <span class="math inline">\(\pi^{\star}(\bar{s})\)</span></li>
+</ul></li>
+<li>离散化的方法对很多问题都有较好的效果，但其存在两点不足：
+<ul>
+<li>对 <span class="math inline">\(V^{\star}\)</span> 和 <span class="math inline">\(\pi^{\star}\)</span> 的表达过于天真
+<ul>
+<li>即假设其在离散的区段上取值不变</li>
+<li><p>例如下面的线性回归问题，如果使用离散化来表达，则得到如下结果：</p>
+<p><img src="http://media.zjubiomedit.com/2019-05-27-112359.png" width="40%"></p>
+<ul>
+<li>可以看出离散化对光滑数据的拟合并不好</li>
+<li>我们可能需要更加精确的离散化（非常小的网格）来获得精确的估计</li>
+</ul></li>
+</ul></li>
+<li><strong>维度诅咒</strong>（curse of dimensionality）
+<ul>
+<li>假设 <span class="math inline">\(S=\mathbb{R}^{n}\)</span>，且我们将每个维度的状态离散化为 <span class="math inline">\(k\)</span> 个值
+<ul>
+<li>则总的离散状态数为 <span class="math inline">\(k^n\)</span></li>
+<li>其随着维数的增加呈指数上升趋势，难以推广至大型问题</li>
+</ul></li>
+<li>从经验上来说，离散化对 1 维和 2 维问题的效果最好
+<ul>
+<li>如果注意离散化的方法，则其对 4 维以下问题也效果不错</li>
+<li>如果你特别牛批，甚至能应用到 6 维问题
+<ul>
+<li>再高的话基本上就不行了</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="值函数近似">值函数近似</h2>
+<ul>
+<li>下面介绍另一种在连续状态 MDP 中寻找最佳策略的方法
+<ul>
+<li>该方法中我们直接估计 <span class="math inline">\(V^{\star}\)</span> ，而不去进行离散化</li>
+<li>该方法称为<strong>值函数近似</strong>，已经成功应用于许多强化学习问题</li>
+</ul></li>
+</ul>
+<h3 id="使用一个模型或模拟器">使用一个模型或模拟器</h3>
+<ul>
+<li>为了设计一个值函数估计算法，需要先假设我们有一个<strong>模型</strong>（或<strong>模拟器</strong>）</li>
+<li>对于 MDP，通俗来说，模拟器就是一个黑盒子
+<ul>
+<li>接收输入状态 <span class="math inline">\(s_t\)</span> （连续值）和动作 <span class="math inline">\(a_t\)</span></li>
+<li><p>输出下一个状态 <span class="math inline">\(s_{t+1}\)</span> ，根据状态转移概率 <span class="math inline">\(P_{s_ta_t}\)</span></p>
+<p><img src="http://media.zjubiomedit.com/2019-05-27-114156.jpg" width="45%"></p></li>
+</ul></li>
+<li>我们有多种方式来得到上述模型
+<ul>
+<li>第一种方法是使用物理模拟
+<ul>
+<li>使用软件包来对某些问题进行物理描述，进行模拟</li>
+</ul></li>
+<li>第二种方法是从已有的数据中进行学习
+<ul>
+<li>例如，假设我们在一个 MDP 中执行 <span class="math inline">\(m\)</span> 次<strong>试验</strong>
+<ul>
+<li>每次试验包含 T 个时间步</li>
+<li>动作的选择可以随机或是执行某种特定的策略，或是其他方式</li>
+</ul></li>
+<li><p>然后，我们会得到如下的 <span class="math inline">\(m\)</span> 个观察序列 <span class="math display">\[
+\begin{array}{c}{s_{0}^{(1)} \stackrel{a_{0}^{(1)}}{\longrightarrow} s_{1}^{(1)} \stackrel{a_{1}^{(1)}}{\longrightarrow} s_{2}^{(1)} \stackrel{a_{2}^{(1)}}{\longrightarrow} \cdots \stackrel{a_{T-1}^{(1)}}{\longrightarrow} s_{T}^{(1)}} \\ {s_{0}^{(2)} \stackrel{a_{0}^{(2)}}{\longrightarrow} s_{1}^{(2)} \stackrel{a_{1}^{(2)}}{\longrightarrow} s_{2}^{(2)} \stackrel{a_{2}^{(2)}}{\longrightarrow} \cdots \stackrel{a_{T-1}^{(2)}}{\longrightarrow} s_{T}^{(2)}} \\ {\cdots} \\ {s_{0}^{(m)} \stackrel{a_{0}^{(m)}}{\longrightarrow} s_{1}^{(m)} \stackrel{a_{1}^{(m)}}{\longrightarrow} s_{2}^{(m)} \stackrel{a_{2}^{(m)}}{\longrightarrow} \cdots \stackrel{a_{T-1}^{(m)}}{\longrightarrow} s_{T}^{(m)}}\end{array}
+\]</span></p>
+<ul>
+<li>我们会使用一个学习算法来将 <span class="math inline">\(s_{t+1}\)</span> 表示为 <span class="math inline">\(s_t\)</span> 和 <span class="math inline">\(a_t\)</span> 的函数</li>
+</ul></li>
+<li><p>一种可能的线性模型如下： <span class="math display">\[
+s_{t+1}=A s_{t}+B a_{t} \tag{5}
+\]</span></p>
+<ul>
+<li><p>我们可以使用试验中收集到的数据来估计参数： <span class="math display">\[
+\arg \min _{A, B} \sum_{i=1}^{m} \sum_{t=0}^{T-1}\left\|s_{t+1}^{(i)}-\left(A s_{t}^{(i)}+B a_{t}^{(i)}\right)\right\|^{2}
+\]</span></p></li>
+<li>学习到了 <span class="math inline">\(A\)</span> 和 <span class="math inline">\(B\)</span> 后，一种选择是建立一个<strong>决定性</strong>模型
+<ul>
+<li>即给定输入 <span class="math inline">\(s_t\)</span> 和 <span class="math inline">\(a_t\)</span> 后，输出 <span class="math inline">\(s_{t+1}\)</span>，例如式 <span class="math inline">\((5)\)</span></li>
+</ul></li>
+<li><p>另一种选择时建立一个<strong>随机</strong>模型，即 <span class="math inline">\(s_{t+1}\)</span> 是输入的随机函数 <span class="math display">\[
+s_{t+1}=A s_{t}+B a_{t}+\epsilon_{t}
+\]</span></p>
+<ul>
+<li>其中 <span class="math inline">\(\epsilon_{t}\)</span> 是噪声项，分布为 <span class="math inline">\(\epsilon_{t} \sim \mathcal{N}(0, \Sigma)\)</span>
+<ul>
+<li><span class="math inline">\(\Sigma\)</span> 也可以从数据中学习</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>上面我们所说的都是线性模型，非线性模型也可以用于构建模拟器</p></li>
+</ul></li>
+</ul></li>
+</ul>
+<h3 id="拟合值迭代">拟合值迭代</h3>
+<ul>
+<li>下面介绍用于估计连续状态 MDP 值函数的拟合值迭代算法
+<ul>
+<li>这里假设状态空间连续，但动作空间较小且离散
+<ul>
+<li>一般来说，动作集的离散化相对容易很多</li>
+</ul></li>
+</ul></li>
+<li><p>在值迭代中，我们会进行如下更新： <span class="math display">\[
+\begin{align*} V(s) &amp; :=R(s)+\gamma \max _{a} \int_{s^{\prime}} P_{s a}\left(s^{\prime}\right) V\left(s^{\prime}\right) d s^{\prime} \tag{6}\\ &amp;=R(s)+\gamma \max _{a} \mathrm{E}_{s^{\prime} \sim P a}\left[V\left(s^{\prime}\right)\right] \tag{7}\end{align*}
+\]</span></p>
+<ul>
+<li>注意这里对于连续值需使用积分</li>
+</ul></li>
+<li>拟合值迭代的主要思想就是：基于有限的状态样本 <span class="math inline">\(s^{(1)}, \ldots, s^{(m)}\)</span> 对上述过程进行估计
+<ul>
+<li>具体来说，我们会使用一个监督学习算法（线性回归）
+<ul>
+<li><p>将值函数用状态的线性或非线性函数估计 <span class="math display">\[
+V(s)=\theta^{T} \phi(s)
+\]</span></p>
+<ul>
+<li>其中 <span class="math inline">\(\phi\)</span> 是状态的某种适当的特征映射</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>对于 <span class="math inline">\(m\)</span> 个有限状态样本中的每一个状态 <span class="math inline">\(s\)</span>
+<ul>
+<li>拟合值迭代会先计算一个量 <span class="math inline">\(y^{(i)}\)</span>
+<ul>
+<li>作为对 <span class="math inline">\(R(s)+\gamma \max _{a} \mathrm{E}_{s^{\prime} \sim P a}\left[V\left(s^{\prime}\right)\right]\)</span> 的估计</li>
+</ul></li>
+<li>然后使用监督学习算法尝试去让 <span class="math inline">\(V(s)\)</span> 接近 <span class="math inline">\(R(s)+\gamma \max _{a} \mathrm{E}_{s^{\prime} \sim P a}\left[V\left(s^{\prime}\right)\right]\)</span>
+<ul>
+<li>即接近 <span class="math inline">\(y^{(i)}\)</span></li>
+<li>从而学习出参数 <span class="math inline">\(\theta\)</span></li>
+</ul></li>
+</ul></li>
+<li>具体来说，算法的过程如下：
+<ol type="1">
+<li>随机采样 <span class="math inline">\(m\)</span> 个状态 <span class="math inline">\(s^{(1)}, s^{(2)}, \ldots s^{(m)} \in S\)</span></li>
+<li>初始化 <span class="math inline">\(\theta := 0\)</span></li>
+<li>重复下述过程：
+<ul>
+<li>对于 <span class="math inline">\(i=1, \ldots, m\)</span>
+<ul>
+<li>对于每个动作 <span class="math inline">\(a \in A\)</span>
+<ul>
+<li>基于模型采样 <span class="math inline">\(s_{1}^{\prime}, \ldots, s_{k}^{\prime} \sim P_{s^{(i)} a}\)</span></li>
+<li>令 <span class="math inline">\(q(a)=\frac{1}{k} \sum_{j=1}^{k} R\left(s^{(i)}\right)+\gamma V\left(s_{j}^{\prime}\right)\)</span>
+<ul>
+<li>这样 <span class="math inline">\(q(a)\)</span> 就可以看做 <span class="math inline">\(R\left(s^{(i)}\right)+\gamma \mathrm{E}_{s^{\prime} \sim P_{s^{(i)}{a}}}\left[V\left(s^{\prime}\right)\right]\)</span> 的估计</li>
+</ul></li>
+</ul></li>
+<li>令 <span class="math inline">\(y^{(i)}=\max _{a} q(a)\)</span>
+<ul>
+<li>这样 <span class="math inline">\(y^{(i)}\)</span> 可以看做 <span class="math inline">\(R\left(s^{(i)}\right)+\gamma \max _{a} \mathrm{E}_{s^{\prime} \sim P_{s^{(i)}{a}}}\left[V\left(s^{\prime}\right)\right]\)</span></li>
+</ul></li>
+</ul></li>
+<li>在原始的值迭代（离散值）中，我们需要更新 <span class="math inline">\(V\left(s^{(i)}\right) :=y^{(i)}\)</span>
+<ul>
+<li>在该算法中，我们希望 <span class="math inline">\(V\left(s^{(i)}\right) \approx y^{(i)}\)</span>，使用监督学习算法： <span class="math display">\[
+\operatorname{Set} \theta :=\arg \min _{\theta} \frac{1}{2} \sum_{i=1}^{m}\left(\theta^{T} \phi\left(s^{(i)}\right)-y^{(i)}\right)^{2}
+\]</span></li>
+</ul></li>
+</ul></li>
+</ol></li>
+<li>上述算法使用了线性回归，实际上其他的回归算法也可以使用
+<ul>
+<li>如加权线性回归</li>
+</ul></li>
+<li>与离散状态集的值迭代不同，拟合值迭代并不一定总是会收敛
+<ul>
+<li>不过在实际应用中，其通常会收敛（或近似收敛）</li>
+</ul></li>
+<li>注意：如果我们使用决定性模型（模拟器）
+<ul>
+<li>那么算法中 <span class="math inline">\(k = 1\)</span>
+<ul>
+<li>因为下一个状态只有一个确定的值</li>
+</ul></li>
+<li>否则我们需要取 <span class="math inline">\(k\)</span> 个样本并求均值（即随机模型）</li>
+</ul></li>
+<li>最终，拟合值迭代输出 <span class="math inline">\(V\)</span>，其为对 <span class="math inline">\(V^{\star}\)</span> 的估计
+<ul>
+<li><p>当系统处于状态 <span class="math inline">\(s\)</span> 时，可以通过下面的公式来选择动作： <span class="math display">\[
+\arg \max _{a} \mathrm{E}_{s^{\prime} \sim P_{s a}}\left[V\left(s^{\prime}\right)\right]
+\]</span></p>
+<ul>
+<li>上式计算的过程与算法的内循环类似，对于每一个动作，我们采样 <span class="math inline">\(s_{1}^{\prime}, \ldots, s_{k}^{\prime} \sim P_{s a}\)</span>
+<ul>
+<li>类似地，如果使用决定性模型，则 <span class="math inline">\(k=1\)</span></li>
+</ul></li>
+</ul></li>
+<li>在实际应用中，还有其他方法来估计上述值，例如：
+<ul>
+<li>如果模拟器的形式为 <span class="math inline">\(s_{t+1} = f\left(s_{t}, a_{t}\right)+\epsilon_{t}\)</span>
+<ul>
+<li>其中 <span class="math inline">\(f\)</span> 是某个决定性函数（如 <span class="math inline">\(f\left(s_{t}, a_{t}\right)=A s_{t}+B a_{t}\)</span>）</li>
+<li><span class="math inline">\(\epsilon\)</span> 是 0 均值高斯噪声</li>
+</ul></li>
+<li><p>则可以通过下述公式选择动作： <span class="math display">\[
+\arg \max _{a} V(f(s, a))
+\]</span></p>
+<ul>
+<li>可以理解为令 <span class="math inline">\(\epsilon_t = 0\)</span></li>
+<li><p>也可以通过下述公式推导： <span class="math display">\[
+\begin{aligned} \mathrm{E}_{s^{\prime}}\left[V\left(s^{\prime}\right)\right] &amp; \approx V\left(\mathrm{E}_{s^{\prime}}\left[s^{\prime}\right]\right) \\ &amp;=V(f(s, a)) \end{aligned}
+\]</span></p>
+<ul>
+<li>第一步可以参考 Jensen 不等式
+<ul>
+<li>只要噪声项很小，则估计一般合理</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>对于无法使用上述估计方法的问题，则可能需要采样 <span class="math inline">\(k|A|\)</span> 个样本
+<ul>
+<li>这通常计算量较大</li>
+</ul></li>
+</ul></li>
+</ul>
+<h1 id="思维导图">思维导图</h1>
+<p><img src="http://media.zjubiomedit.com/2019-05-28-121303.png" width="100%"></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Zheyu Wang</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://xxwywzy.github.io/2019/05/28/cs229-15/" title="CS229 学习笔记之十五：强化学习与控制">https://xxwywzy.github.io/2019/05/28/cs229-15/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CS229/" rel="tag"># CS229</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/06/cs229-14/" rel="next" title="CS229 学习笔记之十四：隐马尔可夫模型基础">
+                <i class="fa fa-chevron-left"></i> CS229 学习笔记之十四：隐马尔可夫模型基础
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Zheyu Wang"/>
+            
+              <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+              <p class="site-description motion-element" itemprop="description">更に向こうへ</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">32</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/xxwywzy" title="GitHub &rarr; https://github.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://twitter.com/xxwywzy" title="Twitter &rarr; https://twitter.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="http://weibo.com/xxwywzy" title="Weibo &rarr; http://weibo.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://instagram.com/xxwywzy" title="Instagram &rarr; https://instagram.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#马尔可夫决策过程"><span class="nav-number">1.</span> <span class="nav-text">马尔可夫决策过程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#值迭代和策略迭代"><span class="nav-number">2.</span> <span class="nav-text">值迭代和策略迭代</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#值迭代"><span class="nav-number">2.1.</span> <span class="nav-text">值迭代</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#策略迭代"><span class="nav-number">2.2.</span> <span class="nav-text">策略迭代</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#马尔可夫过程的模型学习"><span class="nav-number">3.</span> <span class="nav-text">马尔可夫过程的模型学习</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#连续状态马尔可夫决策过程"><span class="nav-number">4.</span> <span class="nav-text">连续状态马尔可夫决策过程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#离散化"><span class="nav-number">4.1.</span> <span class="nav-text">离散化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#值函数近似"><span class="nav-number">4.2.</span> <span class="nav-text">值函数近似</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用一个模型或模拟器"><span class="nav-number">4.2.1.</span> <span class="nav-text">使用一个模型或模拟器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#拟合值迭代"><span class="nav-number">4.2.2.</span> <span class="nav-text">拟合值迭代</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#思维导图"><span class="nav-number">5.</span> <span class="nav-text">思维导图</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.5.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.0.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz',
+    appKey: 'IxP5URFEhxow4TfWyVNiowbH',
+    placeholder: '请在这里评论=￣ω￣=',
+    avatar: 'retro',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+</script>
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+  
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .fail(function ({ responseJSON }) {
+                console.log(`Failed to save Visitor num, with error message: ${responseJSON.error}`);
+              })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1 }))
+                .done(function() {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function() {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+        .fail(function ({ responseJSON }) {
+          console.log(`LeanCloud Counter Error: ${responseJSON.code} ${responseJSON.error}`);
+        });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz',
+                'X-LC-Key': 'IxP5URFEhxow4TfWyVNiowbH',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            addCount(Counter);
+          
+        });
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: "AMS"
+      }
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+      for (i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+<script src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+  overflow: auto hidden;
+}
+</style><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+    
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
