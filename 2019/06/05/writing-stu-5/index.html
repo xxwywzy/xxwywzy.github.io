@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2"/>
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0"/>
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/favicon.png?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本篇博客为科学写作公开课的第五周学习笔记。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Writing in the Sciences Week5 学习笔记">
+<meta property="og:url" content="https://xxwywzy.github.io/2019/06/05/writing-stu-5/index.html">
+<meta property="og:site_name" content="xxwywzy&#39;s Blog">
+<meta property="og:description" content="本篇博客为科学写作公开课的第五周学习笔记。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-05-28-062110.jpg">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-05-28-063244.png">
+<meta property="og:updated_time" content="2019-06-05T12:47:16.226Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Writing in the Sciences Week5 学习笔记">
+<meta name="twitter:description" content="本篇博客为科学写作公开课的第五周学习笔记。">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2019-05-28-062110.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="https://xxwywzy.github.io/2019/06/05/writing-stu-5/"/>
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Writing in the Sciences Week5 学习笔记 | xxwywzy's Blog</title>
+  
+
+
+
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a02b5462e7522b1ed191c4cea6b1d6e6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xxwywzy's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Long may the sunshine</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br/>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br/>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br/>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br/>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2019/06/05/writing-stu-5/"/>
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zheyu Wang"/>
+      <meta itemprop="description" content="更に向こうへ"/>
+      <meta itemprop="image" content="/images/avatar.png"/>
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xxwywzy's Blog"/>
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Writing in the Sciences Week5 学习笔记
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-06-05 21:30:37" itemprop="dateCreated datePublished" datetime="2019-06-05T21:30:37+08:00">2019-06-05</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/科研/" itemprop="url" rel="index"><span itemprop="name">科研</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/科研/写作/" itemprop="url" rel="index"><span itemprop="name">写作</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <a href="/2019/06/05/writing-stu-5/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/06/05/writing-stu-5/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+            <span id="/2019/06/05/writing-stu-5/" class="leancloud_visitors" data-flag-title="Writing in the Sciences Week5 学习笔记">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <div class="note warning">
+            本篇博客为科学写作公开课的第五周学习笔记。 
+          </div>
+<a id="more"></a>
+<ul>
+<li>本周将介绍如何撰写科学论文</li>
+<li>在写论文时，建议每天制定小而可行的目标，如：
+<ul>
+<li>每天 400 字</li>
+<li>完成 discussion 的前两段</li>
+</ul></li>
+<li>推荐的写作顺序为：
+<ul>
+<li>表格和图片</li>
+<li>结果</li>
+<li>方法</li>
+<li>介绍</li>
+<li>讨论</li>
+<li>摘要</li>
+</ul></li>
+</ul>
+<h1 id="表格和图片">表格和图片</h1>
+<ul>
+<li>表格和图片是整个文章的基石
+<ul>
+<li>可能读者只会去阅读标题、摘要和图表</li>
+</ul></li>
+<li>图表应该独立，可以讲述一个完整的故事</li>
+<li>尽可能地使用最少数量的图表来讲述故事</li>
+<li>不要在图和表中展示相同的数据</li>
+<li>图片和表格的区别：
+<ul>
+<li>图片：
+<ul>
+<li>视觉冲击</li>
+<li>展示趋势和模式</li>
+<li>快速讲述故事</li>
+<li>完整讲述故事</li>
+<li>突出一个具体的结果</li>
+</ul></li>
+<li>表格：
+<ul>
+<li>提供精确的数据</li>
+<li>展示大量的数据/变量</li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="表格">表格</h2>
+<ul>
+<li>表格标题应该：
+<ul>
+<li>明确表格的主旨</li>
+<li>与正文使用相同的关键词</li>
+<li>尽量简洁</li>
+</ul></li>
+<li>表格脚注：
+<ul>
+<li>通过脚注表明统计学显著性或解释细节、缩略语等</li>
+<li>具体应该遵循期刊的要求</li>
+</ul></li>
+<li>表格形式：
+<ul>
+<li>参考期刊之前的文章，不要重新造轮子！</li>
+<li>大部分期刊使用三线表格</li>
+<li>注意单位、数字位数、对齐方式等细节（看起来要很专业）</li>
+</ul></li>
+</ul>
+<h2 id="图片">图片</h2>
+<ul>
+<li>图片主要可以分为三类：
+<ul>
+<li>原始证据</li>
+<li>所见即所得</li>
+<li>统计图
+<ul>
+<li>折线图</li>
+<li>柱状图</li>
+<li>散点图</li>
+<li>饼状图</li>
+<li>箱型图</li>
+</ul></li>
+<li>示意图
+<ul>
+<li>说明试验设置或流程</li>
+<li>给出假设模型</li>
+<li>描述微观现象</li>
+</ul></li>
+</ul></li>
+<li>图例应该使得图片可以独立，包括：
+<ul>
+<li>简要的标题</li>
+<li>必要的试验细节</li>
+<li>符号定义或线/柱的模式</li>
+<li>各组的解释</li>
+<li>统计信息</li>
+<li>PS：似乎有些期刊只需要简要的标题</li>
+</ul></li>
+<li>统计图的要点：
+<ul>
+<li>讲述一个快速的可视化的故事</li>
+<li>保持简单</li>
+<li>可以较容易地区分各组</li>
+<li>如果过于复杂，考虑转换为表格</li>
+</ul></li>
+<li>除了表格和图片外，还可以将影片作为补充材料</li>
+<li>个人感想：先完成文章构思（Road map），再画图片和表格，再开始写
+<ul>
+<li>不一定要整篇完成后再进行，可以分章节或段落进行</li>
+</ul></li>
+</ul>
+<h1 id="结果">结果</h1>
+<ul>
+<li>结果部分不应该只是生硬地描述数据，而应该：
+<ul>
+<li>总结数据展示了什么
+<ul>
+<li>指出简单的关系</li>
+<li>描述整体趋势</li>
+<li>引用相关的图表</li>
+</ul></li>
+<li>避免简单地重复图表中的数据</li>
+</ul></li>
+<li>撰写结果时的一些技巧：
+<ul>
+<li>划分子章节（如果需要）</li>
+<li>对图表中已有的信息进行补全，例如：
+<ul>
+<li>给出图片中没有标明的具体数值</li>
+<li>如果表格中只给出了绝对的数值，可以给出其百分比变化或差值</li>
+</ul></li>
+<li>只重复/突出最重要的数值</li>
+<li>不要忘记说明不好的结果或对照组结果</li>
+<li>注意 significant 只用于标明统计学显著性</li>
+<li>将你做了什么放到方法中
+<ul>
+<li>例如不要在结果中讨论统计分析的原理</li>
+</ul></li>
+<li>将对结果意义的评价放到讨论中</li>
+</ul></li>
+<li>结果部分时态的使用：
+<ul>
+<li><p>对于已完成动作使用<strong>过去时</strong></p>
+<ul>
+<li><blockquote>
+<p>we <u>found</u> that…</p>
+</blockquote></li>
+<li><blockquote>
+<p>The average reaction time <u>was</u> …</p>
+</blockquote></li>
+</ul></li>
+<li><p>对于一直正确的主张，使用现在时，如数据的结果：</p>
+<ul>
+<li><blockquote>
+<p>Figure 1 <u>shows</u>…</p>
+</blockquote></li>
+<li><blockquote>
+<p>The data <u>suggest</u>…</p>
+</blockquote></li>
+</ul></li>
+</ul></li>
+<li>结果部分可以使用主动语态（更加生动）
+<ul>
+<li>因为主要讨论试验数据，所以可以少量地使用 we 来保持主动语态</li>
+</ul></li>
+</ul>
+<h1 id="方法">方法</h1>
+<ul>
+<li>方法部分应该：
+<ul>
+<li>对你做了什么给出清晰的概述</li>
+<li>给出足够的信息，以保证研究可以复现</li>
+<li>保持完整，但应该保证易读性
+<ul>
+<li>划分子章节</li>
+<li>常用方法给出引用（不用描述细节）</li>
+<li>可能的话用流程图或表格展示</li>
+</ul></li>
+<li>与其他部分相比，可以更加自由地使用专业术语和被动语态</li>
+</ul></li>
+<li>具体来说，方法的组成成分应该包括：
+<ul>
+<li>实验材料</li>
+<li>参与者/研究对象</li>
+<li>实验方案/研究设计</li>
+<li>数据测量</li>
+<li>数据分析</li>
+</ul></li>
+<li>方法部分的时态：
+<ul>
+<li>使用过去时
+<ul>
+<li>protocol 文章不遵循</li>
+</ul></li>
+<li><p>但如果涉及数据表示，使用现在时</p>
+<ul>
+<li><blockquote>
+<p>data are summarized as means ± SD</p>
+</blockquote></li>
+</ul></li>
+</ul></li>
+<li>方法部分可以大量使用被动语态
+<ul>
+<li>偶尔也可以使用主动语态</li>
+</ul></li>
+</ul>
+<h1 id="介绍">介绍</h1>
+<ul>
+<li>介绍部分其实比你想象的要简单
+<ul>
+<li>只需要遵循一个相对标准的形式</li>
+</ul></li>
+<li>一般来说不宜过长，三段左右即可
+<ul>
+<li>推荐 2-5段</li>
+</ul></li>
+<li>注意：介绍并不是一个完整的综述
+<ul>
+<li>应该聚焦于具体的假设和研究目的上</li>
+</ul></li>
+<li><p>可以将介绍想象成下面的圆锥体：</p>
+<p><img src="http://media.zjubiomedit.com/2019-05-28-062110.jpg" width="50%"></p></li>
+<li>介绍应该包含下面这些内容：
+<ul>
+<li>已知的部分</li>
+<li>未知的部分
+<ul>
+<li>当前研究的局限和不足</li>
+</ul></li>
+<li>你提出的问题、假设或目的</li>
+<li>你的实验性方法</li>
+<li>为什么你的方法是创新且重要的（弥补其他研究的不足）</li>
+</ul></li>
+<li>撰写介绍的技巧：
+<ul>
+<li>保持段落长度较短</li>
+<li>面向普通读者写作
+<ul>
+<li>清晰、简洁、非技术性</li>
+</ul></li>
+<li>带领读者一步一步从已知背景到未知的不足，最后到你提出的问题</li>
+<li>强调你的研究如何弥补不足</li>
+<li>明确地表达你的研究问题（目的/假设）
+<ul>
+<li>we asked whether</li>
+<li>Our hypothesis was</li>
+<li>We tested the hypothesis that</li>
+</ul></li>
+<li>不要回答你的研究问题
+<ul>
+<li>放在之后的章节中</li>
+</ul></li>
+<li>从一个 high level 进行总结
+<ul>
+<li>去除细节及和其他具体研究的对比</li>
+</ul></li>
+</ul></li>
+<li>介绍的时态和语态
+<ul>
+<li>使用主动语态</li>
+<li>介绍他人的研究用过去时</li>
+</ul></li>
+</ul>
+<h1 id="讨论">讨论</h1>
+<ul>
+<li>讨论章节的自由性最高
+<ul>
+<li>给予你发挥写作能力的机会
+<ul>
+<li>请遵循之前提到的写作原则</li>
+</ul></li>
+<li>也是最具挑战性的章节</li>
+</ul></li>
+<li><p>讨论可以看做反的圆锥体：</p>
+<p><img src="http://media.zjubiomedit.com/2019-05-28-063244.png" width="60%"></p></li>
+<li>讨论部分应该包括下面这些内容：
+<ul>
+<li>主要发现（回答介绍中提出的研究问题）
+<ul>
+<li>通常以 We found that 等类似的短语开头</li>
+<li>解释数据的意义（挑重点）</li>
+<li>表明发现是否具有创新性</li>
+</ul></li>
+<li>次要发现</li>
+<li>上下文
+<ul>
+<li>给出可能的机制或路径（对于某些解释机理的文章）</li>
+<li>与他人的结果比较</li>
+<li>讨论你的发现如何支持或挑战现有理论</li>
+</ul></li>
+<li>优点与不足
+<ul>
+<li>预计读者可能的问题与批评</li>
+<li>解释为什么你的结果具有鲁棒性</li>
+</ul></li>
+<li>下一步
+<ul>
+<li>推荐验证性研究（need to be confirmed）</li>
+<li>指出没有解决的问题和未来的方向</li>
+</ul></li>
+<li>so what？
+<ul>
+<li>说明你的发现的重要影响</li>
+<li>告诉读者为什么应该关注你的研究</li>
+</ul></li>
+<li>总结
+<ul>
+<li>重述你的主要发现</li>
+<li>给出最终的关键信息（take-home message）</li>
+</ul></li>
+</ul></li>
+<li>撰写讨论的技巧如下：
+<ul>
+<li>展示好的写作技巧
+<ul>
+<li>使用主动语态</li>
+<li>像讲故事一样</li>
+</ul></li>
+<li>以主要发现开头和结尾</li>
+<li>不要距离你的数据太远
+<ul>
+<li>聚焦于你的数据实际表明的内容，不是你希望其证明的内容</li>
+</ul></li>
+<li>聚焦于具体的不足，而不是普遍性的</li>
+<li>保证你给出的关键信息是清晰且坚固的</li>
+</ul></li>
+<li>讨论的时态：
+<ul>
+<li><p>当指向具体的研究细节、结果、分析和背景研究时，使用<strong>过去时</strong>（偶尔完成时）</p>
+<ul>
+<li><blockquote>
+<p>We <u>found</u> that</p>
+</blockquote></li>
+<li><blockquote>
+<p>Subjects may <u>have experienced</u></p>
+</blockquote></li>
+<li><blockquote>
+<p>Miller et al. <u>found</u></p>
+</blockquote></li>
+</ul></li>
+<li><p>当讨论数据的含义时，使用现在时：</p>
+<ul>
+<li><blockquote>
+<p>The greater weight loss <u>suggests</u></p>
+</blockquote></li>
+<li><blockquote>
+<p>The explanation for this difference <u>is</u> not clear</p>
+</blockquote></li>
+</ul></li>
+</ul></li>
+</ul>
+<h3 id="摘要">摘要</h3>
+<ul>
+<li>摘要部分是对主要故事的概述
+<ul>
+<li>其给出了每个章节的高光部分</li>
+<li>一般有长度限制</li>
+<li>独立于其他部分</li>
+<li>一般是人们只会去阅读的部分</li>
+</ul></li>
+<li>建议将摘要作为文章的最后一部分完成
+<ul>
+<li>如果之前写过摘要的草稿，终稿建议重新开始写</li>
+</ul></li>
+<li>摘要部分包括以下内容
+<ul>
+<li>背景</li>
+<li>研究问题/目的/假设</li>
+<li>实验
+<ul>
+<li>对关键材料和方法的快速总结</li>
+</ul></li>
+<li>结果
+<ul>
+<li>主要结果</li>
+<li>最少量的原始数据（最好进行总结）</li>
+</ul></li>
+<li>结论
+<ul>
+<li>对研究问题的解答或关键信息</li>
+</ul></li>
+<li>研究的影响（可选）</li>
+</ul></li>
+<li>摘要可以是结构化的（小标题）或自由形式</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Zheyu Wang</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://xxwywzy.github.io/2019/06/05/writing-stu-5/" title="Writing in the Sciences Week5 学习笔记">https://xxwywzy.github.io/2019/06/05/writing-stu-5/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/06/05/writing-stu-4/" rel="next" title="Writing in the Sciences Week4 学习笔记">
+                <i class="fa fa-chevron-left"></i> Writing in the Sciences Week4 学习笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Zheyu Wang"/>
+            
+              <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+              <p class="site-description motion-element" itemprop="description">更に向こうへ</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">38</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/xxwywzy" title="GitHub &rarr; https://github.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://twitter.com/xxwywzy" title="Twitter &rarr; https://twitter.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="http://weibo.com/xxwywzy" title="Weibo &rarr; http://weibo.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://instagram.com/xxwywzy" title="Instagram &rarr; https://instagram.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#表格和图片"><span class="nav-number">1.</span> <span class="nav-text">表格和图片</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#表格"><span class="nav-number">1.1.</span> <span class="nav-text">表格</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#图片"><span class="nav-number">1.2.</span> <span class="nav-text">图片</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结果"><span class="nav-number">2.</span> <span class="nav-text">结果</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#方法"><span class="nav-number">3.</span> <span class="nav-text">方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#介绍"><span class="nav-number">4.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#讨论"><span class="nav-number">5.</span> <span class="nav-text">讨论</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#摘要"><span class="nav-number">5.0.1.</span> <span class="nav-text">摘要</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.5.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.0.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz',
+    appKey: 'IxP5URFEhxow4TfWyVNiowbH',
+    placeholder: '请在这里评论=￣ω￣=',
+    avatar: 'retro',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+</script>
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+  
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .fail(function ({ responseJSON }) {
+                console.log(`Failed to save Visitor num, with error message: ${responseJSON.error}`);
+              })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1 }))
+                .done(function() {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function() {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+        .fail(function ({ responseJSON }) {
+          console.log(`LeanCloud Counter Error: ${responseJSON.code} ${responseJSON.error}`);
+        });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz',
+                'X-LC-Key': 'IxP5URFEhxow4TfWyVNiowbH',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            addCount(Counter);
+          
+        });
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: "AMS"
+      }
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+      for (i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+<script src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+  overflow: auto hidden;
+}
+</style><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+    
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
