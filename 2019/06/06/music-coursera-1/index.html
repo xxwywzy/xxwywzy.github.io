@@ -96,29 +96,45 @@
 
 
 
-  <meta name="description" content="本篇博客为CS229第六篇学习笔记，主要内容包括朴素贝叶斯算法、拉普拉斯平滑以及文本分类的事件模型。">
-<meta name="keywords" content="CS229,机器学习,朴素贝叶斯">
+  <meta name="description" content="本篇博客是 Coursera 上音乐理论基础课的第一周笔记。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CS229学习笔记之六：朴素贝叶斯">
-<meta property="og:url" content="https://xxwywzy.github.io/2018/04/14/CS229-6/index.html">
+<meta property="og:title" content="音乐理论基础-第一周学习笔记">
+<meta property="og:url" content="https://xxwywzy.github.io/2019/06/06/music-coursera-1/index.html">
 <meta property="og:site_name" content="xxwywzy&#39;s Blog">
-<meta property="og:description" content="本篇博客为CS229第六篇学习笔记，主要内容包括朴素贝叶斯算法、拉普拉斯平滑以及文本分类的事件模型。">
+<meta property="og:description" content="本篇博客是 Coursera 上音乐理论基础课的第一周笔记。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-134336.jpg">
-<meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-134347.png">
-<meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-134401.png">
-<meta property="og:updated_time" content="2019-02-28T02:25:21.000Z">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-104500.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-104605.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-104644.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-104833.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-104943.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-105824.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-110411.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-110447.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-111251.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-112019.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-112835.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-113852.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-113932.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-114423.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-114757.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-115036.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-115204.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-115918.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-121221.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-121857.png">
+<meta property="og:updated_time" content="2019-06-06T09:08:48.328Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CS229学习笔记之六：朴素贝叶斯">
-<meta name="twitter:description" content="本篇博客为CS229第六篇学习笔记，主要内容包括朴素贝叶斯算法、拉普拉斯平滑以及文本分类的事件模型。">
-<meta name="twitter:image" content="http://media.zjubiomedit.com/2018-05-28-134336.jpg">
+<meta name="twitter:title" content="音乐理论基础-第一周学习笔记">
+<meta name="twitter:description" content="本篇博客是 Coursera 上音乐理论基础课的第一周笔记。">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2019-03-24-104500.png">
 
 
 
 
 
 
-  <link rel="canonical" href="https://xxwywzy.github.io/2018/04/14/CS229-6/"/>
+  <link rel="canonical" href="https://xxwywzy.github.io/2019/06/06/music-coursera-1/"/>
 
 
 
@@ -128,7 +144,7 @@
   };
 </script>
 
-  <title>CS229学习笔记之六：朴素贝叶斯 | xxwywzy's Blog</title>
+  <title>音乐理论基础-第一周学习笔记 | xxwywzy's Blog</title>
   
 
 
@@ -341,7 +357,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2018/04/14/CS229-6/"/>
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2019/06/06/music-coursera-1/"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Zheyu Wang"/>
@@ -358,7 +374,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">CS229学习笔记之六：朴素贝叶斯
+          <h1 class="post-title" itemprop="name headline">音乐理论基础-第一周学习笔记
 
               
             
@@ -384,7 +400,7 @@
                 
               
 
-              <time title="创建时间：2018-04-14 11:12:48" itemprop="dateCreated datePublished" datetime="2018-04-14T11:12:48+08:00">2018-04-14</time>
+              <time title="创建时间：2019-06-06 17:02:13" itemprop="dateCreated datePublished" datetime="2019-06-06T17:02:13+08:00">2019-06-06</time>
             
 
             
@@ -402,7 +418,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/人工智能/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/音乐/" itemprop="url" rel="index"><span itemprop="name">音乐</span></a></span>
 
                 
                 
@@ -420,8 +436,8 @@
                   <i class="fa fa-comment-o"></i>
                 </span>
             
-                <a href="/2018/04/14/CS229-6/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/04/14/CS229-6/" itemprop="commentCount"></span>
+                <a href="/2019/06/06/music-coursera-1/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/06/06/music-coursera-1/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -429,7 +445,7 @@
 
           
           
-            <span id="/2018/04/14/CS229-6/" class="leancloud_visitors" data-flag-title="CS229学习笔记之六：朴素贝叶斯">
+            <span id="/2019/06/06/music-coursera-1/" class="leancloud_visitors" data-flag-title="音乐理论基础-第一周学习笔记">
               <span class="post-meta-divider">|</span>
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
@@ -460,131 +476,157 @@
       
 
       
-        <p><img src="http://media.zjubiomedit.com/2018-05-28-134336.jpg" width="75%" height="75%"></p>
-<p>本篇博客为CS229第六篇学习笔记，主要内容包括朴素贝叶斯算法、拉普拉斯平滑以及文本分类的事件模型。</p>
+        <div class="note default">
+            本篇博客是 Coursera 上音乐理论基础课的第一周笔记。 
+          </div>
 <a id="more"></a>
-<h3 id="朴素贝叶斯算法">朴素贝叶斯算法</h3>
-<p>在高斯判别分析中，特征向量是连续的、实数值向量。现在我们要谈谈一个不同的生成学习算法，其中x是离散的向量。</p>
-<p>让我们以识别垃圾邮件为例，这类问题被称为<strong>文本分类</strong>问题。</p>
-<p>假设我们有一个训练集（已经标记好了是否为垃圾邮件的邮件集合），我们首先需要构建表示一封邮件的特征向量。</p>
-<p>我们通过如下方式表示特征向量：其长度为词表的长度（词表为所有可能出现的词的集合，一般通过训练集生成），如果这封邮件包含了第 i 个词，<span class="math inline">\(x_i = 1\)</span>，否则 <span class="math inline">\(x_i = 0\)</span>。下图为一个简单的例子：</p>
-<p><img src="http://media.zjubiomedit.com/2018-05-28-134347.png" width="25%" height="25%"></p>
-<p>选择好特征向量后，我们需要来构建生成模型，但考虑到x是一个高维向量，因此如果直接对 <span class="math inline">\(p(x\mid y)\)</span> 建模，那么会得到一个参数向量的维数极高的多项分布，使计算过于复杂。</p>
-<p>因此，我们需要做一个强力的假设，假设给定 y 时， 每一个$x_i $是条件独立的。这个假设被称为<strong>朴素贝叶斯假设</strong>，其引出的算法被称为<strong>朴素贝叶斯分类器</strong>。（注意是条件独立而不是独立，即仅在给定 y 的情况下独立）</p>
-<p>现在我们有（以50000维度为例）：</p>
-<p><span class="math display">\[
-\begin{align*}
-p(x_1,\ldots,x_{50000}\mid y) &amp;=  
-p(x_1 \mid y) p(x_2 \mid y,x_1)p(x_3 \mid y,x_1,x_2)\cdots p(x_{50000} \mid y,x_1, \ldots, x_{49999})\\
-&amp;=p(x_1 \mid y)p(x_2 \mid y) p(x_3 \mid y)\cdot p(x_{50000} \mid y)\\
-&amp;= \prod_{j=1}^np(x_j\mid y)
-\end{align*}
-\]</span></p>
-<p>第一个等式来自于概率的基本性质，第二个等式则使用了朴素贝叶斯假设。即使这个假设在现实中不一定成立，但其实际的效果还是不错的。</p>
-<p>模型包含了以下三个参数：</p>
-<p><span class="math display">\[
-\begin{align*}
-\phi_{i|y=1} &amp;= p(x_i = 1 \mid y=1) \\
-\phi_{i|y=0} &amp;= p(x_i = 1 \mid y=0) \\
-\phi_y &amp;= p(y = 1 )
-\end{align*}
-\]</span></p>
-<p>和之前一样，给定一个训练集 <span class="math inline">\(\{(x^{(i)},y^{(i)}); i=1,\dots,m\}\)</span>，我们可以写出如下的联合似然函数（具体的形式参见生成学习算法）：</p>
-<p><span class="math display">\[
-\mathcal{L} (\phi_y,\phi_{i|y=0},\phi_{i|y=1}) = \prod_{i=1}^m p(x^{(i)},y^{(i)})
-\]</span></p>
-<p>对这个联合似然函数进行最大似然分析，得到的参数值如下：</p>
-<p><span class="math display">\[
-\begin{align*}
-\phi_{j|y=1} &amp;= \frac{\sum_{i=1}^m 1\{x_j^{(i)}=1 \wedge y^{(i)}=1\}}{\sum_{i=1}^m 1\{y^{(i)}=1\}}\\
-\phi_{j|y=0} &amp;= \frac{\sum_{i=1}^m 1\{x_j^{(i)}=1 \wedge y^{(i)}=0\}}{\sum_{i=1}^m 1\{y^{(i)}=0\}} \\
-\phi_y &amp;= \frac {\sum_{i=1}^m 1\{y^{(i)} = 1\}}{m}
-\end{align*}
-\]</span></p>
-<p>这些结果的得出是很自然的，从概率的角度也可以很好地解释。</p>
-<p>得到了这些参数之后，为了对一个新的输入x进行预测，我们可以计算：</p>
-<p><span class="math display">\[
-\begin{align*}
-p(y=1 \mid x) &amp;= \frac{p(x\mid y=1)p(y=1)}{p(x)} \\
-&amp;= \frac {(\prod_{i=1}^n p(x_i \mid y=1))p(y=1)}{(\prod_{i=1}^n p(x_i \mid y=1))p(y=1)+(\prod_{i=1}^n p(x_i \mid y=0))p(y=0)}
-\end{align*}
-\]</span></p>
-<p>然后选择具有更高后验概率的类作为输出。（这里的n指字典的维数，需要先把x转换为统一长度的向量）</p>
-<p>在之前的例子中，输入的每一维特征都是是二元的，其对应的分布是伯努利分布，而当特征是多元时，其对应的分布应该用多项式分布建模。</p>
-<p><img src="http://media.zjubiomedit.com/2018-05-28-134401.png" width="60%" height="60%"></p>
-<p>实际上，即便一些原始的输入数据是连续值，我们可以通过一个映射表将连续值映射为离散值，然后运用朴素贝叶斯方法进行建模。当原始，连续值的数据不能很好的用多元正态分布进行建模时，将其离散化再使用朴素贝叶斯建模往往会取得更好的效果。（现在还有高斯离散贝叶斯算法）</p>
-<h3 id="拉普拉斯平滑">拉普拉斯平滑</h3>
-<p>之前描述的朴素贝叶斯算法有很多的应用，但是其当前的形式仍存在一个问题，让我们讨论一下如何解决这个问题。</p>
-<p>在垃圾邮件分类问题中，如果词典中存在一个词，而这个词在训练集中从未出现过时，其最大似然分析得出的参数 <span class="math inline">\(\phi_{35000|y}\)</span> 将会是</p>
-<p><span class="math display">\[
-\begin{align*}
-\phi_{35000|y=1} &amp;= \frac{\sum_{i=1}^m 1\{x_{35000}^{(i)}=1 \wedge y^{(i)}=1\}}{\sum_{i=1}^m 1\{y^{(i)}=1\}} =0 \\
-\phi_{35000|y=0} &amp;= \frac{\sum_{i=1}^m 1\{x_{35000}^{(i)}=1 \wedge y^{(i)}=0\}}{\sum_{i=1}^m 1\{y^{(i)}=0\}} = 0 \\
-\end{align*}
-\]</span></p>
-<p>因此，当我们尝试去预测含有该词的邮件是否为垃圾邮件时，后验概率的计算结果将变为：</p>
-<p><span class="math display">\[
-\begin{align*}
-p(y=1 \mid x) &amp;= \frac {(\prod_{i=1}^n p(x_i \mid y=1))p(y=1)}{(\prod_{i=1}^n p(x_i \mid y=1))p(y=1)+(\prod_{i=1}^n p(x_i \mid y=0))p(y=0)} \\
-&amp;= \frac 0 0
-\end{align*}
-\]</span></p>
-<p>这会导致我们无法进行预测。更一般的来看，如果你在有限的训练集上没有看到过某个事件，就认为其发生的概率为0，这在统计学上是不合理的。</p>
-<p>现在假设我们要分析一个多项式随机变量 z 的均值，取值为 <span class="math inline">\(\{1,\dots,k\}\)</span>，我们可以分析 <span class="math inline">\(\phi_i=p(z=i)\)</span>，给定一个独立的观察集 <span class="math inline">\(\{z^{(1)},\dots,z^{(m)}\}\)</span>，最大似然估计的结果为：</p>
-<p><span class="math display">\[
-\phi_j = \frac {\sum_{i=1}^m 1\{z^{(i)}=j\}}{m}
-\]</span></p>
-<p>如果我们用这个公式来进行最大似然估计，那么有一些 <span class="math inline">\(\phi_i\)</span> 的值可能为0（如果未在观察集中出现），为了避免这个问题，我们可以使用<strong>拉普拉斯平滑</strong>，其形式为：</p>
-<p><span class="math display">\[
-\phi_j = \frac {\sum_{i=1}^m 1\{z^{(i)}=j\}+1}{m+k}
-\]</span></p>
-<p>分子加1，分母加k，这样可以保证 <span class="math inline">\(\sum_{j=1}^m \phi_j=1\)</span>（概率之和为1），同时保证了对所有的取值， <span class="math inline">\(\phi_j \neq 0\)</span>，从而解决了之前的问题。实验证明，在大部分情况下，拉普拉斯平滑可以给出一个最优的估计。</p>
-<p>对于朴素贝叶斯分类器，使用拉普拉斯平滑，可以得到如下公式：</p>
-<p><span class="math display">\[
-\begin{align*}
-\phi_{j|y=1} &amp;= \frac{\sum_{i=1}^m 1\{x_j^{(i)}=1 \wedge y^{(i)}=1\}+1}{\sum_{i=1}^m 1\{y^{(i)}=1\}+2}\\
-\phi_{j|y=0} &amp;= \frac{\sum_{i=1}^m 1\{x_j^{(i)}=1 \wedge y^{(i)}=0\}+1}{\sum_{i=1}^m 1\{y^{(i)}=0\}+2} 
-\end{align*}
-\]</span></p>
-<p>因为x的取值有两种，所以分子加1，分母加2。</p>
-<p>（在实际中，一般不需要对 <span class="math inline">\(\phi_y\)</span> 进行拉普拉斯平滑。）</p>
-<h3 id="文本分类的事件模型">文本分类的事件模型</h3>
-<p>让我们再探讨一个专门用于文本分类的模型来结束生成学习算法。虽然朴素贝叶斯对许多分类问题有很好的效果，但是对于文本分类，还有存在着一个效果更棒的相关模型。</p>
-<p>在文本分类领域，之前我们使用的朴素贝叶斯模型被称为<strong>多元伯努利事件模型</strong>。现在我们将使用一个不同的模型，叫作<strong>多项式事件模型</strong>。</p>
-<p>我们将使用与之前不同的方式来表示一封邮件。令 <span class="math inline">\(x_i\)</span> 表示邮件中的第i个词语，则其取值范围为 <span class="math inline">\(\{1,\ldots,|V|\}\)</span>，<span class="math inline">\(|V|\)</span> 是词表（词典）的大小。 一封含有 n 个词语的邮件现在将被表示为一个长度为 n 的向量 <span class="math inline">\((x+1,x_2,\ldots,x_n)\)</span> ，注意 n 会随邮件的不同而变化。</p>
-<p>该模型的参数为：</p>
-<p><span class="math display">\[
-\begin{align*}
-\phi_{i|y=1} &amp;= p(x_j = i \mid y=1)\\
-\phi_{i|y=0} &amp;= p(x_j = i \mid y=0)\\
-\phi_y &amp;= p(y)
-\end{align*}
-\]</span></p>
-<p>注意：我们假设 $p(x_jy) $ 对所有的 <span class="math inline">\(j\)</span>（邮件中词语的位置）都是一样的。</p>
-<p>如果给定一个训练集 <span class="math inline">\(\{(x^{(i)},y^{(i)}); i=1,\ldots,m\} \;\text{where} \;x^{(i)} = (x_1^{(i)},x_2^{(i)},\dots,x_{n_i}^{(i)})\)</span>，这里 <span class="math inline">\(n_i\)</span> 表示第 <span class="math inline">\(i\)</span> 个训练样本的词数，那么数据的似然函数可以表示为：</p>
-<p><span class="math display">\[
-\begin{align*}
-\mathcal{L} (\phi_y,\phi_{i|y=0},\phi_{i|y=1}) &amp;= \prod_{i=1}^m p(x^{(i)},y^{(i)}) \\
-&amp;= \prod_{i=1}^m \left(\prod_{j=1}^{n_i} p(x_j^{(i)}\mid y;\phi_{i|y=0},\phi_{i|y=1}) \right) p(y^{(i)};\phi_y)
-\end{align*}
-\]</span></p>
-<p>最大似然估计得出的结果如下：</p>
-<p><span class="math display">\[
-\begin{align*}
-\phi_{k|y=1} &amp;= \frac{\sum_{i=1}^m\sum_{j=1}^{n_i}1\{x_j^{(i)}=k \wedge y^{(i)}=1\}}{\sum_{i=1}^m 1\{y^{(i)}=1\}n_i} \\
-\phi_{k|y=0} &amp;= \frac{\sum_{i=1}^m\sum_{j=1}^{n_i} 1\{x_j^{(i)}=k \wedge y^{(i)}=0\}}{\sum_{i=1}^m 1\{y^{(i)}=0\}n_i} \\
-\phi_y &amp;= \frac {\sum_{i=1}^m 1\{y^{(i)} = 1\}}{m}
-\end{align*}
-\]</span></p>
-<p>可以看到，这里在考虑字典中索引为k的词时，会把在每个文本中出现的次数相加，所以该模型相比于之前的模型，不仅仅考虑是否出现，还考虑了出现的次数。</p>
-<p>如果有要应用拉普拉斯平滑，可以在分子加1，分母加 <span class="math inline">\(|V|\)</span>，得到：</p>
-<p><span class="math display">\[
-\begin{align*}
-\phi_{k|y=1} &amp;= \frac{\sum_{i=1}^m\sum_{j=1}^{n_i}1\{x_j^{(i)}=k \wedge y^{(i)}=1\}+1}{\sum_{i=1}^m 1\{y^{(i)}=1\}n_i+|V|} \\
-\phi_{k|y=0} &amp;= \frac{\sum_{i=1}^m\sum_{j=1}^{n_i} 1\{x_j^{(i)}=k \wedge y^{(i)}=0\}+1}{\sum_{i=1}^m 1\{y^{(i)}=0\}n_i+|V|} 
-\end{align*}
-\]</span></p>
-<p>虽然朴素贝叶斯不是最好的分类算法，但因为其易于实现，所以非常适合作为你的第一个尝试。</p>
+<p><a href="https://www.coursera.org/learn/edinburgh-music-theory/home/welcome" target="_blank" rel="noopener">课程地址</a></p>
+<h1 id="音符musical-notes">音符（Musical Notes)</h1>
+<h2 id="命名音符">命名音符</h2>
+<ul>
+<li>早期的音乐中没有五线谱，导致音符难以被表示</li>
+<li><p>现代音乐使用<strong>五线谱</strong>（stave）与<strong>英文字母</strong>来表示音符</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-104500.png" width="80%"></p></li>
+<li><p>可以通过以下方式来记忆音符在五线谱中的对应位置：</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-104605.png" width="80%"></p></li>
+<li><p>在钢琴上，音符的位置如下图所示：</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-104644.png" width="40%"></p></li>
+</ul>
+<h2 id="八度音octave">八度音（Octave）</h2>
+<ul>
+<li><p><strong>八度音</strong>是指来自不同音域的相同音名，下图展示了五线谱上相邻的八度音：</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-104833.png" width="80%"></p>
+<ul>
+<li><p>可以看到如果一个音名在线上，则其相邻的八度音一定在两条线之间（反之亦然）</p></li>
+<li><p>我们将较低的那个 C 称为<strong><a href="https://zh.wikipedia.org/wiki/C_(%E9%9F%B3%E5%90%8D)" target="_blank" rel="noopener">中央C</a></strong>（middle C），它一般位于键盘的中央</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-104943.png" width="20%"></p></li>
+</ul></li>
+</ul>
+<h1 id="音程intervals">音程（Intervals）</h1>
+<ul>
+<li><p>音程指两个音的高低关系</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-105824.png" width="70%"></p></li>
+</ul>
+<h2 id="全音和半音tones-and-semitones">全音和半音（Tones and semitones）</h2>
+<ul>
+<li>两个音之间的最小距离称为半音
+<ul>
+<li>两个半音距离构成一个全音</li>
+</ul></li>
+<li>如果只考虑白键，我们有如下两组半音
+<ul>
+<li><p>B 和 C</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-110411.png" width="45%"></p></li>
+<li><p>E 和 F</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-110447.png" width="45%"></p></li>
+</ul></li>
+</ul>
+<h2 id="c-大调the-c-major-scale">C 大调（The C major scale）</h2>
+<ul>
+<li><p>在了解了全音和半音之间的关系之后，我们就可以推导出 C 大调</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-111251.png" width="80%"></p></li>
+<li>C 大调是一个于 C 音开始的音乐的大调
+<ul>
+<li>C 音为主音（tonic）</li>
+<li>这是一个自然音阶组成的大调（没有升降号）
+<ul>
+<li>其特点是从一个八度音到其相邻八度音，其中包含 2 个半音和 5 个全音</li>
+</ul></li>
+</ul></li>
+</ul>
+<h1 id="音阶scale">音阶（Scale）</h1>
+<ul>
+<li><p>音阶不仅仅包含大调，下面的音阶表示了 A 自然小调（The A natural minor scale）：</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-112019.png" width="80%"></p>
+<ul>
+<li>当全音与半音的排列模式不同时，音阶听起来也会不同（质量不同）</li>
+<li>我们简单地通过从不同的音符开始来发现不同的音阶
+<ul>
+<li>通过仅选择自然音阶，可以实现对全音和半音的重新组合</li>
+</ul></li>
+</ul></li>
+<li><p>七种由自然音阶生成的模式如下：</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-112835.png" width="70%"></p>
+<ul>
+<li>下面的句子可以帮助记忆这些模式：
+<ul>
+<li><strong>I</strong> <strong>D</strong>on’t <strong>P</strong>unch <strong>L</strong>ike <strong>M</strong>uhammad <strong>A</strong> - <strong>L</strong>i.</li>
+</ul></li>
+</ul></li>
+</ul>
+<h1 id="c-大调和-a-小调三和弦triads">C 大调和 A 小调三和弦（Triads）</h1>
+<ul>
+<li>三和弦就是由三个音符组成的和弦
+<ul>
+<li>和弦即不同的音的组合（组合后的音是和谐的）</li>
+</ul></li>
+<li><p>C 大调三和弦如下图所示：</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-113852.png" width="80%"></p></li>
+<li><p>A 小调三和弦如下图所示：</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-113932.png" width="80%"></p></li>
+</ul>
+<h2 id="理解三和弦的内部结构">理解三和弦的内部结构</h2>
+<ul>
+<li>首先我们计算三和弦中首尾两个音之间的音程
+<ul>
+<li><p>对于 C 大三和弦：</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-114423.png" width="70%"></p>
+<ul>
+<li>其音程包含了 7 个半音，被称为<strong>纯五度</strong>（perfect fifth）</li>
+</ul></li>
+<li><p>对于 A 小三和弦：</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-114757.png" width="70%"></p>
+<ul>
+<li>其音程同样为纯五度</li>
+</ul></li>
+</ul></li>
+<li>接着我们计算首音和中间音的音程：
+<ul>
+<li><p>对于 C 大三和弦：</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-115036.png" width="70%"></p>
+<ul>
+<li>其音程包含了 4 个半音，被称为<strong>大三度</strong>（major third）</li>
+</ul></li>
+<li><p>对于 A 小三和弦：</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-115204.png" width="70%"></p>
+<ul>
+<li>其音程包含了 3 个半音，被称为<strong>小三度</strong>（major third）</li>
+</ul></li>
+</ul></li>
+<li>基于上述结果我们可以得出三和弦的命名规则：
+<ul>
+<li>大三度 + 小三度（纯五度）：<strong>大三和弦</strong></li>
+<li>小三度 + 大三度（纯五度）：<strong>小三和弦</strong></li>
+<li>小三度 + 小三度（减五度）：<strong>减三和弦</strong></li>
+</ul></li>
+<li><p>自然音阶组成的和弦如下图所示：</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-115918.png" width="70%"></p></li>
+</ul>
+<h1 id="三个主要和弦">三个主要和弦</h1>
+<ul>
+<li>在音阶中，不同的音有不同的名称：
+<ul>
+<li>第一个音称为主音（Tonic）</li>
+<li>第二个音称为上主音（Supertonic）</li>
+<li>第三个音称为中音（Mediant）</li>
+<li>第四个音称为下属音（Subdominant）</li>
+<li>第五个音称为属音（Dominant）</li>
+<li>第六个音称为下中音（Submediant）</li>
+<li>第七个音称为下主音（Subtonic）</li>
+</ul></li>
+<li>对于一个音阶，以下三个和弦最为重要：
+<ul>
+<li>主和弦：以主音开头的和弦</li>
+<li>下属和弦：以下属音开头的和弦</li>
+<li>属和弦：以属音开头的和弦</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-121221.png" width="70%"></p></li>
+<li>音阶中不同的音符适合与这三个和弦中不同的和弦搭配
+<ul>
+<li>搭配的和弦中应包括该音符</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-121857.png" width="70%"></p></li>
+</ul>
 
       
     </div>
@@ -618,7 +660,7 @@ p(y=1 \mid x) &amp;= \frac {(\prod_{i=1}^n p(x_i \mid y=1))p(y=1)}{(\prod_{i=1}^
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
     
-    <a href="https://xxwywzy.github.io/2018/04/14/CS229-6/" title="CS229学习笔记之六：朴素贝叶斯">https://xxwywzy.github.io/2018/04/14/CS229-6/</a>
+    <a href="https://xxwywzy.github.io/2019/06/06/music-coursera-1/" title="音乐理论基础-第一周学习笔记">https://xxwywzy.github.io/2019/06/06/music-coursera-1/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
@@ -629,16 +671,6 @@ p(y=1 \mid x) &amp;= \frac {(\prod_{i=1}^n p(x_i \mid y=1))p(y=1)}{(\prod_{i=1}^
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/CS229/" rel="tag"># CS229</a>
-          
-            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
-          
-            <a href="/tags/朴素贝叶斯/" rel="tag"># 朴素贝叶斯</a>
-          
-        </div>
-      
 
       
       
@@ -648,8 +680,8 @@ p(y=1 \mid x) &amp;= \frac {(\prod_{i=1}^n p(x_i \mid y=1))p(y=1)}{(\prod_{i=1}^
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/04/01/CS229-5/" rel="next" title="CS229学习笔记之五：生成学习算法">
-                <i class="fa fa-chevron-left"></i> CS229学习笔记之五：生成学习算法
+              <a href="/2019/06/05/ontology-101/" rel="next" title="本体构建 101">
+                <i class="fa fa-chevron-left"></i> 本体构建 101
               </a>
             
           </div>
@@ -657,10 +689,6 @@ p(y=1 \mid x) &amp;= \frac {(\prod_{i=1}^n p(x_i \mid y=1))p(y=1)}{(\prod_{i=1}^
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/04/16/uncharted4/" rel="prev" title="A thief's end —— 神秘海域4通关感想">
-                A thief's end —— 神秘海域4通关感想 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -938,7 +966,7 @@ p(y=1 \mid x) &amp;= \frac {(\prod_{i=1}^n p(x_i \mid y=1))p(y=1)}{(\prod_{i=1}^
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#朴素贝叶斯算法"><span class="nav-number">1.</span> <span class="nav-text">朴素贝叶斯算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#拉普拉斯平滑"><span class="nav-number">2.</span> <span class="nav-text">拉普拉斯平滑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文本分类的事件模型"><span class="nav-number">3.</span> <span class="nav-text">文本分类的事件模型</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#音符musical-notes"><span class="nav-number">1.</span> <span class="nav-text">音符（Musical Notes)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#命名音符"><span class="nav-number">1.1.</span> <span class="nav-text">命名音符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#八度音octave"><span class="nav-number">1.2.</span> <span class="nav-text">八度音（Octave）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#音程intervals"><span class="nav-number">2.</span> <span class="nav-text">音程（Intervals）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#全音和半音tones-and-semitones"><span class="nav-number">2.1.</span> <span class="nav-text">全音和半音（Tones and semitones）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-大调the-c-major-scale"><span class="nav-number">2.2.</span> <span class="nav-text">C 大调（The C major scale）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#音阶scale"><span class="nav-number">3.</span> <span class="nav-text">音阶（Scale）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#c-大调和-a-小调三和弦triads"><span class="nav-number">4.</span> <span class="nav-text">C 大调和 A 小调三和弦（Triads）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#理解三和弦的内部结构"><span class="nav-number">4.1.</span> <span class="nav-text">理解三和弦的内部结构</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三个主要和弦"><span class="nav-number">5.</span> <span class="nav-text">三个主要和弦</span></a></li></ol></div>
             
 
           </div>
