@@ -116,7 +116,7 @@
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-05-09-040311.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-05-09-042153.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-05-09-042925.png">
-<meta property="og:updated_time" content="2019-06-05T14:21:46.464Z">
+<meta property="og:updated_time" content="2019-06-11T12:22:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Coursera-Kaggle Week2 学习笔记">
 <meta name="twitter:description" content="本篇博客为 Coursera-Kaggle 公开课的第二周学习笔记。">
@@ -714,6 +714,19 @@
 </ul>
 <h3 id="作业数据泄露">作业：数据泄露</h3>
 <p><a href="https://necromuralist.github.io/kaggle-competitions/posts/data-leakages/" target="_blank" rel="noopener">参考地址</a></p>
+<p>整体思路：</p>
+<ul>
+<li>先提交全为 1 的预测，得到评分为 0.5
+<ul>
+<li>说明测试集中正负样本各一半</li>
+</ul></li>
+<li>基于两个特征 id 的共现矩阵，计算每一组 id 对的相似性
+<ul>
+<li>共现矩阵对称，通过向量点积计算</li>
+</ul></li>
+<li>发现相似性得分以 20 为分界，各占 50%</li>
+<li>基于该分界，预测正负样本，准确率接近 99%</li>
+</ul>
 
       
     </div>
