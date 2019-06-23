@@ -109,7 +109,7 @@
 <meta property="og:image" content="http://media.zjubiomedit.com/2018-12-12-031131.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2018-12-12-031609.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-06-23-083303.png">
-<meta property="og:updated_time" content="2019-06-23T15:41:15.855Z">
+<meta property="og:updated_time" content="2019-06-23T15:55:05.675Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS229学习笔记之六：学习理论">
 <meta name="twitter:description" content="本篇博客为 CS229 学习笔记第六部分，主题是：学习理论。">
@@ -730,19 +730,20 @@ m \ge O \left( \frac 1 {\gamma^2}\log\frac {2^{64d}} \delta\right) = O \left( \f
 <li>对于一个线性分类器，如果将它写作 <span class="math inline">\(h_\theta(x) = 1\{\theta_0 + \theta_1x_1 + \cdots + \theta_nx_n \ge 0\}\)</span>，那么其参数共有 <span class="math inline">\(n+1\)</span> 个
 <ul>
 <li>如果将它写作 <span class="math inline">\(h_{u,v}(x) = 1\{(v_0^2-u_0^2)+ (v_1^2-u_1^2)x_1 + \cdots + (v_n^2-u_n^2)x_n \ge 0\}\)</span>，那么其参数共有 <span class="math inline">\(2n+2\)</span> 个</li>
-<li>两种情况都可以看做相同的假设集 <span class="math inline">\(\mathcal{H}\)</span>：一个 <span class="math inline">\(n\)</span> 维空间的线性分类器集合</li>
+<li>两种情况都可以看做相同的假设集 <span class="math inline">\(\mathcal{H}\)</span>：一个 <span class="math inline">\(n\)</span> 维空间的线性分类器集合</li>
 </ul></li>
 </ul></li>
 <li>为了进行更严谨的论证，给出如下定义：
 <ul>
 <li>给定一个点的集合 <span class="math inline">\(S=\{x^{(1)},\ldots,x^{(d)} \}\)</span>（与训练集无关），其中 <span class="math inline">\(x_i \in \mathcal{X}\)</span>（即每个点维数相同）</li>
-<li>对于一个假设集 <span class="math inline">\(\mathcal{H}\)</span>，我们认为 <span class="math inline">\(\mathcal{H}\)</span> <strong>打散</strong>（shatter）了 <span class="math inline">\(S\)</span> 如果 <span class="math inline">\(\mathcal{H}\)</span> 可以实现 <span class="math inline">\(S\)</span> 的任意标签化
+<li><p>对于一个假设集 <span class="math inline">\(\mathcal{H}\)</span>，我们认为 <span class="math inline">\(\mathcal{H}\)</span> <strong>打散</strong>（shatter）了 <span class="math inline">\(S\)</span> 如果 <span class="math inline">\(\mathcal{H}\)</span> 可以实现 <span class="math inline">\(S\)</span> 的任意标签化</p>
 <ul>
 <li>即对于任意的标签集合 <span class="math inline">\(\{y^{(1)},\ldots,y^{(d)} \}\)</span>，都存在某个 <span class="math inline">\(h \in \mathcal{H}\)</span> 使得 <span class="math inline">\(h(x^{(i)}) = y^{(i)}\)</span> 对于所有的 <span class="math inline">\(i=1,\ldots,d\)</span> 均成立</li>
 </ul></li>
 <li>我们定义一个假设集 <span class="math inline">\(\mathcal{H}\)</span> 的 <strong>VC 维</strong>（Vapnik-Chervonenkis dimension）为该假设集能够打散的最大集合规模
 <ul>
 <li>如果 <span class="math inline">\(\mathcal{H}\)</span> 可以打散任意大的集合，那么 <span class="math inline">\(VC(\mathcal{H}) = \infty\)</span></li>
+</ul></li>
 <li><p>例如，对于下图所示的三个点的集合：</p>
 <p><img src="http://media.zjubiomedit.com/2018-12-12-030409.png" width="40%"></p>
 <ul>
@@ -756,7 +757,6 @@ m \ge O \left( \frac 1 {\gamma^2}\log\frac {2^{64d}} \delta\right) = O \left( \f
 <p><img src="http://media.zjubiomedit.com/2018-12-12-031609.png" width="55%"></p>
 <ul>
 <li>换句话说，在 VC 维的定义下，要保证 <span class="math inline">\(VC(\mathcal{H})\)</span> 至少为 <span class="math inline">\(d\)</span>，只需要证明至少有一个规模为 <span class="math inline">\(d\)</span> 的点集能够被 <span class="math inline">\(\mathcal{H}\)</span> 打散即可</li>
-</ul></li>
 </ul></li>
 </ul></li>
 <li>基于 VC 维，我们可以给出如下定理（学习理论中最重要的定理之一）：
