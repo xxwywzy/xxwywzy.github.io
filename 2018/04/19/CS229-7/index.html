@@ -96,26 +96,20 @@
 
 
 
-  <meta name="description" content="本篇博客为CS229第七篇学习笔记，主要内容为对支持向量机算法的系统介绍。">
-<meta name="keywords" content="CS229,机器学习,支持向量机">
+  <meta name="description" content="本篇博客为 CS229 学习笔记第七部分，主题是：正则化与模型选择。">
+<meta name="keywords" content="CS229">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CS229学习笔记之七：支持向量机">
+<meta property="og:title" content="CS229学习笔记之七：正则化与模型选择">
 <meta property="og:url" content="https://xxwywzy.github.io/2018/04/19/CS229-7/index.html">
 <meta property="og:site_name" content="xxwywzy&#39;s Blog">
-<meta property="og:description" content="本篇博客为CS229第七篇学习笔记，主要内容为对支持向量机算法的系统介绍。">
+<meta property="og:description" content="本篇博客为 CS229 学习笔记第七部分，主题是：正则化与模型选择。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-134414.jpg">
-<meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-134426.png">
-<meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-134438.png">
-<meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-134453.png">
-<meta property="og:image" content="http://media.zjubiomedit.com/2018-07-26-014831.png">
-<meta property="og:image" content="http://media.zjubiomedit.com/2018-07-26-015037.png">
-<meta property="og:image" content="http://media.zjubiomedit.com/2018-07-26-015157.png">
-<meta property="og:updated_time" content="2019-02-01T14:18:37.114Z">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-07-024755.png">
+<meta property="og:updated_time" content="2019-07-07T02:51:28.708Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CS229学习笔记之七：支持向量机">
-<meta name="twitter:description" content="本篇博客为CS229第七篇学习笔记，主要内容为对支持向量机算法的系统介绍。">
-<meta name="twitter:image" content="http://media.zjubiomedit.com/2018-05-28-134414.jpg">
+<meta name="twitter:title" content="CS229学习笔记之七：正则化与模型选择">
+<meta name="twitter:description" content="本篇博客为 CS229 学习笔记第七部分，主题是：正则化与模型选择。">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2019-07-07-024755.png">
 
 
 
@@ -132,7 +126,7 @@
   };
 </script>
 
-  <title>CS229学习笔记之七：支持向量机 | xxwywzy's Blog</title>
+  <title>CS229学习笔记之七：正则化与模型选择 | xxwywzy's Blog</title>
   
 
 
@@ -379,7 +373,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">CS229学习笔记之七：支持向量机
+          <h1 class="post-title" itemprop="name headline">CS229学习笔记之七：正则化与模型选择
 
               
             
@@ -427,6 +421,13 @@
 
                 
                 
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/人工智能/机器学习/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a></span>
+
+                
+                
               
             </span>
           
@@ -450,7 +451,7 @@
 
           
           
-            <span id="/2018/04/19/CS229-7/" class="leancloud_visitors" data-flag-title="CS229学习笔记之七：支持向量机">
+            <span id="/2018/04/19/CS229-7/" class="leancloud_visitors" data-flag-title="CS229学习笔记之七：正则化与模型选择">
               <span class="post-meta-divider">|</span>
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
@@ -481,446 +482,201 @@
       
 
       
-        <p><img src="http://media.zjubiomedit.com/2018-05-28-134414.jpg" width="75%" height="75%"></p>
-<p>本篇博客为CS229第七篇学习笔记，主要内容为对支持向量机算法的系统介绍。</p>
+        <div class="note info">
+            本篇博客为 CS229 学习笔记第七部分，主题是：正则化与模型选择。 
+          </div>
 <a id="more"></a>
-<p>支持向量机（Support Vector Machines）被认为是最好的监督学习算法之一。这里先简要说明一下理解SVM的必要的几个部分（本段引用自<a href="http://blog.csdn.net/stdcoutzyx/article/details/9774135" target="_blank" rel="noopener">张雨石的博客</a>）：首先是函数间隔和几何间隔，由它们引出最优间隔分类器；为了多快好地解决最优间隔分类器问题，使用了拉格朗日对偶性性质，于是，先要理解原始优化问题与对偶问题及它们在什么条件下最优解等价，然后写出最优间隔分类器的对偶形式；通过对最优间隔分类器对偶问题求解，发现求解时目标函数存在内积形式的计算，据此引入了核技法；引入核技法后就得到了完完全全的 SVM 求解问题，使用序列最小化算法（SMO）进行求解。</p>
-<h3 id="间隔直观描述">间隔：直观描述</h3>
-<p>我们将通过对<strong>间隔</strong>的讨论来开启关于支持向量机的故事。这一部分将给出关于间隔以及预测“置信度”的一个直观描述，正式的概念将于第三部分提出。</p>
-<p>对于逻辑回归来说，概率 <span class="math inline">\(p(y=1 \mid x;\theta)\)</span> 由函数 $h_{}(x) = g(^Tx) $给出，预测结果为：</p>
-<p><span class="math display">\[
-\text{predict} \quad  “1” \quad \text{iff} \quad \theta^Tx\ge0, \\ \text{predict} \quad  “0”  \quad  \text{iff}  \quad  \theta^Tx\lt0.
-\]</span></p>
-<p>其中 iff 表示当且仅当。对于一个正训练样本（y=1）来说，如果 <span class="math inline">\(\theta^Tx\)</span> 越大，则 <span class="math inline">\(h_\theta(x)=p(y=1|x;w,b)\)</span> 越接近1，因此我们可以非常“确信”该样本的标签为1，以此类推，我们有：</p>
-<p><span class="math display">\[
-\text{If} \quad \theta^Tx\gg0,\quad \text{very “confident” that} \quad y=1, \\  \text{If} \quad \theta^Tx\ll0,\quad \text{very “confident” that} \quad y=0.
-\]</span></p>
-<p>给定一个训练集，如果我们可以找到这样的 <span class="math inline">\(\theta\)</span>，满足上面的条件，那么对所有的训练样本来说，分类的置信度将很高，这看起来是一个不错的目标。之后我们将用<strong>函数间隔</strong>来对这一描述进行定义。</p>
-<p>接下来我们将换一个角度来描述间隔。观察下面这幅图，x 代表正训练样本，o 代表负训练样本，决策边界由 <span class="math inline">\(\theta^Tx=0\)</span> 给出（又被称为<strong>分离超平面</strong>），有三个点以 A, B 和 C 标注。</p>
-<p><img src="http://media.zjubiomedit.com/2018-05-28-134426.png" width="45%" height="45%"></p>
-<p>可以看到，点 A 距离决策边界很远，因此如果要进行预测，我们非常“确信”其标签为1。而对于点 C ，由于其离决策边界太近，所以我们不能非常确定其标签为1，只要决策边界发生一点点变化，就可能导致对 C 的预测结果发生改变。而 B 的预测置信度介于 A 和 C 之间。</p>
-<p>因此，给定一个训练集，我们希望能找到一条决策边界，使我们对所有训练样本的预测时正确且置信度高的，即要求所有样本都远离决策边界。之后我们将用<strong>几何间隔</strong>来对这一描述进行定义。</p>
-<p>注：在前几部分的讨论中，我们默认数据是线性可分的。（之后会讨论线性不可分的情况）</p>
-<h3 id="符号变换">符号变换</h3>
-<p>为了更好地说明 SVM，我们将修改一些之前定义过的符号：</p>
+<h1 id="模型选择">模型选择</h1>
+<ul>
+<li>对于一个学习问题，我们可能有多种模型可以选择，例如：
+<ul>
+<li>多项式回归中的不同项数对应的模型</li>
+<li>局部加权回归中不同带宽参数对应的模型</li>
+<li>L1正则化支持向量机中的不同参数 C 对应的模型</li>
+</ul></li>
+<li>我们希望可以自动选择一个权衡方差与偏差最好的模型</li>
+<li>为了更加具体，本节所讨论的模型集合为有限集 <span class="math inline">\(\mathcal{M} = {\mathcal{M}_1,\dots,\mathcal{M}_d\}\)</span>
+<ul>
+<li>向无限集的推广并不难</li>
+<li>该模型集合可以是一系列类似的模型（如不同项数的多项式模型），也可以是完全不同的模型（如SVM、神经网络或逻辑回归）</li>
+</ul></li>
+</ul>
+<h2 id="交叉验证">交叉验证</h2>
+<ul>
+<li>给定一个训练集 <span class="math inline">\(S\)</span>，基于经验风险最小化，我们可以考虑如下的算法进行模型选择：
 <ol type="1">
-<li>在逻辑回归中，我们使用 0,1 来表示两个类，现在将改用 -1,+1 ，即 <span class="math inline">\(y \in \{-1,+1\}\)</span>；</li>
-<li>在逻辑回归中，我们使用向量 <span class="math inline">\(\theta\)</span> 作为参数，现在我们将使用参数 <span class="math inline">\(\omega\)</span> 和 <span class="math inline">\(b\)</span>，即 <span class="math inline">\(h_{w,b}(x)=g(w^Tx+b)\)</span>，其中 <span class="math inline">\(\omega\)</span> 相当于 <span class="math inline">\({\begin{bmatrix} \theta_1 \ldots \theta_n \end{bmatrix}}^T\)</span>，<span class="math inline">\(b\)</span> 相当于 <span class="math inline">\(\theta_0\)</span>；</li>
-<li>在逻辑回归中，我们的 g 是 sigmoid 函数，现在改为： <span class="math display">\[
-g(z)=\begin{cases} 1, \quad z\ge0 \\ -1, \quad \text{otherwise} \end{cases}
-\]</span></li>
-</ol>
-<p>注意：现在我们的分类器会直接预测 1 或 -1（类似感知器算法），而不是先输出中间态：y 为 1 的概率。</p>
-<h3 id="函数间隔与几何间隔">函数间隔与几何间隔</h3>
-<p>下面让我们对函数间隔与几何间隔进行正式的定义。</p>
-<p>给定一个训练样本 <span class="math inline">\((x^{(i)},y^{(i)})\)</span>，我们定义它到超平面 <span class="math inline">\((\omega,b)\)</span> 的<strong>函数间隔</strong>为：</p>
-<p><span class="math display">\[
-\hat{\gamma}^{(i)}=y^{(i)}(w^Tx^{(i)}+b).
+<li>在 <span class="math inline">\(S\)</span> 上训练每个模型 <span class="math inline">\(M_i\)</span>，得到每个模型对应的假设 <span class="math inline">\(h_i\)</span></li>
+<li>选择具有最小训练误差的假设</li>
+</ol></li>
+<li>上述算法<em>不会</em>工作
+<ul>
+<li>以多项式模型为例，其项数越高，对训练集的拟合越好</li>
+<li>因此上述算法一定会选出高项数且高方差的模型，这并不是一个好的选择</li>
+</ul></li>
+<li>下面给出一个可以工作的算法：<strong>保留交叉验证</strong>（hold-out cross validation)
+<ol type="1">
+<li>随机将训练集 <span class="math inline">\(S\)</span> 分为 <span class="math inline">\(S_{\text{train}}\)</span>（通常用 70% 的数据）和 <span class="math inline">\(S_{\text{cv}}\)</span>（剩余的 30%）
+<ul>
+<li><span class="math inline">\(S_{\text{cv}}\)</span> 称为保留交叉验证集</li>
+</ul></li>
+<li>仅在 <span class="math inline">\(S_{\text{train}}\)</span> 上训练每个模型 <span class="math inline">\(M_i\)</span>，得到其对应的假设 <span class="math inline">\(h_i\)</span></li>
+<li>选择在保留交叉验证集上误差（<span class="math inline">\(\hat\epsilon_{S_{\text{cv}}}(h_i)\)</span>）最小的假设 <span class="math inline">\(h_i\)</span> 作为输出</li>
+</ol></li>
+<li>通过在模型没有训练的 <span class="math inline">\(S_{\text{cv}}\)</span> 上进行测试，我们可以更好地估计假设 <span class="math inline">\(h_i\)</span> 的真实泛化误差</li>
+<li>上述算法的第三步可以用下面的方法替代：
+<ul>
+<li>根据保留交叉验证集选择选择出模型后，再使用全部训练集对模型进行训练</li>
+<li>这通常是一个好的主意，除非算法对于数据的初始状态十分敏感，即可能在 <span class="math inline">\(S_{\text{cv}}\)</span> 上的训练表现会很差</li>
+</ul></li>
+<li>保留交叉验证集的缺点是其浪费了很多数据（30%）
+<ul>
+<li>虽然我们可以使用全部训练集重新训练模型，但我们仍然只使用了 70% 的数据来找到一个好的模型</li>
+<li>如果数据量较大，那么这并没有什么问题，但是如果数据量很小的话，我们应该考虑其他的算法</li>
+</ul></li>
+<li>下面给出 <strong>k 保留交叉验证</strong>方法（k-fold cross validation），这种方法每次保留更少的数据用于验证：
+<ol type="1">
+<li>随机将 <span class="math inline">\(S\)</span> 分为 <span class="math inline">\(k\)</span> 个互斥的子集，每个子集中含有 <span class="math inline">\(m/k\)</span> 个训练样本，我们称之为子集 <span class="math inline">\(S_1,\dots,S_k\)</span></li>
+<li>对于每个模型 <span class="math inline">\(M_i\)</span>，按照如下步骤进行分析：
+<ul>
+<li>For <span class="math inline">\(j=1,\dots,k\)</span>，在除去子集 <span class="math inline">\(S_j\)</span> 上的训练集上训练每个模型，得到对应的假设 <span class="math inline">\(h_{ij}\)</span>
+<ul>
+<li>在 <span class="math inline">\(S_j\)</span> 上测试假设 <span class="math inline">\(h_{ij}\)</span>，得到 <span class="math inline">\(\hat\epsilon_{S_j}(h_{ij})\)</span></li>
+</ul></li>
+<li>模型 <span class="math inline">\(M_i\)</span> 的估计泛化误差通过求 <span class="math inline">\(\hat\epsilon_{S_j}(h_{ij})\)</span> 的平均得到</li>
+</ul></li>
+<li>选择具有最小估计泛化误差的模型 <span class="math inline">\(M_i\)</span>，然后在整个训练集上重新训练，得出的结果即为我们的最终假设</li>
+</ol></li>
+<li>与保留交叉验证相比，该方法需要训练每个模型 <span class="math inline">\(k\)</span> 次，计算代价更高
+<ul>
+<li>对于 <span class="math inline">\(k\)</span> 一个经典的选择是 <span class="math inline">\(k=10\)</span></li>
+<li>在某些样本量很小的情况下，我们会选择 <span class="math inline">\(k=m\)</span>
+<ul>
+<li>这种方法被称为<strong>留一交叉验证</strong>（leave-one-out cross validation）</li>
+</ul></li>
+</ul></li>
+<li>虽然我们介绍各种不同的交叉验证作为模型选择的方法，但其也可以用来评估<em>单个</em>模型或算法的性能</li>
+</ul>
+<h1 id="特征选择">特征选择</h1>
+<ul>
+<li>模型选择的一个特例是特征选择（feature selection)</li>
+<li>为了引出特征选择问题，假设我们有一个监督学习算法，其特征数量非常之大（<span class="math inline">\(n \gg m\)</span>）
+<ul>
+<li>但是你认为只有一小部分特征与学习任务相关</li>
+<li>即便使用一个简单的线性分类器，假设的 VC 维也会是 <span class="math inline">\(O(n)\)</span></li>
+<li>如果训练集不是特别大，很容易出现过拟合的问题</li>
+</ul></li>
+<li>因此，我们需要一个特征选择算法来减少特征的数量
+<ul>
+<li>给定 <span class="math inline">\(n\)</span> 个特征，总共有 <span class="math inline">\(2^n\)</span> 种可能的子集（每个特征可选可不选）</li>
+<li>可以将其看作是一个包含 <span class="math inline">\(2^n\)</span> 种模型的模型选择问题</li>
+<li>由于 <span class="math inline">\(n\)</span> 较大，因此遍历所有的模型代价过高，一般会采用一些启发式的搜索流程来找到好的特征子集</li>
+</ul></li>
+<li>下面介绍两种启发式的特征选择算法：包装器特征选择（wrapper feature selection）和过滤器特征选择（filter feature selection）</li>
+</ul>
+<h2 id="包装器特征选择">包装器特征选择</h2>
+<ul>
+<li>包装器特征选择可以分为<strong>前向搜索</strong>与<strong>后向搜索</strong>两种</li>
+<li>前向搜索：
+<ol type="1">
+<li>初始化 <span class="math inline">\(\mathcal{F} = \emptyset\)</span></li>
+<li>重复：
+<ul>
+<li>对于 <span class="math inline">\(i=1,\dots,n\)</span>，如果 <span class="math inline">\(i \notin \mathcal{F}\)</span>，令 <span class="math inline">\(\mathcal{F}_i=\mathcal{F} \cup \{i\}\)</span>
+<ul>
+<li>使用某种交叉验证来评估特征集 <span class="math inline">\(\mathcal{F}_i\)</span>（<span class="math inline">\(i \in \mathcal{F}\)</span> 时不评估）</li>
+</ul></li>
+<li>将 <span class="math inline">\(\mathcal{F}\)</span> 设为上一步骤（遍历一次）中表现最佳的特征子集</li>
+</ul></li>
+<li>选择整个搜索过程中表现最佳的特征子集输出</li>
+</ol></li>
+<li>第二步中循环的结束条件可以是当 <span class="math inline">\(\mathcal{F}= \{1,\ldots,n\}\)</span> 为整个特征集，也可以指定一个特征数量的上界</li>
+<li>后向搜索与前向搜索类似，只是其初始值为 <span class="math inline">\(\mathcal{F}= \{1,\ldots,n\}\)</span>，然后逐步减少特征数量</li>
+<li>包装器特征选择算法通常效果较好，但是相对来说计算代价较高
+<ul>
+<li>完整的前向搜索过程会进行约 <span class="math inline">\(O(n^2)\)</span>次学习算法的调用</li>
+</ul></li>
+</ul>
+<h2 id="过滤器特征选择">过滤器特征选择</h2>
+<ul>
+<li>相比之下，过滤器特征选择算法的计算代价很小</li>
+<li>算法思想是计算每个特征 <span class="math inline">\(x_i\)</span> 对其类别标签 <span class="math inline">\(y\)</span> 所能体现的信息量 <span class="math inline">\(S(i)\)</span>
+<ul>
+<li>选择得分最高的 <span class="math inline">\(k\)</span> 个特征作为特征集</li>
+<li>一般将 <span class="math inline">\(S(i)\)</span> 定义为 <span class="math inline">\(x_i\)</span> 与 <span class="math inline">\(y\)</span> 之间的相关程度（基于训练集计算）</li>
+</ul></li>
+<li><p>实践中通过 <span class="math inline">\(x_i\)</span> 与 <span class="math inline">\(y\)</span> 之间的<strong>互信息</strong>（mutual information）来计算 <span class="math inline">\(S(i)\)</span> <span class="math display">\[
+\text{MI}(x_i,y) = \sum_{x_i \in \{0,1\}} \sum_{y \in \{0,1\}} p(x_i,y) \log \frac {p(x_i,y)}{p(x_i)p(y)}
 \]</span></p>
-<p>为了使预测的置信度更高，我们希望函数间隔越大越好，即：</p>
-<p><span class="math display">\[
-\text{if} \quad y^{(i)}=1, \text{want} \quad w^Tx^{(i)}+b\gg0, \\ \text{if} \quad y^{(i)}=-1, \text{want} \quad w^Tx^{(i)}+b\ll0.
+<ul>
+<li>上式假设 <span class="math inline">\(x_i\)</span> 和 <span class="math inline">\(y\)</span> 都是二元分类</li>
+<li>上式中的概率值都基于训练集来估计</li>
+</ul></li>
+<li><p>为了更好的理解互信息，可以将其表示成 KL 散度（Kullback-Leibler divergence） <span class="math display">\[
+\text{MI}(x_i,y) = \text{KL}(p(x_i,y)||p(x_i)p(y))
 \]</span></p>
-<p>易知，如果 <span class="math inline">\(y^{(i)}(w^Tx^{(i)}+b)&gt;0\)</span> ，则表示对该样本的预测正确 。</p>
-<p>然而，对于一个给定输出为 g （取值为 <span class="math inline">\(\{-1,1\}\)</span>）的线性分类器，函数间隔的性质导致其对于预测置信度的测量并不可信。这个性质就是我们可以在不改变超平面的情况下，通过成比例地增加 <span class="math inline">\(w,b\)</span>，使得函数间隔任意大。这样预测的结果就仅与符号相关，而不取决于大小，从而失去了对置信度的测量。为了解决这个问题，我们需要对 g 进行归一化（即几何间隔）。</p>
-<p>给定一个训练集 <span class="math inline">\(S = \{(x^{(i)},y^{(i)});i=1,\ldots,m\}\)</span>，我们定义 S 到超平面 <span class="math inline">\((w,b)\)</span> 的<strong>函数间隔</strong>为所有训练样本的函数间隔中的最小值，即：</p>
-<p><span class="math display">\[
-\hat{\gamma}=\min_{i=1,\ldots,m}\hat{\gamma}^{(i)}.
+<ul>
+<li>KL 散度表明 <span class="math inline">\(p(x_i,y)\)</span> 与 <span class="math inline">\(p(x_i)p(y)\)</span> 的不同程度
+<ul>
+<li>如果 <span class="math inline">\(x_i\)</span> 和 <span class="math inline">\(y\)</span> 独立同分布，那么我们有 <span class="math inline">\(p(x_i,y) = p(x_i)p(y)\)</span>，其 KL 散度为 0</li>
+</ul></li>
+</ul></li>
+<li>当你得到所有的 <span class="math inline">\(S(i)\)</span> 并排序完成后，应该如何选择 <span class="math inline">\(k\)</span> ？
+<ul>
+<li>一个标准的方法是使用交叉验证来在 <span class="math inline">\(k\)</span> 的可能选项中选择</li>
+</ul></li>
+</ul>
+<h1 id="贝叶斯统计与正则化">贝叶斯统计与正则化</h1>
+<ul>
+<li>本部分将介绍对抗过拟合的另外一个工具</li>
+<li><p>之前我们介绍了基于最大似然法的参数拟合，其公式如下： <span class="math display">\[
+\theta_{\text{ML}} = \arg \max_\theta \prod_{i=1}^m p(y^{(i)}|x^{(i)};\theta)
 \]</span></p>
-<p>接下来，让我们讨论<strong>几何间隔</strong>。观察下面的图片：</p>
-<p><img src="http://media.zjubiomedit.com/2018-05-28-134438.png" width="45%" height="45%"></p>
-<p>对于超平面 <span class="math inline">\(w^Tx+b = 0\)</span>，其法向量为 <span class="math inline">\(w\)</span>（证明略） ，点 A 表示某个输入为 <span class="math inline">\(x^{(i)}\)</span> 的训练样本，标签为 <span class="math inline">\(y^{(i)} = 1\)</span>，其到决策边界的距离为 <span class="math inline">\(\gamma^{(i)}\)</span>，即线段AB的长度。</p>
-<p>现在，我们需要求解出 <span class="math inline">\(\gamma^{(i)}\)</span> 的值。由于BA方向即为法向量，其单位向量为 <span class="math inline">\(\frac{w}{||w||}\)</span>，因此点 B 可以通过下式计算：</p>
-<p><span class="math display">\[
-x^{(i)}-\gamma^{(i)}\cdot\frac{w}{\Vert w\Vert}.
+<ul>
+<li>我们将 <span class="math inline">\(\theta\)</span> 看作一个<strong>未知常量</strong>，而并不是一个随机变量
+<ul>
+<li>这是一种<strong>频率学派</strong>的观点</li>
+</ul></li>
+</ul></li>
+<li>从<strong>贝叶斯学派</strong>的角度，我们将 <span class="math inline">\(\theta\)</span> 看作一个<strong>未知的随机变量</strong>
+<ul>
+<li>我们将指定一个 <span class="math inline">\(\theta\)</span> 的先验分布 <span class="math inline">\(p(\theta)\)</span></li>
+</ul></li>
+<li><p>给定一个训练集 <span class="math inline">\(S=\{(x^{(i)},y^{(i)})\}_{i=1}^m\)</span>，我们可以先计算参数的后验分布： <span class="math display">\[
+\begin{aligned}
+p(\theta|S) &amp;= \frac {p(S|\theta)p(\theta)} {p(S)} \\
+&amp;= \frac {\left(\prod_{i=1}^m  p(y^{(i)}|x^{(i)},\theta)\right)p(\theta)} {\int_{\theta}\left(\prod_{i=1}^m  p(y^{(i)}|x^{(i)},\theta)p(\theta)\right)d\theta}
+\end{aligned}
 \]</span></p>
-<p>而点 B 又位于决策边界上，即满足 <span class="math inline">\(w^Tx+b = 0\)</span>，因此有：</p>
-<p><span class="math display">\[
-w^T(x^{(i)}-\gamma^{(i)}\cdot\frac{w}{\Vert w\Vert})+b=0.
+<ul>
+<li>注意这里使用了逗号而不是分号（表明 <span class="math inline">\(\theta\)</span> 是一个随机变量）</li>
+<li><span class="math inline">\(p(y^{(i)}|x^{(i)},\theta)\)</span> 根据你使用的模型来决定</li>
+</ul></li>
+<li><p>当要预测一个新的 <span class="math inline">\(x\)</span> 的输出时，我们可以基于 <span class="math inline">\(\theta\)</span> 的后验分布来计算分类标签的后验分布（这里以逻辑回归为例） <span class="math display">\[
+p(y|x,S) = \int_\theta p(y|x,\theta)p(\theta|S)d\theta
+\]</span></p></li>
+<li><p>因此，预测的输出为： <span class="math display">\[
+\text{E}[y|x,S] = \int_y yp(y|x,S)dy
+\]</span></p></li>
+<li>上述过程是完整的贝叶斯预测，但是实际上该后验分布是很难计算的（因为 <span class="math inline">\(\theta\)</span> 的积分计算难以求出闭合解/解析解）</li>
+<li>因此，实际应用中我们会对 <span class="math inline">\(\theta\)</span> 的后验分布进行估计
+<ul>
+<li>一个常用的估计方法是将后验分布使用一个单点估计来代替</li>
+</ul></li>
+<li><p>对 <span class="math inline">\(\theta\)</span> 的最大后验估计（MAP）为： <span class="math display">\[
+\theta_{\text{MAP}} = \arg \max_\theta \prod_{i=1}^m p(y^{(i)}|x^{(i)},\theta)p(\theta)
 \]</span></p>
-<p>解得：</p>
-<p><span class="math display">\[
-\gamma^{(i)}=\frac{w^Tx^{(i)}+b}{\Vert w\Vert}=(\frac{w}{\Vert w\Vert})^Tx^{(i)}+\frac{b}{\Vert w\Vert}.
-\]</span></p>
-<p>这是基于正训练样本得出的结果，一般来说，对于一个训练样本 <span class="math inline">\((x^{(i)},y^{(i)})\)</span>，其到超平面 <span class="math inline">\((w,b)\)</span> 的几何间隔为：</p>
-<p><span class="math display">\[
-\gamma^{(i)}=y^{(i)}\left(\left(\frac{w}{\Vert  w\Vert}\right)^Tx^{(i)}+\frac{b}{\Vert  w\Vert}\right).
-\]</span></p>
-<p>可以发现当 <span class="math inline">\(\Vert w\Vert = 1\)</span> 时，几何间隔即为函数间隔。此外，对于几何间隔来说，等比例地改变参数，几何间隔不会发生任何改变，因为 $w$ 也会随之变化。这个性质可以让我们任意地改变参数的值，而不对决策边界造成实质性的影响（方便进行数学上的变换）。</p>
-<p>最后，给定一个训练集 <span class="math inline">\(S = \{(x^{(i)},y^{(i)});i=1,\ldots,m\}\)</span>，与之前类似，我们定义 S 到超平面 <span class="math inline">\((w,b)\)</span> 的<strong>几何间隔</strong>为所有训练样本的几何间隔中的最小值，即：</p>
-<p><span class="math display">\[
-\gamma=\min_{i=1,\ldots,m}\gamma^{(i)}.
-\]</span></p>
-<h3 id="最优间隔分类器">最优间隔分类器</h3>
-<p>给定一个训练集，我们希望能找到一个超平面，使正样本与负样本之间的“间距”（几何距离）尽量大，这样预测的可信度会更高。</p>
-<p>需要再次强调的是，我们假设训练集是线性可分的，即能够使用超平面将正样本和负样本分割开来。那么如何找到具有最大几何间隔的超平面呢？我们可以将其描述为如下的优化问题：</p>
-<p><span class="math display">\[
-\begin{align*} 
-\max_{\gamma,\omega,b} &amp;\quad \gamma \\ \text{s.t.} &amp;\quad y^{(i)}(w^Tx^{(i)}+ b)\ge\gamma, \; i=1,2,…,m \\ &amp;\quad 
-\Vert w \Vert = 1.
-\end{align*}
-\]</span></p>
-<p>其中，<span class="math inline">\(\Vert w \Vert = 1\)</span> 保证了函数间隔与几何间隔相同，该优化问题的含义是通过改变 <span class="math inline">\(w,b\)</span>，在保证训练集中的所有点到超平面的几何距离都大于 <span class="math inline">\(\gamma\)</span> 的情况下，寻找一个最大的 <span class="math inline">\(\gamma\)</span> 值（即找到训练集到超平面几何距离的最大值）。</p>
-<p>但是，上述问题不易求解，因为约束条件 <span class="math inline">\(\Vert w \Vert = 1\)</span> 是非凸性约束，最优解容易达到局部最优，且其形式不能使用标准优化软件进行求解，所以，我们对该问题进行转换，得到：</p>
-<p><span class="math display">\[
-\begin{align*} 
-\max_{\hat{\gamma},w,b} &amp;\quad \frac{\hat{\gamma}}{\Vert w \Vert} \\ \text{s.t.} &amp;\quad y^{(i)}(w^Tx^{(i)}+ b)\ge \hat{\gamma}, \; i=1,2,…,m
-\end{align*}
-\]</span></p>
-<p>现在，我们需要在保证训练集中的所有点到超平面的函数距离都大于 <span class="math inline">\(\hat{\gamma}\)</span> 的情况下， 最大化 <span class="math inline">\(\frac{\hat{\gamma}}{\Vert w \Vert}\)</span>。因为函数间隔与几何间隔之间的关系为 <span class="math inline">\(\gamma = \hat{\gamma} / \Vert w \Vert\)</span>，所以该优化问题与之前的等价。虽然非凸性约束已经去除，但是目标函数 <span class="math inline">\(\frac{\hat{\gamma}}{\Vert w \Vert}\)</span> 是非凸的，我们仍然无法直接使用软件进行求解。</p>
-<p>我们需要继续修改优化问题的形式。之前我们曾提到，通过成比例地改变 <span class="math inline">\(w,b\)</span>，可以使得函数间隔变成任意的大小，而不改变超平面本身；因此，对于上述约束条件，我们可以通过缩放 <span class="math inline">\(w,b\)</span>，使得 <span class="math display">\[
-\hat{\gamma} = 1.
-\]</span></p>
-<p>这样，我们的目标函数就变为 <span class="math inline">\(\frac{1}{\Vert w \Vert}\)</span>，因为最大化 $ $ 等价于最小化 <span class="math inline">\(\Vert w \Vert^2\)</span>，所以我们得到了如下的优化问题：</p>
-<p><span class="math display">\[
-\begin{align*} 
-\min_{w,a,b} &amp;\quad \frac{1}{2}\Vert w \Vert^2 \\ \text{s.t.} &amp;\quad y^{(i)}(w^Tx^{(i)}+ b)\ge 1, \; i=1,2,…,m
-\end{align*}
-\]</span></p>
-<p>这样我们的问题就转化成了在线性约束下的二次规划问题，可以使用专业软件来求解这个优化问题，从而得到<strong>最优间隔分类器</strong>。</p>
-<p>下面，我们要讨论一下拉格朗日对偶，其可以帮助我们推导出上述优化问题的对偶形式，从而更快地进行求解，同时还能够引出核函数，实现在超高维度空间中的求解。</p>
-<h3 id="拉格朗日对偶性">拉格朗日对偶性</h3>
-<p>对于如下形式的优化问题：</p>
-<p><span class="math display">\[
-\begin{align*} 
-\min_{w} &amp;\quad f(w) \\ \text{s.t.} &amp;\quad h_i(w)=0, \; i=1,2,…,l
-\end{align*}
-\]</span></p>
-<p>我们构造<strong>拉格朗日方程</strong>：</p>
-<p><span class="math display">\[
-\mathcal{L}(w,\beta)=f(w)+\sum_{i=1}^l\beta_ih_i(w)
-\]</span></p>
-<p>其中，<span class="math inline">\(\beta_i\)</span> 是<strong>拉格朗日乘子</strong>。我们队拉格朗日方程求偏导数，将偏导数设为0，求得的值就是原问题的解了。</p>
-<p><span class="math display">\[
- \frac{\partial\mathcal{L}}{\partial w_i}  = 0;\;\frac{\partial\mathcal{L}}{\partial \beta_i} = 0
-\]</span></p>
-<p>下面我们将通过约束条件，介绍更为广义的拉格朗日方程。在约束条件中添加不等式约束后，我们得到如下问题，称之为<strong>原始</strong>优化问题：</p>
-<p><span class="math display">\[
-\begin{align*} 
-\min_{w} &amp;\quad f(w) \\ \text{s.t.} &amp;\quad g_i(w)\le 0, \; i=1,2,…,k \\&amp;\quad h_i(w)=0, \; i=1,2,…,l
-\end{align*}
-\]</span></p>
-<p>该问题对应的<strong>广义拉格朗日方程</strong>是：</p>
-<p><span class="math display">\[
-\mathcal{L}(w,\alpha,\beta)=f(w)+\sum_{i=1}^k\alpha_ig_i(w)+\sum_{i=1}^l\beta_ih_i(w).
-\]</span></p>
-<p>其中，<span class="math inline">\(\alpha_i\)</span> 和 <span class="math inline">\(\beta_i\)</span> 是拉格朗日乘子。现在我们定义：</p>
-<p><span class="math display">\[
-\theta_{\mathcal{P}}(w)=\operatorname*\max_{\alpha,\beta:\alpha_i\geq 0}\mathcal{L}(w,\alpha,\beta).
-\]</span></p>
-<p>其中，下标 “<span class="math inline">\(\mathcal{P}\)</span>” 代表原始，可以发现，在给定 <span class="math inline">\(w\)</span> 时，如果 <span class="math inline">\(w\)</span> 不满足所有约束条件，比如 <span class="math inline">\(g_i(w) &gt;0\)</span> 或 <span class="math inline">\(h_i(w) \ne 0\)</span> ，那么总可以找到相应的 <span class="math inline">\(\alpha,\beta\)</span>，使得： <span class="math display">\[
-\begin{align*}
-\theta_{\mathcal{P}}(w) &amp;=\operatorname*\max_{\alpha,\beta:\alpha_i\geq 0}f(w)+\sum_{i=1}^k\alpha_ig_i(w)+\sum_{i=1}^l\beta_ih_i(w) 
-\\&amp;= \infty
-\end{align*}
-\]</span></p>
-<p>而当约束满足时，<span class="math inline">\(\theta_{\mathcal{P}}(w)=f(w)\)</span>，因此我们有：</p>
-<p><span class="math display">\[
-\theta_{\mathcal{P}}=\begin{cases}f(w) &amp; w\text{ 满足原始问题的约束} \\ \\ \infty &amp;\text{其他}\end{cases}
-\]</span></p>
-<p>因此，如果考虑最小化：</p>
-<p><span class="math display">\[
-\min_{w}\theta_{\mathcal{P}}(w)=\min_{w}\max_{\alpha,\beta:\alpha_i\geq 0}\mathcal{L}(w,\alpha,\beta)
-\]</span></p>
-<p>那么它与原始优化问题是等价的，即有相同的解。这样一来我们就把原始优化问题表示成了广义拉格朗日函数的极小极大问题。为了后面使用方便，我们定义原始问题取得最优解时的函数值：</p>
-<p><span class="math display">\[
-p^\ast=\min_w\theta_{\mathcal{p}}(w)
-\]</span> 称为原始问题的值。</p>
-<p>现在，我们来看一下另外一个问题： <span class="math display">\[
-\theta_{\mathcal{D}}(\alpha,\beta)=\min_{w}\mathcal{L}(w,\alpha,\beta)
-\]</span> 其中，下标 “<span class="math inline">\(\mathcal{D}\)</span>” 代表对偶，注意在 <span class="math inline">\(\theta_{\mathcal{P}}\)</span> 的定义中我们是最大化关于 <span class="math inline">\(\alpha,\beta\)</span> 的函数，而这里我们是最小化关于 <span class="math inline">\(w\)</span> 的函数。</p>
-<p>现在我们可以提出<strong>对偶</strong>优化问题：</p>
-<p><span class="math display">\[
-\max_{\alpha,\beta:\alpha_i\ge0}\theta_{\mathcal{D}}(\alpha,\beta)=\max_{\alpha,\beta:\alpha_i\ge0}\min_{w}\mathcal{L}(w,\alpha,\beta)
-\]</span></p>
-<p>其与原始问题基本相同，唯一的区别就在于 min 和 max 的顺序不同，类似地，我们定义：<span class="math inline">\(d^{\ast}=\max_{\alpha,\beta:\alpha_i\ge0}\theta_{\mathcal{D}}(\alpha,\beta)\)</span> 为对偶问题的值。</p>
-<p>那么原始问题和对偶问题有什么关联呢？易证明对于任意函数都有 <span class="math inline">\(minmax\le maxmin\)</span>，所以我们可以得到：</p>
-<p><span class="math display">\[
-d^{\ast}=\max_{\alpha,\beta:\alpha_i\ge0}\min_{w}\mathcal{L}(w,\alpha,\beta)\le\min_{w}\max_{\alpha,\beta:\alpha_i\geq 0}\mathcal{L}(w,\alpha,\beta)=p^{\ast}
-\]</span></p>
-<p>而在某些条件下，我们将有：</p>
-<p><span class="math display">\[
-d^{\ast} = p^{\ast}
-\]</span></p>
-<p>这样我们就可以通过求解对偶问题来得到原始问题的解。</p>
-<p>这些条件是： <span class="math inline">\(f\)</span> 和 <span class="math inline">\(g_i\)</span> 是凸函数（Hessian矩阵半正定）；<span class="math inline">\(h_i\)</span> 是仿射函数（允许截距存在的线性函数）；不等式约束 <span class="math inline">\(g_i\)</span> 是严格可执行的（Slater条件），即存在 <span class="math inline">\(w\)</span> 使得对于所有的 <span class="math inline">\(i\)</span> 都有 <span class="math inline">\(g_i(w)&lt;0\)</span> .</p>
-<p>在上述条件成立的情况下，一定存在<span class="math inline">\(w^{\ast},\alpha^{\ast},\beta^{\ast}\)</span>，使得 $w^{} $ 是原始问题的解，<span class="math inline">\(\alpha^{\ast},\beta^{\ast}\)</span> 是对偶问题的解，并且有<span class="math inline">\(p^{\ast}=d^{\ast}=\mathcal{L}(w^{\ast}, {\alpha}^{\ast}, {\beta}^{\ast})\)</span>，同时 <span class="math inline">\(w^{\ast},\alpha^{\ast},\beta^{\ast}\)</span>需要满足<strong>KKT条件(Karush-Kuhn-Tucker conditions)</strong>：</p>
-<p><span class="math display">\[
-\begin{align*}
-\frac\partial{\partial w_i} \mathcal{L}(w^{\ast}, {\alpha}^{\ast}, {\beta}^{\ast}) &amp;= 0,\quad i=1,\ldots,n \tag{3} \\
-\frac\partial{\partial \beta_i} \mathcal{L}(w^{\ast}, {\alpha}^{\ast}, {\beta}^{\ast}) &amp;= 0,\quad i=1,\ldots,l \tag{4} \\
-\alpha_i^{\ast}g_i(w^{\ast}) &amp;= 0,\quad i=1,\ldots,k \tag{5} \\
-g_i(w^{\ast}) &amp;\le 0,\quad i=1,\ldots,k \tag{6} \\
-\alpha_i^{\ast} &amp;\ge 0,\quad i=1,\ldots,k \tag{7} \\
-\end{align*}
-\]</span></p>
-<p>因此，如果存在满足KKT条件的<span class="math inline">\(w^{\ast},\alpha^{\ast},\beta^{\ast}\)</span>，那么它一定是原始问题和对偶问题的解。（单独的KKT条件只是强对偶的必要条件，只有当满足之前的假设时，KKT条件才是强对偶的<a href="http://matafight.github.io/2015/05/13/KKT%E6%9D%A1%E4%BB%B6%E4%B8%8E%E6%8B%89%E6%A0%BC%E6%9C%97%E6%97%A5%E5%AF%B9%E5%81%B6%E6%80%A7/" target="_blank" rel="noopener">充要条件</a>）</p>
-<p>对于 (5) 式，我们称之为 <strong>KKT 对偶互补条件</strong>，这个条件表明如果 <span class="math inline">\(\alpha^{\ast}&gt;0\)</span> ，那么就有 <span class="math inline">\(g_i(w^\ast)=0\)</span>。即该约束被激活（达到临界条件），这个条件将展示出在SVM中，只有一些支持向量点会起作用，在之后的SMO算法的收敛验证中也会用到这个条件。</p>
-<h3 id="最优间隔分类器的求解">最优间隔分类器的求解</h3>
-<p>之前，我们给出了如下的求解最优间隔分类器的（原始）优化问题：</p>
-<p><span class="math display">\[
-\begin{align*} 
-\min_{w,a,b} &amp;\quad \frac{1}{2}\Vert w \Vert^2 \\ \text{s.t.} &amp;\quad y^{(i)}(w^Tx^{(i)}+ b)\ge 1, \; i=1,2,…,m
-\end{align*}
-\]</span></p>
-<p>我们可以将约束表示为： <span class="math display">\[
-g_i(w) = -y^{(i)}(w^Tx^{(i)}+b) +1 \le 0.
-\]</span></p>
-<p>注意到：从KKT对偶互补条件可以得出，只有当函数间隔等于1时，才有 <span class="math inline">\(\alpha_i&gt;0\)</span>，而函数间隔等于1对应着距离分隔超平面最近的点，即下图中虚线穿过的三个点：</p>
-<p><img src="http://media.zjubiomedit.com/2018-05-28-134453.png" width="45%" height="45%"></p>
-<p>只有这三个点对应的 <span class="math inline">\(\alpha_i\)</span> 在优化问题的解中不为0，这些点也被称为<strong>支持向量</strong>，其数量远小于训练集。</p>
-<p>接着往下来，我们已经给出了原始问题的对偶形式，那么一个关键思路就是，我们将尝试把算法表示为仅包含输入空间中的点的内积的形式 <span class="math inline">\(\langle x^{(i)},x^{(j)} \rangle\)</span>（可以理解为<span class="math inline">\((x^{(i)})^Tx^{(j)}\)</span>），当使用核技巧的时候，这将十分重要。</p>
-<p>让我们构建该优化问题的拉格朗日方程： <span class="math display">\[
-\mathcal{L}(w, b, \alpha)=\frac12||w||^2-\sum_{i=1}^m\alpha_i[y^{(i)}(w^Tx^{(i)}+b)-1].   \tag{8}
-\]</span></p>
-<p>注意：这里只有不等式约束，没有等式约束，所以拉格朗日乘子只有 <span class="math inline">\(\alpha\)</span>，没有 <span class="math inline">\(\beta\)</span>.</p>
-<p>让我们找出该问题的对偶形式，即：</p>
-<p><span class="math display">\[
-d^\ast=\mathop\max_{\alpha:\alpha_i\ge0}\theta_\mathcal{D}(\alpha)=\mathop\max_{\alpha:\alpha_i\ge0}\mathop\min_{w,b}\mathcal{L}(w,b,\alpha).
-\]</span></p>
-<p>首先，求 <span class="math inline">\(\mathcal{L}(w,b,\alpha)\)</span> 关于 <span class="math inline">\(w,b\)</span> 的最小值，令偏导为0：</p>
-<p><span class="math display">\[
-\frac{\partial\mathcal{L}}{\partial w}=w-\sum_{i=1}^m\alpha_iy^{(i)}x^{(i)}=0, \\ \frac{\partial\mathcal{L}}{\partial b}=0-\sum_{i=1}^m\alpha_iy^{(i)}=0.
-\]</span></p>
-<p>可得：</p>
-<p><span class="math display">\[
-w=\sum_{i=1}^m\alpha_iy^{(i)}x^{(i)}, \\ \sum_{i=1}^m\alpha_iy^{(i)}=0.
-\]</span></p>
-<p>将以上结果代入拉格朗日方程，得到：</p>
-<p><span class="math display">\[
-\begin{align*}  \mathop\min_{w,b}\mathcal{L}(w,b,\alpha)  &amp;= \sum_{i=1}^m\alpha_i  - \frac12\sum_{i,j=1}^my^{(i)}y^{(j)}\alpha_i\alpha_j(x^{(i)})^Tx^{(j)}\\ &amp; = \sum_{i=1}^m\alpha_i  - \frac12\sum_{i,j=1}^my^{(i)}y^{(j)}\alpha_i\alpha_j\langle x^{(i)},x^{(j)} \rangle\end{align*}
-\]</span></p>
-<p>于是，我们可以得到如下的对偶优化问题：</p>
-<p><span class="math display">\[
-\begin{align*} 
-\max_{\alpha} &amp;\quad W(\alpha) = \sum_{i=1}^m\alpha_i  - \frac12\sum_{i,j=1}^my^{(i)}y^{(j)}\alpha_i\alpha_j\langle x^{(i)},x^{(j)} \rangle \\ \text{s.t.} &amp;\quad \alpha \ge 0, \; i=1,2,…,m \\
-&amp; \quad \sum_{i=1}^m\alpha_iy^{(i)}=0,
-\end{align*}
-\]</span></p>
-<p>可以证明该优化问题满足 <span class="math inline">\(p^\ast = d^\ast\)</span> 的前提条件与KKT条件，因此，我们可以通过求解对偶问题的解得到原始问题的解，求得 <span class="math inline">\(\alpha\)</span> 之后，我们可以通过下面的公式求出 <span class="math inline">\(w,b\)</span> ：</p>
-<p><span class="math display">\[
-w^\ast =\sum_{i=1}^m\alpha_i^\ast y^{(i)}x^{(i)} \\
-b^\ast = - \frac {\max_{i:y^{(i)}=-1}{w^\ast}^T{x^{(i)}}+\min_{i:y^{(i)}=1}{w^\ast}^T{x^{(i)}}}{2}.
-\]</span></p>
-<p>当求出所有的参数后，我们就可以通过计算 <span class="math inline">\(w^Tx+b\)</span> 来进行分类了，当其大于 0 时预测<span class="math inline">\(y=1\)</span>，公式如下：</p>
-<p><span class="math display">\[
-\begin{align*} 
-w^Tx+b &amp; = {\left(\sum_{i=1}^m\alpha_iy^{(i)}x^{(i)}\right)}^Tx+b \\ &amp; = \sum_i^m\alpha_iy^{(i)}\langle x^{(i)},x \rangle +b.
-\end{align*}
-\]</span></p>
-<p>通过上式我们发现，现在新来一个数据，我们只需要计算它与训练样本的内积即可。并且通过前面的 KKT 对偶互补条件我们知道，只有除了支持向量的那些样本，都有 <span class="math inline">\(\alpha_i = 0\)</span>，所以，我们只需要将新样本与支持向量进行内积即可进行预测。</p>
-<p>通过求解优化问题的对偶形式，我们对要解决的问题的结构有了更为深入的理解，并且还根据输入特征向量之间的内积来表示整个算法。 在下一节中，我们将充分利用这些内容，对我们的分类问题使用<strong>核方法</strong>。 最终得到的算法，就是<strong>支持向量机</strong>，其将能够在非常高的维度空间中进行有效地学习。</p>
-<h3 id="核">核</h3>
-<p>在之前的线性回归模型中，我们探讨了使用多项式回归来解决房价预测问题：给定输入 <span class="math inline">\(x\)</span> 为房屋面积，考虑使用 <span class="math inline">\(x,x^2,x^3\)</span> 作为特征来进行回归。这里给出如下定义：将原始的输入值称为<strong>属性（attributes）</strong>，在房价预测问题中即为 <span class="math inline">\(x\)</span> ，将其映射到的新的输入数据集称为<strong>特征（features）</strong>，在房价预测问题中即为 <span class="math inline">\(x,x^2,x^3\)</span> 。我们使用 <span class="math inline">\(\phi\)</span> 来表示这种将属性映射为特征的<strong>特征映射</strong>，对于房价预测问题：</p>
-<p><span class="math display">\[
-\phi(x) = \begin{bmatrix}  x \\ x^2 \\ x^3 \end{bmatrix}
-\]</span></p>
-<p>在 SVM 中，我们希望使用某些特征 <span class="math inline">\(\phi(x)\)</span> 来替代原始的输入属性 <span class="math inline">\(x\)</span> 来进行学习。为了做到这一点，我们只需要简单地在原来的算法中将所有的 <span class="math inline">\(x\)</span> 替换为 <span class="math inline">\(\phi(x)\)</span> 就行了。</p>
-<p>而我们知道，SVM 可以表示为内积 <span class="math inline">\(\langle x,z\rangle\)</span> 的形式，这代表我们可以将所有的内积替换为 <span class="math inline">\(\langle \phi(x),\phi(z)\rangle\)</span>。特别地，给定一个特征映射 <span class="math inline">\(\phi\)</span>，我们定义相应的<strong>核（Kernel）</strong>为：</p>
-<p><span class="math display">\[
-K(x,z) = \phi(x)^T\phi(z)
-\]</span></p>
-<p>这样对于算法中所有的内积 <span class="math inline">\(\langle x,z\rangle\)</span>，我们可以使用 <span class="math inline">\(K(x,z)\)</span> 进行替换。</p>
-<p>现在，给定一个映射 <span class="math inline">\(\phi\)</span>，我们可以通过找出 <span class="math inline">\(\phi(x)\)</span> 和 <span class="math inline">\(\phi(z)\)</span> 并计算其内积来得出 <span class="math inline">\(K(x,z)\)</span>，然而有趣的是，直接计算 <span class="math inline">\(K(x,z)\)</span> 的代价有时会比较低，即便 <span class="math inline">\(\phi(x)\)</span> 本身可能是一个非常高维的向量，计算起来代价较高。在这种情况下，我们可以在 <span class="math inline">\(\phi\)</span> 给出的高维特征空间中执行 SVM 算法（解决低维空间中线性不可分的情况），并且不用去计算 <span class="math inline">\(\phi(x)\)</span> 的具体值。</p>
-<p>让我们看一个例子。假设 <span class="math inline">\(x,z \in \mathbb{R}^n\)</span>，对于下面的核：</p>
-<p><span class="math display">\[
-K(x,z)=(x^Tz)^2
-\]</span></p>
-<p>我们可以将其改写为：</p>
-<p><span class="math display">\[
-\begin{align*}
-K(x,z) &amp;= \left(\sum_{i=1}^nx_iz_i\right)\left(\sum_{i=1}^nx_iz_i\right) \\
-&amp;= \sum_{i=1}^n\sum_{j=1}^nx_ix_jz_iz_j \\
-&amp;= \sum_{i,j=1}^n(x_ix_j)(z_iz_j)
-\end{align*}
-\]</span></p>
-<p>这样我们就有 <span class="math inline">\(K(x,z) = \phi(x)^T\phi(z)\)</span>，其中特征映射 <span class="math inline">\(\phi\)</span> 如下所示（假设 n = 3）：</p>
-<p><span class="math display">\[
-\phi(x) = \begin{bmatrix}  x _1x_1\\ x _1x_2 \\ x _1x_3 \\ x _2x_1  \\ x _2x_2  \\ x _2x_3  \\ x _3x_1  \\ x _3x_2  \\ x _3x_3\end{bmatrix}.
-\]</span></p>
-<p>在这个例子中，直接计算 <span class="math inline">\(K(x,z)\)</span> 需要的时间复杂度仅为 <span class="math inline">\(O(n)\)</span>，而计算 <span class="math inline">\(\phi(x)\)</span> 需要的时间复杂度为 <span class="math inline">\(O(n^2)\)</span>。实际上映射后特征内积和原始特征的内积平方是等价的，因此使用恰当的核可以大大缩短计算时间。</p>
-<p>让我们再来看另外一个核：</p>
-<p><span class="math display">\[
-\begin{align*}
-K(x,z) &amp;= (x^Tz + c)^2 \\
-&amp;= \sum_{i,j=1}^n(x_ix_j)(z_iz_j) + \sum_{i=1}^n(\sqrt{2c}x_i)(\sqrt{2c}z_i) + c^2.
-\end{align*}
-\]</span></p>
-<p>其对应如下的特征映射（n = 3）：</p>
-<p><span class="math display">\[
-\phi(x) = \begin{bmatrix}  x_1x_1\\ x_1x_2 \\  x_1x_3 \\ x_2x_1  \\ x_2x_2  \\ x_2x_3  \\ x_3x_1  \\ x_3x_2  \\ x_3x_3  \\ \sqrt{2c}x_1 \\ \sqrt{2c}x_2 \\ \sqrt{2c}x_3 \\ c\end{bmatrix},
-\]</span></p>
-<p>其中参数 c 控制 <span class="math inline">\(x_i\)</span> （一阶项）和 <span class="math inline">\(x_ix_j\)</span> （二阶项）之间的相对权重。</p>
-<p>更广泛的来说，我们有：</p>
-<p><span class="math display">\[
-K(x,z)=(x^Tz+c)^d
-\]</span></p>
-<p>其将 n 维的原始输入属性映射到 <span class="math inline">\({ {n+d} \choose d }\)</span> 维的特征空间。特征向量中每个元素都是最高为 d 阶的变量的组合。如果计算 <span class="math inline">\(\phi\)</span> 的话，需要 <span class="math inline">\(O(n^d)\)</span> 的时间复杂度，而直接计算 <span class="math inline">\(K(x,z)\)</span> 依旧只需要 <span class="math inline">\(O(n)\)</span> 的时间复杂度，这进一步体现了核函数降低计算量的好处。</p>
-<h4 id="关于多项式核的维数问题">关于多项式核的维数问题</h4>
-<p>这里对一个困扰了我一天的问题做一个记录。在上一段中，我们知道 <span class="math inline">\(K(x,z)=(x^Tz+c)^d\)</span> 对应的特征空间的维数为 <span class="math inline">\({ {n+d} \choose d }\)</span>，然而在第二个例子中，核 <span class="math inline">\(K(x,z) = (x^Tz + c)^2\)</span> 对应的特征空间为 <strong>13</strong> 维，但根据公式，其特征空间维数应为：</p>
-<p><span class="math display">\[
-\begin{align*}
-{ {n+d} \choose d } &amp;= { {3+2} \choose 2 } \\
-&amp;= { 5 \choose 2 } \\
-&amp;= 10
-\end{align*}
-\]</span></p>
-<p>出现了矛盾！经过两个小时的思考，终于发现了问题所在。其实，<span class="math inline">\(K(x,z) = (x^Tz + c)^2\)</span> 可以对应不同的特征空间，如果要符合公式，应该将 <span class="math inline">\(K(x,z)\)</span> 按照如下的形式改写：</p>
-<p><span class="math display">\[
-\begin{align*}
-K(x,z) &amp;= (x^Tz + c)^2 \\
-&amp;= \sum_{i=1}^n(x_i^2)(z_i^2) + \sum_{i=2}^n\sum_{j=1}^{i-1}(\sqrt{2}x_ix_j)(\sqrt{2}z_iz_j) + \sum_{i=1}^n(\sqrt{2c}x_i)(\sqrt{2c}z_i) + c^2.
-\end{align*}
-\]</span></p>
-<p>这样，其对应的特征映射为：</p>
-<p><span class="math display">\[
-\phi(x) = \begin{bmatrix}  x_1x_1\\ x_2x_2 \\  x_3x_3 \\ \sqrt2x_2x_1  \\ \sqrt2x_3x_1  \\ \sqrt2x_3x_2   \\ \sqrt{2c}x_1 \\ \sqrt{2c}x_2 \\ \sqrt{2c}x_3 \\ c\end{bmatrix}.
-\]</span></p>
-<p>原来如此。这里再做一些延伸：<span class="math inline">\(K(x,z)=(x^Tz+c)^d\)</span> 被称为<strong><a href="https://en.wikipedia.org/wiki/Polynomial_kernel" target="_blank" rel="noopener">多项式核</a>（Polynomial kernel）</strong>，关于其特征空间的维数公式的<a href="http://www.cs.cmu.edu/~ninamf/ML11/lect1020.pdf" target="_blank" rel="noopener">证明</a>如下：</p>
-<p><strong>命题</strong>：多项式核对应的特征空间维数为 <span class="math inline">\({ {n+d} \choose d }\)</span>。</p>
-<p><strong>证明</strong>：我们使用数学归纳法进行证明。</p>
-<p>第一步：对于 <span class="math inline">\(n = 1\)</span>，易知维数为 <span class="math inline">\(d + 1\)</span>，而对于 <span class="math inline">\(d = 1\)</span>，易知维数为 <span class="math inline">\(n + 1\)</span>，满足命题。</p>
-<p>第二步：对于 <span class="math inline">\(K(x,z)=(x^Tz+c)^d\)</span>，其特征向量的每个元素都是最高为 d 阶的变量的组合，即 <span class="math inline">\(x_1^{i_1}x_1^{i_2}\cdots x_n^{i_n}\)</span>，其中 <span class="math inline">\(i_j \in N\)</span> 且 <span class="math inline">\(\sum_{j=1}^ni_j \le d\)</span>。我们可以将这些元素分为两类，一类是包含因子 <span class="math inline">\(x_1\)</span> 的（至少一个），一类是不包含因子 <span class="math inline">\(x_1\)</span> 的（即 <span class="math inline">\(i_1\)</span> = 0）。对于第一类元素，其相当于将阶数 d 缩小了一阶（可以理解为固定一个因子不变，则可变的部分与之前相比就减少了一阶），因此这部分元素的数目为 <span class="math inline">\(f(n,d-1)\)</span>。（假设其元素数目为 n 与 d 的某种函数）对于第二类元素，其相当于将原始属性的维数 n 缩小了一维（去掉了一个因子），因此这部分元素的数目为 <span class="math inline">\(f(n-1,d)\)</span>，综上我们有：</p>
-<p><span class="math display">\[
-f(n,d) = f(n-1,d) + f(n, d-1)
-\]</span></p>
-<p>第三步：假设 <span class="math inline">\(n = n-1\)</span> 和 <span class="math inline">\(d = d-1\)</span> 的时候命题成立，则：</p>
-<p><span class="math display">\[
-\begin{align*}
-f(n-1,d) &amp;= { {n-1+d} \choose d } \\
-f(n,d-1) &amp;= { {n+d-1} \choose d-1 } 
-\end{align*}
-\]</span></p>
-<p>那么根据组合数的定义，我们有：</p>
-<p><span class="math display">\[
-\begin{align*}
-f(n,d) &amp;= f(n-1,d) + f(n, d-1) \\
-&amp;=  { {n-1+d} \choose d } + { {n+d-1} \choose d-1 }  \\
-&amp;= { {n+d} \choose d }
-\end{align*}
-\]</span></p>
-<p>满足命题，因此原命题对于任意的 n 和 d 均成立。</p>
-<p>好的，终于可以回到正题了。从直观上来看，如果 <span class="math inline">\(\phi(x)\)</span> 和 <span class="math inline">\(\phi(z)\)</span> 在空间中很接近，那么内积值 <span class="math inline">\(K(x,z) = \phi(x)^T\phi(z)\)</span> 就会很大，反正则会很小，这意味着我们可以将 <span class="math inline">\(K(x,z)\)</span> 看做是度量 <span class="math inline">\(\phi(x)\)</span> 和 <span class="math inline">\(\phi(z)\)</span> 之间相似度的函数，也即度量 <span class="math inline">\(x\)</span> 和 <span class="math inline">\(z\)</span> 之间的相似度。（实际上这一观点并不一定正确）</p>
-<p>根据以上观点，我们会考虑选择能够度量 <span class="math inline">\(x\)</span> 和 <span class="math inline">\(z\)</span> 之间的相似度的函数作为核函数，例如：</p>
-<p><span class="math display">\[
-K(x,z) = \exp\left(-\frac{||x-z||^2}{2\sigma^2}\right).
-\]</span></p>
-<p>这看上去是一个合理的核函数，它能够度量 <span class="math inline">\(x\)</span> 和 <span class="math inline">\(z\)</span> 之间的相似度，当 <span class="math inline">\(x\)</span> 和 <span class="math inline">\(z\)</span> 比较接近时，该函数趋向于 1 ，当 <span class="math inline">\(x\)</span> 和 <span class="math inline">\(z\)</span> 比较远离时，函数趋向于 0 。那么这个核函数究竟是否合法呢？答案是肯定的（这个核函数被称为<strong>高斯核函数</strong>，其对应的特征空间为无暇维）。一般来说，给定一个函数 <span class="math inline">\(K\)</span> ，我们如何判断它是否为一个合法的核函数呢？这个问题等价于判断 <span class="math inline">\(K\)</span> 是否可以拆分成映射函数的内积，如果可以拆分，那么 <span class="math inline">\(K\)</span> 就是一个合法的核函数。</p>
-<p>下面让我们来解决这个问题。假设 <span class="math inline">\(K\)</span> 是一个合法的核，其对应的特征映射为 <span class="math inline">\(\phi\)</span> ，现在给定一个含有 m 个样本的有限数据集 <span class="math inline">\(\{x^{(1)},\ldots,x^{(m)}\}\)</span>，定义一个 m*m 的矩阵 <span class="math inline">\(K\)</span> ，其中 <span class="math inline">\(K_{ij} = K(x^{(i)},x^{(j)})\)</span> ，这个矩阵被称为<strong>核矩阵</strong>。注意这里 <span class="math inline">\(K\)</span> 既代表核函数，又代表核矩阵。</p>
-<p>对于核矩阵，有几个性质。首先，<span class="math inline">\(K_{ij} = K(x^{(i)},x^{(j)}) = \phi(x^{(i)})^T\phi(x^{(j)}) = \phi(x^{(j)})^T\phi(x^{(i)}) = K_{ji}\)</span> ，因此 <span class="math inline">\(K\)</span> 是一个<strong>对称</strong>矩阵。其次，令 <span class="math inline">\(\phi_k(x)\)</span> 表示向量 <span class="math inline">\(\phi(x)\)</span> 的第 k 维分量，我们可以发现对于任意的 m 维向量 z ，有：</p>
-<p><span class="math display">\[
-\begin{align*}
-z^TKz &amp;= \sum_i\sum_j z_iK_{ij}z_j\\
-&amp;= \sum_i\sum_j z_i\phi(x^{(i)})^T\phi(x^{(j)})z_j  \\
-&amp; =\sum_i\sum_j z_i\sum_k\phi_k(x^{(i)})\phi_k(x^{(j)})z_j \\
-&amp; =\sum_k\sum_i\sum_j z_i\phi_k(x^{(i)})\phi_k(x^{(j)})z_j \\
-&amp; = \sum_k \left(\sum_i z_i\phi_k(x^{(i)})\right)^2 \\
-&amp; \ge 0.
-\end{align*}
-\]</span></p>
-<p>因为 z 是任意的，所以 <span class="math inline">\(K\)</span> 是一个<strong>半正定矩阵（positive semi-definite）</strong>。</p>
-<p>综上所述，我们证明了如果 <span class="math inline">\(K\)</span> 是一个合法的核，则其对应的核矩阵 <span class="math inline">\(K \in \mathbb{R}^{m \times m}\)</span> 是对称半正定矩阵。其实，这不仅是一个必要条件，也是一个充分条件。<strong>Mercer 定理</strong> 指出：给定一个函数 <span class="math inline">\(K\)</span> : <span class="math inline">\(\mathbb{R}^n \times \mathbb{R}^n \to \mathbb{R}\)</span> ，则 <span class="math inline">\(K\)</span> 为合法核（又称为 Mercer 核）的充要条件为对于任意的有限数据集 <span class="math inline">\(\lbrace x^{(1)},…,x^{(m)}\rbrace, (m\lt\infty)\)</span>，其对应的核矩阵为对称半正定矩阵。</p>
-<p>对于核来说，其不仅仅只存在于 SVM 中，对于任意的算法，只要计算时出现了内积，都可以用核函数替代，从而提高在高维数据上的性能，比如感知器算法，代入后可发展为核感知器算法。这就是所谓的<strong>“核技法”（kernel trick）</strong>。</p>
-<h3 id="l1-正则化软间隔-svm">L1 正则化软间隔 SVM</h3>
-<p>到目前为止，对于 SVM 的推导都是基于<strong>数据线性可分</strong>这一前提的。虽然将数据映射到高维空间可能会增加数据可分的可能性，但我们并不能保证这一点。此外，在某些情况下，超平面可能会对于新加入的样本(噪声)过于敏感，如下图所示：</p>
-<p><img src="http://media.zjubiomedit.com/2018-07-26-014831.png" width="65%" height="65%"></p>
-<p>为了让算法对于线性不可分的数据起效，同时减少其对于噪声的敏感度，我们对于之前的原始优化问题进行了修正，引入了<strong>L1正则化</strong>：</p>
-<p><span class="math display">\[
-\begin{align*} 
-\min_{\gamma,w,b} &amp;\quad \frac{1}{2}\Vert w \Vert^2 + C\sum_{i=1}^m \xi_i\\ \text{s.t.} &amp;\quad y^{(i)}(w^Tx^{(i)}+ b)\ge 1 - \xi_i, \; i=1,2,…,m \\
-&amp;\quad \xi_i \ge 0, \; i=1,2,…,m
-\end{align*}
-\]</span></p>
-<p>上述公式引入了一个惩罚项，能够使得样本的函数距离小于1（甚至小于0，即分类错误），但这样会导致目标函数变大，参数C用于控制相对权重。</p>
-<p>与之前同理，我们可以得出下面的拉格朗日方程：</p>
-<p><span class="math display">\[
-\mathcal{L}(w,b,\xi,\alpha,r) = \frac 1 2 w^Tw + C\sum_{i=1}^m\xi_i-\sum_{i=1}^m\alpha_i[y^{(i)}(x^Tw+b)-1+\xi_i]- \sum_{i=1}^m r_i\xi_i.
-\]</span></p>
-<p>其中 <span class="math inline">\(\alpha_i\)</span> 与 <span class="math inline">\(r_i\)</span> 是拉格朗日乘子，省略推导过程，我们可以得到下面的对偶问题：</p>
-<p><span class="math display">\[
-\begin{align*} 
-\max_{\alpha} &amp;\quad W(\alpha) = \sum_{i=1}^m\alpha_i  - \frac12\sum_{i,j=1}^my^{(i)}y^{(j)}\alpha_i\alpha_j\langle x^{(i)},x^{(j)} \rangle \\ \text{s.t.} &amp;\quad 0 \le \alpha \le C, \; i=1,2,…,m \\
-&amp; \quad \sum_{i=1}^m\alpha_iy^{(i)}=0,
-\end{align*}
-\]</span></p>
-<p>可以看到，对偶问题唯一改变的地方就是 <span class="math inline">\(\alpha_i\)</span> 多了一个约束，我们仍然可以利用样本的内积进行预测，不过截距 b 的计算公式会发生变化。</p>
-<p>此外，kkt对偶互补条件也会发生一些变化：</p>
-<p><span class="math display">\[
-\begin{align*}
-\alpha_i = 0 &amp;\Rightarrow y^{(i)}(w^Tx^{(i)}+b) \ge 1 \tag{14} \\
-\alpha_i = C &amp;\Rightarrow y^{(i)}(w^Tx^{(i)}+b) \le 1 \tag{15} \\
-0 &lt; \alpha_i &lt; C &amp;\Rightarrow y^{(i)}(w^Tx^{(i)}+b) = 1. \tag{16} \\
-\end{align*}
-\]</span></p>
-<p>这些条件将在下一节中用于判断 SMO 算法是否收敛。现在我们只需要一个能够实际求解对偶问题的算法，就可以实现支持向量机了！</p>
-<h3 id="smo-算法">SMO 算法</h3>
-<p>SMO（sequential minimal optimization）算法，为 SVM 推导中产生的对偶问题提供了一种高效解法。在讨论 SMO 算法之前，让我们先看一个与其思想相同的有趣算法：坐标上升（coordinate ascent）算法。</p>
-<h4 id="坐标上升法">坐标上升法</h4>
-<p>我们要解决如下的无约束优化问题：</p>
-<p><span class="math display">\[
-\max_\alpha W(\alpha_1,\alpha_2,\ldots,\alpha_m)
-\]</span></p>
-<p>我们已经介绍了两种优化算法：梯度下降法和牛顿方法，下面要介绍一种新方法，称为<strong>坐标上升法</strong>：</p>
-<p>Loop until convergence<span class="math inline">\(\;\)</span>{<br>
-<span class="math inline">\(\quad\)</span> For i=1 to m,<span class="math inline">\(\;\)</span>{<br>
-<span class="math display">\[
-\alpha_i := \arg \max_{\hat{\alpha_i}} W(\alpha_1,\alpha_{i-1},\hat{\alpha_i},\alpha_{i+1}\ldots,\alpha_m).
-\]</span> <span class="math inline">\(\quad\)</span> }<br>
-}</p>
-<p>在内层循环中，当更新 <span class="math inline">\(\alpha_i\)</span> 时，保持其他的参数不变。在这个版本中，参数更新的顺序是按照下标的，其他更复杂的版本可能会根据 <span class="math inline">\(W(\alpha)\)</span> 的变化程度来决定参数的更新顺序。</p>
-<p>当内层循环中的 arg max 能够很快的求解时，此算法是一个相当高效的算法。下面是一张算法运行样例图：</p>
-<p><img src="http://media.zjubiomedit.com/2018-07-26-015037.png" width="45%" height="45%"></p>
-<p>图中的椭圆是我们想要优化的二次函数的轮廓。坐标上升法从(2，-2)这一点开始，可以看到每一步的优化路线都与坐标轴<strong>平行</strong>，因为每次只优化一个变量。</p>
-<h4 id="smo">SMO</h4>
-<p>让我们用对 SMO 算法的推导为支持向量机的学习收尾。我们希望解决如下的对偶问题：</p>
-<p><span class="math display">\[
-\begin{align*} 
-\max_{\alpha} &amp;\quad W(\alpha) = \sum_{i=1}^m\alpha_i  - \frac12\sum_{i,j=1}^my^{(i)}y^{(j)}\alpha_i\alpha_j\langle x^{(i)},x^{(j)} \rangle \tag{17}\\ \text{s.t.} &amp;\quad 0 \le \alpha \le C, \; i=1,2,…,m \tag{18}\\
-&amp; \quad \sum_{i=1}^m\alpha_iy^{(i)}=0. \tag{19}
-\end{align*}
-\]</span></p>
-<p>如果我们使用坐标上升法来求解最优值，会发现由于约束(19)的存在，会有：</p>
-<p><span class="math display">\[
-\alpha_1y^{(1)} = -\sum_{i=2}^m \alpha_i y^{(i)}.
-\]</span></p>
-<p>由于 <span class="math inline">\(y^{(1)} \in \{1,-1\}\)</span>，两边同乘 <span class="math inline">\(y^{(1)}\)</span>， 得到：</p>
-<p><span class="math display">\[
-\alpha_1 = -y^{(1)}\sum_{i=2}^m \alpha_i y^{(i)}.
-\]</span></p>
-<p>因此，<span class="math inline">\(\alpha_1\)</span> 完全由其他的 <span class="math inline">\(\alpha_i\)</span> 决定，我们无法在不违背约束的情况下仅改变一个参数的值来求解优化问题。为了解决这个问题，我们可以一次更新两个参数，从而得到 SMO 算法：</p>
-<p>Repeat until convergence<span class="math inline">\(\;\)</span>{<br>
-<span class="math inline">\(\quad\)</span> 1. 选择要更新的参数对 <span class="math inline">\(\alpha_i\)</span> 和 <span class="math inline">\(\alpha_j\)</span><br>
-<span class="math inline">\(\quad\)</span> 2. 保持其他参数不变，针对 <span class="math inline">\(\alpha_i\)</span> 和 <span class="math inline">\(\alpha_j\)</span> 来优化 <span class="math inline">\(W(\alpha)\)</span><br>
-}</p>
-<p>我们可以使用一些启发式规则来选择使目标函数全局增长最大的参数对。为了测试算法是否收敛，我们可以检查 KKT条件（方程14-16）是否在某个tol的范围内得到满足。这里，tol是收敛误差参数（convergence tolerance parameter）, 通常被设置为大约 0.01 至 0.001 。（具体细节请参考<a href="https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/tr-98-14.pdf" target="_blank" rel="noopener">论文</a>）</p>
-<p>SMO 算法高效的关键原因是对于 <span class="math inline">\(\alpha_i\)</span> 和 <span class="math inline">\(\alpha_j\)</span> 的更新计算非常的高效，下面进行简单的阐述。</p>
-<p>假设有一组参数 <span class="math inline">\(\alpha_i\)</span> ，满足约束(18-19) ，我们希望去更新 <span class="math inline">\(\alpha_1\)</span> 和 <span class="math inline">\(\alpha_2\)</span> ，并保持其他参数不变，那么根据公式(19)，我们有：</p>
-<p><span class="math display">\[
-\alpha_1y^{(1)} + \alpha_2y^{(2)} =  -\sum_{i=3}^m \alpha_i y^{(i)} = \zeta \tag{20}
-\]</span></p>
-<p><span class="math inline">\(\zeta\)</span> 为某个常数，我们可以得到如下的图像：</p>
-<p><img src="http://media.zjubiomedit.com/2018-07-26-015157.png" width="40%" height="40%"></p>
-<p>根据约束(18)，我们知道 <span class="math inline">\(\alpha_1\)</span> 和 <span class="math inline">\(\alpha_2\)</span> 一定位于区间 <span class="math inline">\([0,C] \times [0,C]\)</span> 内，从图中可以看出，<span class="math inline">\(\alpha_2\)</span> 一定存在某个上界 H 和某个下界 L ，来保证 <span class="math inline">\(\alpha_1\)</span> 和 <span class="math inline">\(\alpha_2\)</span> 位于区间 <span class="math inline">\([0,C] \times [0,C]\)</span> 内，这个上界与下界取决于直线的位置。</p>
-<p>使用公式(20)，我们可以得到：</p>
-<p><span class="math display">\[
-\alpha_1 = (\zeta - \alpha_2y^{(2)})y^{(1)}.
-\]</span></p>
-<p>因此，目标函数 <span class="math inline">\(W(\alpha)\)</span> 可以被写成：</p>
-<p><span class="math display">\[
-W(\alpha_1,\alpha_2,\ldots,\alpha_m) = W((\zeta-\alpha_2y^{(2)})y^{(1)},\alpha_2, \ldots,\alpha_m).
-\]</span></p>
-<p>可以看到，将 <span class="math inline">\(\alpha_3,\dots,\alpha_m\)</span> 看作常数，那么目标函数就是一个标准的一元二次函数，可以改写成 <span class="math inline">\(a\alpha_2^2 + b\alpha_2 +c\)</span> 的形式。如果 <span class="math inline">\(a&lt;0\)</span> ，那么假设导数为 0 时 <span class="math inline">\(\alpha_2\)</span> 为 <span class="math inline">\(\alpha_2^{new,unclipped}\)</span> ，那么根据边界条件 <span class="math inline">\([L,H]\)</span> ，有如下几种情况：</p>
-<p><span class="math display">\[
-\left\{  
-\begin{array}{l}  
-H &amp;\text{if} \; \alpha_2^{new,unclipped} &gt; H\\  
-\alpha_2^{new,unclipped} &amp;\text{if} \;L \le \alpha_2^{new,unclipped} \le H\\  
-L &amp;\text{if} \; \alpha_2^{new,unclipped} &lt; L    
-\end{array}  
-\right.
-\]</span></p>
-<p>总的来说，对于该函数的极值求解是很简单的，这样我们就可以高效地求解出对偶问题，从而求解 SVM 算法。</p>
-<p><strong>以上就是 CS229 中关于支持向量机的全部阐述。</strong></p>
+<ul>
+<li>和最大似然相比，只是末尾多了一项 <span class="math inline">\(\theta\)</span> 的先验分布 <span class="math inline">\(p(\theta)\)</span></li>
+<li>在实际应用中，<span class="math inline">\(p(\theta)\)</span> 的一个常用选择是 <span class="math inline">\(\theta \sim \mathcal{N}(0, \tau^2I)\)</span></li>
+</ul></li>
+<li>与最大似然相比，拟合出的参数将具有更小的范数，从而使得贝叶斯 MAP 更<strong>易于避免过拟合</strong>
+<ul>
+<li>例如，对于文本分类问题，虽然 <span class="math inline">\(n \gg m\)</span>，贝叶斯逻辑回归仍然是一个比较高效的算法</li>
+</ul></li>
+<li><p>贝叶斯 MAP 可以看作是在最大似然的公式里加入了一个惩罚项，防止参数过拟合</p></li>
+</ul>
+<h1 id="思维导图">思维导图</h1>
+<p><img src="http://media.zjubiomedit.com/2019-07-07-024755.png" width="100%"></p>
 
       
     </div>
@@ -954,7 +710,7 @@ L &amp;\text{if} \; \alpha_2^{new,unclipped} &lt; L
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
     
-    <a href="https://xxwywzy.github.io/2018/04/19/CS229-7/" title="CS229学习笔记之七：支持向量机">https://xxwywzy.github.io/2018/04/19/CS229-7/</a>
+    <a href="https://xxwywzy.github.io/2018/04/19/CS229-7/" title="CS229学习笔记之七：正则化与模型选择">https://xxwywzy.github.io/2018/04/19/CS229-7/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
@@ -968,10 +724,6 @@ L &amp;\text{if} \; \alpha_2^{new,unclipped} &lt; L
         <div class="post-tags">
           
             <a href="/tags/CS229/" rel="tag"># CS229</a>
-          
-            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
-          
-            <a href="/tags/支持向量机/" rel="tag"># 支持向量机</a>
           
         </div>
       
@@ -1194,7 +946,7 @@ L &amp;\text{if} \; \alpha_2^{new,unclipped} &lt; L
                     
                       
                     
-                    <span class="site-state-item-count">20</span>
+                    <span class="site-state-item-count">19</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -1278,7 +1030,7 @@ L &amp;\text{if} \; \alpha_2^{new,unclipped} &lt; L
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#间隔直观描述"><span class="nav-number">1.</span> <span class="nav-text">间隔：直观描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#符号变换"><span class="nav-number">2.</span> <span class="nav-text">符号变换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数间隔与几何间隔"><span class="nav-number">3.</span> <span class="nav-text">函数间隔与几何间隔</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最优间隔分类器"><span class="nav-number">4.</span> <span class="nav-text">最优间隔分类器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#拉格朗日对偶性"><span class="nav-number">5.</span> <span class="nav-text">拉格朗日对偶性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最优间隔分类器的求解"><span class="nav-number">6.</span> <span class="nav-text">最优间隔分类器的求解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#核"><span class="nav-number">7.</span> <span class="nav-text">核</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#关于多项式核的维数问题"><span class="nav-number">7.1.</span> <span class="nav-text">关于多项式核的维数问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#l1-正则化软间隔-svm"><span class="nav-number">8.</span> <span class="nav-text">L1 正则化软间隔 SVM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#smo-算法"><span class="nav-number">9.</span> <span class="nav-text">SMO 算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#坐标上升法"><span class="nav-number">9.1.</span> <span class="nav-text">坐标上升法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#smo"><span class="nav-number">9.2.</span> <span class="nav-text">SMO</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#模型选择"><span class="nav-number">1.</span> <span class="nav-text">模型选择</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#交叉验证"><span class="nav-number">1.1.</span> <span class="nav-text">交叉验证</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#特征选择"><span class="nav-number">2.</span> <span class="nav-text">特征选择</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#包装器特征选择"><span class="nav-number">2.1.</span> <span class="nav-text">包装器特征选择</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#过滤器特征选择"><span class="nav-number">2.2.</span> <span class="nav-text">过滤器特征选择</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#贝叶斯统计与正则化"><span class="nav-number">3.</span> <span class="nav-text">贝叶斯统计与正则化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#思维导图"><span class="nav-number">4.</span> <span class="nav-text">思维导图</span></a></li></ol></div>
             
 
           </div>
