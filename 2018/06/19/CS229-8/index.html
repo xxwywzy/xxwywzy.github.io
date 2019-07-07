@@ -96,27 +96,27 @@
 
 
 
-  <meta name="description" content="本篇博客为 CS229 学习笔记第七部分，主题是：正则化与模型选择。">
+  <meta name="description" content="本篇博客为 CS229 学习笔记第八部分，主题是：在线学习。">
 <meta name="keywords" content="CS229">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CS229学习笔记之七：正则化与模型选择">
-<meta property="og:url" content="https://xxwywzy.github.io/2018/04/19/CS229-7/index.html">
+<meta property="og:title" content="CS229学习笔记之八：在线学习">
+<meta property="og:url" content="https://xxwywzy.github.io/2018/06/19/CS229-8/index.html">
 <meta property="og:site_name" content="xxwywzy&#39;s Blog">
-<meta property="og:description" content="本篇博客为 CS229 学习笔记第七部分，主题是：正则化与模型选择。">
+<meta property="og:description" content="本篇博客为 CS229 学习笔记第八部分，主题是：在线学习。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-07-024755.png">
-<meta property="og:updated_time" content="2019-07-07T03:03:33.309Z">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-07-034611.png">
+<meta property="og:updated_time" content="2019-07-07T03:48:21.088Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CS229学习笔记之七：正则化与模型选择">
-<meta name="twitter:description" content="本篇博客为 CS229 学习笔记第七部分，主题是：正则化与模型选择。">
-<meta name="twitter:image" content="http://media.zjubiomedit.com/2019-07-07-024755.png">
+<meta name="twitter:title" content="CS229学习笔记之八：在线学习">
+<meta name="twitter:description" content="本篇博客为 CS229 学习笔记第八部分，主题是：在线学习。">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2019-07-07-034611.png">
 
 
 
 
 
 
-  <link rel="canonical" href="https://xxwywzy.github.io/2018/04/19/CS229-7/"/>
+  <link rel="canonical" href="https://xxwywzy.github.io/2018/06/19/CS229-8/"/>
 
 
 
@@ -126,7 +126,7 @@
   };
 </script>
 
-  <title>CS229学习笔记之七：正则化与模型选择 | xxwywzy's Blog</title>
+  <title>CS229学习笔记之八：在线学习 | xxwywzy's Blog</title>
   
 
 
@@ -356,7 +356,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2018/04/19/CS229-7/"/>
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2018/06/19/CS229-8/"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Zheyu Wang"/>
@@ -373,7 +373,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">CS229学习笔记之七：正则化与模型选择
+          <h1 class="post-title" itemprop="name headline">CS229学习笔记之八：在线学习
 
               
             
@@ -399,7 +399,7 @@
                 
               
 
-              <time title="创建时间：2018-04-19 20:43:02" itemprop="dateCreated datePublished" datetime="2018-04-19T20:43:02+08:00">2018-04-19</time>
+              <time title="创建时间：2018-06-19 20:43:02" itemprop="dateCreated datePublished" datetime="2018-06-19T20:43:02+08:00">2018-06-19</time>
             
 
             
@@ -442,8 +442,8 @@
                   <i class="fa fa-comment-o"></i>
                 </span>
             
-                <a href="/2018/04/19/CS229-7/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/04/19/CS229-7/" itemprop="commentCount"></span>
+                <a href="/2018/06/19/CS229-8/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/06/19/CS229-8/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -451,7 +451,7 @@
 
           
           
-            <span id="/2018/04/19/CS229-7/" class="leancloud_visitors" data-flag-title="CS229学习笔记之七：正则化与模型选择">
+            <span id="/2018/06/19/CS229-8/" class="leancloud_visitors" data-flag-title="CS229学习笔记之八：在线学习">
               <span class="post-meta-divider">|</span>
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
@@ -483,200 +483,119 @@
 
       
         <div class="note info">
-            本篇博客为 CS229 学习笔记第七部分，主题是：正则化与模型选择。 
+            本篇博客为 CS229 学习笔记第八部分，主题是：在线学习。 
           </div>
 <a id="more"></a>
-<h1 id="模型选择">模型选择</h1>
+<h1 id="在线学习">在线学习</h1>
 <ul>
-<li>对于一个学习问题，我们可能有多种模型可以选择，例如：
+<li>之前我们讨论的学习都是<strong>批量学习</strong>（batch learning）
 <ul>
-<li>多项式回归中的不同项数对应的模型</li>
-<li>局部加权回归中不同带宽参数对应的模型</li>
-<li>L1正则化支持向量机中的不同参数 C 对应的模型</li>
+<li>批量学习的特点是我们会基于一个训练集进行学习，然后在独立的测试数据上评估学习得到的假设 <span class="math inline">\(h\)</span></li>
 </ul></li>
-<li>我们希望可以自动选择一个权衡方差与偏差最好的模型</li>
-<li>为了更加具体，本节所讨论的模型集合为有限集 <span class="math inline">\(\mathcal{M} = \{\mathcal{M}_1,\dots,\mathcal{M}_d\}\)</span>
+<li>本节将讨论<strong>在线学习</strong>（online learning）
 <ul>
-<li>向无限集的推广并不难</li>
-<li>该模型集合可以是一系列类似的模型（如不同项数的多项式模型），也可以是完全不同的模型（如 SVM、神经网络或逻辑回归）</li>
+<li>在线学习的特点是算法需要在学习时实时进行预测</li>
 </ul></li>
-</ul>
-<h2 id="交叉验证">交叉验证</h2>
+<li>在线学习的过程如下：
 <ul>
-<li>给定一个训练集 <span class="math inline">\(S\)</span>，基于经验风险最小化，我们可以考虑如下的算法进行模型选择：
-<ol type="1">
-<li>在 <span class="math inline">\(S\)</span> 上训练每个模型 <span class="math inline">\(M_i\)</span>，得到每个模型对应的假设 <span class="math inline">\(h_i\)</span></li>
-<li>选择具有最小训练误差的假设</li>
-</ol></li>
-<li>上述算法<em>不会</em>工作
+<li>一个样本序列 <span class="math inline">\((x^{(1)},y^{(1)}),(x^{(2)},y^{(2)}),\ldots, (x^{(m)},y^{(m)})\)</span> 会按顺序输入算法</li>
+<li>算法依次对每一个样本作出预测，然后使用真实值进行修正
 <ul>
-<li>以多项式模型为例，其项数越高，对训练集的拟合越好</li>
-<li>因此上述算法一定会选出高项数且高方差的模型，这并不是一个好的选择</li>
-</ul></li>
-<li>下面给出一个可以工作的算法：<strong>保留交叉验证</strong>（hold-out cross validation)
-<ol type="1">
-<li>随机将训练集 <span class="math inline">\(S\)</span> 分为 <span class="math inline">\(S_{\text{train}}\)</span>（通常用 70% 的数据）和 <span class="math inline">\(S_{\text{cv}}\)</span>（剩余的 30%）
-<ul>
-<li><span class="math inline">\(S_{\text{cv}}\)</span> 称为保留交叉验证集</li>
-</ul></li>
-<li>仅在 <span class="math inline">\(S_{\text{train}}\)</span> 上训练每个模型 <span class="math inline">\(M_i\)</span>，得到其对应的假设 <span class="math inline">\(h_i\)</span></li>
-<li>选择在保留交叉验证集上误差（<span class="math inline">\(\hat\epsilon_{S_{\text{cv}}}(h_i)\)</span>）最小的假设 <span class="math inline">\(h_i\)</span> 作为输出</li>
-</ol></li>
-<li>通过在模型没有训练的 <span class="math inline">\(S_{\text{cv}}\)</span> 上进行测试，我们可以更好地估计假设 <span class="math inline">\(h_i\)</span> 的真实泛化误差</li>
-<li>上述算法的第三步可以用下面的方法替代：
-<ul>
-<li>根据保留交叉验证集选择选择出模型后，再使用全部训练集对模型进行训练</li>
-<li>这通常是一个好的主意，除非算法对于数据的初始状态十分敏感，即可能在 <span class="math inline">\(S_{\text{cv}}\)</span> 上的训练表现会很差</li>
-</ul></li>
-<li>保留交叉验证集的缺点是其浪费了很多数据（30%）
-<ul>
-<li>虽然我们可以使用全部训练集重新训练模型，但我们仍然只使用了 70% 的数据来找到一个好的模型</li>
-<li>如果数据量较大，那么这并没有什么问题，但是如果数据量很小的话，我们应该考虑其他的算法</li>
-</ul></li>
-<li>下面给出 <strong>k 保留交叉验证</strong>方法（k-fold cross validation），这种方法每次保留更少的数据用于验证：
-<ol type="1">
-<li>随机将 <span class="math inline">\(S\)</span> 分为 <span class="math inline">\(k\)</span> 个互斥的子集，每个子集中含有 <span class="math inline">\(m/k\)</span> 个训练样本，我们称之为子集 <span class="math inline">\(S_1,\dots,S_k\)</span></li>
-<li>对于每个模型 <span class="math inline">\(M_i\)</span>，按照如下步骤进行分析：
-<ul>
-<li>For <span class="math inline">\(j=1,\dots,k\)</span>，在除去子集 <span class="math inline">\(S_j\)</span> 上的训练集上训练每个模型，得到对应的假设 <span class="math inline">\(h_{ij}\)</span>
-<ul>
-<li>在 <span class="math inline">\(S_j\)</span> 上测试假设 <span class="math inline">\(h_{ij}\)</span>，得到 <span class="math inline">\(\hat\epsilon_{S_j}(h_{ij})\)</span></li>
-</ul></li>
-<li>模型 <span class="math inline">\(M_i\)</span> 的估计泛化误差通过求 <span class="math inline">\(\hat\epsilon_{S_j}(h_{ij})\)</span> 的平均得到</li>
-</ul></li>
-<li>选择具有最小估计泛化误差的模型 <span class="math inline">\(M_i\)</span>，然后在整个训练集上重新训练，得出的结果即为我们的最终假设</li>
-</ol></li>
-<li>与保留交叉验证相比，该方法需要训练每个模型 <span class="math inline">\(k\)</span> 次，计算代价更高
-<ul>
-<li>对于 <span class="math inline">\(k\)</span> 一个经典的选择是 <span class="math inline">\(k=10\)</span></li>
-<li>在某些样本量很小的情况下，我们会选择 <span class="math inline">\(k=m\)</span>
-<ul>
-<li>这种方法被称为<strong>留一交叉验证</strong>（leave-one-out cross validation）</li>
+<li>具体来说，算法首先会看到 <span class="math inline">\(x^1\)</span>，然后被要求预测 <span class="math inline">\(y^{(1)}\)</span> 的值，预测完成后 <span class="math inline">\(y^{(1)}\)</span> 的真实值会暴露给算法，对模型进行修正</li>
+<li>然后，算法会看到 <span class="math inline">\(x^{(2)}\)</span> ，同样被要求进行预测，重复上一步的操作，直至到达 $ (x<sup>{(m)},y</sup>{(m)})$</li>
 </ul></li>
 </ul></li>
-<li>虽然我们介绍各种不同的交叉验证作为模型选择的方法，但其也可以用来评估<em>单个</em>模型或算法的性能</li>
-</ul>
-<h1 id="特征选择">特征选择</h1>
+<li>我们关心的是在线学习在整个过程中产生的误差数量
 <ul>
-<li>模型选择的一个特例是特征选择（feature selection)</li>
-<li>为了引出特征选择问题，假设我们有一个监督学习算法，其特征数量非常之大（<span class="math inline">\(n \gg m\)</span>）
-<ul>
-<li>但是你认为只有一小部分特征与学习任务相关</li>
-<li>即便使用一个简单的线性分类器，假设的 VC 维也会是 <span class="math inline">\(O(n)\)</span></li>
-<li>如果训练集不是特别大，很容易出现过拟合的问题</li>
-</ul></li>
-<li>因此，我们需要一个特征选择算法来减少特征的数量
-<ul>
-<li>给定 <span class="math inline">\(n\)</span> 个特征，总共有 <span class="math inline">\(2^n\)</span> 种可能的子集（每个特征可选可不选）</li>
-<li>可以将其看作是一个包含 <span class="math inline">\(2^n\)</span> 种模型的模型选择问题</li>
-<li>由于 <span class="math inline">\(n\)</span> 较大，因此遍历所有的模型代价过高，一般会采用一些启发式的搜索流程来找到好的特征子集</li>
-</ul></li>
-<li>下面介绍两种启发式的特征选择算法：包装器特征选择（wrapper feature selection）和过滤器特征选择（filter feature selection）</li>
-</ul>
-<h2 id="包装器特征选择">包装器特征选择</h2>
-<ul>
-<li>包装器特征选择可以分为<strong>前向搜索</strong>与<strong>后向搜索</strong>两种</li>
-<li>前向搜索：
-<ol type="1">
-<li>初始化 <span class="math inline">\(\mathcal{F} = \emptyset\)</span></li>
-<li>重复：
-<ul>
-<li>对于 <span class="math inline">\(i=1,\dots,n\)</span>，如果 <span class="math inline">\(i \notin \mathcal{F}\)</span>，令 <span class="math inline">\(\mathcal{F}_i=\mathcal{F} \cup \{i\}\)</span>
-<ul>
-<li>使用某种交叉验证来评估特征集 <span class="math inline">\(\mathcal{F}_i\)</span>（<span class="math inline">\(i \in \mathcal{F}\)</span> 时不评估）</li>
-</ul></li>
-<li>将 <span class="math inline">\(\mathcal{F}\)</span> 设为上一步骤（遍历一次）中表现最佳的特征子集</li>
-</ul></li>
-<li>选择整个搜索过程中表现最佳的特征子集输出</li>
-</ol></li>
-<li>第二步中循环的结束条件可以是当 <span class="math inline">\(\mathcal{F}= \{1,\ldots,n\}\)</span> 为整个特征集，也可以指定一个特征数量的上界</li>
-<li>后向搜索与前向搜索类似，只是其初始值为 <span class="math inline">\(\mathcal{F}= \{1,\ldots,n\}\)</span>，然后逐步减少特征数量</li>
-<li>包装器特征选择算法通常效果较好，但是相对来说计算代价较高
-<ul>
-<li>完整的前向搜索过程会进行约 <span class="math inline">\(O(n^2)\)</span>次学习算法的调用</li>
+<li>因此，在线学习是对算法需要在学习过程中进行预测的应用的建模</li>
 </ul></li>
 </ul>
-<h2 id="过滤器特征选择">过滤器特征选择</h2>
+<h1 id="感知器与大间隔分类器">感知器与大间隔分类器</h1>
 <ul>
-<li>相比之下，过滤器特征选择算法的计算代价很小</li>
-<li>算法思想是计算每个特征 <span class="math inline">\(x_i\)</span> 对其类别标签 <span class="math inline">\(y\)</span> 所能体现的信息量 <span class="math inline">\(S(i)\)</span>
+<li>下面将给出感知器算法的在线学习误差数量的上界
 <ul>
-<li>选择得分最高的 <span class="math inline">\(k\)</span> 个特征作为特征集</li>
-<li>一般将 <span class="math inline">\(S(i)\)</span> 定义为 <span class="math inline">\(x_i\)</span> 与 <span class="math inline">\(y\)</span> 之间的相关程度（基于训练集计算）</li>
+<li>为了简化推导，这里将分类标签定义为 <span class="math inline">\(y \in \{-1,1\}\)</span></li>
 </ul></li>
-<li><p>实践中通过 <span class="math inline">\(x_i\)</span> 与 <span class="math inline">\(y\)</span> 之间的<strong>互信息</strong>（mutual information）来计算 <span class="math inline">\(S(i)\)</span> <span class="math display">\[
-\text{MI}(x_i,y) = \sum_{x_i \in \{0,1\}} \sum_{y \in \{0,1\}} p(x_i,y) \log \frac {p(x_i,y)}{p(x_i)p(y)}
+<li><p>我们知道感知器算法的参数 <span class="math inline">\(\theta \in \mathbb{R}^{n+1}\)</span>，其假设函数为： <span class="math display">\[
+h_\theta(x)= g(\theta^Tx) \tag{1}
 \]</span></p>
 <ul>
-<li>上式假设 <span class="math inline">\(x_i\)</span> 和 <span class="math inline">\(y\)</span> 都是二元分类</li>
-<li>上式中的概率值都基于训练集来估计</li>
+<li>其中： <span class="math display">\[
+g(z)=\left\{
+\begin{align*}
+&amp; 1 \quad \text{if} \;\text{z} \ge 0\\
+&amp; -1 \quad  \text{if} \;\text{z} &lt; 0
+\end{align*}
+\right.
+\]</span></li>
 </ul></li>
-<li><p>为了更好的理解互信息，可以将其表示成 KL 散度（Kullback-Leibler divergence） <span class="math display">\[
-\text{MI}(x_i,y) = \text{KL}(p(x_i,y)||p(x_i)p(y))
+<li>给定一个训练样本 <span class="math inline">\((x,y)\)</span>，感知器算法的学习规则如下：
+<ul>
+<li><p>如果 <span class="math inline">\(h_\theta(x) = y\)</span>，那么参数不发生变化，否则： <span class="math display">\[
+\theta := \theta + yx
 \]</span></p>
 <ul>
-<li>KL 散度表明 <span class="math inline">\(p(x_i,y)\)</span> 与 <span class="math inline">\(p(x_i)p(y)\)</span> 的不同程度
-<ul>
-<li>如果 <span class="math inline">\(x_i\)</span> 和 <span class="math inline">\(y\)</span> 独立同分布，那么我们有 <span class="math inline">\(p(x_i,y) = p(x_i)p(y)\)</span>，其 KL 散度为 0</li>
+<li>该规则与第二章的相比有所不同，因为这里分类标签为 <span class="math inline">\(\{-1,1\}\)</span></li>
+<li>此外，学习速率被省略了，这只会影响到参数的大小，对算法本身的行为没有影响</li>
 </ul></li>
 </ul></li>
-<li>当你得到所有的 <span class="math inline">\(S(i)\)</span> 并排序完成后，应该如何选择 <span class="math inline">\(k\)</span> ？
+<li>下面的定理将给出感知器算法在线学习误差数量的上界
 <ul>
-<li>一个标准的方法是使用交叉验证来在 <span class="math inline">\(k\)</span> 的可能选项中选择</li>
+<li>当其作为在线算法运行时，每一次得到分类样本错误的时候会进行一次更新</li>
+<li>注意下面给出的误差数量上界与序列样本数量 <span class="math inline">\(m\)</span> 和输入维度 <span class="math inline">\(n\)</span> 并没有直接关系</li>
 </ul></li>
-</ul>
-<h1 id="贝叶斯统计与正则化">贝叶斯统计与正则化</h1>
+<li><strong>定理</strong>（Block, 1962, and Novikoﬀ, 1962）：
 <ul>
-<li>本部分将介绍对抗过拟合的另外一个工具</li>
-<li><p>之前我们介绍了基于最大似然法的参数拟合，其公式如下： <span class="math display">\[
-\theta_{\text{ML}} = \arg \max_\theta \prod_{i=1}^m p(y^{(i)}|x^{(i)};\theta)
-\]</span></p>
-<ul>
-<li>我们将 <span class="math inline">\(\theta\)</span> 看作一个<strong>未知常量</strong>，而并不是一个随机变量
-<ul>
-<li>这是一种<strong>频率学派</strong>的观点</li>
+<li>给定一个样本序列 <span class="math inline">\((x^{(1)},y^{(1)}),(x^{(2)},y^{(2)}),\ldots, (x^{(m)},y^{(m)})\)</span> ，假设对于所有的样本，都有 <span class="math inline">\(||x^{(i)}|| \le D\)</span>（欧几里得范数），并且存在一个单位长度向量 <span class="math inline">\(u\)</span>（<span class="math inline">\(||u||= 1\)</span>），使得对于所有样本都有：<span class="math inline">\(y^{(i)} \cdot (u^Tx^{(i)}) \ge \gamma\)</span> 成立（即 <span class="math inline">\(u\)</span> 将数据以至少为 <span class="math inline">\(\gamma\)</span> 的间隔分离）</li>
+<li>那么感知器算法对于该序列的总预测误差数量最多为 <span class="math inline">\((D/\gamma)^2\)</span></li>
 </ul></li>
-</ul></li>
-<li>从<strong>贝叶斯学派</strong>的角度，我们将 <span class="math inline">\(\theta\)</span> 看作一个<strong>未知的随机变量</strong>
+<li><strong>证明</strong>：
 <ul>
-<li>我们将指定一个 <span class="math inline">\(\theta\)</span> 的先验分布 <span class="math inline">\(p(\theta)\)</span></li>
-</ul></li>
-<li><p>给定一个训练集 <span class="math inline">\(S=\{(x^{(i)},y^{(i)})\}_{i=1}^m\)</span>，我们可以先计算参数的后验分布： <span class="math display">\[
-\begin{aligned}
-p(\theta|S) &amp;= \frac {p(S|\theta)p(\theta)} {p(S)} \\
-&amp;= \frac {\left(\prod_{i=1}^m  p(y^{(i)}|x^{(i)},\theta)\right)p(\theta)} {\int_{\theta}\left(\prod_{i=1}^m  p(y^{(i)}|x^{(i)},\theta)p(\theta)\right)d\theta}
-\end{aligned}
-\]</span></p>
+<li>感知器只有当发现错误时才会更新参数，定义 <span class="math inline">\(\theta^{(k)}\)</span> 为出现第 <span class="math inline">\(k\)</span> 个错误时的权重
 <ul>
-<li>注意这里使用了逗号而不是分号（表明 <span class="math inline">\(\theta\)</span> 是一个随机变量）</li>
-<li><span class="math inline">\(p(y^{(i)}|x^{(i)},\theta)\)</span> 根据你使用的模型来决定</li>
+<li>那么有 <span class="math inline">\(\theta^{(1)}=\vec 0\)</span>（因为权重初始化为0）</li>
+<li>如果第 <span class="math inline">\(k\)</span> 个错误出现时的样本为 <span class="math inline">\((x^{(m)},y^{(m)})\)</span>，那么 <span class="math inline">\(g((x^{(i)})^T\theta^{(k)}) \ne y^{(i)}\)</span>，即： <span class="math display">\[
+(x^{(i)})^T\theta^{(k)}y^{(i)} \le 0 \tag{2}
+\]</span></li>
 </ul></li>
-<li><p>当要预测一个新的 <span class="math inline">\(x\)</span> 的输出时，我们可以基于 <span class="math inline">\(\theta\)</span> 的后验分布来计算分类标签的后验分布（这里以逻辑回归为例） <span class="math display">\[
-p(y|x,S) = \int_\theta p(y|x,\theta)p(\theta|S)d\theta
+<li><p>根据感知器算法的学习规则，我们有 <span class="math inline">\(\theta^{(k+1)} = \theta^{(k)}+ y^{(i)}x^{(i)}\)</span>，据此有： <span class="math display">\[
+\begin{align*}
+(\theta^{(k+1)})^Tu &amp;= (\theta^{(k)})^Tu+ y^{(i)}(x^{(i)})^Tu \\
+&amp;\ge (\theta^{(k)})^Tu+ \gamma
+\end{align*}
 \]</span></p></li>
-<li><p>因此，预测的输出为： <span class="math display">\[
-\text{E}[y|x,S] = \int_y yp(y|x,S)dy
+<li><p>通过一个简答的数学归纳法证明，可以得到： <span class="math display">\[
+(\theta^{(k+1)})^Tu \ge k\gamma \tag{3}
 \]</span></p></li>
-<li>上述过程是完整的贝叶斯预测，但是实际上该后验分布是很难计算的（因为 <span class="math inline">\(\theta\)</span> 的积分计算难以求出闭合解/解析解）</li>
-<li>因此，实际应用中我们会对 <span class="math inline">\(\theta\)</span> 的后验分布进行估计
-<ul>
-<li>一个常用的估计方法是将后验分布使用一个单点估计来代替</li>
-</ul></li>
-<li><p>对 <span class="math inline">\(\theta\)</span> 的最大后验估计（MAP）为： <span class="math display">\[
-\theta_{\text{MAP}} = \arg \max_\theta \prod_{i=1}^m p(y^{(i)}|x^{(i)},\theta)p(\theta)
+<li><p>此外，我们还有： <span class="math display">\[
+\begin{align*}
+||\theta^{(k+1)}||^2 &amp;= || \theta^{(k)}+ y^{(i)}x^{(i)}||^2 \\
+&amp;= ||\theta^{(k)}||^2 + ||x^{(i)}||^2 + 2(x^{(i)})^T\theta^{(k)}y^{(i)} \\
+&amp;\le ||\theta^{(k)}||^2 + ||x^{(i)}||^2 \\
+&amp;\le ||\theta^{(k)}||^2 + D^2 \tag{4}
+\end{align*}
 \]</span></p>
 <ul>
-<li>和最大似然相比，只是末尾多了一项 <span class="math inline">\(\theta\)</span> 的先验分布 <span class="math inline">\(p(\theta)\)</span></li>
-<li>在实际应用中，<span class="math inline">\(p(\theta)\)</span> 的一个常用选择是 <span class="math inline">\(\theta \sim \mathcal{N}(0, \tau^2I)\)</span></li>
+<li>第三步使用了公式 (2) 的结论</li>
+<li>基于数学归纳法可以得到： <span class="math display">\[
+||\theta^{(k+1)}||^2 \le kD^2 \tag{5}
+\]</span></li>
 </ul></li>
-<li>与最大似然相比，拟合出的参数将具有更小的范数，从而使得贝叶斯 MAP 更<strong>易于避免过拟合</strong>
+<li><p>将 (3) 和 (5) 式结合起来可以得到： <span class="math display">\[
+\begin{align*}
+\sqrt k D &amp;\ge ||\theta^{(k+1)}|| \\
+&amp;\ge (\theta^{(k+1)})^Tu \\
+&amp;\ge k\gamma
+\end{align*}
+\]</span></p>
 <ul>
-<li>例如，对于文本分类问题，虽然 <span class="math inline">\(n \gg m\)</span>，贝叶斯逻辑回归仍然是一个比较高效的算法</li>
+<li>第二步的推导来自于 <span class="math inline">\(z^Tu = ||z||\cdot ||u||\,cos\phi \le ||z||\cdot||u||\)</span></li>
 </ul></li>
-<li><p>贝叶斯 MAP 可以看作是在最大似然的公式里加入了一个惩罚项，防止参数过拟合</p></li>
+<li><p>因此，如果感知器算法发现了第 k 个错误，可以证明 <span class="math inline">\(k \le (D/\gamma)^2\)</span></p></li>
+</ul></li>
 </ul>
 <h1 id="思维导图">思维导图</h1>
-<p><img src="http://media.zjubiomedit.com/2019-07-07-024755.png" width="100%"></p>
+<p><img src="http://media.zjubiomedit.com/2019-07-07-034611.png" width="80%"></p>
 
       
     </div>
@@ -710,7 +629,7 @@ p(y|x,S) = \int_\theta p(y|x,\theta)p(\theta|S)d\theta
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
     
-    <a href="https://xxwywzy.github.io/2018/04/19/CS229-7/" title="CS229学习笔记之七：正则化与模型选择">https://xxwywzy.github.io/2018/04/19/CS229-7/</a>
+    <a href="https://xxwywzy.github.io/2018/06/19/CS229-8/" title="CS229学习笔记之八：在线学习">https://xxwywzy.github.io/2018/06/19/CS229-8/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
@@ -736,8 +655,8 @@ p(y|x,S) = \int_\theta p(y|x,\theta)p(\theta|S)d\theta
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/04/16/uncharted4/" rel="next" title="A thief's end —— 神秘海域4通关感想">
-                <i class="fa fa-chevron-left"></i> A thief's end —— 神秘海域4通关感想
+              <a href="/2018/05/19/deep-2/" rel="next" title="deeplearning.ai 第二周：神经网络的编程基础">
+                <i class="fa fa-chevron-left"></i> deeplearning.ai 第二周：神经网络的编程基础
               </a>
             
           </div>
@@ -746,8 +665,8 @@ p(y|x,S) = \int_\theta p(y|x,\theta)p(\theta|S)d\theta
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/04/22/game-engine-1/" rel="prev" title="《游戏引擎架构》读书笔记之一：导论">
-                《游戏引擎架构》读书笔记之一：导论 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/02/01/deep-3/" rel="prev" title="deeplearning.ai 第三周：浅层神经网络">
+                deeplearning.ai 第三周：浅层神经网络 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -1030,7 +949,7 @@ p(y|x,S) = \int_\theta p(y|x,\theta)p(\theta|S)d\theta
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#模型选择"><span class="nav-number">1.</span> <span class="nav-text">模型选择</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#交叉验证"><span class="nav-number">1.1.</span> <span class="nav-text">交叉验证</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#特征选择"><span class="nav-number">2.</span> <span class="nav-text">特征选择</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#包装器特征选择"><span class="nav-number">2.1.</span> <span class="nav-text">包装器特征选择</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#过滤器特征选择"><span class="nav-number">2.2.</span> <span class="nav-text">过滤器特征选择</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#贝叶斯统计与正则化"><span class="nav-number">3.</span> <span class="nav-text">贝叶斯统计与正则化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#思维导图"><span class="nav-number">4.</span> <span class="nav-text">思维导图</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#在线学习"><span class="nav-number">1.</span> <span class="nav-text">在线学习</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#感知器与大间隔分类器"><span class="nav-number">2.</span> <span class="nav-text">感知器与大间隔分类器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#思维导图"><span class="nav-number">3.</span> <span class="nav-text">思维导图</span></a></li></ol></div>
             
 
           </div>
