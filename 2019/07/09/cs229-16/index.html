@@ -1,0 +1,1593 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2"/>
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0"/>
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/favicon.png?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本篇博客为 CS229 学习笔记第十六部分，主题是：强化学习中的各种算法。">
+<meta name="keywords" content="CS229">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CS229 学习笔记之十六：LQR, DDP 和 LQG">
+<meta property="og:url" content="https://xxwywzy.github.io/2019/07/09/cs229-16/index.html">
+<meta property="og:site_name" content="xxwywzy&#39;s Blog">
+<meta property="og:description" content="本篇博客为 CS229 学习笔记第十六部分，主题是：强化学习中的各种算法。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-10-124341.png">
+<meta property="og:updated_time" content="2019-07-10T12:52:20.141Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CS229 学习笔记之十六：LQR, DDP 和 LQG">
+<meta name="twitter:description" content="本篇博客为 CS229 学习笔记第十六部分，主题是：强化学习中的各种算法。">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2019-07-10-124341.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://xxwywzy.github.io/2019/07/09/cs229-16/"/>
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>CS229 学习笔记之十六：LQR, DDP 和 LQG | xxwywzy's Blog</title>
+  
+
+
+
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a02b5462e7522b1ed191c4cea6b1d6e6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xxwywzy's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Long may the sunshine</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br/>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br/>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br/>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br/>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br/>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2019/07/09/cs229-16/"/>
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zheyu Wang"/>
+      <meta itemprop="description" content="相信过程"/>
+      <meta itemprop="image" content="/images/avatar.png"/>
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xxwywzy's Blog"/>
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">CS229 学习笔记之十六：LQR, DDP 和 LQG
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-07-09 18:49:23" itemprop="dateCreated datePublished" datetime="2019-07-09T18:49:23+08:00">2019-07-09</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/人工智能/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/人工智能/机器学习/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <a href="/2019/07/09/cs229-16/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/07/09/cs229-16/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+            <span id="/2019/07/09/cs229-16/" class="leancloud_visitors" data-flag-title="CS229 学习笔记之十六：LQR, DDP 和 LQG">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <div class="note info">
+            本篇博客为 CS229 学习笔记第十六部分，主题是：强化学习中的各种算法。 
+          </div>
+<a id="more"></a>
+<ul>
+<li>LQR：线性二次调节</li>
+<li>DDP：微分动态规划</li>
+<li>LQG：线性二次高斯分布</li>
+</ul>
+<h1 id="有限范围-mdp">有限范围 MDP</h1>
+<ul>
+<li>在上一章中我们介绍了马尔可夫决策过程
+<ul>
+<li><p>其中最优贝尔曼公式给出了最优值函数的求解方法 <span class="math display">\[
+V^{\pi^{*}}(s)=R(s)+\max _{a \in \mathcal{A}} \gamma \sum_{s^{\prime} \in S} P_{s a}\left(s^{\prime}\right) V^{\pi^{*}}\left(s^{\prime}\right)
+\]</span></p></li>
+<li><p>根据最优值函数，我们还可以求解出最优策略 <span class="math display">\[
+\pi^{*}(s)=\operatorname{argmax}_{a \in \mathcal{A}} \sum_{s^{\prime} \in \mathcal{S}} P_{s a}\left(s^{\prime}\right) V^{*}\left(s^{\prime}\right)
+\]</span></p></li>
+</ul></li>
+<li>在本章中，我们将对上一章的结论进行推广：
+<ol type="1">
+<li><p>我们希望写出的方程对离散和连续情况均适用，即： <span class="math display">\[
+\begin{array}{c}{\mathbb{E}_{s^{\prime} \sim P_{s a}}\left[V^{\pi^{*}}\left(s^{\prime}\right)\right] \quad \text { instead of }} \\ {\sum_{s^{\prime} \in S} P_{s a}\left(s^{\prime}\right) V^{\pi^{*}}\left(s^{\prime}\right)}\end{array}
+\]</span></p></li>
+<li>我们将假设奖励函数同时依赖于<strong>状态和动作</strong>，即 <span class="math inline">\(R : \mathcal{S} \times \mathcal{A} \rightarrow \mathbb{R}\)</span>
+<ul>
+<li>这使得最优策略的计算公式变为： <span class="math display">\[
+\pi^{*}(s)=\operatorname{argmax}_{a \in \mathcal{A}} R(s, a)+\gamma       \mathbb{E}_{s^{\prime} \sim P_{sa}}\left[V^{\pi^{*}}\left(s^{\prime}\right)\right]
+\]</span></li>
+</ul></li>
+<li><p>不同于之前的无限范围，我们将假设 MDP 为<strong>有限范围</strong>，定义如下五元组： <span class="math display">\[
+\left(\mathcal{S}, \mathcal{A}, P_{s a}, T, R\right)
+\]</span></p>
+<ul>
+<li>其中 <span class="math inline">\(T&gt;0\)</span> 为时间范围</li>
+<li><p>在这样的设定中，对于收益的定义将发生变化： <span class="math display">\[
+R\left(s_{0}, a_{0}\right)+R\left(s_{1}, a_{1}\right)+\cdots+R\left(s_{T}, a_{T}\right)
+\]</span></p>
+<ul>
+<li>而不是： <span class="math display">\[
+\begin{array}{l}{R\left(s_{0}, a_{0}\right)+\gamma R\left(s_{1}, a_{1}\right)+\gamma^{2} R\left(s_{2}, a_{2}\right)+\ldots} \\ {\sum_{t=0}^{\infty} R\left(s_{t}, a_{t}\right) \gamma^{t}}\end{array}
+\]</span></li>
+</ul></li>
+<li>折扣因子的存在本质上是为了保证无限和的奖励函数为有限值
+<ul>
+<li><p>假设奖励函数的上界为某一常数 <span class="math inline">\(\bar{R}\)</span>，则收益为： <span class="math display">\[
+\left|\sum_{t=0}^{\infty} R\left(s_{t}\right) \gamma^{t}\right| \leq \overline{R} \sum_{t=0}^{\infty} \gamma^{t}
+\]</span></p></li>
+<li>其为一个几何级数和（有限和）</li>
+</ul></li>
+<li>因为这里收益本身即为有限和，所以折扣因子也不再需要</li>
+<li><p>此外，在有限范围下，最优策略 <span class="math inline">\(\pi^{\star}\)</span> 将不稳定，随时间发生变化： <span class="math display">\[
+\pi^{(t)} : \mathcal{S} \rightarrow \mathcal{A}
+\]</span></p>
+<ul>
+<li>这种情况出现的原因从直观上可以理解为：
+<ul>
+<li>我们希望基于处于环境中的位置与剩余的时间来采取不同的策略</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>我们将使用基于时间的动态方法： <span class="math display">\[
+s_{t+1} \sim P_{s_{t}, a_{t}}^{(t)}
+\]</span></p>
+<ul>
+<li>即状态转移概率随时间变化
+<ul>
+<li>奖励函数同样随时间变化 <span class="math inline">\(R^{(t)}\)</span></li>
+</ul></li>
+<li>这样的设定更加符合实际情况</li>
+<li><p>结合之前的设定，有限范围 MDP 的通用公式如下： <span class="math display">\[
+\left(\mathcal{S}, \mathcal{A}, P_{s a}^{(t)}, T, R^{(t)}\right)
+\]</span></p>
+<ul>
+<li>注：上述方程与在状态中加入时间等价</li>
+</ul></li>
+<li><p>时间 <span class="math inline">\(t\)</span> 的值函数（使用策略 <span class="math inline">\(\pi\)</span>）使用与之前相同的方式定义： <span class="math display">\[
+V_{t}(s)=\mathbb{E}\left[R^{(t)}\left(s_{t}, a_{t}\right)+\cdots+R^{(T)}\left(s_{T}, a_{T}\right) | s_{t}=s, \pi\right]
+\]</span></p></li>
+</ul></li>
+</ol></li>
+<li><p>现在的问题是，如何在有限范围下找出最优值函数： <span class="math display">\[
+V_{t}^{*}(s)=\max _{\pi} V_{t}^{\pi}(s)
+\]</span></p>
+<ul>
+<li>我们可以用<strong>动态规划</strong>的思想来求解这一问题：
+<ol type="1">
+<li><p>在决策过程的最后，最优值函数为： <span class="math display">\[
+\forall s \in \mathcal{S} : \quad V_{T}^{*}(s) :=\max _{a \in \mathcal{A}} R^{(T)}(s, a) \tag{1}
+\]</span></p></li>
+<li><p>对于另一个时间步 <span class="math inline">\(0 \leq t&lt;T\)</span>，如果已知下一个时间步的最优值函数 <span class="math inline">\(V_{t+1}^{*}\)</span>，则： <span class="math display">\[
+\forall t&lt;T, s \in \mathcal{S} : \quad V_{t}^{*}(s) :=\max _{a \in \mathcal{A}}\left[R^{(t)}(s, a)+\mathbb{E}_{s^{\prime} \sim P_{s a}^{(t)}}\left[V_{t+1}^{*}\left(s^{\prime}\right)\right]\right] \tag{2}
+\]</span></p></li>
+</ol></li>
+<li>基于上述观察，可以用如下算法来求解最优值函数：
+<ol type="1">
+<li>使用 <span class="math inline">\((1)\)</span> 式计算 <span class="math inline">\(V_{T}^{*}\)</span></li>
+<li>对于 <span class="math inline">\(t=T-1, \dots, 0\)</span>
+<ul>
+<li>使用 <span class="math inline">\((2)\)</span> 式基于 <span class="math inline">\(V_{t+1}^{*}\)</span> 计算 <span class="math inline">\(V_{t}^{*}\)</span></li>
+</ul></li>
+</ol></li>
+<li>备注：可以将标准的值迭代看做上述算法的特例（不追踪时间）</li>
+<li>如果我们在标准设置下，运行值迭代 <span class="math inline">\(T\)</span> 次，则可以得到最优值迭代的 <span class="math inline">\(\gamma^T\)</span> 估计（几何收敛）
+<ul>
+<li>定理：令 <span class="math inline">\(B\)</span> 定义贝尔曼更新以及 <span class="math inline">\(\|f(x)\|_{\infty} :=\sup _{x}|f(x)|\)</span> （上界）
+<ul>
+<li><p>如果 <span class="math inline">\(V_t\)</span> 表示 <span class="math inline">\(t\)</span> 时间步的值函数，则有： <span class="math display">\[
+\begin{aligned}\left\|V_{t+1}-V^{*}\right\|_{\infty} &amp;=\left\|B\left(V_{t}\right)-V^{*}\right\|_{\infty} \\ &amp; \leq \gamma\left\|V_{t}-V^{*}\right\|_{\infty} \\ &amp; \leq \gamma^{t}\left\|V_{1}-V^{*}\right\|_{\infty} \end{aligned}
+\]</span></p></li>
+<li><p>可以看出，贝尔曼更新 <span class="math inline">\(B\)</span> 是一个 <span class="math inline">\(\gamma\)</span> 收缩算子</p></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+<h1 id="线性二次调节lqr">线性二次调节（LQR）</h1>
+<ul>
+<li>本节我们将介绍有限范围 MDP 下的一个特例：<strong>LQR 模型</strong>
+<ul>
+<li>在该模型下，可以求得精确的解
+<ul>
+<li>使用 LQR 算法</li>
+</ul></li>
+<li>该模型常用于机器人控制
+<ul>
+<li>很多问题经常将问题简化成该模型</li>
+</ul></li>
+</ul></li>
+<li>首先定义模型假设
+<ul>
+<li><p>状态空间与动作空间连续： <span class="math display">\[
+\mathcal{S}=\mathbb{R}^{n}, \;\;\mathcal{A}=\mathbb{R}^{d}
+\]</span></p></li>
+<li><p>线性转移函数（带噪声）： <span class="math display">\[
+s_{t+1}=A_{t} s_{t}+B_{t} a_{t}+w_{t}
+\]</span></p>
+<ul>
+<li>其中 <span class="math inline">\(A_{t} \in R^{n \times n}, B_{t} \in R^{n \times d}\)</span> 为矩阵</li>
+<li><span class="math inline">\(w_{t} \sim \mathcal{N}\left(0, \Sigma_{t}\right)\)</span> 为某个高斯噪声（0 均值）
+<ul>
+<li>之后我们会证明最优策略与噪声无关！</li>
+</ul></li>
+</ul></li>
+<li><p>二次奖励函数： <span class="math display">\[
+R^{(t)}\left(s_{t}, a_{t}\right)=-s_{t}^{\top} U_{t} s_{t}-a_{t}^{\top} W_{t} a_{t}
+\]</span></p>
+<ul>
+<li>其中 <span class="math inline">\(U_{t} \in R^{n \times n}, W_{t} \in R^{d \times d}\)</span> 为正定矩阵
+<ul>
+<li>这意味着奖励函数一直为负</li>
+</ul></li>
+<li>该奖励函数的特征表明我们希望状态接近原点（小范数）
+<ul>
+<li>可以理解为模型希望维持稳定，避免过度的波动</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>定义完假设后，下面介绍 LQR 算法的两个步骤：
+<ol type="1">
+<li>假定 <span class="math inline">\(A, B, \Sigma\)</span> 未知，我们需要基于观察数据进行估计
+<ul>
+<li><p>对于 <span class="math inline">\(A,B\)</span>，使用值函数近似章节中的方法进行估计 <span class="math display">\[
+\operatorname{argmin}_{A, B} \sum_{i=1}^{m} \sum_{t=0}^{T-1}\left\|s_{t+1}^{(i)}-\left(A s_{t}^{(i)}+B a_{t}^{(i)}\right)\right\|^{2}
+\]</span></p></li>
+<li>对于 <span class="math inline">\(\Sigma\)</span>，使用高斯判别分析方法进行估计（极大似然）</li>
+</ul></li>
+<li>假定模型参数已知（给定或估计得出），我们可以使用动态规划算法来推导最优策略
+<ul>
+<li><p>即给定： <span class="math display">\[
+\left\{\begin{array}{ll}{s_{t+1}} &amp; {=A_{t} s_{t}+B_{t} a_{t}+w_{t} \quad A_{t}, B_{t}, U_{t}, W_{t}, \Sigma_{t} \text { known }} \\ {R^{(t)}\left(s_{t}, a_{t}\right)} &amp; {=-s_{t}^{\top} U_{t} s_{t}-a_{t}^{\top} W_{t} a_{t}}\end{array}\right.
+\]</span></p></li>
+<li>我们希望去计算 <span class="math inline">\(V_{t}^{*}\)</span></li>
+</ul></li>
+</ol></li>
+<li>使用第一节中提到的动态规划方法，我们有：
+<ol type="1">
+<li><strong>初始化步骤</strong>
+<ul>
+<li>对于最后一个时间步 <span class="math inline">\(T\)</span>： <span class="math display">\[
+\begin{aligned} V_{T}^{*}\left(s_{T}\right) &amp;=\max _{a_{F} \in \mathcal{A}} R_{T}\left(s_{T}, a_{T}\right) \\ &amp;=\max _{a_{T} \in \mathcal{A}}-s_{T}^{\top} U_{T} s_{T}-a_{T}^{\top} W_{T} a_{T} \\ &amp;=-s_{T}^{\top} U_{T} s_{T} &amp; \text { (maximized for } a_{T}=0 ) \end{aligned}
+\]</span></li>
+</ul></li>
+<li><strong>循环步骤</strong>
+<ul>
+<li>令 <span class="math inline">\(t &lt; T\)</span>，假定我们知道 <span class="math inline">\(V_{t+1}^{*}\)</span></li>
+<li><p><u>事实 1</u>：如果 <span class="math inline">\(V_{t+1}^{*}\)</span> 是一个二次函数，那么 <span class="math inline">\(V_{t}^{*}\)</span> 也是一个二次函数，即： <span class="math display">\[
+\begin{aligned} \text { if } V_{t+1}^{*}\left(s_{t+1}\right) &amp;=s_{t+1}^{\top} \Phi_{t+1} s_{t+1}+\Psi_{t+1} \\ \text { then } V_{t}^{*}\left(s_{t}\right) &amp;=s_{t}^{\top} \Phi_{t} s_{t}+\Psi_{t} \end{aligned}
+\]</span></p>
+<ul>
+<li>对于时间步 <span class="math inline">\(t=T\)</span>，我们有 <span class="math inline">\(\Phi_{t}=-U_{T}\)</span> 以及 <span class="math inline">\(\Psi_{T}=0\)</span></li>
+</ul></li>
+<li><u>事实 2</u>：我们可以证明最优策略是状态的线性函数
+<ul>
+<li>知道了 <span class="math inline">\(V_{t+1}^{*}\)</span> 就等同于知道了 <span class="math inline">\(\Phi_{t+1}\)</span> 和 <span class="math inline">\(\Psi_{t+1}\)</span>
+<ul>
+<li>我们只需要解释如何基于 <span class="math inline">\(\Phi_{t+1}\)</span> 和 <span class="math inline">\(\Psi_{t+1}\)</span> 以及其他参数来计算 <span class="math inline">\(\Phi_{t}\)</span> 和 <span class="math inline">\(\Psi_{t}\)</span></li>
+</ul></li>
+<li><p>根据最优值函数的定义以及模型假设，我们有： <span class="math display">\[
+\begin{aligned} V_{t}^{*}\left(s_{t}\right) &amp;=s_{t}^{\top} \Phi_{t} s_{t}+\Psi_{t} \\ &amp;=\max _{a_{t}}\left[R^{(t)}\left(s_{t}, a_{t}\right)+\mathbb{E}_{s_{t+1} \sim P_{s_t,a_t}^{(t)}}\left[V_{t+1}^{*}\left(s_{t+1}\right)\right]\right] \\ &amp;=\max _{a_{t}}\left[-s_{t}^{\top} U_{t} s_{t}-a_{t}^{\top} V_{t} a_{t}+\mathbb{E}_{s_{t+1} \sim \mathcal{N}\left(A_{t} s_{t}+B_{t} a_{t}, \Sigma_{t}\right)}\left[s_{t+1}^{\top} \Phi_{t+1} s_{t+1}+\Psi_{t+1}\right]\right] \end{aligned}
+\]</span></p>
+<ul>
+<li>上式可以优化为关于 <span class="math inline">\(a_t\)</span> 的二次函数（过程省略o(╯□╰)o）</li>
+</ul></li>
+<li><p>我们可以解得最优动作 <span class="math inline">\(a_{t}^{*}\)</span>： <span class="math display">\[
+\begin{aligned} a_{t}^{*} &amp;=\left[\left(B_{t}^{\top} \Phi_{t+1} B_{t}-V_{t}\right)^{-1} B_{t} \Phi_{t+1} A_{t}\right] \cdot s_{t} \\ &amp;=L_{t} \cdot s_{t} \end{aligned}
+\]</span></p>
+<ul>
+<li><p>其中： <span class="math display">\[
+L_{t} :=\left[\left(B_{t}^{\top} \Phi_{t+1} B_{t}-W_{t}\right)^{-1} B_{t} \Phi_{t+1} A_{t}\right]
+\]</span></p></li>
+<li>根据上式可以得出：最优策略与 <span class="math inline">\(s_t\)</span> 线性相关</li>
+</ul></li>
+<li><p>给定 <span class="math inline">\(a_{t}^{*}\)</span> 我们可以求解 <span class="math inline">\(\Phi_{t}\)</span> 和 <span class="math inline">\(\Psi_{t}\)</span>，得出<strong>离散里卡蒂方程</strong> <span class="math display">\[
+\begin{aligned} \Phi_{t} &amp;=A_{t}^{\top}\left(\Phi_{t+1}-\Phi_{t+1} B_{t}\left(B_{t}^{\top} \Phi_{t+1} B_{t}-W_{t}\right)^{-1} B_{t} \Phi_{t+1}\right) A_{t}-U_{t} \\ \Psi_{t} &amp;=-\operatorname{tr}\left(\Sigma_{t} \Phi_{t+1}\right)+\Psi_{t+1} \end{aligned}
+\]</span></p></li>
+</ul></li>
+<li><u>事实 3</u>：可以看到 <span class="math inline">\(\Phi_{t}\)</span> 不依赖于 <span class="math inline">\(\Psi\)</span> 和噪声 <span class="math inline">\(\Sigma_t\)</span>
+<ul>
+<li>这表明<strong>最优策略也不依赖于噪声</strong>！</li>
+<li>但是 <span class="math inline">\(\Psi_t\)</span> 依赖于 <span class="math inline">\(\Sigma_t\)</span>，即 <span class="math inline">\(V_{t}^{*}\)</span> 也依赖于 <span class="math inline">\(\Sigma_t\)</span></li>
+</ul></li>
+</ul></li>
+</ol></li>
+<li>总结：LQR 算法的流程如下：
+<ol type="1">
+<li>估计参数 <span class="math inline">\(A_{t}, B_{t}, \Sigma_{t}\)</span> （如果必要）</li>
+<li>初始化 <span class="math inline">\(\Phi_{T} :=-U_{T}\)</span> 和 <span class="math inline">\(\Psi_{T} :=0\)</span></li>
+<li>从 <span class="math inline">\(t=T-1 \ldots 0\)</span> 开始迭代更新 <span class="math inline">\(\Phi_{t}\)</span> 和 <span class="math inline">\(\Psi_{t}\)</span>
+<ul>
+<li>使用离散里卡蒂方程（基于 <span class="math inline">\(\Phi_{t+1}\)</span> 和 <span class="math inline">\(\Psi_{t+1}\)</span>）</li>
+<li>只要存在能朝 0 状态前进的策略，收敛性就可以得到保障</li>
+</ul></li>
+<li>求解最优策略 <span class="math inline">\(a_{t}^{*} =\left[\left(B_{t}^{\top} \Phi_{t+1} B_{t}-V_{t}\right)^{-1} B_{t} \Phi_{t+1} A_{t}\right] \cdot s_{t}\)</span>
+<ul>
+<li>因为最优策略不依赖于 <span class="math inline">\(\Psi_{t}\)</span>，所以可以不更新</li>
+</ul></li>
+</ol></li>
+</ul>
+<h1 id="非线性动态下的-lqr">非线性动态下的 LQR</h1>
+<ul>
+<li>对于很多问题，即便其动态非线性，也可以化简为 LQR
+<ul>
+<li><p>例如对于倒立摆问题，其状态间的转换关系为： <span class="math display">\[
+\left(\begin{array}{c}{x_{t+1}} \\ {\dot{x}_{t+1}} \\ {\theta_{t+1}} \\ {\dot{\theta}_{t+1}}\end{array}\right)=F\left(\left(\begin{array}{c}{x_{t}} \\ {\dot{x}_{t}} \\ {\theta_{t}} \\ {\dot{\theta}_{t}}\end{array}\right), a_{t}\right)
+\]</span></p>
+<ul>
+<li>其中函数 <span class="math inline">\(F\)</span> 取决于角度的余弦</li>
+</ul></li>
+<li><p>我们的问题是：<em>该系统能够线性化吗？</em></p></li>
+</ul></li>
+</ul>
+<h2 id="动态的线性化">动态的线性化</h2>
+<ul>
+<li>假定在时间 <span class="math inline">\(t\)</span>，系统大部分时间都处于状态 <span class="math inline">\(\bar{s_t}\)</span>，且选取的行为在 <span class="math inline">\(\bar{a_t}\)</span> 附近
+<ul>
+<li>对于倒立摆问题，如果我们达到了某种最优状态，就会满足：行为空间很小且和竖直方向的偏差不大</li>
+</ul></li>
+<li>我们可以使用泰勒展开来进行线性化
+<ul>
+<li><p>先考虑最简单的情况：状态为一维且转换函数 <span class="math inline">\(F\)</span> 不依赖于动作，则我们可以写出： <span class="math display">\[
+s_{t+1}=F\left(s_{t}\right) \approx F\left(\bar{s_{t}}\right)+F^{\prime}\left(\bar{s_{t}}\right) \cdot\left(s_{t}-\bar{s_{t}}\right)
+\]</span></p></li>
+<li><p>对于更一般的情况，公式看上去基本一样，只是将简单的导数换成了梯度： <span class="math display">\[
+s_{t+1} \approx F\left(\bar{s_{t}}, \bar{a_{t}}\right)+\nabla_{s} F\left(\bar{s_{t}}, \bar{a_{t}}\right) \cdot\left(s_{t}-\bar{s_{t}}\right)+\nabla_{a} F\left(\bar{s_{t}}, \bar{a_{t}}\right) \cdot\left(a_{t}-\bar{a_{t}}\right) \tag{3}
+\]</span></p></li>
+<li><p>现在我们可以重写 <span class="math inline">\((3)\)</span> 式来得到如下线性关系： <span class="math display">\[
+s_{t+1} \approx A s_{t}+B a_{t}+\kappa
+\]</span></p>
+<ul>
+<li>其中 <span class="math inline">\(\kappa\)</span> 是某个常数，<span class="math inline">\(A,B\)</span> 是矩阵</li>
+<li>我们可以通过将常数项合并到 <span class="math inline">\(s_t\)</span> 中（增加一维）使得公式的形式与之前一致</li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="微分动态规划ddp">微分动态规划（DDP）</h2>
+<ul>
+<li>之前所说的方法适用于优化目标为保持在某个状态 <span class="math inline">\(s^{\star}\)</span> 附近
+<ul>
+<li>如倒立摆、无人驾驶（保持在路中间）</li>
+<li>而某些情况下，目标往往更加复杂</li>
+</ul></li>
+<li>下面介绍一种方法，其适用于系统需要遵循某种轨迹（比如火箭）
+<ul>
+<li>该方法将轨迹离散化为离散的时间步，并创造中间目标来使用之前的方法</li>
+</ul></li>
+<li>该方法称为<strong>微分动态规划</strong>，其主要步骤如下：
+<ol type="1">
+<li><p>使用一个简单的控制器得到一条标称轨迹，作为对目标轨迹的估计： <span class="math display">\[
+s_{0}^{*}, a_{0}^{*} \rightarrow s_{1}^{*}, a_{1}^{*} \rightarrow \ldots
+\]</span></p></li>
+<li><p>在每个轨迹点 <span class="math inline">\(s_{t}^{*}\)</span> 执行线性化： <span class="math display">\[
+s_{t+1} \approx F\left(s_{t}^{*}, a_{t}^{*}\right)+\nabla_{s} F\left(s_{t}^{*}, a_{t}^{*}\right)\left(s_{t}-s_{t}^{*}\right)+\nabla_{a} F\left(s_{t}^{*}, a_{t}^{*}\right)\left(a_{t}-a_{t}^{*}\right)
+\]</span></p>
+<ul>
+<li>其中 <span class="math inline">\(s_t,a_t\)</span> 表示当前的状态和动作</li>
+<li><p>现在我们可以使用之前的方法，将上式重写为： <span class="math display">\[
+s_{t+1}=A_{t} \cdot s_{t}+B_{t} \cdot a_{t}
+\]</span></p>
+<ul>
+<li>注意这里使用的是非平稳动态设定，即策略随时间发生变化</li>
+</ul></li>
+<li><p>类似地，我们可以通过二阶泰勒展开得到奖励函数 <span class="math inline">\(R^{(t)}\)</span>： <span class="math display">\[
+\begin{aligned} R\left(s_{t}, a_{t}\right) &amp; \approx R\left(s_{t}^{*}, a_{t}^{*}\right)+\nabla_{s} R\left(s_{t}^{*}, a_{t}^{*}\right)\left(s_{t}-s_{t}^{*}\right)+\nabla_{a} R\left(s_{t}^{*}, a_{t}^{*}\right)\left(a_{t}-a_{t}^{*}\right) \\ &amp;+\frac{1}{2}\left(s_{t}-s_{t}^{*}\right)^{\top} H_{s s}\left(s_{t}-s_{t}^{*}\right)+\left(s_{t}-s_{t}^{*}\right)^{\top} H_{s a}\left(a_{t}-a_{t}^{*}\right) \\ &amp;+\frac{1}{2}\left(a_{t}-a_{t}^{*}\right)^{\top} H_{a a}\left(a_{t}-a_{t}^{*}\right) \end{aligned}
+\]</span></p>
+<ul>
+<li>其中 <span class="math inline">\(H_{xy}\)</span> 表示 <span class="math inline">\(R\)</span> 的海森矩阵项</li>
+<li><p>上式可以重写为： <span class="math display">\[
+R_{t}\left(s_{t}, a_{t}\right)=-s_{t}^{\top} U_{t} s_{t}-a_{t}^{\top} W_{t} a_{t}
+\]</span></p>
+<ul>
+<li>使用之前所述的增加维度技巧</li>
+<li>如果想自己证明，注意下式： <span class="math display">\[
+\left(\begin{array}{ll}{1} &amp; {x}\end{array}\right) \cdot\left(\begin{array}{ll}{a} &amp; {b} \\ {b} &amp; {c}\end{array}\right) \cdot\left(\begin{array}{l}{1} \\ {x}\end{array}\right)=a+2 b x+c x^{2}
+\]</span></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>现在，我们已经将问题严格的重写为了 LQR 框架下的形式
+<ul>
+<li>可以使用 LQR 来找到最优策略 <span class="math inline">\(\pi_t\)</span></li>
+<li>注意：如果 LQR 轨迹（下一步）与其线性化偏离过多，可能会出现问题，需要通过调节奖励函数的形态来修正</li>
+</ul></li>
+<li><p>现在我们得到了新的控制器（新策略 <span class="math inline">\(\pi_t\)</span> ），我们将构建一个新的轨迹： <span class="math display">\[
+s_{0}^{*}, \pi_{0}\left(s_{0}^{*}\right) \rightarrow s_{1}^{*}, \pi_{1}\left(s_{1}^{*}\right) \rightarrow \rightarrow s_{T}^{*}
+\]</span></p>
+<ul>
+<li><p>注意生成新轨迹时，我们使用真实的函数 <span class="math inline">\(F\)</span> 而不是其线性估计来计算转换，即： <span class="math display">\[
+s_{t+1}^{*}=F\left(s_{t}^{*}, a_{t}^{*}\right)
+\]</span></p></li>
+<li><p>然后返回步骤 2，进行重复直到满足某些停止条件</p></li>
+</ul></li>
+</ol></li>
+</ul>
+<h1 id="线性二次高斯分布lqg">线性二次高斯分布（LQG）</h1>
+<ul>
+<li>目前为止，我们假设状态都是可以得到的
+<ul>
+<li>而在现实世界中，实际的观测值可能并不是真实的状态值（类似 HMM）</li>
+</ul></li>
+<li>我们将使用<strong>部分可观测 MDP</strong>（POMDP）来解决这类问题
+<ul>
+<li><p>我们将引入一个新的变量 <span class="math inline">\(o_t\)</span>，其满足某种条件概率分布： <span class="math display">\[
+o_{t}\left|s_{t} \sim O(o | s)\right.
+\]</span></p></li>
+<li><p>形式上看，一个有限范围 POMDP 由如下六元组给出： <span class="math display">\[
+\left(\mathcal{S}, \mathcal{O}, \mathcal{A}, P_{s a}, T, R\right)
+\]</span></p></li>
+<li>在该框架下，一种通用的策略是先基于观测值 <span class="math inline">\(o_1,\ldots,o_t\)</span> 得到一个<strong>置信状态</strong>，然后 POMDP 的策略将置信状态映射为动作</li>
+</ul></li>
+<li><p>本节我们将对 LQR 进行拓展来求解 POMDP，假定我们观测到 <span class="math inline">\(y_{t} \in \mathbb{R}^{m}\)</span>（<span class="math inline">\(m &lt; n\)</span>），并满足： <span class="math display">\[
+\left\{\begin{array}{ll}{y_{t}} &amp; {=C \cdot s_{t}+v_{t}} \\ {s_{t+1}} &amp; {=A \cdot s_{t}+B \cdot a_{t}+w_{t}}\end{array}\right.
+\]</span></p>
+<ul>
+<li>其中 <span class="math inline">\(C \in R^{m \times n}\)</span> 为压缩矩阵</li>
+<li><span class="math inline">\(v_{t}\)</span> 和 <span class="math inline">\(w_{t}\)</span> 一样为高斯噪声</li>
+<li>奖励函数保持不变，为状态（非观测值）和动作的函数</li>
+<li>置信状态同样满足高斯分布</li>
+</ul></li>
+<li>在上述设定下，具体的算法如下：
+<ol type="1">
+<li><p>基于观测值计算置信状态的高斯分布： <span class="math display">\[
+s_{t} | y_{1}, \ldots, y_{t} \sim \mathcal{N}\left(s_{t | t}, \Sigma_{t | t}\right)
+\]</span></p>
+<ul>
+<li>我们希望计算均值 <span class="math inline">\(s_{t | t}\)</span> 和协方差 $ _{t | t}$</li>
+<li>我们将使用<strong>卡尔曼滤波</strong>算法来提升计算效率（之后介绍）</li>
+</ul></li>
+<li>得到分布后，我们将使用均值 <span class="math inline">\(s_{t | t}\)</span> 作为对 <span class="math inline">\(s_t\)</span> 的最佳估计</li>
+<li>选择动作 <span class="math inline">\(a_{t} :=L_{t} s_{t | t}\)</span> 其中 <span class="math inline">\(L_t\)</span> 来自常规的 LQR 算法</li>
+</ol></li>
+<li>直观上来看，因为 <span class="math inline">\(s_{t | t}\)</span> 是 <span class="math inline">\(s_t\)</span> 的噪声估计，而 LQR 是与噪声无关的，所以这个算法可以工作</li>
+<li><p>下面对第一步进行解释，这里我们假设状态与动作无关（<span class="math inline">\(A\)</span> 和 <span class="math inline">\(C\)</span> 可以基于观察数据估计）： <span class="math display">\[
+\left\{\begin{array}{ll}{s_{t+1}} &amp; {=A \cdot s_{t}+w_{t}, \quad w_{t} \sim N\left(0, \Sigma_{s}\right)} \\ {y_{t}} &amp; {=C \cdot s_{t}+v_{t}, \quad v_{t} \sim N\left(0, \Sigma_{y}\right)}\end{array}\right.
+\]</span></p>
+<ul>
+<li><p>因为噪声是高斯分布，所以我们可以证明联合分布也为高斯分布： <span class="math display">\[
+\left(\begin{array}{c}{s_{1}} \\ {\vdots} \\ {s_{t}} \\ {y_{1}} \\ {\vdots} \\ {y_{t}}\end{array}\right) \sim \mathcal{N}(\mu, \Sigma) \qquad \text { for some } \mu, \Sigma
+\]</span></p>
+<ul>
+<li><p>使用高斯分布的边缘公式（参考因子分析章节），我们可以得到： <span class="math display">\[
+s_{t} | y_{1}, \ldots, y_{t} \sim \mathcal{N}\left(s_{t | t}, \Sigma_{t | t}\right)
+\]</span></p></li>
+<li>然而计算边缘分布的参数计算过于复杂，可能会达到 <span class="math inline">\(O(t^4)\)</span> 的复杂度</li>
+</ul></li>
+</ul></li>
+<li>我们将使用卡尔曼滤波算法来更快捷地计算均值与方差仅需要常数时间 t ：
+<ul>
+<li>算法分为两步，假定我们已知分布 <span class="math inline">\(s_{t} | y_{1}, \dots, y_{t}\)</span>
+<ol type="1">
+<li><strong>预测步</strong>：计算 <span class="math inline">\(s_{t+1} | y_{1}, \dots, y_{t}\)</span></li>
+<li><strong>更新步</strong>：计算 <span class="math inline">\(s_{t+1} | y_{1}, \dots, y_{t+1}\)</span></li>
+</ol></li>
+<li><p>不断迭代上述步骤，即可更新置信状态： <span class="math display">\[
+\left(s_{t} | y_{1}, \ldots, y_{t}\right) \stackrel{\text { predict }}{\longrightarrow}\left(s_{t+1} | y_{1}, \ldots, y_{t}\right) \stackrel{\text { update }}{\longrightarrow}\left(s_{t+1} | y_{1}, \ldots, y_{t+1}\right) \stackrel{\text { predict }}{\longrightarrow} \ldots
+\]</span></p></li>
+<li>下面具体解释两个步骤：
+<ul>
+<li><p><strong>预测步</strong>：假定我们已知分布： <span class="math display">\[
+s_{t} | y_{1}, \ldots, y_{t} \sim \mathcal{N}\left(s_{t | t}, \Sigma_{t | t}\right)
+\]</span></p>
+<ul>
+<li><p>则下一个状态的分布也为高斯分布： <span class="math display">\[
+s_{t+1} | y_{1}, \ldots, y_{t} \sim \mathcal{N}\left(s_{t+1 | t}, \Sigma_{t+1 | t}\right)
+\]</span></p></li>
+<li><p>其中： <span class="math display">\[
+\left\{\begin{array}{ll}{s_{t+1 | t}} &amp; {=A \cdot s_{t | t}} \\ {\Sigma_{t+1 | t}} &amp; {=A \cdot \Sigma_{t | t} \cdot A^{\top}+\Sigma_{s}}\end{array}\right.
+\]</span></p></li>
+</ul></li>
+<li><p><strong>更新步</strong>：给定 <span class="math inline">\(s_{t+1} | t\)</span> 和 <span class="math inline">\(\Sigma_{t+1 | t}\)</span>，我们可以证明： <span class="math display">\[
+s_{t+1} | y_{1}, \ldots, y_{t+1} \sim \mathcal{N}\left(s_{t+1 | t+1}, \Sigma_{t+1 | t+1}\right)
+\]</span></p>
+<ul>
+<li><p>其中： <span class="math display">\[
+\left\{\begin{array}{ll}{s_{t+1 | t+1}} &amp; {=s_{t+1 | t}+K_{t}\left(y_{t+1}-C s_{t+1 | t}\right)} \\ {\Sigma_{t+1 | t+1}} &amp; {=\Sigma_{t+1 | t}-K_{t} \cdot C \cdot \Sigma_{t+1 | t}}\end{array}\right.
+\]</span></p></li>
+<li><p>矩阵 <span class="math inline">\(K_t\)</span> 也称为<strong>卡尔曼增益</strong> <span class="math display">\[
+K_{t} :=\Sigma_{t+1 | t} C^{\top}\left(C \Sigma_{t+1 | t} C^{\top}+\Sigma_{y}\right)^{-1}
+\]</span></p>
+<ul>
+<li>从公式可以看出我们并不需要时间步 t 之前的观测值，仅需要之前的概率分布</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>将上述过程结合起来，算法的整体过程如下：
+<ol type="1">
+<li>运行前向传播来计算 <span class="math inline">\(K_{t}\)</span> ，<span class="math inline">\(\Sigma_{t | t}\)</span> 和 <span class="math inline">\(s_{t|t}\)</span></li>
+<li>运行反向传播（LQR 更新）来计算量 <span class="math inline">\(\Phi_t\)</span>，<span class="math inline">\(\Psi_{t}\)</span> 和 <span class="math inline">\(L_t\)</span></li>
+<li>使用 <span class="math inline">\(a_{t}^{*}=L_{t} s_{t | t}\)</span> 来得到最优策略</li>
+</ol></li>
+</ul>
+<h1 id="思维导图">思维导图</h1>
+<p><img src="http://media.zjubiomedit.com/2019-07-10-124341.png" width="100%"></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Zheyu Wang</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://xxwywzy.github.io/2019/07/09/cs229-16/" title="CS229 学习笔记之十六：LQR, DDP 和 LQG">https://xxwywzy.github.io/2019/07/09/cs229-16/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CS229/" rel="tag"># CS229</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/06/22/pixel-1/" rel="next" title="像素画创作教程 - Part 1">
+                <i class="fa fa-chevron-left"></i> 像素画创作教程 - Part 1
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Zheyu Wang"/>
+            
+              <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+              <p class="site-description motion-element" itemprop="description">相信过程</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">44</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">16</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/xxwywzy" title="GitHub &rarr; https://github.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://twitter.com/xxwywzy" title="Twitter &rarr; https://twitter.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="http://weibo.com/xxwywzy" title="Weibo &rarr; http://weibo.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://instagram.com/xxwywzy" title="Instagram &rarr; https://instagram.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#有限范围-mdp"><span class="nav-number">1.</span> <span class="nav-text">有限范围 MDP</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线性二次调节lqr"><span class="nav-number">2.</span> <span class="nav-text">线性二次调节（LQR）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#非线性动态下的-lqr"><span class="nav-number">3.</span> <span class="nav-text">非线性动态下的 LQR</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#动态的线性化"><span class="nav-number">3.1.</span> <span class="nav-text">动态的线性化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#微分动态规划ddp"><span class="nav-number">3.2.</span> <span class="nav-text">微分动态规划（DDP）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线性二次高斯分布lqg"><span class="nav-number">4.</span> <span class="nav-text">线性二次高斯分布（LQG）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#思维导图"><span class="nav-number">5.</span> <span class="nav-text">思维导图</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.5.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.0.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz',
+    appKey: 'IxP5URFEhxow4TfWyVNiowbH',
+    placeholder: '请在这里评论=￣ω￣=',
+    avatar: 'retro',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+</script>
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+  
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .fail(function ({ responseJSON }) {
+                console.log(`Failed to save Visitor num, with error message: ${responseJSON.error}`);
+              })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1 }))
+                .done(function() {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function() {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+        .fail(function ({ responseJSON }) {
+          console.log(`LeanCloud Counter Error: ${responseJSON.code} ${responseJSON.error}`);
+        });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz',
+                'X-LC-Key': 'IxP5URFEhxow4TfWyVNiowbH',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            addCount(Counter);
+          
+        });
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: "AMS"
+      }
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+      for (i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+<script src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+  overflow: auto hidden;
+}
+</style><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+    
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
