@@ -96,13 +96,13 @@
 
 
 
-  <meta name="description" content="Gamma 函数 作者首先介绍了 Gamma 函数： \[ \Gamma(x)=\int_{0}^{\infty} t^{x-1} e^{-t} d t \] Gamma 函数在数学上应用广泛，它可以将阶乘延拓到实数集上： \[ \Gamma(n)=(n-1) ! \] 在概率统计中，Gamma 函数也频繁出现。首先，由 Gamma 函数可以推导出 Gamma 分布： \[ \operatorna">
+  <meta name="description" content="本篇博客为对 LDA 的原理解读第一篇，主要参考网上流传已久的文章《LDA 数学八卦》。">
 <meta name="keywords" content="LDA">
 <meta property="og:type" content="article">
 <meta property="og:title" content="LDA 原理第一部分：LDA 数学八卦">
 <meta property="og:url" content="https://xxwywzy.github.io/2019/08/26/lda-1/index.html">
 <meta property="og:site_name" content="xxwywzy&#39;s Blog">
-<meta property="og:description" content="Gamma 函数 作者首先介绍了 Gamma 函数： \[ \Gamma(x)=\int_{0}^{\infty} t^{x-1} e^{-t} d t \] Gamma 函数在数学上应用广泛，它可以将阶乘延拓到实数集上： \[ \Gamma(n)=(n-1) ! \] 在概率统计中，Gamma 函数也频繁出现。首先，由 Gamma 函数可以推导出 Gamma 分布： \[ \operatorna">
+<meta property="og:description" content="本篇博客为对 LDA 的原理解读第一篇，主要参考网上流传已久的文章《LDA 数学八卦》。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-08-16-122049.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-08-26-032341.jpg">
@@ -114,10 +114,10 @@
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-09-05-013847.jpg">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-09-05-021751.jpg">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-09-05-084257.jpg">
-<meta property="og:updated_time" content="2019-09-05T11:59:50.271Z">
+<meta property="og:updated_time" content="2019-09-05T12:13:25.965Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LDA 原理第一部分：LDA 数学八卦">
-<meta name="twitter:description" content="Gamma 函数 作者首先介绍了 Gamma 函数： \[ \Gamma(x)=\int_{0}^{\infty} t^{x-1} e^{-t} d t \] Gamma 函数在数学上应用广泛，它可以将阶乘延拓到实数集上： \[ \Gamma(n)=(n-1) ! \] 在概率统计中，Gamma 函数也频繁出现。首先，由 Gamma 函数可以推导出 Gamma 分布： \[ \operatorna">
+<meta name="twitter:description" content="本篇博客为对 LDA 的原理解读第一篇，主要参考网上流传已久的文章《LDA 数学八卦》。">
 <meta name="twitter:image" content="http://media.zjubiomedit.com/2019-08-16-122049.png">
 
 
@@ -491,26 +491,25 @@
       
 
       
-        <h1 id="gamma-函数">Gamma 函数</h1>
+        <div class="note info">
+            本篇博客为对 LDA 的原理解读第一篇，主要参考网上流传已久的文章《LDA 数学八卦》。 
+          </div>
+<a id="more"></a>
+<h1 id="gamma-函数">Gamma 函数</h1>
 <p>作者首先介绍了 Gamma 函数： <span class="math display">\[
 \Gamma(x)=\int_{0}^{\infty} t^{x-1} e^{-t} d t
 \]</span> Gamma 函数在数学上应用广泛，它可以将阶乘延拓到实数集上： <span class="math display">\[
 \Gamma(n)=(n-1) !
 \]</span> 在概率统计中，Gamma 函数也频繁出现。首先，由 Gamma 函数可以推导出 Gamma 分布： <span class="math display">\[
 \operatorname{Gamma}(x | \alpha)=\frac{x^{\alpha-1} e^{-x}}{\Gamma(\alpha)}
-\]</span> Gamma 分布和 Poisson 分布有着密切的联系：</p>
-<ul>
-<li>参数为 <span class="math inline">\(\lambda\)</span> 的 Poisson 分布，概率写为：</li>
-</ul>
-<p><span class="math display">\[
+\]</span> Gamma 分布和 Poisson 分布有着密切的联系： + 参数为 <span class="math inline">\(\lambda\)</span> 的 Poisson 分布，概率写为： <span class="math display">\[
 \text {Poisson }(X=k | \lambda)=\frac{\lambda^{k} e^{-\lambda}}{k !}
 \]</span></p>
 <ul>
-<li>而 Gamma 分布中取 <span class="math inline">\(\alpha = k+1\)</span> 得到：</li>
-</ul>
-<p><span class="math display">\[
+<li>而 Gamma 分布中取 <span class="math inline">\(\alpha = k+1\)</span> 得到： <span class="math display">\[
 \operatorname{Gamma}(x | \alpha=k+1)=\frac{x^{k} e^{-x}}{\Gamma(k+1)}=\frac{x^{k} e^{-x}}{k !}
-\]</span></p>
+\]</span></li>
+</ul>
 <p>这两个分布在数学形式上是一致的，可以直观地认为 Gamma 分布是 Poisson 分布在正实数集上的连续化版本。</p>
 <p>我们可以从二项分布出发，利用其极限是 Poisson 分布的性质，将 Gamma 分布和 Poisson 分布联系起来： <span class="math display">\[
 \text {Poisson }(X \leq k | \lambda)+\int_{0}^{\lambda} \frac{x^{k} e^{-x}}{k !} d x=1
@@ -553,13 +552,10 @@ P\left(X_{t+1}=x | X_{t}, X_{t-1}, \cdots\right)=P\left(X_{t+1}=x | X_{t}\right)
 \pi(i) P_{i j}=\pi(j) P_{j i} \quad \text { for all } \quad i, j
 \]</span></p>
 <ul>
-<li>则 <span class="math inline">\(\pi(x)\)</span> 是马氏链的平稳分布</li>
-</ul></li>
-</ul>
-<p>对于一个转移矩阵为 <span class="math inline">\(q(i,j)\)</span> 的马氏链，通常情况下，细致平稳条件不成立： <span class="math display">\[
+<li>则 <span class="math inline">\(\pi(x)\)</span> 是马氏链的平稳分布 对于一个转移矩阵为 <span class="math inline">\(q(i,j)\)</span> 的马氏链，通常情况下，细致平稳条件不成立： <span class="math display">\[
 p(i) q(i, j) \neq p(j) q(j, i)
-\]</span></p>
-<ul>
+\]</span></li>
+</ul></li>
 <li><p>我们可以引入一个 <span class="math inline">\(\alpha(i,j)\)</span> ，使得： <span class="math display">\[
 p(i) q(i, j) \alpha(i, j)=p(j) q(j, i) \alpha(j, i)
 \]</span></p></li>
@@ -665,12 +661,12 @@ p(X) Q(X \rightarrow Y)=p(Y) Q(Y \rightarrow X)
 <blockquote>
 <p><strong>Algorithm</strong> Unigram Model</p>
 <ol type="1">
-<li><p>上帝只有一个骰子，这个骰子有 <span class="math inline">\(V\)</span> 个面，每个面对应一个词，各个面的概率不一</p>
+<li>上帝只有一个骰子，这个骰子有 <span class="math inline">\(V\)</span> 个面，每个面对应一个词，各个面的概率不一
 <ul>
-<li><p>即参数为词典中每个词语出现的概率 <span class="math inline">\(\vec{p}=\left(p_{1}, p_{2}, \cdots, p_{V}\right)\)</span></p></li>
-<li><p>该模型并不关心词语的顺序信息</p></li>
+<li>即参数为词典中每个词语出现的概率 <span class="math inline">\(\vec{p}=\left(p_{1}, p_{2}, \cdots, p_{V}\right)\)</span></li>
+<li>该模型并不关心词语的顺序信息</li>
 </ul></li>
-<li><p>每抛一次骰子，抛出的面就对应地产生一个词，假设总词频为 <span class="math inline">\(N\)</span>，则生成语料的方法为独立地抛 <span class="math inline">\(N\)</span> 次骰子产生这 <span class="math inline">\(N\)</span> 个词</p></li>
+<li>每抛一次骰子，抛出的面就对应地产生一个词，假设总词频为 <span class="math inline">\(N\)</span>，则生成语料的方法为独立地抛 <span class="math inline">\(N\)</span> 次骰子产生这 <span class="math inline">\(N\)</span> 个词</li>
 </ol>
 </blockquote>
 <p>基于上述方法，假定每个词 <span class="math inline">\(v_i\)</span> 的发生次数为 <span class="math inline">\(n_i\)</span>，则 <span class="math inline">\(\vec{n}=\left(n_{1}, n_{2}, \cdots, n_{V}\right)\)</span> 恰好为一个多项分布： <span class="math display">\[
@@ -774,7 +770,7 @@ p\left(\vec{w} | d_{m}\right)=\prod_{i=1}^{n} \sum_{z=1}^{K} p\left(w_{i} | z\ri
 <li><span class="math inline">\(\vec{\beta} \rightarrow \vec{\varphi}_{k} \rightarrow w_{m, n} | k=z_{m, n}\)</span>，这个过程表示在上帝手头的 <span class="math inline">\(K\)</span> 个 topic-word 骰子 <span class="math inline">\(\vec{\varphi}_k\)</span> 中，挑选编号为 <span class="math inline">\(k=z_{m,n}\)</span> 的那个骰子进行投掷，然后生成 word <span class="math inline">\(w_{m,n}\)</span></li>
 </ol>
 <p>在 LDA 模型中，有一些物理过程是相互独立可交换的，<span class="math inline">\(M\)</span> 篇文档会对应 <span class="math inline">\(M\)</span> 个独立的 Dirichlet-Multinomial 共轭结构，<span class="math inline">\(K\)</span> 个 topic 会对应 <span class="math inline">\(K\)</span> 个独立的 Dirichlet-Multinomial 共轭结构，因此 LDA 模型可以被分解为 <span class="math inline">\(M+K\)</span> 个 Dirichlet-Multinomial 共轭结构，下面我们来具体阐述这两个结构。</p>
-<h3 id="m-个-dirichlet-multinomial-共轭结构"><strong>M 个 Dirichlet-Multinomial 共轭结构</strong></h3>
+<h3 id="m-个-dirichlet-multinomial-共轭结构">M 个 Dirichlet-Multinomial 共轭结构</h3>
 <p>对于第一个物理过程，<span class="math inline">\(\vec{\alpha} \rightarrow \vec{\theta}_{m} \rightarrow \vec{z}_{m}\)</span> 表示生成第 <span class="math inline">\(m\)</span> 篇文档中所有词对应的 topics，显然 <span class="math inline">\(\vec{\alpha} \rightarrow \vec{\theta}_{m}\)</span> 对应于 Dirichlet 分布，<span class="math inline">\(\vec{\theta}_{m} \rightarrow \vec{z}_{m}\)</span> 对应于 Multinomial 分布，所以该过程整体是一个 Dirichlet-Multinomial 结构： <span class="math display">\[
 \vec{\alpha} \underbrace{\longrightarrow}_{\text {Dirichlet }} \vec{\theta}_{m} \underbrace{\longrightarrow}_{\text {Multinomial }} \vec{z}_{m}
 \]</span> 利用 Dirichlet-Multinomial 共轭结构，我们得到参数 <span class="math inline">\(\vec{\theta}_m\)</span> 的后验分布恰好是： <span class="math display">\[
@@ -787,7 +783,8 @@ p\left(\vec{z}_{m} | \vec{\alpha}\right)=\frac{\Delta\left(\vec{n}_{m}+\vec{\alp
 </ul>
 <p>由于语料中 <span class="math inline">\(M\)</span> 篇文档的 topics 生成过程相互独立，所以我们得到了 <span class="math inline">\(M\)</span> 个相互独立的 Dirichlet-Multinomial 共轭结构，从而可以得到整个语料中 topics 的生成概率： <span class="math display">\[
 \begin{aligned} p(\vec{\mathbf{z}} | \vec{\alpha}) &amp;=\prod_{m=1}^{M} p\left(\vec{z}_{m} | \vec{\alpha}\right) \\ &amp;=\prod_{m=1}^{M} \frac{\Delta\left(\vec{n}_{m}+\vec{\alpha}\right)}{\Delta(\vec{\alpha})} \end{aligned}
-\]</span> ### <strong>K 个 Dirichlet-Multinomial 共轭结构</strong></p>
+\]</span></p>
+<h3 id="k-个-dirichlet-multinomial-共轭结构">K 个 Dirichlet-Multinomial 共轭结构</h3>
 <p>为了得到这 <span class="math inline">\(K\)</span> 个共轭结构，我们需要对游戏的顺序作如下调整：</p>
 <blockquote>
 <p><strong>Algorithm</strong> LDA Model 2</p>
@@ -824,10 +821,7 @@ p\left(\vec{w}_{(k)} | \vec{\beta}\right)=\frac{\Delta\left(\vec{n}_{k}+\vec{\be
 \begin{aligned} p(\vec{\mathbf{w}}, \vec{\mathbf{z}} | \vec{\alpha}, \vec{\beta}) &amp;=p(\vec{\mathbf{w}} | \vec{\mathbf{z}}, \vec{\beta}) p(\vec{\mathbf{z}} | \vec{\alpha}) \\ &amp;=\prod_{k=1}^{K} \frac{\Delta(\vec{n}_{k}+\vec{\beta})}{\Delta(\vec{\beta})} \prod_{m=1}^{M} \frac{\Delta(\vec{n}_{m}+\vec{\alpha})}{\Delta(\vec{\alpha})} \end{aligned}
 \]</span></p>
 <h2 id="gibbs-sampling-1">Gibbs Sampling</h2>
-<p>得到了联合分布 <span class="math inline">\(p(\vec{\mathbf{w}}, \vec{\mathbf{z}})\)</span> 之后，我们可以使用 Gibbs Sampling 对这个分布进行采样</p>
-<ul>
-<li>由于 <span class="math inline">\(\vec{w}\)</span> 是观测到的已知数据，只有 <span class="math inline">\(\vec{z}\)</span> 是隐含变量，因此真正需要采样的是分布 <span class="math inline">\(p(\vec{z} |\vec{w} )\)</span></li>
-</ul>
+<p>得到了联合分布 <span class="math inline">\(p(\vec{\mathbf{w}}, \vec{\mathbf{z}})\)</span> 之后，我们可以使用 Gibbs Sampling 对这个分布进行采样。由于 <span class="math inline">\(\vec{w}\)</span> 是观测到的已知数据，只有 <span class="math inline">\(\vec{z}\)</span> 是隐含变量，因此真正需要采样的是分布 <span class="math inline">\(p(\vec{z} |\vec{w} )\)</span>。</p>
 <p>为了更好地理解采样过程，本节我们将基于 Dirichlet-Multinomial 共轭来推导 Gibbs Sampling 公式。</p>
 <p>语料库 <span class="math inline">\(\vec{z}\)</span> 中的第 <span class="math inline">\(i\)</span> 个词对应的 topic 记为 <span class="math inline">\(z_i\)</span>，其中 <span class="math inline">\(i=(m,n)\)</span> 是一个二维下标，对应于第 <span class="math inline">\(m\)</span> 篇文档的第 <span class="math inline">\(n\)</span> 个词，我们用 <span class="math inline">\(\neg i\)</span> 表示去除下标为 <span class="math inline">\(i\)</span> 的词。</p>
 <p>按照 Gibbs Sampling 算法（高维）的要求，我们要求得任意一个坐标轴 <span class="math inline">\(i\)</span> 对应的条件分布 <span class="math inline">\(p\left(z_{i}=k | \vec{\mathbf{z}}_{\neg i}, \vec{\mathbf{w}}\right)\)</span>，假设已经观测到的词 <span class="math inline">\(w_i=t\)</span>，则由贝叶斯法则，我们容易得到： <span class="math display">\[
@@ -1222,7 +1216,7 @@ p\left(z_{i}=k | \vec{\mathbf{z}}_{\neg i}, \vec{\mathbf{w}}\right)  \propto \fr
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#gamma-函数"><span class="nav-number">1.</span> <span class="nav-text">Gamma 函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#betadirichlet-分布"><span class="nav-number">2.</span> <span class="nav-text">Beta/Dirichlet 分布</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#mcmc-和-gibbs-sampling"><span class="nav-number">3.</span> <span class="nav-text">MCMC 和 Gibbs Sampling</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#markov-chain-monte-carlo"><span class="nav-number">3.1.</span> <span class="nav-text">Markov Chain Monte Carlo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gibbs-sampling"><span class="nav-number">3.2.</span> <span class="nav-text">Gibbs Sampling</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文本建模"><span class="nav-number">4.</span> <span class="nav-text">文本建模</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#unigram-model"><span class="nav-number">4.1.</span> <span class="nav-text">Unigram Model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#plsa-model"><span class="nav-number">4.2.</span> <span class="nav-text">PLSA Model</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lda-文本建模"><span class="nav-number">5.</span> <span class="nav-text">LDA 文本建模</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#物理过程分解"><span class="nav-number">5.1.</span> <span class="nav-text">物理过程分解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#m-个-dirichlet-multinomial-共轭结构"><span class="nav-number">5.1.1.</span> <span class="nav-text">M 个 Dirichlet-Multinomial 共轭结构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gibbs-sampling-1"><span class="nav-number">5.2.</span> <span class="nav-text">Gibbs Sampling</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#training-and-inference"><span class="nav-number">5.3.</span> <span class="nav-text">Training and Inference</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#gamma-函数"><span class="nav-number">1.</span> <span class="nav-text">Gamma 函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#betadirichlet-分布"><span class="nav-number">2.</span> <span class="nav-text">Beta/Dirichlet 分布</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#mcmc-和-gibbs-sampling"><span class="nav-number">3.</span> <span class="nav-text">MCMC 和 Gibbs Sampling</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#markov-chain-monte-carlo"><span class="nav-number">3.1.</span> <span class="nav-text">Markov Chain Monte Carlo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gibbs-sampling"><span class="nav-number">3.2.</span> <span class="nav-text">Gibbs Sampling</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文本建模"><span class="nav-number">4.</span> <span class="nav-text">文本建模</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#unigram-model"><span class="nav-number">4.1.</span> <span class="nav-text">Unigram Model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#plsa-model"><span class="nav-number">4.2.</span> <span class="nav-text">PLSA Model</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lda-文本建模"><span class="nav-number">5.</span> <span class="nav-text">LDA 文本建模</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#物理过程分解"><span class="nav-number">5.1.</span> <span class="nav-text">物理过程分解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#m-个-dirichlet-multinomial-共轭结构"><span class="nav-number">5.1.1.</span> <span class="nav-text">M 个 Dirichlet-Multinomial 共轭结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#k-个-dirichlet-multinomial-共轭结构"><span class="nav-number">5.1.2.</span> <span class="nav-text">K 个 Dirichlet-Multinomial 共轭结构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gibbs-sampling-1"><span class="nav-number">5.2.</span> <span class="nav-text">Gibbs Sampling</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#training-and-inference"><span class="nav-number">5.3.</span> <span class="nav-text">Training and Inference</span></a></li></ol></li></ol></div>
             
 
           </div>
