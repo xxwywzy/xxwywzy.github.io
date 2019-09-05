@@ -107,7 +107,7 @@
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-01-27-083324.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-01-29-071355.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-01-29-074845.png">
-<meta property="og:updated_time" content="2019-02-06T13:19:05.000Z">
+<meta property="og:updated_time" content="2019-02-06T13:19:05.587Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="deeplearning.ai 第二周：神经网络的编程基础">
 <meta name="twitter:description" content="本篇博客为 deeplearning.ai 第二周学习笔记，主题是：神经网络的编程基础。">
@@ -509,10 +509,10 @@
 <ul>
 <li>具体的参数包括：
 <ul>
-<li>输入特征向量：<span class="math inline">\(x \in \mathbb{R}^{n_x}\)</span></li>
-<li>训练标签：<span class="math inline">\(y \in \{0,1\}\)</span></li>
-<li>权重：<span class="math inline">\(w \in \mathbb{R}^{n_x}\)</span></li>
-<li>输出：<span class="math inline">\(\hat{y} = \sigma(w^Tx+b)\)</span></li>
+<li><p>输入特征向量：<span class="math inline">\(x \in \mathbb{R}^{n_x}\)</span></p></li>
+<li><p>训练标签：<span class="math inline">\(y \in \{0,1\}\)</span></p></li>
+<li><p>权重：<span class="math inline">\(w \in \mathbb{R}^{n_x}\)</span></p></li>
+<li><p>输出：<span class="math inline">\(\hat{y} = \sigma(w^Tx+b)\)</span></p></li>
 <li><p>sigmoid函数：<span class="math inline">\(s = \sigma(w^Tx+b) = \sigma(z) = \frac 1 {1+e^{-z}}\)</span></p>
 <p><img src="http://media.zjubiomedit.com/2019-01-27-083324.png" width="50%"></p></li>
 </ul></li>
@@ -591,14 +591,14 @@ b = b - \alpha * \frac {d(J(w,b))} {db}
 </ul>
 <h1 id="pythonnumpy-使用笔记">Python/Numpy 使用笔记</h1>
 <ul>
-<li>在 Numpy 中，<code>obj.sum(axis = 0)</code> 按列求和，<code>obj.sum(axis = 1)</code> 按行求和，默认将所有元素求和</li>
-<li>在 Numpy 中，<code>obj.reshape(1, 4)</code> 将通过广播机制（broadcasting）重组矩阵
+<li><p>在 Numpy 中，<code>obj.sum(axis = 0)</code> 按列求和，<code>obj.sum(axis = 1)</code> 按行求和，默认将所有元素求和</p></li>
+<li><p>在 Numpy 中，<code>obj.reshape(1, 4)</code> 将通过广播机制（broadcasting）重组矩阵</p>
 <ul>
-<li>reshape 操作的调用代价极低，可以放在任何位置</li>
+<li><p>reshape 操作的调用代价极低，可以放在任何位置</p></li>
 <li><p>广播机制的原理参考下图：</p>
 <p><img src="http://media.zjubiomedit.com/2019-01-29-071355.png" width="50%"></p></li>
 </ul></li>
-<li>关于矩阵 shape 的问题：
+<li><p>关于矩阵 shape 的问题：</p>
 <ul>
 <li>如果不指定一个矩阵的 shape，将生成 “rank 1 array”，会导致其 shape 为 <code>(m, )</code>，无法进行转置
 <ul>
@@ -778,7 +778,7 @@ b = b - \alpha * \frac {d(J(w,b))} {db}
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">46</span>
+                    <span class="site-state-item-count">47</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -894,7 +894,9 @@ b = b - \alpha * \frac {d(J(w,b))} {db}
                     
                       
                     
-                    <span class="site-state-item-count">19</span>
+                      
+                    
+                    <span class="site-state-item-count">20</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

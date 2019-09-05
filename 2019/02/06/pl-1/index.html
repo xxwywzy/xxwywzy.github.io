@@ -488,7 +488,7 @@
 <a id="more"></a>
 <h1 id="ml-表达式与变量绑定">ML 表达式与变量绑定</h1>
 <ul>
-<li>一个 ML 程序由一系列的<strong>绑定</strong>（bindings）组成
+<li><p>一个 ML 程序由一系列的<strong>绑定</strong>（bindings）组成</p>
 <ul>
 <li>每个绑定会先进行<strong>类型检查</strong>，再进行<strong>分析</strong>
 <ul>
@@ -506,11 +506,11 @@
 <li>类型检查：将<code>x</code> 的类型设为 <code>t</code> 其中 <code>t</code> 是表达式 <code>e</code> 的类型</li>
 <li>分析：将<code>x</code> 的值设为 <code>v</code> 其中 <code>v</code> 是表达式 <code>e</code> 的分析结果</li>
 </ul></li>
-<li>值是一种无法进一步进行计算（简化）的表达式
+<li><p>值是一种无法进一步进行计算（简化）的表达式</p>
 <ul>
 <li>所有的值都是表达式，但并非所有的表达式都是值</li>
 </ul></li>
-<li>ML 中常见的表达式包括：
+<li><p>ML 中常见的表达式包括：</p>
 <ul>
 <li><strong>整型常量</strong>
 <ul>
@@ -567,8 +567,8 @@
 </ul>
 <h1 id="函数绑定">函数绑定</h1>
 <ul>
-<li>函数是一种调用参数并通过函数体产生结果的代码块</li>
-<li>ML 中的函数没有类（class）的概念，也不存在返回语句</li>
+<li><p>函数是一种调用参数并通过函数体产生结果的代码块</p></li>
+<li><p>ML 中的函数没有类（class）的概念，也不存在返回语句</p></li>
 <li><p>下面给出一个计算幂次的简单函数：</p>
 <figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun pow (<span class="symbol">x:</span>int, <span class="symbol">y:</span>int) = (* correct only <span class="keyword">for</span> y &gt;= <span class="number">0</span> *) </span><br><span class="line">    <span class="keyword">if</span> y=<span class="number">0</span> </span><br><span class="line">    <span class="keyword">then</span> <span class="number">1</span> </span><br><span class="line">    <span class="keyword">else</span> x * pow(x,y-<span class="number">1</span>)</span><br></pre></td></tr></table></figure></li>
 </ul>
@@ -629,18 +629,18 @@
 </ul>
 <h2 id="pairs">Pairs</h2>
 <ul>
-<li>语法：<code>(e1, e2)</code></li>
-<li>类型检查：pair 的类型为 <code>t1 * t2</code>
+<li><p>语法：<code>(e1, e2)</code></p></li>
+<li><p>类型检查：pair 的类型为 <code>t1 * t2</code></p>
 <ul>
 <li><code>t1</code> 是 <code>e1</code> 的类型</li>
 <li><code>t2</code> 是 <code>e2</code> 的类型</li>
 </ul></li>
-<li>分析：pair 的取值为 <code>(v1, v2)</code>
+<li><p>分析：pair 的取值为 <code>(v1, v2)</code></p>
 <ul>
 <li><code>v1</code> 是 <code>e1</code> 的值</li>
 <li><code>t2</code> 是 <code>e2</code> 的值</li>
 </ul></li>
-<li>使用 <code>#1</code> 和 <code>#2</code> 来获取 pair 的第一部分与第二部分
+<li><p>使用 <code>#1</code> 和 <code>#2</code> 来获取 pair 的第一部分与第二部分</p>
 <ul>
 <li>如果 <code>e</code> 的类型 <code>ta * tb</code></li>
 <li>则 <code>#1 e</code> 的类型为 <code>ta</code> 且 <code>#2 e</code> 的类型为 <code>tb</code></li>
@@ -713,7 +713,7 @@
 </ul>
 <h1 id="let-表达式">Let 表达式</h1>
 <ul>
-<li>let 表达式是 ML 的一个重要特性
+<li><p>let 表达式是 ML 的一个重要特性</p>
 <ul>
 <li>其能够提供简单灵活的<strong>局部绑定</strong></li>
 <li>可以放置在任何能够放置表达式的地方</li>
@@ -739,7 +739,7 @@
 <li>在这个局部函数中，使用了函数体外的变量 <code>x</code></li>
 <li>这是函数式编程的一个重要特性（函数闭包）</li>
 </ul></li>
-<li>let 表达式可以避免重复的运算
+<li><p>let 表达式可以避免重复的运算</p>
 <ul>
 <li><p>下面的例子用于获得一个 int list 中的最大值</p>
 <figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun bad_max (xs : int list) =</span><br><span class="line">    <span class="keyword">if</span> null xs </span><br><span class="line">    <span class="keyword">then</span> <span class="number">0</span> (* <span class="symbol">note:</span> bad style; see below *) </span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> null (tl xs) </span><br><span class="line">    <span class="keyword">then</span> hd xs </span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> hd xs &gt; bad_max(tl xs) </span><br><span class="line">    <span class="keyword">then</span> hd xs </span><br><span class="line">    <span class="keyword">else</span> bad_max(tl xs)</span><br></pre></td></tr></table></figure>
@@ -752,12 +752,12 @@
 </ul>
 <h1 id="options">Options</h1>
 <ul>
-<li>上面的例子在 list 为空时返回了 0，这并不优雅
+<li><p>上面的例子在 list 为空时返回了 0，这并不优雅</p>
 <ul>
 <li>我们希望返回一个值，表明该 list 为空因此没有最大值</li>
 <li>ML 提供了 options 来做到这一点</li>
 </ul></li>
-<li>一个 option 有两种可能的取值：<code>NONE</code> 或 <code>SOME e</code>
+<li><p>一个 option 有两种可能的取值：<code>NONE</code> 或 <code>SOME e</code></p>
 <ul>
 <li><code>NONE</code> 表示该 option 没有携带任何值
 <ul>
@@ -768,7 +768,7 @@
 <li><code>SOME e</code> 的类型为 <code>t option</code>，其中 <code>t</code> 为 <code>e</code> 的类型</li>
 </ul></li>
 </ul></li>
-<li>我们使用 <code>isSome</code> 和 <code>valOf</code> 来处理 options
+<li><p>我们使用 <code>isSome</code> 和 <code>valOf</code> 来处理 options</p>
 <ul>
 <li>如果 option 为 <code>NONE</code>，则 <code>isSome</code> 为 <code>false</code></li>
 <li><code>valOf</code> 获取 <code>SOME e</code> 的值（<code>NONE</code> 则抛出异常）</li>
@@ -806,7 +806,7 @@
 </ul>
 <h2 id="共享与别名">共享与别名</h2>
 <ul>
-<li>具体来说，不可变性的一大好处就是让共享（sharing）与别名（aliasing）互不相关</li>
+<li><p>具体来说，不可变性的一大好处就是让共享（sharing）与别名（aliasing）互不相关</p></li>
 <li><p>下面以一个例子来说明：</p>
 <figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun append (xs : int list, ys : int list) = </span><br><span class="line">    <span class="keyword">if</span> null xs </span><br><span class="line">    <span class="keyword">then</span> ys </span><br><span class="line">    <span class="keyword">else</span> (hd xs) <span class="symbol">:</span>: append(tl xs, ys)</span><br></pre></td></tr></table></figure>
 <ul>
@@ -988,7 +988,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">46</span>
+                    <span class="site-state-item-count">47</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1104,7 +1104,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">19</span>
+                      
+                    
+                    <span class="site-state-item-count">20</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

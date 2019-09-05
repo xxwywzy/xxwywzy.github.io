@@ -96,23 +96,36 @@
 
 
 
-  <meta name="description" content="相信过程">
-<meta property="og:type" content="website">
-<meta property="og:title" content="xxwywzy&#39;s Blog">
-<meta property="og:url" content="https://xxwywzy.github.io/index.html">
+  <meta name="description" content="Gamma 函数 作者首先介绍了 Gamma 函数： \[ \Gamma(x)=\int_{0}^{\infty} t^{x-1} e^{-t} d t \] Gamma 函数在数学上应用广泛，它可以将阶乘延拓到实数集上： \[ \Gamma(n)=(n-1) ! \] 在概率统计中，Gamma 函数也频繁出现。首先，由 Gamma 函数可以推导出 Gamma 分布： \[ \operatorna">
+<meta name="keywords" content="LDA">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LDA 原理第一部分：LDA 数学八卦">
+<meta property="og:url" content="https://xxwywzy.github.io/2019/08/26/lda-1/index.html">
 <meta property="og:site_name" content="xxwywzy&#39;s Blog">
-<meta property="og:description" content="相信过程">
+<meta property="og:description" content="Gamma 函数 作者首先介绍了 Gamma 函数： \[ \Gamma(x)=\int_{0}^{\infty} t^{x-1} e^{-t} d t \] Gamma 函数在数学上应用广泛，它可以将阶乘延拓到实数集上： \[ \Gamma(n)=(n-1) ! \] 在概率统计中，Gamma 函数也频繁出现。首先，由 Gamma 函数可以推导出 Gamma 分布： \[ \operatorna">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-08-16-122049.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-08-26-032341.jpg">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-08-30-075754.jpg">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-09-02-022004.jpg">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-09-02-024609.jpg">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-09-04-075810.jpg">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-09-05-013456.jpg">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-09-05-013847.jpg">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-09-05-021751.jpg">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-09-05-084257.jpg">
+<meta property="og:updated_time" content="2019-09-05T11:59:50.271Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="xxwywzy&#39;s Blog">
-<meta name="twitter:description" content="相信过程">
+<meta name="twitter:title" content="LDA 原理第一部分：LDA 数学八卦">
+<meta name="twitter:description" content="Gamma 函数 作者首先介绍了 Gamma 函数： \[ \Gamma(x)=\int_{0}^{\infty} t^{x-1} e^{-t} d t \] Gamma 函数在数学上应用广泛，它可以将阶乘延拓到实数集上： \[ \Gamma(n)=(n-1) ! \] 在概率统计中，Gamma 函数也频繁出现。首先，由 Gamma 函数可以推导出 Gamma 分布： \[ \operatorna">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2019-08-16-122049.png">
 
 
 
 
 
 
-  <link rel="canonical" href="https://xxwywzy.github.io/"/>
+  <link rel="canonical" href="https://xxwywzy.github.io/2019/08/26/lda-1/"/>
 
 
 
@@ -122,7 +135,7 @@
   };
 </script>
 
-  <title>xxwywzy's Blog</title>
+  <title>LDA 原理第一部分：LDA 数学八卦 | xxwywzy's Blog</title>
   
 
 
@@ -180,8 +193,7 @@
     
   
 
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left 
-  page-home">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -223,7 +235,7 @@
         
         
           
-          <li class="menu-item menu-item-home menu-item-active">
+          <li class="menu-item menu-item-home">
 
     
     
@@ -336,9 +348,9 @@
           
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -370,10 +382,8 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/08/26/lda-1/" class="post-title-link" itemprop="url">LDA 原理第一部分：LDA 数学八卦</a>
+          <h1 class="post-title" itemprop="name headline">LDA 原理第一部分：LDA 数学八卦
+
               
             
           </h1>
@@ -481,9 +491,7 @@
       
 
       
-        
-          
-            <h1 id="gamma-函数">Gamma 函数</h1>
+        <h1 id="gamma-函数">Gamma 函数</h1>
 <p>作者首先介绍了 Gamma 函数： <span class="math display">\[
 \Gamma(x)=\int_{0}^{\infty} t^{x-1} e^{-t} d t
 \]</span> Gamma 函数在数学上应用广泛，它可以将阶乘延拓到实数集上： <span class="math display">\[
@@ -868,8 +876,6 @@ p\left(z_{i}=k | \vec{\mathbf{z}}_{\neg i}, \vec{\mathbf{w}}\right)  \propto \fr
 </ol>
 </blockquote>
 
-          
-        
       
     </div>
 
@@ -887,407 +893,62 @@ p\left(z_{i}=k | \vec{\mathbf{z}}_{\neg i}, \vec{\mathbf{w}}\right)  \propto \fr
     
 
     
+      <div>
+        
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Zheyu Wang</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://xxwywzy.github.io/2019/08/26/lda-1/" title="LDA 原理第一部分：LDA 数学八卦">https://xxwywzy.github.io/2019/08/26/lda-1/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2019/07/18/protege/"/>
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Zheyu Wang"/>
-      <meta itemprop="description" content="相信过程"/>
-      <meta itemprop="image" content="/images/avatar.png"/>
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xxwywzy's Blog"/>
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/07/18/protege/" class="post-title-link" itemprop="url">OWL 本体构建指南</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-07-18 19:24:23" itemprop="dateCreated datePublished" datetime="2019-07-18T19:24:23+08:00">2019-07-18</time>
-            
-
-            
-          </span>
-
+        <div class="post-tags">
           
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/科研/" itemprop="url" rel="index"><span itemprop="name">科研</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/科研/本体/" itemprop="url" rel="index"><span itemprop="name">本体</span></a></span>
-
-                
-                
-              
-            </span>
+            <a href="/tags/LDA/" rel="tag"># LDA</a>
           
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <a href="/2019/07/18/protege/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/07/18/protege/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-            <span id="/2019/07/18/protege/" class="leancloud_visitors" data-flag-title="OWL 本体构建指南">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              
-                <span class="post-meta-item-text">阅读次数：</span>
-              
-                <span class="leancloud-visitors-count"></span>
-            </span>
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
+      
 
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
+      
       
       
 
       
-        
-          <div class="note warning">
-            本篇博客介绍如何通过 Protege 构建 OWL 本体。 
-          </div>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/07/18/protege/#more" rel="contents">
-                阅读全文 &raquo;
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/18/protege/" rel="next" title="OWL 本体构建指南">
+                <i class="fa fa-chevron-left"></i> OWL 本体构建指南
               </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2019/07/18/nobita/"/>
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Zheyu Wang"/>
-      <meta itemprop="description" content="相信过程"/>
-      <meta itemprop="image" content="/images/avatar.png"/>
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xxwywzy's Blog"/>
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/07/18/nobita/" class="post-title-link" itemprop="url">のび太の日本文学大冒険</a>
-              
             
-          </h1>
-        
+          </div>
 
-        <div class="post-meta">
-          <span class="post-time">
+          <span class="post-nav-divider"></span>
 
+          <div class="post-nav-prev post-nav-item">
             
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-07-18 15:25:24" itemprop="dateCreated datePublished" datetime="2019-07-18T15:25:24+08:00">2019-07-18</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/科研/" itemprop="url" rel="index"><span itemprop="name">科研</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/科研/写作/" itemprop="url" rel="index"><span itemprop="name">写作</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <a href="/2019/07/18/nobita/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/07/18/nobita/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-            <span id="/2019/07/18/nobita/" class="leancloud_visitors" data-flag-title="のび太の日本文学大冒険">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              
-                <span class="post-meta-item-text">阅读次数：</span>
-              
-                <span class="leancloud-visitors-count"></span>
-            </span>
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          <div class="note warning">
-            本科作业的最高杰作，存个档 ⁄(⁄ ⁄•⁄ω⁄•⁄ ⁄)⁄  
-          </div>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/07/18/nobita/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -1297,408 +958,19 @@ p\left(z_{i}=k | \vec{\mathbf{z}}_{\neg i}, \vec{\mathbf{w}}\right)  \propto \fr
   </article>
 
 
-    
-      
+  </div>
 
-  
 
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2019/07/09/cs229-16/"/>
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Zheyu Wang"/>
-      <meta itemprop="description" content="相信过程"/>
-      <meta itemprop="image" content="/images/avatar.png"/>
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xxwywzy's Blog"/>
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/07/09/cs229-16/" class="post-title-link" itemprop="url">CS229 学习笔记之十六：LQR, DDP 和 LQG</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-07-09 18:49:23" itemprop="dateCreated datePublished" datetime="2019-07-09T18:49:23+08:00">2019-07-09</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/人工智能/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/人工智能/机器学习/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <a href="/2019/07/09/cs229-16/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/07/09/cs229-16/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-            <span id="/2019/07/09/cs229-16/" class="leancloud_visitors" data-flag-title="CS229 学习笔记之十六：LQR, DDP 和 LQG">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              
-                <span class="post-meta-item-text">阅读次数：</span>
-              
-                <span class="leancloud-visitors-count"></span>
-            </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <div class="note info">
-            本篇博客为 CS229 学习笔记第十六部分，主题是：强化学习中的各种算法。 
           </div>
-          <!--noindex-->
           
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/07/09/cs229-16/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
+
+  
+    <div class="comments" id="comments">
     </div>
 
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
   
 
-  
-  
-  
 
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2019/06/22/pixel-1/"/>
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Zheyu Wang"/>
-      <meta itemprop="description" content="相信过程"/>
-      <meta itemprop="image" content="/images/avatar.png"/>
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xxwywzy's Blog"/>
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/06/22/pixel-1/" class="post-title-link" itemprop="url">像素画创作教程 - Part 1</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-06-22 23:01:37" itemprop="dateCreated datePublished" datetime="2019-06-22T23:01:37+08:00">2019-06-22</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/游戏/" itemprop="url" rel="index"><span itemprop="name">游戏</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/游戏/游戏美术/" itemprop="url" rel="index"><span itemprop="name">游戏美术</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <a href="/2019/06/22/pixel-1/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/06/22/pixel-1/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-            <span id="/2019/06/22/pixel-1/" class="leancloud_visitors" data-flag-title="像素画创作教程 - Part 1">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              
-                <span class="post-meta-item-text">阅读次数：</span>
-              
-                <span class="leancloud-visitors-count"></span>
-            </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <div class="note primary">
-            本篇博客为像素画系列教程的第一篇。 
-          </div>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/06/22/pixel-1/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-  </section>
-
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
-  </nav>
-
-
-
-          </div>
-          
 
         </div>
         
@@ -1719,8 +991,17 @@ p\left(z_{i}=k | \vec{\mathbf{z}}_{\neg i}, \vec{\mathbf{w}}\right)  \propto \fr
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -1931,6 +1212,23 @@ p\left(z_{i}=k | \vec{\mathbf{z}}_{\neg i}, \vec{\mathbf{w}}\right)  \propto \fr
       </div>
 
       
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#gamma-函数"><span class="nav-number">1.</span> <span class="nav-text">Gamma 函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#betadirichlet-分布"><span class="nav-number">2.</span> <span class="nav-text">Beta/Dirichlet 分布</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#mcmc-和-gibbs-sampling"><span class="nav-number">3.</span> <span class="nav-text">MCMC 和 Gibbs Sampling</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#markov-chain-monte-carlo"><span class="nav-number">3.1.</span> <span class="nav-text">Markov Chain Monte Carlo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gibbs-sampling"><span class="nav-number">3.2.</span> <span class="nav-text">Gibbs Sampling</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文本建模"><span class="nav-number">4.</span> <span class="nav-text">文本建模</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#unigram-model"><span class="nav-number">4.1.</span> <span class="nav-text">Unigram Model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#plsa-model"><span class="nav-number">4.2.</span> <span class="nav-text">PLSA Model</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lda-文本建模"><span class="nav-number">5.</span> <span class="nav-text">LDA 文本建模</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#物理过程分解"><span class="nav-number">5.1.</span> <span class="nav-text">物理过程分解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#m-个-dirichlet-multinomial-共轭结构"><span class="nav-number">5.1.1.</span> <span class="nav-text">M 个 Dirichlet-Multinomial 共轭结构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gibbs-sampling-1"><span class="nav-number">5.2.</span> <span class="nav-text">Gibbs Sampling</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#training-and-inference"><span class="nav-number">5.3.</span> <span class="nav-text">Training and Inference</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
 
       
 
@@ -2062,6 +1360,10 @@ p\left(z_{i}=k | \vec{\mathbf{z}}_{\neg i}, \vec{\mathbf{w}}\right)  \propto \fr
 
 
   
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
 
   
 
@@ -2102,6 +1404,8 @@ p\left(z_{i}=k | \vec{\mathbf{z}}_{\neg i}, \vec{\mathbf{w}}\right)  \propto \fr
 
 
 
+  
+
 
   
 
@@ -2113,38 +1417,35 @@ p\left(z_{i}=k | \vec{\mathbf{z}}_{\neg i}, \vec{\mathbf{w}}\right)  \propto \fr
   
   <script>
     
-    function showTime(Counter) {
-      var entries = [];
+    function addCount(Counter) {
       var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
 
-      $visitors.each(function() {
-        entries.push( $(this).attr('id').trim() );
-      });
-
-      Counter('get', '/classes/Counter', { where: JSON.stringify({ url: { '$in': entries } }) })
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
         .done(function({ results }) {
-          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
-
-          if (results.length === 0) {
-            $visitors.find(COUNT_CONTAINER_REF).text(0);
-            return;
-          }
-
-          for (var i = 0; i < results.length; i++) {
-            var item = results[i];
-            var url = item.url;
-            var time = item.time;
-            var element = document.getElementById(url);
-
-            $(element).find(COUNT_CONTAINER_REF).text(time);
-          }
-          for (var i = 0; i < entries.length; i++) {
-            var url = entries[i];
-            var element = document.getElementById(url);
-            var countSpan = $(element).find(COUNT_CONTAINER_REF);
-            if (countSpan.text() == '') {
-              countSpan.text(0);
-            }
+          if (results.length > 0) {
+            var counter = results[0];
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .fail(function ({ responseJSON }) {
+                console.log(`Failed to save Visitor num, with error message: ${responseJSON.error}`);
+              })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1 }))
+                .done(function() {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function() {
+                  console.log('Failed to create');
+                });
+            
           }
         })
         .fail(function ({ responseJSON }) {
@@ -2169,9 +1470,7 @@ p\left(z_{i}=k | \vec{\mathbf{z}}_{\neg i}, \vec{\mathbf{w}}\right)  \propto \fr
             });
           };
           
-            if ($('.post-title-link').length >= 1) {
-              showTime(Counter);
-            }
+            addCount(Counter);
           
         });
     });
@@ -2189,18 +1488,6 @@ p\left(z_{i}=k | \vec{\mathbf{z}}_{\neg i}, \vec{\mathbf{w}}\right)  \propto \fr
   
 
   
-  
-    
-      
-    
-      
-    
-      
-    
-      
-    
-      
-    
   
 
   

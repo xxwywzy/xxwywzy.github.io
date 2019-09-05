@@ -110,7 +110,7 @@
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-04-12-061319.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-04-12-062659.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-04-12-063359.png">
-<meta property="og:updated_time" content="2019-05-09T02:49:22.000Z">
+<meta property="og:updated_time" content="2019-05-09T02:49:22.357Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Coursera-Kaggle Week1 学习笔记">
 <meta name="twitter:description" content="本篇博客为 Coursera 上一门关于 kaggle 的公开课的第一周学习笔记。">
@@ -487,7 +487,7 @@
 <p><a href="https://www.coursera.org/learn/competitive-data-science/home/welcome" target="_blank" rel="noopener">课程地址</a></p>
 <h1 id="竞赛基础">竞赛基础</h1>
 <ul>
-<li>一个竞赛涉及的主要概念包括：
+<li><p>一个竞赛涉及的主要概念包括：</p>
 <ul>
 <li>数据</li>
 <li>模型</li>
@@ -496,14 +496,14 @@
 <li>排行榜</li>
 </ul>
 <p><img src="http://media.zjubiomedit.com/2019-03-29-024844.png" width="60%"></p></li>
-<li>竞赛平台：
+<li><p>竞赛平台：</p>
 <ul>
 <li>Kaggle</li>
 <li>DrivenData</li>
 <li>CrowdAnalityx</li>
 <li>天池 &amp; 科赛</li>
 </ul></li>
-<li>竞赛和实际应用的区别：
+<li><p>竞赛和实际应用的区别：</p>
 <ul>
 <li>实际问题往往更加复杂</li>
 <li>竞赛是一种很好的学习方式
@@ -515,7 +515,7 @@
 </ul>
 <h1 id="算法回顾">算法回顾</h1>
 <ul>
-<li>在竞赛中，常用的 ML 算法可以分为四类（以下解释基于分类问题）：
+<li><p>在竞赛中，常用的 ML 算法可以分为四类（以下解释基于分类问题）：</p>
 <ul>
 <li>线性模型
 <ul>
@@ -535,11 +535,11 @@
 </ul></li>
 </ul>
 <p><img src="http://media.zjubiomedit.com/2019-03-29-075548.png" width="100%"></p></li>
-<li>没有完美适用于所有问题的算法
+<li><p>没有完美适用于所有问题的算法</p>
 <ul>
 <li>一般情况下，最有效的方法是<strong>梯度提升决策树</strong>和<strong>神经网络</strong></li>
 </ul></li>
-<li>关于 GBDT 和 RF 的问题
+<li><p>关于 GBDT 和 RF 的问题</p>
 <ul>
 <li>如果训练一个 GBDT 或 RF 模型，并丢弃模型中的第一棵树或最后一棵树
 <ul>
@@ -619,12 +619,12 @@ X=(X-X.min ( )) /(X.max ( )-X.min ( ))
 <li><p>基于标准差的缩放：缩放至平均值为 0，标准差为 1：<code>sklearn.preprocessing.StandardScaler</code> <span class="math display">\[
 X=(X-X .mean( )) / X . std( )
 \]</span></p></li>
-<li>异常值处理：采用剪切的方法（设置上下阈值）</li>
-<li>分级：使有序变量之间的距离相等：<code>scipy.stats.rankdata</code>
+<li><p>异常值处理：采用剪切的方法（设置上下阈值）</p></li>
+<li><p>分级：使有序变量之间的距离相等：<code>scipy.stats.rankdata</code></p>
 <ul>
 <li>可以在缩放的同时处理异常值</li>
 </ul></li>
-<li>对数与幂处理：<code>np.log(1+x)</code> 以及 <code>np.sqrt(1+x)</code>
+<li><p>对数与幂处理：<code>np.log(1+x)</code> 以及 <code>np.sqrt(1+x)</code></p>
 <ul>
 <li>使得过大的数值更加趋向于平均值，同时也使得在原点附近的数据更容易区分</li>
 <li>适用于神经网络等非线性模型</li>
@@ -638,11 +638,11 @@ X=(X-X .mean( )) / X . std( )
 </ul>
 <h2 id="分类和序数特征">分类和序数特征</h2>
 <ul>
-<li>序数特征是一种特殊的分类特征，其中的值按某种有意义的顺序排列
+<li><p>序数特征是一种特殊的分类特征，其中的值按某种有意义的顺序排列</p>
 <ul>
 <li>比如船票等级、驾照等级等</li>
 </ul></li>
-<li>标签编码可以将分类变量映射为数字
+<li><p>标签编码可以将分类变量映射为数字</p>
 <ul>
 <li>可以按照字母表顺序映射：<code>sklearn.preprocessing.LabelEncoder</code></li>
 <li>也可以按照在数据集中出现的顺序映射：<code>Pandas.factorize</code></li>
@@ -652,7 +652,7 @@ X=(X-X .mean( )) / X . std( )
 <ul>
 <li>对于多个频率重复的情况，可以使用 <code>scipy.stats.rankdata</code></li>
 </ul></li>
-<li>标签和频率编码通常对基于树的模型很有用
+<li><p>标签和频率编码通常对基于树的模型很有用</p>
 <ul>
 <li>有时也对线性模型有用</li>
 </ul></li>
@@ -937,7 +937,7 @@ X=(X-X .mean( )) / X . std( )
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">46</span>
+                    <span class="site-state-item-count">47</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1053,7 +1053,9 @@ X=(X-X .mean( )) / X . std( )
                     
                       
                     
-                    <span class="site-state-item-count">19</span>
+                      
+                    
+                    <span class="site-state-item-count">20</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

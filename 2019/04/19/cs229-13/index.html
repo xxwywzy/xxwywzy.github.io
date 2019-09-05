@@ -507,7 +507,7 @@
 </ul>
 <h2 id="非线性">非线性</h2>
 <ul>
-<li>决策树是一种天生支持<strong>非线性</strong>的机器学习算法</li>
+<li><p>决策树是一种天生支持<strong>非线性</strong>的机器学习算法</p></li>
 <li><p>正式来说，如果一个方法是线性的，则其输入 <span class="math inline">\(x \in \mathbb{R}^n\)</span> 会输出下面形式的假设函数： <span class="math display">\[
 h(x)=\theta^{T}x
 \]</span></p>
@@ -515,12 +515,12 @@ h(x)=\theta^{T}x
 <li>其中 <span class="math inline">\(\theta \in \mathbb{R}^{n}\)</span></li>
 <li>截距项内置（<span class="math inline">\(x_0 = 1\)</span>）</li>
 </ul></li>
-<li>不能被化简为上述形式的假设函数即称为非线性
+<li><p>不能被化简为上述形式的假设函数即称为非线性</p>
 <ul>
 <li>如果一个方法输出非线性的假设函数，则该方法也为非线性</li>
 <li>之前我们介绍了对线性方法引入核函数，通过特征映射可以得到非线性的假设函数</li>
 </ul></li>
-<li>与核方法相比，决策树则可以直接输出非线性的假设函数
+<li><p>与核方法相比，决策树则可以直接输出非线性的假设函数</p>
 <ul>
 <li><p>下图给出了基于时间与地点判断该地区能否滑雪的数据</p>
 <p><img src="http://media.zjubiomedit.com/2019-04-14-070139.png" width="70%"></p>
@@ -534,8 +534,8 @@ h(x)=\theta^{T}x
 </ul>
 <h2 id="选择区域">选择区域</h2>
 <ul>
-<li>一般来说，选择最优的区域是较困难的</li>
-<li>决策树通过<strong>贪婪、自顶向下，递归的分割</strong>来进行区域的选择
+<li><p>一般来说，选择最优的区域是较困难的</p></li>
+<li><p>决策树通过<strong>贪婪、自顶向下，递归的分割</strong>来进行区域的选择</p>
 <ul>
 <li>具体来说，我们首先从原始的输入空间 <span class="math inline">\(\mathcal{X}\)</span> 开始，基于单个特征的某个阈值将其划分为两个子区域</li>
 <li>然后再选择其中一个子区域，基于新的阈值进行划分</li>
@@ -553,7 +553,7 @@ h(x)=\theta^{T}x
 </ul>
 <h2 id="定义一个损失函数">定义一个损失函数</h2>
 <ul>
-<li>对于上面的过程，一个自然的问题是如何选择分割
+<li><p>对于上面的过程，一个自然的问题是如何选择分割</p>
 <ul>
 <li>我们可以基于区域集来定义损失函数 <span class="math inline">\(L\)</span></li>
 </ul></li>
@@ -566,9 +566,9 @@ L\left(R_{p}\right)-\frac{\left|R_{1}\right| L\left(R_{1}\right)+\left|R_{2}\rig
 </ul>
 <h3 id="错误分类损失">错误分类损失</h3>
 <ul>
-<li>对于一个分类问题，我们感兴趣的是<strong>错误分类的损失</strong> <span class="math inline">\(L_{misclass}\)</span>
+<li><p>对于一个分类问题，我们感兴趣的是<strong>错误分类的损失</strong> <span class="math inline">\(L_{misclass}\)</span></p>
 <ul>
-<li>对于一个区域 <span class="math inline">\(R\)</span>，令 <span class="math inline">\(\hat{p}_{c}\)</span> 为区域中类别为 c 的样本比例</li>
+<li><p>对于一个区域 <span class="math inline">\(R\)</span>，令 <span class="math inline">\(\hat{p}_{c}\)</span> 为区域中类别为 c 的样本比例</p></li>
 <li><p>则 <span class="math inline">\(R\)</span> 的错误分类损失可以写作： <span class="math display">\[
 L_{misclass}(R)=1-\max _{c}\left(\hat{p}_{c}\right)
 \]</span></p>
@@ -602,7 +602,7 @@ L_{cross}(R)=-\sum_{c} \hat{p}_{c} \log _{2} \hat{p}_{c}
 <li>进一步来说，从父区域到子区域的损失的减少可以看做是信息的增加</li>
 </ul></li>
 </ul></li>
-<li>为了理解上述两种损失函数之间的敏感性的差别，我们将上面的二分类的例子的损失函数进行作图表述
+<li><p>为了理解上述两种损失函数之间的敏感性的差别，我们将上面的二分类的例子的损失函数进行作图表述</p>
 <ul>
 <li><p>对于该例，我们可以将损失函数简化为仅依赖于正样本 <span class="math inline">\(\hat{p}_i\)</span> （在区域 <span class="math inline">\(R_i\)</span> 中） <span class="math display">\[
 \begin{array}{l}{L_{misclass}(R)=L_{misclass}(\hat{p})=1-\max (\hat{p}, 1-\hat{p})} \\ {L_{cross}(R)=L_{cross}(\hat{p})=-\hat{p} \log \hat{p}-(1-\hat{p}) \log (1-\hat{p})}\end{array}
@@ -621,7 +621,7 @@ L_{cross}(R)=-\sum_{c} \hat{p}_{c} \log _{2} \hat{p}_{c}
 </ul>
 <h3 id="平方损失">平方损失</h3>
 <ul>
-<li>对于回归问题，则不能使用上述的损失函数
+<li><p>对于回归问题，则不能使用上述的损失函数</p>
 <ul>
 <li>对每个数据点 <span class="math inline">\(x_i\)</span>，我们现在都会有一个对应的值 <span class="math inline">\(y_{i} \in \mathbb{R}\)</span> 希望去预测</li>
 </ul></li>
@@ -647,16 +647,16 @@ L_{squared}(R)=\frac{\sum_{i \in R}\left(y_{i}-\hat{y}\right)^{2}}{|R|}
 </ul>
 <h3 id="分类变量">分类变量</h3>
 <ul>
-<li>决策树的另一个优点是其可以轻松地处理类别变量（指输入）</li>
+<li><p>决策树的另一个优点是其可以轻松地处理类别变量（指输入）</p></li>
 <li><p>以之前的滑雪数据为例，将位置变量表示为类别变量（南半球、北半球或赤道） <span class="math display">\[
 \operatorname{loc} \in\{N, S, E\}
 \]</span></p>
 <ul>
-<li>其他算法可能需要先进行预处理（如独热编码），将类别变量转化为定量特征</li>
+<li><p>其他算法可能需要先进行预处理（如独热编码），将类别变量转化为定量特征</p></li>
 <li><p>而对于决策树，我们可以直接处理分类变量，如下图所示：</p>
 <p><img src="http://media.zjubiomedit.com/2019-04-15-125938.png" width="50%"></p></li>
 </ul></li>
-<li>需要注意的是，我们要防止类别过多的情况出现
+<li><p>需要注意的是，我们要防止类别过多的情况出现</p>
 <ul>
 <li>这会导致计算过于复杂，以及过拟合的出现</li>
 <li>这时应该考虑将类别变量进行低维度的定量表达</li>
@@ -709,7 +709,7 @@ L_{squared}(R)=\frac{\sum_{i \in R}\left(y_{i}-\hat{y}\right)^{2}}{|R|}
 </ul>
 <h3 id="加性结构的缺失">加性结构的缺失</h3>
 <ul>
-<li>决策树的一个缺点是其不能轻易地捕捉加性结构</li>
+<li><p>决策树的一个缺点是其不能轻易地捕捉加性结构</p></li>
 <li><p>在下面的例子中，决策树每一次分割只能考虑一个特征，而线性模型则可以直接导出右图所示的边界：</p>
 <p><img src="http://media.zjubiomedit.com/2019-04-15-125221.png" width="70%"></p>
 <ul>
@@ -755,7 +755,7 @@ L_{squared}(R)=\frac{\sum_{i \in R}\left(y_{i}-\hat{y}\right)^{2}}{|R|}
 </ul></li>
 <li>如果我们抛弃了独立假设，即变量仅为同分布
 <ul>
-<li>相对地，<span class="math inline">\(X_i\)</span> 之间的关联系数为 <span class="math inline">\(\rho\)</span></li>
+<li><p>相对地，<span class="math inline">\(X_i\)</span> 之间的关联系数为 <span class="math inline">\(\rho\)</span></p></li>
 <li><p>则平均值的方差为： <span class="math display">\[
 \begin{aligned} \operatorname{Var}(\bar{X}) &amp;=\operatorname{Var}\left(\frac{1}{n} \sum_{i} X_{i}\right) \\ &amp;=\frac{1}{n^{2}} \sum_{i, j} \operatorname{Cov}\left(X_{i}, X_{j}\right) \\ &amp;=\frac{n \sigma^{2}}{n^{2}}+\frac{n(n-1) \rho \sigma^{2}}{n^{2}} \\ &amp;=\rho \sigma^{2}+\frac{1-\rho}{n} \sigma^{2} \end{aligned}
 \]</span></p>
@@ -824,7 +824,7 @@ L_{squared}(R)=\frac{\sum_{i \in R}\left(y_{i}-\hat{y}\right)^{2}}{|R|}
 G(X)=\sum_{m} \frac{G_{m}(x)}{M}
 \]</span></p>
 <ul>
-<li>这一过程即称为 <strong>bagging</strong></li>
+<li><p>这一过程即称为 <strong>bagging</strong></p></li>
 <li><p>在之前的推到中，我们得出 <span class="math inline">\(M\)</span> 个相关模型的方差为： <span class="math display">\[
 \operatorname{Var}(\bar{X})=\rho \sigma^{2}+\frac{1-\rho}{M} \sigma^{2}
 \]</span></p>
@@ -840,7 +840,7 @@ G(X)=\sum_{m} \frac{G_{m}(x)}{M}
 </ul></li>
 </ul></li>
 </ul></li>
-<li>bagging 的另外一个好处是<strong>袋外估计</strong>（out-of-bag estimation）
+<li><p>bagging 的另外一个好处是<strong>袋外估计</strong>（out-of-bag estimation）</p>
 <ul>
 <li>可以证明每个 bootstrap 样本都只包含大概 <span class="math inline">\(\frac 2 3\)</span> 的样本
 <ul>
@@ -915,14 +915,14 @@ G(X)=\sum_{m} \frac{G_{m}(x)}{M}
 <h2 id="提升法">提升法</h2>
 <h3 id="直观理解">直观理解</h3>
 <ul>
-<li>装袋法是一种降低方差的技术，而提升法则是一种<strong>降低偏差</strong>的技术
+<li><p>装袋法是一种降低方差的技术，而提升法则是一种<strong>降低偏差</strong>的技术</p>
 <ul>
 <li>因此，我们需要高偏差低方差的模型来使用提升法
 <ul>
 <li>这种模型即<strong>弱学习模型</strong>（weak learners）</li>
 </ul></li>
 </ul></li>
-<li>对决策树来说，通过只允许每个树在预测前进行一次决策，可以将其变为弱学习模型
+<li><p>对决策树来说，通过只允许每个树在预测前进行一次决策，可以将其变为弱学习模型</p>
 <ul>
 <li>这种决策树也称为<strong>决策树桩</strong>（decision stumps）</li>
 </ul></li>
@@ -961,7 +961,7 @@ G(X)=\sum_{m} \frac{G_{m}(x)}{M}
 </ul></li>
 <li>对于弱分类器 <span class="math inline">\(G(x)\)</span>，每一步我们尝试去找到下一个弱分类器的参数和权重，来最大程度减小当前集成模型的剩余误差</li>
 </ul></li>
-<li>关于损失函数，可以选择平方损失函数
+<li><p>关于损失函数，可以选择平方损失函数</p>
 <ul>
 <li>相当于将单个分类器拟合至残差 <span class="math inline">\(y_{i}-f_{m-1}\left(x_{i}\right)\)</span></li>
 </ul></li>
@@ -975,11 +975,11 @@ L(y, \hat{y})=\exp (-y \hat{y})
 <h3 id="gradient-boosting">Gradient Boosting</h3>
 <p><img src="http://media.zjubiomedit.com/2019-04-19-085823.png" width="60%"></p>
 <ul>
-<li>一般来说，前向分布算法中的最小化问题很难求出闭合解
+<li><p>一般来说，前向分布算法中的最小化问题很难求出闭合解</p>
 <ul>
 <li>像 xgboost 这样的高效算法通常会采用数值优化来解决该问题</li>
 </ul></li>
-<li>一种最常见的做法是对损失函数求导并进行梯度下降
+<li><p>一种最常见的做法是对损失函数求导并进行梯度下降</p>
 <ul>
 <li>但是，参数 <span class="math inline">\(\gamma\)</span> 被限制在模型中进行梯度下降
 <ul>
@@ -1161,7 +1161,7 @@ g_{i}=\frac{\partial L\left(y, f\left(x_{i}\right)\right)}{\partial f\left(x_{i}
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">46</span>
+                    <span class="site-state-item-count">47</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1277,7 +1277,9 @@ g_{i}=\frac{\partial L\left(y, f\left(x_{i}\right)\right)}{\partial f\left(x_{i}
                     
                       
                     
-                    <span class="site-state-item-count">19</span>
+                      
+                    
+                    <span class="site-state-item-count">20</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

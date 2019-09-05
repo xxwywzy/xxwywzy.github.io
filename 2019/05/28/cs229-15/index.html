@@ -108,7 +108,7 @@
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-05-27-112359.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-05-27-114156.jpg">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-05-28-121303.png">
-<meta property="og:updated_time" content="2019-05-28T12:14:08.000Z">
+<meta property="og:updated_time" content="2019-05-28T12:14:08.379Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS229 学习笔记之十五：强化学习与控制">
 <meta name="twitter:description" content="本篇博客为 CS229 学习笔记第十五部分，主题是：强化学习。">
@@ -517,7 +517,7 @@
 </ul>
 <h1 id="马尔可夫决策过程">马尔可夫决策过程</h1>
 <ul>
-<li>一个马尔可夫决策过程是一个五元组 <span class="math inline">\(\left(S, A,\left\{P_{s a}\right\}, \gamma, R\right)\)</span>，其中：
+<li><p>一个马尔可夫决策过程是一个五元组 <span class="math inline">\(\left(S, A,\left\{P_{s a}\right\}, \gamma, R\right)\)</span>，其中：</p>
 <ul>
 <li><span class="math inline">\(S\)</span> 是一个<strong>状态</strong>集
 <ul>
@@ -538,7 +538,7 @@
 <li>有时候奖励函数被写作仅与状态 <span class="math inline">\(S\)</span> 相关，即 <span class="math inline">\(R : S \mapsto \mathbb{R}\)</span></li>
 </ul></li>
 </ul></li>
-<li>马尔可夫决策过程（MDP）的执行如下：
+<li><p>马尔可夫决策过程（MDP）的执行如下：</p>
 <ul>
 <li>我们从某个状态 <span class="math inline">\(s_0\)</span> 开始，选择某个动作 <span class="math inline">\(a_{0} \in A\)</span> 来执行 MDP</li>
 <li>作为选择的结果，MDP 的状态将随机转移到某个后继状态 <span class="math inline">\(s_{1} \sim P_{s_{0} a_{0}}\)</span></li>
@@ -557,7 +557,7 @@ R\left(s_{0}, a_{0}\right)+\gamma R\left(s_{1}, a_{1}\right)+\gamma^{2} R\left(s
 R\left(s_{0}\right)+\gamma R\left(s_{1}\right)+\gamma^{2} R\left(s_{2}\right)+\cdots
 \]</span></li>
 </ul></li>
-<li>本章将主要使用简单的状态奖励函数 <span class="math inline">\(R(s)\)</span>
+<li><p>本章将主要使用简单的状态奖励函数 <span class="math inline">\(R(s)\)</span></p>
 <ul>
 <li>推广至 <span class="math inline">\(R(s, a)\)</span> 并不难</li>
 </ul></li>
@@ -568,7 +568,7 @@ R\left(s_{0}\right)+\gamma R\left(s_{1}\right)+\gamma^{2} R\left(s_{2}\right)+\c
 <li>注意在时间步 <span class="math inline">\(t\)</span> 的奖励通过参数 <span class="math inline">\(\gamma^t\)</span> 进行了缩减</li>
 <li>因此，为了使得期望较大，我们希望尽可能早地积累正奖励，尽可能推迟负奖励</li>
 </ul></li>
-<li><strong>策略</strong>（policy）指的是将状态映射为动作的任意函数 <span class="math inline">\(\pi : S \mapsto A\)</span>
+<li><p><strong>策略</strong>（policy）指的是将状态映射为动作的任意函数 <span class="math inline">\(\pi : S \mapsto A\)</span></p>
 <ul>
 <li>任意时刻，当我们处在状态 <span class="math inline">\(s\)</span>，我们采取了行动 <span class="math inline">\(a=\pi(s)\)</span>，则我们执行了策略 <span class="math inline">\(\pi\)</span></li>
 </ul></li>
@@ -594,7 +594,7 @@ V^{\pi}(s)=R(s)+\gamma \sum_{s^{\prime} \in S} P_{s \pi(s)}\left(s^{\prime}\righ
 </ul></li>
 </ul></li>
 </ul></li>
-<li>贝尔曼等式可以用于求解 <span class="math inline">\(V^{\pi}\)</span>
+<li><p>贝尔曼等式可以用于求解 <span class="math inline">\(V^{\pi}\)</span></p>
 <ul>
 <li>在一个有限状态的 MDP 中，我们可以对于每个状态 <span class="math inline">\(s\)</span> 写出其 <span class="math inline">\(V^{\pi}(s)\)</span> 的等式</li>
 <li>这可以给出一个含有 <span class="math inline">\(|S|\)</span> 个变量的 <span class="math inline">\(|S|\)</span> 个线性方程，可以进行求解
@@ -606,7 +606,7 @@ V^{\pi}(s)=R(s)+\gamma \sum_{s^{\prime} \in S} P_{s \pi(s)}\left(s^{\prime}\righ
 V^{*}(s)=\max _{\pi} V^{\pi}(s) \tag{1}
 \]</span></p>
 <ul>
-<li>其表示在所有策略中，可以得到的最大期望和</li>
+<li><p>其表示在所有策略中，可以得到的最大期望和</p></li>
 <li><p>其也满足贝尔曼等式： <span class="math display">\[
 V^{*}(s)=R(s)+\max _{a \in A} \gamma \sum_{s^{\prime} \in S} P_{s a}\left(s^{\prime}\right) V^{*}\left(s^{\prime}\right) \tag{2}
 \]</span></p>
@@ -695,7 +695,7 @@ V^{*}(s)=V^{\pi^{*}}(s) \geq V^{\pi}(s)
 </ul>
 <h1 id="马尔可夫过程的模型学习">马尔可夫过程的模型学习</h1>
 <ul>
-<li>在实际问题中，我们无法得知状态转移概率和奖励函数
+<li><p>在实际问题中，我们无法得知状态转移概率和奖励函数</p>
 <ul>
 <li>因此需要基于数据来进行估计</li>
 </ul></li>
@@ -712,12 +712,12 @@ P_{s a}\left(s^{\prime}\right)=\frac{\# \text { times took we action } a \text {
 <ul>
 <li>如果比例为 <span class="math inline">\(0/0\)</span>，则使用 <span class="math inline">\(1/|S|\)</span> 替代</li>
 </ul></li>
-<li>当我们进行更多的实验，得到更多的“经验”时，我们可以用一种较高效的方法来更新状态转移概率：
+<li><p>当我们进行更多的实验，得到更多的“经验”时，我们可以用一种较高效的方法来更新状态转移概率：</p>
 <ul>
 <li>具体来说，我们可以记录上式的分子与分母值，新的数据直接在旧数据的基础上累加即可</li>
 </ul></li>
-<li>类似地，如果奖励函数 <span class="math inline">\(R\)</span> 未知，我们可以用状态 <span class="math inline">\(s\)</span> 的期望即时奖励估计 <span class="math inline">\(R(s)\)</span> 来作为其平均奖励</li>
-<li>在学习出 MDP 的模型后，我们可以使用值迭代或策略迭代来求解 MDP，找出最佳策略
+<li><p>类似地，如果奖励函数 <span class="math inline">\(R\)</span> 未知，我们可以用状态 <span class="math inline">\(s\)</span> 的期望即时奖励估计 <span class="math inline">\(R(s)\)</span> 来作为其平均奖励</p></li>
+<li><p>在学习出 MDP 的模型后，我们可以使用值迭代或策略迭代来求解 MDP，找出最佳策略</p>
 <ul>
 <li>例如，将模型学习和值迭代结合在一起，我们可以得出下面的算法：
 <ul>
@@ -748,7 +748,7 @@ P_{s a}\left(s^{\prime}\right)=\frac{\# \text { times took we action } a \text {
 </ul>
 <h2 id="离散化">离散化</h2>
 <ul>
-<li>求解连续状态 MDP 的最简单的方法就是<strong>离散化状态空间</strong>
+<li><p>求解连续状态 MDP 的最简单的方法就是<strong>离散化状态空间</strong></p>
 <ul>
 <li>然后使用之前提到的值迭代或状态迭代算法</li>
 </ul></li>
@@ -762,11 +762,11 @@ P_{s a}\left(s^{\prime}\right)=\frac{\# \text { times took we action } a \text {
 </ul></li>
 <li>当实际的系统处于某个连续值的状态 <span class="math inline">\(s \in S\)</span> 时，我们先计算其对应的离散状态 <span class="math inline">\(\bar{s}\)</span>，然后执行最优策略 <span class="math inline">\(\pi^{\star}(\bar{s})\)</span></li>
 </ul></li>
-<li>离散化的方法对很多问题都有较好的效果，但其存在两点不足：
+<li><p>离散化的方法对很多问题都有较好的效果，但其存在两点不足：</p>
 <ul>
 <li>对 <span class="math inline">\(V^{\star}\)</span> 和 <span class="math inline">\(\pi^{\star}\)</span> 的表达过于天真
 <ul>
-<li>即假设其在离散的区段上取值不变</li>
+<li><p>即假设其在离散的区段上取值不变</p></li>
 <li><p>例如下面的线性回归问题，如果使用离散化来表达，则得到如下结果：</p>
 <p><img src="http://media.zjubiomedit.com/2019-05-27-112359.png" width="40%"></p>
 <ul>
@@ -805,7 +805,7 @@ P_{s a}\left(s^{\prime}\right)=\frac{\# \text { times took we action } a \text {
 <li>为了设计一个值函数估计算法，需要先假设我们有一个<strong>模型</strong>（或<strong>模拟器</strong>）</li>
 <li>对于 MDP，通俗来说，模拟器就是一个黑盒子
 <ul>
-<li>接收输入状态 <span class="math inline">\(s_t\)</span> （连续值）和动作 <span class="math inline">\(a_t\)</span></li>
+<li><p>接收输入状态 <span class="math inline">\(s_t\)</span> （连续值）和动作 <span class="math inline">\(a_t\)</span></p></li>
 <li><p>输出下一个状态 <span class="math inline">\(s_{t+1}\)</span> ，根据状态转移概率 <span class="math inline">\(P_{s_ta_t}\)</span></p>
 <p><img src="http://media.zjubiomedit.com/2019-05-27-114156.jpg" width="45%"></p></li>
 </ul></li>
@@ -817,7 +817,7 @@ P_{s a}\left(s^{\prime}\right)=\frac{\# \text { times took we action } a \text {
 </ul></li>
 <li>第二种方法是从已有的数据中进行学习
 <ul>
-<li>例如，假设我们在一个 MDP 中执行 <span class="math inline">\(m\)</span> 次<strong>试验</strong>
+<li><p>例如，假设我们在一个 MDP 中执行 <span class="math inline">\(m\)</span> 次<strong>试验</strong></p>
 <ul>
 <li>每次试验包含 T 个时间步</li>
 <li>动作的选择可以随机或是执行某种特定的策略，或是其他方式</li>
@@ -835,7 +835,7 @@ s_{t+1}=A s_{t}+B a_{t} \tag{5}
 <li><p>我们可以使用试验中收集到的数据来估计参数： <span class="math display">\[
 \arg \min _{A, B} \sum_{i=1}^{m} \sum_{t=0}^{T-1}\left\|s_{t+1}^{(i)}-\left(A s_{t}^{(i)}+B a_{t}^{(i)}\right)\right\|^{2}
 \]</span></p></li>
-<li>学习到了 <span class="math inline">\(A\)</span> 和 <span class="math inline">\(B\)</span> 后，一种选择是建立一个<strong>决定性</strong>模型
+<li><p>学习到了 <span class="math inline">\(A\)</span> 和 <span class="math inline">\(B\)</span> 后，一种选择是建立一个<strong>决定性</strong>模型</p>
 <ul>
 <li>即给定输入 <span class="math inline">\(s_t\)</span> 和 <span class="math inline">\(a_t\)</span> 后，输出 <span class="math inline">\(s_{t+1}\)</span>，例如式 <span class="math inline">\((5)\)</span></li>
 </ul></li>
@@ -855,7 +855,7 @@ s_{t+1}=A s_{t}+B a_{t}+\epsilon_{t}
 </ul>
 <h3 id="拟合值迭代">拟合值迭代</h3>
 <ul>
-<li>下面介绍用于估计连续状态 MDP 值函数的拟合值迭代算法
+<li><p>下面介绍用于估计连续状态 MDP 值函数的拟合值迭代算法</p>
 <ul>
 <li>这里假设状态空间连续，但动作空间较小且离散
 <ul>
@@ -868,7 +868,7 @@ s_{t+1}=A s_{t}+B a_{t}+\epsilon_{t}
 <ul>
 <li>注意这里对于连续值需使用积分</li>
 </ul></li>
-<li>拟合值迭代的主要思想就是：基于有限的状态样本 <span class="math inline">\(s^{(1)}, \ldots, s^{(m)}\)</span> 对上述过程进行估计
+<li><p>拟合值迭代的主要思想就是：基于有限的状态样本 <span class="math inline">\(s^{(1)}, \ldots, s^{(m)}\)</span> 对上述过程进行估计</p>
 <ul>
 <li>具体来说，我们会使用一个监督学习算法（线性回归）
 <ul>
@@ -880,7 +880,7 @@ V(s)=\theta^{T} \phi(s)
 </ul></li>
 </ul></li>
 </ul></li>
-<li>对于 <span class="math inline">\(m\)</span> 个有限状态样本中的每一个状态 <span class="math inline">\(s\)</span>
+<li><p>对于 <span class="math inline">\(m\)</span> 个有限状态样本中的每一个状态 <span class="math inline">\(s\)</span></p>
 <ul>
 <li>拟合值迭代会先计算一个量 <span class="math inline">\(y^{(i)}\)</span>
 <ul>
@@ -892,7 +892,7 @@ V(s)=\theta^{T} \phi(s)
 <li>从而学习出参数 <span class="math inline">\(\theta\)</span></li>
 </ul></li>
 </ul></li>
-<li>具体来说，算法的过程如下：
+<li><p>具体来说，算法的过程如下：</p>
 <ol type="1">
 <li>随机采样 <span class="math inline">\(m\)</span> 个状态 <span class="math inline">\(s^{(1)}, s^{(2)}, \ldots s^{(m)} \in S\)</span></li>
 <li>初始化 <span class="math inline">\(\theta := 0\)</span></li>
@@ -921,15 +921,15 @@ V(s)=\theta^{T} \phi(s)
 </ul></li>
 </ul></li>
 </ol></li>
-<li>上述算法使用了线性回归，实际上其他的回归算法也可以使用
+<li><p>上述算法使用了线性回归，实际上其他的回归算法也可以使用</p>
 <ul>
 <li>如加权线性回归</li>
 </ul></li>
-<li>与离散状态集的值迭代不同，拟合值迭代并不一定总是会收敛
+<li><p>与离散状态集的值迭代不同，拟合值迭代并不一定总是会收敛</p>
 <ul>
 <li>不过在实际应用中，其通常会收敛（或近似收敛）</li>
 </ul></li>
-<li>注意：如果我们使用决定性模型（模拟器）
+<li><p>注意：如果我们使用决定性模型（模拟器）</p>
 <ul>
 <li>那么算法中 <span class="math inline">\(k = 1\)</span>
 <ul>
@@ -937,7 +937,7 @@ V(s)=\theta^{T} \phi(s)
 </ul></li>
 <li>否则我们需要取 <span class="math inline">\(k\)</span> 个样本并求均值（即随机模型）</li>
 </ul></li>
-<li>最终，拟合值迭代输出 <span class="math inline">\(V\)</span>，其为对 <span class="math inline">\(V^{\star}\)</span> 的估计
+<li><p>最终，拟合值迭代输出 <span class="math inline">\(V\)</span>，其为对 <span class="math inline">\(V^{\star}\)</span> 的估计</p>
 <ul>
 <li><p>当系统处于状态 <span class="math inline">\(s\)</span> 时，可以通过下面的公式来选择动作： <span class="math display">\[
 \arg \max _{a} \mathrm{E}_{s^{\prime} \sim P_{s a}}\left[V\left(s^{\prime}\right)\right]
@@ -948,9 +948,9 @@ V(s)=\theta^{T} \phi(s)
 <li>类似地，如果使用决定性模型，则 <span class="math inline">\(k=1\)</span></li>
 </ul></li>
 </ul></li>
-<li>在实际应用中，还有其他方法来估计上述值，例如：
+<li><p>在实际应用中，还有其他方法来估计上述值，例如：</p>
 <ul>
-<li>如果模拟器的形式为 <span class="math inline">\(s_{t+1} = f\left(s_{t}, a_{t}\right)+\epsilon_{t}\)</span>
+<li><p>如果模拟器的形式为 <span class="math inline">\(s_{t+1} = f\left(s_{t}, a_{t}\right)+\epsilon_{t}\)</span></p>
 <ul>
 <li>其中 <span class="math inline">\(f\)</span> 是某个决定性函数（如 <span class="math inline">\(f\left(s_{t}, a_{t}\right)=A s_{t}+B a_{t}\)</span>）</li>
 <li><span class="math inline">\(\epsilon\)</span> 是 0 均值高斯噪声</li>
@@ -959,7 +959,7 @@ V(s)=\theta^{T} \phi(s)
 \arg \max _{a} V(f(s, a))
 \]</span></p>
 <ul>
-<li>可以理解为令 <span class="math inline">\(\epsilon_t = 0\)</span></li>
+<li><p>可以理解为令 <span class="math inline">\(\epsilon_t = 0\)</span></p></li>
 <li><p>也可以通过下述公式推导： <span class="math display">\[
 \begin{aligned} \mathrm{E}_{s^{\prime}}\left[V\left(s^{\prime}\right)\right] &amp; \approx V\left(\mathrm{E}_{s^{\prime}}\left[s^{\prime}\right]\right) \\ &amp;=V(f(s, a)) \end{aligned}
 \]</span></p>
@@ -971,7 +971,7 @@ V(s)=\theta^{T} \phi(s)
 </ul></li>
 </ul></li>
 </ul></li>
-<li>对于无法使用上述估计方法的问题，则可能需要采样 <span class="math inline">\(k|A|\)</span> 个样本
+<li><p>对于无法使用上述估计方法的问题，则可能需要采样 <span class="math inline">\(k|A|\)</span> 个样本</p>
 <ul>
 <li>这通常计算量较大</li>
 </ul></li>
@@ -1128,7 +1128,7 @@ V(s)=\theta^{T} \phi(s)
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">46</span>
+                    <span class="site-state-item-count">47</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1244,7 +1244,9 @@ V(s)=\theta^{T} \phi(s)
                     
                       
                     
-                    <span class="site-state-item-count">19</span>
+                      
+                    
+                    <span class="site-state-item-count">20</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

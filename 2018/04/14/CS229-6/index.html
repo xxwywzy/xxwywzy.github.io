@@ -109,7 +109,7 @@
 <meta property="og:image" content="http://media.zjubiomedit.com/2018-12-12-031131.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2018-12-12-031609.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-06-23-083303.png">
-<meta property="og:updated_time" content="2019-06-24T00:13:45.000Z">
+<meta property="og:updated_time" content="2019-06-24T00:13:54.597Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS229学习笔记之六：学习理论">
 <meta name="twitter:description" content="本篇博客为 CS229 学习笔记第六部分，主题是：学习理论。">
@@ -527,7 +527,7 @@
 </ul>
 <h1 id="预先准备">预先准备</h1>
 <ul>
-<li>先给出两个简单但是有用的引理：
+<li><p>先给出两个简单但是有用的引理：</p>
 <ol type="1">
 <li><strong>联合约束</strong>（The union bound）设 <span class="math inline">\(A_1, A_2, \ldots, A_k\)</span> 是 K个不同事件（但不一定互相独立），则有：</li>
 </ol>
@@ -546,12 +546,12 @@ P(|\phi-\hat\phi|&gt;\gamma)\leq 2\exp (-2\gamma^2m)
 <li>其表明：如果我们从一个伯努利分布的随机变量中选取平均值 <span class="math inline">\(\hat\phi\)</span> 来作为对 <span class="math inline">\(\phi\)</span> 的估计值，那么只要 <span class="math inline">\(m\)</span> 足够大，我们偏移真实值很远的概率就会比较小</li>
 </ul></li>
 </ul></li>
-<li>基于上述引理，我们就可以证明在学习理论中一些深刻且重要的理论了
+<li><p>基于上述引理，我们就可以证明在学习理论中一些深刻且重要的理论了</p>
 <ul>
 <li>为了简化表述，这里以二元分类为例，其中的分类标签为 <span class="math inline">\(y \in \{0, 1\}\)</span></li>
 <li>这里得出的所有结论均可推广至其他问题，包括回归、多元分类等</li>
 </ul></li>
-<li>假设我们有一个给定的训练集 <span class="math inline">\(S = \{(x_{(i)},y_{(i)});i = 1,\ldots,m\}\)</span>，其样本规模为 <span class="math inline">\(m\)</span>，集合中的训练样本 <span class="math inline">\((x_{(i)},y_{(i)})\)</span> 是遵循某概率分布 <span class="math inline">\(\mathcal{D}\)</span> 的独立同分布随机变量
+<li><p>假设我们有一个给定的训练集 <span class="math inline">\(S = \{(x_{(i)},y_{(i)});i = 1,\ldots,m\}\)</span>，其样本规模为 <span class="math inline">\(m\)</span>，集合中的训练样本 <span class="math inline">\((x_{(i)},y_{(i)})\)</span> 是遵循某概率分布 <span class="math inline">\(\mathcal{D}\)</span> 的独立同分布随机变量</p>
 <ul>
 <li><p>对于一个假设 <span class="math inline">\(h\)</span>，我们用如下的方法定义<strong>训练误差</strong>（在学习理论中也称为<strong>经验风险</strong>或者<strong>经验误差</strong>）： <span class="math display">\[
 \hat\epsilon(h) =\frac1m\sum^m_{i=1}1\{h(x^{(i)})\neq y^{(i)}\}
@@ -578,7 +578,7 @@ P(|\phi-\hat\phi|&gt;\gamma)\leq 2\exp (-2\gamma^2m)
 <li>之前所说的算法如逻辑回归可以看做是对该算法的某种近似</li>
 </ul></li>
 </ul></li>
-<li>为了更好地研究学习理论，我们可以对上面的问题进行以下抽象：
+<li><p>为了更好地研究学习理论，我们可以对上面的问题进行以下抽象：</p>
 <ul>
 <li>我们将学习算法所使用的所有假设的集合定义为 <span class="math inline">\(\mathcal{H}\)</span>（hypothesis class）
 <ul>
@@ -591,8 +591,8 @@ P(|\phi-\hat\phi|&gt;\gamma)\leq 2\exp (-2\gamma^2m)
 </ul>
 <h1 id="有限个假设的情况">有限个假设的情况</h1>
 <ul>
-<li>我们先考虑假设集 <span class="math inline">\(\mathcal{H}\)</span> 中的假设个数有限（假定个数为 <span class="math inline">\(k\)</span> ）的情况</li>
-<li>我们会证明下面两个结论：
+<li><p>我们先考虑假设集 <span class="math inline">\(\mathcal{H}\)</span> 中的假设个数有限（假定个数为 <span class="math inline">\(k\)</span> ）的情况</p></li>
+<li><p>我们会证明下面两个结论：</p>
 <ol type="1">
 <li>对于任意的 <span class="math inline">\(h\)</span> ，<span class="math inline">\(\hat\epsilon(h)\)</span> 都是对 <span class="math inline">\(\epsilon(h)\)</span> 的可靠估计</li>
 <li><span class="math inline">\(\hat h\)</span> 的泛化误差 <span class="math inline">\(\epsilon(\hat h)\)</span> 存在上界</li>
@@ -613,7 +613,7 @@ P(|\epsilon(h_i)-\hat\epsilon(h_i)|&gt;\gamma) \leq 2\exp(-2\gamma^2m)
 <ul>
 <li>这表明，对于特定的假设 <span class="math inline">\(h_i\)</span>，如果 m 很大，那么训练误差与泛化误差接近的概率将会非常大</li>
 </ul></li>
-<li>但是我们希望证明这一结论对于假设集中所有的假设均成立
+<li><p>但是我们希望证明这一结论对于假设集中所有的假设均成立</p>
 <ul>
 <li>为此我们需要定义 <span class="math inline">\(A_i\)</span> 为事件 <span class="math inline">\(|\epsilon(h_i)-\hat\epsilon(h_i)|&gt;\gamma\)</span></li>
 <li>我们已经证明了，对于任意特定的 <span class="math inline">\(A_i\)</span>，<span class="math inline">\(P(A_i) \leq 2\exp(-2\gamma^2m)\)</span> 成立</li>
@@ -638,11 +638,11 @@ P(\neg\exists\,h\in\mathcal{H}|\epsilon(h_i)-\hat\epsilon(h_i)|&gt;\gamma) &amp;
 <li>该结论被称为<strong>一致收敛</strong>（uniform convergence）</li>
 </ul></li>
 </ul></li>
-<li>我们感兴趣的变量有三个：<span class="math inline">\(m\)</span>，<span class="math inline">\(\gamma\)</span>，以及训练误差与泛化误差相差大于 <span class="math inline">\(\gamma\)</span> 的概率 <span class="math inline">\(\delta\)</span>
+<li><p>我们感兴趣的变量有三个：<span class="math inline">\(m\)</span>，<span class="math inline">\(\gamma\)</span>，以及训练误差与泛化误差相差大于 <span class="math inline">\(\gamma\)</span> 的概率 <span class="math inline">\(\delta\)</span></p>
 <ul>
 <li>我们可以将其中的任意一个变量用其他两个变量来约束</li>
 </ul></li>
-<li>例如，给定 <span class="math inline">\(\gamma\)</span> 和某个 <span class="math inline">\(\delta&gt;0\)</span>，<span class="math inline">\(m\)</span> 至少应该取多少，才能保证训练误差与泛化误差相差在 <span class="math inline">\(\gamma\)</span> 之内的概率至少为 <span class="math inline">\(1-\delta\)</span> ？
+<li><p>例如，给定 <span class="math inline">\(\gamma\)</span> 和某个 <span class="math inline">\(\delta&gt;0\)</span>，<span class="math inline">\(m\)</span> 至少应该取多少，才能保证训练误差与泛化误差相差在 <span class="math inline">\(\gamma\)</span> 之内的概率至少为 <span class="math inline">\(1-\delta\)</span> ？</p>
 <ul>
 <li><p>根据一致收敛的结论，我们有 <span class="math inline">\(1-\delta \leq 1-2k\exp(-2\gamma^2m)\)</span>，从而得到： <span class="math display">\[
 m \geq \frac 1 {2\gamma^2}\log\frac {2k} \delta
@@ -661,7 +661,7 @@ m \geq \frac 1 {2\gamma^2}\log\frac {2k} \delta
 |\hat\epsilon(h)-\epsilon(h)|\leq \sqrt{\frac 1 {2m}\log\frac {2k} \delta}
 \]</span></li>
 </ul></li>
-<li>利用一致收敛的结果，我们可以证明 <span class="math inline">\(\hat h\)</span> 的泛化误差 <span class="math inline">\(\epsilon(\hat h)\)</span> 存在上界
+<li><p>利用一致收敛的结果，我们可以证明 <span class="math inline">\(\hat h\)</span> 的泛化误差 <span class="math inline">\(\epsilon(\hat h)\)</span> 存在上界</p>
 <ul>
 <li><p>定义 <span class="math inline">\(h^{\star}=\arg\min_{h\in\mathcal{H}}\epsilon(h)\)</span> 为假设集 <span class="math inline">\(\mathcal{H}\)</span> 中的最佳假设（使泛化误差最小），则有： <span class="math display">\[
 \begin{align*}
@@ -677,13 +677,13 @@ m \geq \frac 1 {2\gamma^2}\log\frac {2k} \delta
 <li>我们得到：如果一致收敛发生，那么 <span class="math inline">\(\hat h\)</span> 的泛化误差最多比假设集 <span class="math inline">\(\mathcal{H}\)</span> 中的最佳假设大 <span class="math inline">\(2\gamma\)</span></li>
 </ul></li>
 </ul></li>
-<li>进一步地，将上述结论整合在一起，可以得到如下定理：
+<li><p>进一步地，将上述结论整合在一起，可以得到如下定理：</p>
 <ul>
 <li><strong>定理</strong>：令 <span class="math inline">\(|\mathcal{H}|=k\)</span>，保持 <span class="math inline">\(m\)</span> 和 <span class="math inline">\(\delta\)</span> 不变，则在至少 <span class="math inline">\(1-\delta\)</span> 的概率下 ，我们有： <span class="math display">\[
 \epsilon(\hat h) \leq \left(\min_{h\in\mathcal{H}} \epsilon(h)\right)+ 2\sqrt{\frac 1 {2m}\log\frac {2k} \delta}
 \]</span></li>
 </ul></li>
-<li>上述定理为我们量化了模型选择中方差与偏差的权衡问题
+<li><p>上述定理为我们量化了模型选择中方差与偏差的权衡问题</p>
 <ul>
 <li>假设我们有一个假设集 <span class="math inline">\(\mathcal{H}\)</span>，考虑将它更换为某个更大的假设集 <span class="math inline">\(\mathcal{H}’ \supseteq \mathcal{H}\)</span>（可以理解为从简单的模型换成复杂的模型）</li>
 <li>那么对于上面的定理，第一项 <span class="math inline">\(\min_h \epsilon(h)\)</span> 只会减少（因为可选择的假设更多了）
@@ -695,7 +695,7 @@ m \geq \frac 1 {2\gamma^2}\log\frac {2k} \delta
 <li>这对应为<strong>方差</strong>的增加</li>
 </ul></li>
 </ul></li>
-<li>与之前类似，我们可以得到下述关于样本复杂度的推论：
+<li><p>与之前类似，我们可以得到下述关于样本复杂度的推论：</p>
 <ul>
 <li><strong>推论</strong>：令 <span class="math inline">\(|\mathcal{H}|=k\)</span>，保持 <span class="math inline">\(\gamma\)</span> 和 <span class="math inline">\(\delta\)</span> 不变，那么为了满足 <span class="math inline">\(\epsilon(\hat h) \leq \left(\min_{h\in\mathcal{H}} \epsilon(h)\right)+ 2\gamma\)</span> 成立的概率至少为 <span class="math inline">\(1-\delta\)</span>，则有： <span class="math display">\[
 \begin{align*}
@@ -710,8 +710,8 @@ m &amp;\geq \frac 1 {2\gamma^2}\log\frac {2k} \delta \\
 <li>下面考虑假设集中假设个数无限的情况</li>
 <li>让我们先通过一个不太精确的论证来获得对于无限假设集的直观印象
 <ul>
-<li>假设假设集 <span class="math inline">\(\mathcal{H}\)</span> 中的每一个假设有 <span class="math inline">\(d\)</span> 个实数参数</li>
-<li>由于我们使用计算机来表示实数，而 IEEE 双精度浮点数为 64 个比特位，所以假设集中的每一个假设的参数总共包含 <span class="math inline">\(64d\)</span> 个比特位
+<li><p>假设假设集 <span class="math inline">\(\mathcal{H}\)</span> 中的每一个假设有 <span class="math inline">\(d\)</span> 个实数参数</p></li>
+<li><p>由于我们使用计算机来表示实数，而 IEEE 双精度浮点数为 64 个比特位，所以假设集中的每一个假设的参数总共包含 <span class="math inline">\(64d\)</span> 个比特位</p>
 <ul>
 <li>因此，我们的假设集中最多包含 <span class="math inline">\(2^{64d}\)</span> 种不同的假设</li>
 </ul></li>
@@ -721,8 +721,8 @@ m \ge O \left( \frac 1 {\gamma^2}\log\frac {2^{64d}} \delta\right) = O \left( \f
 <ul>
 <li>这表明需要的训练集样本的数量最多与模型的参数呈<strong>线性</strong>关系</li>
 </ul></li>
-<li>虽然上述推论不够严谨（建立在对参数计算机化表达的基础之上），但是其结论是基本正确的：如果我们尝试去最小化训练误差，并使得其能够学习到一个较好（泛化误差小）的假设（含有 <span class="math inline">\(d\)</span> 个参数），那么我们需要 <span class="math inline">\(d\)</span> 的线性数量级的训练样本数量</li>
-<li>上述结论适用于大部分使用 ERM 或其近似的判别学习算法，对于非 ERM 学习算法的理论证明还在研究中</li>
+<li><p>虽然上述推论不够严谨（建立在对参数计算机化表达的基础之上），但是其结论是基本正确的：如果我们尝试去最小化训练误差，并使得其能够学习到一个较好（泛化误差小）的假设（含有 <span class="math inline">\(d\)</span> 个参数），那么我们需要 <span class="math inline">\(d\)</span> 的线性数量级的训练样本数量</p></li>
+<li><p>上述结论适用于大部分使用 ERM 或其近似的判别学习算法，对于非 ERM 学习算法的理论证明还在研究中</p></li>
 </ul></li>
 <li>上述论证的另一个不严谨之处在于其依赖于假设集 <span class="math inline">\(\mathcal{H}\)</span> 的参数化
 <ul>
@@ -735,12 +735,12 @@ m \ge O \left( \frac 1 {\gamma^2}\log\frac {2^{64d}} \delta\right) = O \left( \f
 </ul></li>
 <li>为了进行更严谨的论证，给出如下定义：
 <ul>
-<li>给定一个点的集合 <span class="math inline">\(S=\{x^{(1)},\ldots,x^{(d)} \}\)</span>（与训练集无关），其中 <span class="math inline">\(x_i \in \mathcal{X}\)</span>（即每个点维数相同）</li>
-<li>对于一个假设集 <span class="math inline">\(\mathcal{H}\)</span>，我们认为 <span class="math inline">\(\mathcal{H}\)</span> <strong>打散</strong>（shatter）了 <span class="math inline">\(S\)</span> 如果 <span class="math inline">\(\mathcal{H}\)</span> 可以实现 <span class="math inline">\(S\)</span> 的任意标签化
+<li><p>给定一个点的集合 <span class="math inline">\(S=\{x^{(1)},\ldots,x^{(d)} \}\)</span>（与训练集无关），其中 <span class="math inline">\(x_i \in \mathcal{X}\)</span>（即每个点维数相同）</p></li>
+<li><p>对于一个假设集 <span class="math inline">\(\mathcal{H}\)</span>，我们认为 <span class="math inline">\(\mathcal{H}\)</span> <strong>打散</strong>（shatter）了 <span class="math inline">\(S\)</span> 如果 <span class="math inline">\(\mathcal{H}\)</span> 可以实现 <span class="math inline">\(S\)</span> 的任意标签化</p>
 <ul>
 <li>即对于任意的标签集合 <span class="math inline">\(\{y^{(1)},\ldots,y^{(d)} \}\)</span>，都存在某个 <span class="math inline">\(h \in \mathcal{H}\)</span> 使得 <span class="math inline">\(h(x^{(i)}) = y^{(i)}\)</span> 对于所有的 <span class="math inline">\(i=1,\ldots,d\)</span> 均成立</li>
 </ul></li>
-<li>我们定义一个假设集 <span class="math inline">\(\mathcal{H}\)</span> 的 <strong>VC 维</strong>（Vapnik-Chervonenkis dimension）为该假设集能够打散的最大集合规模
+<li><p>我们定义一个假设集 <span class="math inline">\(\mathcal{H}\)</span> 的 <strong>VC 维</strong>（Vapnik-Chervonenkis dimension）为该假设集能够打散的最大集合规模</p>
 <ul>
 <li>如果 <span class="math inline">\(\mathcal{H}\)</span> 可以打散任意大的集合，那么 <span class="math inline">\(VC(\mathcal{H}) = \infty\)</span></li>
 </ul></li>
@@ -931,7 +931,7 @@ m \ge O \left( \frac 1 {\gamma^2}\log\frac {2^{64d}} \delta\right) = O \left( \f
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">46</span>
+                    <span class="site-state-item-count">47</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1047,7 +1047,9 @@ m \ge O \left( \frac 1 {\gamma^2}\log\frac {2^{64d}} \delta\right) = O \left( \f
                     
                       
                     
-                    <span class="site-state-item-count">19</span>
+                      
+                    
+                    <span class="site-state-item-count">20</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

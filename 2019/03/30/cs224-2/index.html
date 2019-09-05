@@ -116,7 +116,7 @@
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-03-30-040220.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-03-30-040427.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-03-30-122722.png">
-<meta property="og:updated_time" content="2019-03-30T12:39:10.000Z">
+<meta property="og:updated_time" content="2019-03-30T12:39:10.580Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS224N 学习笔记之二：词向量 2">
 <meta name="twitter:description" content="本篇博客为 CS224N 学习笔记第二部分，主题是：词向量（GloVe，评估和训练）。">
@@ -557,7 +557,7 @@ J = -\sum_{i=1}^W X_i \sum_{j=1}^W P_{ij} \log{Q_{ij}} =-\sum_{i=1}^W X_iH(P_i,Q
 <li>其中 <span class="math inline">\(H(P_i, Q_i)\)</span> 是分布 <span class="math inline">\(P_i\)</span> 和 <span class="math inline">\(Q_i\)</span> 的交叉熵</li>
 </ul></li>
 </ul></li>
-<li>交叉熵代价函数的不足之处在于其分布需要归一化，即在整个语料库上进行求和
+<li><p>交叉熵代价函数的不足之处在于其分布需要归一化，即在整个语料库上进行求和</p>
 <ul>
 <li><p>为了避免这一复杂的运算，我们使用非归一化的分布的最小二乘函数来取代交叉熵函数： <span class="math display">\[
 \hat{J} = -\sum_{i=1}^W \sum_{j=1}^W X_{i}（\hat{P}_{ij} - \hat{Q}_{ij})^2
@@ -566,7 +566,7 @@ J = -\sum_{i=1}^W X_i \sum_{j=1}^W P_{ij} \log{Q_{ij}} =-\sum_{i=1}^W X_iH(P_i,Q
 <li>其中 <span class="math inline">\(\hat{P}_{ij} = X_{ij}\)</span>，<span class="math inline">\(\hat{Q}_{ij} = \exp(u_j^Tv_i)\)</span></li>
 </ul></li>
 </ul></li>
-<li>上述代价函数的一个新问题是 <span class="math inline">\(X_{ij}\)</span> 经常过大，导致优化困难
+<li><p>上述代价函数的一个新问题是 <span class="math inline">\(X_{ij}\)</span> 经常过大，导致优化困难</p>
 <ul>
 <li>我们通过取对数来解决这一问题： <span class="math display">\[
 \begin{aligned}
@@ -575,7 +575,7 @@ J = -\sum_{i=1}^W X_i \sum_{j=1}^W P_{ij} \log{Q_{ij}} =-\sum_{i=1}^W X_iH(P_i,Q
 \end{aligned}
 \]</span></li>
 </ul></li>
-<li>上述代价函数中，根据观测，<span class="math inline">\(X_i\)</span> 并不是一个最佳的选择
+<li><p>上述代价函数中，根据观测，<span class="math inline">\(X_i\)</span> 并不是一个最佳的选择</p>
 <ul>
 <li>我们将使用一个更一般化的权重函数，其依赖于上下文单词 <span class="math display">\[
 \hat{J} = -\sum_{i=1}^W \sum_{j=1}^W f(X_{ij})（u_j^Tv_i - \log X_{ij})^2
@@ -620,7 +620,7 @@ J = -\sum_{i=1}^W X_i \sum_{j=1}^W P_{ij} \log{Q_{ij}} =-\sum_{i=1}^W X_iH(P_i,Q
 </ul>
 <h2 id="内在评估案例词向量类比">内在评估案例：词向量类比</h2>
 <ul>
-<li>一个经典的内在评估方法就是词向量类比补全
+<li><p>一个经典的内在评估方法就是词向量类比补全</p>
 <ul>
 <li>在一个词向量类比中，我们会给出如下形式的不完全类比： <span class="math display">\[
 a:b::c:?
@@ -636,9 +636,9 @@ d = \arg \max_i \frac {(x_b-x_a+x_c)^Tx_i}{||x_b-x_a+x_c||}
 <li>注意这里默认 <span class="math inline">\(x_d\)</span> 已经进行归一化处理，所以不用除以其模</li>
 </ul></li>
 </ul></li>
-<li>词向量的类比可以是语义层面的，也可以是语法层面的
+<li><p>词向量的类比可以是语义层面的，也可以是语法层面的</p>
 <ul>
-<li>有时候由于语料库的影响，语义类比可能产生导致不同的结果，需要注意
+<li><p>有时候由于语料库的影响，语义类比可能产生导致不同的结果，需要注意</p>
 <ul>
 <li><p>下面的例子中，一个国家的首都在不同时期可能不同</p>
 <p><img src="http://media.zjubiomedit.com/2019-03-23-051033.png" width="50%"></p></li>
@@ -649,7 +649,7 @@ d = \arg \max_i \frac {(x_b-x_a+x_c)^Tx_i}{||x_b-x_a+x_c||}
 </ul>
 <h2 id="内在评估调整案例类比评估">内在评估调整案例：类比评估</h2>
 <ul>
-<li>我们可以基于内在评估系统来调整词向量模型的超参数，包括：
+<li><p>我们可以基于内在评估系统来调整词向量模型的超参数，包括：</p>
 <ul>
 <li>词向量维数</li>
 <li>语料库大小</li>
@@ -659,7 +659,7 @@ d = \arg \max_i \frac {(x_b-x_a+x_c)^Tx_i}{||x_b-x_a+x_c||}
 </ul></li>
 <li><p>下表给出了不同模型使用不同超参数在类比问题上的表现对比：</p>
 <p><img src="http://media.zjubiomedit.com/2019-03-25-085105.png" width="50%"></p></li>
-<li>基于该表可以得出以下三点结论：
+<li><p>基于该表可以得出以下三点结论：</p>
 <ul>
 <li><strong>表现非常依赖于模型</strong>
 <ul>
@@ -719,7 +719,7 @@ d = \arg \max_i \frac {(x_b-x_a+x_c)^Tx_i}{||x_b-x_a+x_c||}
 </ul>
 <h2 id="问题的提出">问题的提出</h2>
 <ul>
-<li>大部分 NLP 的外在任务都可以看作分类问题
+<li><p>大部分 NLP 的外在任务都可以看作分类问题</p>
 <ul>
 <li>比如情感分类，命名实体识别等</li>
 </ul></li>
@@ -730,7 +730,7 @@ d = \arg \max_i \frac {(x_b-x_a+x_c)^Tx_i}{||x_b-x_a+x_c||}
 <li>其中 <span class="math inline">\(x^{(i)}\)</span> 是一个 d-维的词向量，通过某种词嵌入技术生成</li>
 <li><span class="math inline">\(y^{(i)}\)</span> 是一个 C-维的 one-hot 向量，表示我们希望预测的标签（类别）</li>
 </ul></li>
-<li>在经典的机器学习任务中，我们通常保持输入数据与输出标签<strong>不变</strong>，使用优化方法来训练参数（权重）
+<li><p>在经典的机器学习任务中，我们通常保持输入数据与输出标签<strong>不变</strong>，使用优化方法来训练参数（权重）</p>
 <ul>
 <li>但是在 NLP 任务中，我们在训练外在任务时可能会<strong>重新训练</strong>输入词向量</li>
 </ul></li>
@@ -772,7 +772,7 @@ d = \arg \max_i \frac {(x_b-x_a+x_c)^Tx_i}{||x_b-x_a+x_c||}
 p(y_j=1|x) = \frac {\exp(W_jx)}{\sum_{c=1}^C\exp(W_cx)}
 \]</span></p>
 <ul>
-<li>这里计算的是词向量 <span class="math inline">\(x\)</span> 属于类别 <span class="math inline">\(j\)</span> 的概率</li>
+<li><p>这里计算的是词向量 <span class="math inline">\(x\)</span> 属于类别 <span class="math inline">\(j\)</span> 的概率</p></li>
 <li><p>使用交叉熵损失函数，可以得到一个训练样本的损失如下： <span class="math display">\[
 -\sum_{j=1}^C y_j \log(p(y_j=1|x)) = -\sum_{j=1}^C y_j \log \left(\frac {\exp(W_jx)}{\sum_{c=1}^C\exp(W_cx)} \right)
 \]</span></p>
@@ -788,9 +788,9 @@ p(y_j=1|x) = \frac {\exp(W_jx)}{\sum_{c=1}^C\exp(W_cx)}
 <li>其中 <span class="math inline">\(k(i)\)</span> 为一个函数，返回样本 <span class="math inline">\(x^{(i)}\)</span> 的正确分类 index</li>
 </ul></li>
 </ul></li>
-<li>对于上述代价函数，如果要训练模型权重 <span class="math inline">\(W\)</span> 和词向量 <span class="math inline">\(x\)</span>，需要更新的参数量是多少呢？
+<li><p>对于上述代价函数，如果要训练模型权重 <span class="math inline">\(W\)</span> 和词向量 <span class="math inline">\(x\)</span>，需要更新的参数量是多少呢？</p>
 <ul>
-<li>对于一个简单的线性分类器，假设其输入为一个 <span class="math inline">\(d\)</span> 维词向量，输出为一个含有 <span class="math inline">\(C\)</span> 个类别的分布
+<li><p>对于一个简单的线性分类器，假设其输入为一个 <span class="math inline">\(d\)</span> 维词向量，输出为一个含有 <span class="math inline">\(C\)</span> 个类别的分布</p>
 <ul>
 <li>关于模型权重需要更新 <span class="math inline">\(C \cdot d\)</span> 个参数</li>
 <li>关于所有词向量需要更新 <span class="math inline">\(|V| \cdot d\)</span> 个参数</li>
@@ -810,7 +810,7 @@ p(y_j=1|x) = \frac {\exp(W_jx)}{\sum_{c=1}^C\exp(W_cx)}
 <li>如此大的参数量很容易引起过拟合</li>
 </ul></li>
 </ul></li>
-<li>为了减小过拟合的风险，我们引入一个正则项
+<li><p>为了减小过拟合的风险，我们引入一个正则项</p>
 <ul>
 <li><p>其利用了贝叶斯学派的理论，对参数的规模进行了限制 <span class="math display">\[
 -\sum_{i=1}^N \log \left(\frac {\exp(W_{k(i)}x)}{\sum_{c=1}^C\exp(W_cx)}\right) + \lambda \sum_{k=1}^{C\cdot d + |V| \cdot d} \theta_k^2
@@ -823,16 +823,16 @@ p(y_j=1|x) = \frac {\exp(W_jx)}{\sum_{c=1}^C\exp(W_cx)}
 </ul>
 <h2 id="窗口分类">窗口分类</h2>
 <ul>
-<li>之前我们使用的输入是单个词向量
+<li><p>之前我们使用的输入是单个词向量</p>
 <ul>
 <li>实际上，在不同的上下文中相同词语有着不同的含义（语义或语法层面）</li>
 </ul></li>
-<li>因此，我们一般使用一个词语序列作为输入
+<li><p>因此，我们一般使用一个词语序列作为输入</p>
 <ul>
 <li>该序列包含一个中心词及其上下文</li>
 <li>上下文的单词数量由上下文窗口大小决定</li>
 </ul></li>
-<li>对于不同的问题，上下文窗口的大小会发生变化，一般来说：
+<li><p>对于不同的问题，上下文窗口的大小会发生变化，一般来说：</p>
 <ul>
 <li>较小的窗口在语法层面上的表现更好</li>
 <li>较大的窗口在语义层面上的表现更好</li>
@@ -1021,7 +1021,7 @@ x^{(i+2)}
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">46</span>
+                    <span class="site-state-item-count">47</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1137,7 +1137,9 @@ x^{(i+2)}
                     
                       
                     
-                    <span class="site-state-item-count">19</span>
+                      
+                    
+                    <span class="site-state-item-count">20</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
