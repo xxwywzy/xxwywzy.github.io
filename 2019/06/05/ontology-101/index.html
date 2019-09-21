@@ -110,7 +110,7 @@
 <meta property="og:image" content="http://media.zjubiomedit.com/blog/20190507/j1NxqtRDgkBS.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-05-29-115510.jpg">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-05-30-024010.png">
-<meta property="og:updated_time" content="2019-06-06T08:58:43.000Z">
+<meta property="og:updated_time" content="2019-09-21T02:42:29.531Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="本体构建 101">
 <meta name="twitter:description" content="本篇博客介绍如何构建你的第一个本体。">
@@ -577,15 +577,17 @@
 </ul>
 <h2 id="第四步-定义类及其层次结构">第四步 定义类及其层次结构</h2>
 <ul>
-<li><p>定义类及其层次结构通常有以下几种方法：</p>
+<li>定义类及其层次结构通常有以下几种方法：
 <ul>
 <li><strong>自顶向下</strong>的方法：先定义领域中最宽泛的概念，然后进行细化</li>
 <li><strong>自底向上</strong>的方法：先定义领域中最具体的概念，然后进行归纳</li>
 <li><strong>混合</strong>方法：将上述两种方法结合起来</li>
+</ul></li>
 </ul>
-<p><img src="http://media.zjubiomedit.com/blog/20190507/vzdyuGRfoQvC.png" width="40%"></p></li>
-<li><p>上述三种方法没有优劣之分，取决于开发者对于领域的视角</p></li>
-<li><p>不论使用哪种方法，我们都需要先定义类，再定义层次结构</p>
+<p><img src="http://media.zjubiomedit.com/blog/20190507/vzdyuGRfoQvC.png" width="40%"></p>
+<ul>
+<li>上述三种方法没有优劣之分，取决于开发者对于领域的视角</li>
+<li>不论使用哪种方法，我们都需要先定义类，再定义层次结构
 <ul>
 <li>先从第三步中的列表中选取能描述对象独特性的术语作为类</li>
 <li>然后将这些类按层次结构组织
@@ -596,21 +598,23 @@
 </ul>
 <h2 id="第五步-定义类的属性">第五步 定义类的属性</h2>
 <ul>
-<li><p>仅仅靠类无法提供足够的信息，我们还需要定义类的属性来进一步描述类</p>
-<p><img src="http://media.zjubiomedit.com/blog/20190507/UFTV5jvRLSKS.png" width="60%"></p></li>
-<li><p>我们已经从第三步的列表中选择了术语来构建类</p>
+<li>仅仅靠类无法提供足够的信息，我们还需要定义类的属性来进一步描述类</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/blog/20190507/UFTV5jvRLSKS.png" width="60%"></p>
+<ul>
+<li>我们已经从第三步的列表中选择了术语来构建类
 <ul>
 <li>大部分剩余的术语都是类的属性</li>
 </ul></li>
-<li><p>一般来说，属性可以分为以下几种：</p>
+<li>一般来说，属性可以分为以下几种：
 <ul>
 <li>内在属性：如酒的味道</li>
 <li>外在属性：如酒的名称、地域</li>
 <li>部件：针对结构化的对象，可以是物理或抽象的部件</li>
 <li>关系：与其他个体之间的关系（注意和类层次结构区分）</li>
 </ul></li>
-<li><p>所有的子类都会<strong>继承</strong>其父类的属性</p></li>
-<li><p>属性应该被放置到最宽泛的类中（即越靠近顶层越好）</p></li>
+<li>所有的子类都会<strong>继承</strong>其父类的属性</li>
+<li>属性应该被放置到最宽泛的类中（即越靠近顶层越好）</li>
 </ul>
 <h2 id="第六步-定义属性的限制">第六步 定义属性的限制</h2>
 <ul>
@@ -634,9 +638,12 @@
 <li>Instance 类型
 <ul>
 <li>用于表示个体之间的关系，需要定义允许的类的列表</li>
-</ul>
-<img src="http://media.zjubiomedit.com/blog/20190507/soyN3PUVmIFW.png" width="50%"></li>
 </ul></li>
+</ul></li>
+</ul></li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/blog/20190507/soyN3PUVmIFW.png" width="50%"></p>
+<ul>
 <li><strong>属性的领域和范围</strong>：
 <ul>
 <li>对于 Instance 类型的属性，其允许的类的列表被称为属性的<strong>范围</strong></li>
@@ -649,7 +656,6 @@
 <li>尽量保持类的宽泛性，但不要过于宽泛</li>
 </ul></li>
 </ul></li>
-</ul></li>
 </ul>
 <h2 id="第七步-创造实例">第七步 创造实例</h2>
 <ul>
@@ -658,9 +664,9 @@
 <li>选择一个类</li>
 <li>创造该类的实例</li>
 <li>填充属性值</li>
-</ol>
-<img src="http://media.zjubiomedit.com/blog/20190507/j1NxqtRDgkBS.png" width="70%"></li>
+</ol></li>
 </ul>
+<p><img src="http://media.zjubiomedit.com/blog/20190507/j1NxqtRDgkBS.png" width="70%"></p>
 <h1 id="定义类及其层次结构">定义类及其层次结构</h1>
 <ul>
 <li>本节介绍在定义类及其层次结构中可能会出现的错误
@@ -789,14 +795,12 @@
 <li>如果概念形成了自然的层级，那么应该被表示为类
 <ul>
 <li>因为没有子实例的概念</li>
-<li>即使表示为类后这些类不再具有直接实例
-<ul>
+<li>即使表示为类后这些类不再具有直接实例</li>
 <li>Protege 允许建立抽象类</li>
 </ul></li>
-</ul>
-<img src="http://media.zjubiomedit.com/2019-05-29-115510.jpg" width="30%"></li>
 </ul></li>
 </ul>
+<p><img src="http://media.zjubiomedit.com/2019-05-29-115510.jpg" width="30%"></p>
 <h2 id="限制范围">限制范围</h2>
 <ul>
 <li>下面给出一些判断本体是否完整的规则：
@@ -836,9 +840,9 @@
 </ul></li>
 <li>虽然这种关系看上去有些冗余，但从知识获取的角度保留两者更加方便</li>
 <li>定义了转置关系后，知识系统会根据一个值自动填充另一个</li>
+</ul></li>
 </ul>
-<img src="http://media.zjubiomedit.com/2019-05-30-024010.png" width="50%"></li>
-</ul>
+<p><img src="http://media.zjubiomedit.com/2019-05-30-024010.png" width="50%"></p>
 <h2 id="默认值">默认值</h2>
 <ul>
 <li>大部分系统允许为属性指定默认值

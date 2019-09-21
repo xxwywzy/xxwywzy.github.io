@@ -169,7 +169,7 @@
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-07-18-111652.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-07-18-112348.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-07-18-112208.png">
-<meta property="og:updated_time" content="2019-07-18T11:36:43.000Z">
+<meta property="og:updated_time" content="2019-09-21T02:41:18.035Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="OWL 本体构建指南">
 <meta name="twitter:description" content="本篇博客介绍如何通过 Protege 构建 OWL 本体。">
@@ -580,111 +580,124 @@
 </ul>
 <h2 id="individuals个体">Individuals（个体）</h2>
 <ul>
-<li><p>个体表示我们感兴趣的领域中的对象</p></li>
-<li><p>与 Protege 本体的重要区别在于，OWL 不遵循<strong>唯一命名假设</strong>（UNA）</p>
+<li>个体表示我们感兴趣的领域中的对象</li>
+<li>与 Protege 本体的重要区别在于，OWL 不遵循<strong>唯一命名假设</strong>（UNA）
 <ul>
 <li>即两个不同名称的个体可能表示同一个个体</li>
 </ul></li>
-<li><p>在 OWL 中，必须要明确指出个体之间是等同的还是不同的</p></li>
-<li><p>下图给出了对某个领域中某些个体的表示：</p>
-<p><img src="http://media.zjubiomedit.com/2019-06-11-065357.png" width="40%"></p></li>
+<li>在 OWL 中，必须要明确指出个体之间是等同的还是不同的</li>
+<li>下图给出了对某个领域中某些个体的表示：</li>
 </ul>
+<p><img src="http://media.zjubiomedit.com/2019-06-11-065357.png" width="40%"></p>
 <h2 id="properties属性">Properties（属性）</h2>
 <ul>
-<li><p>属性是个体间的二元关系</p>
+<li>属性是个体间的二元关系
 <ul>
 <li>即属性将两个个体连接在一起</li>
 </ul></li>
-<li><p>属性拥有多种特征</p>
+<li>属性拥有多种特征
 <ul>
 <li>可以转置</li>
 <li>可以被限制为单值</li>
 <li>可以传递或具有对称性</li>
 </ul></li>
-<li><p>下图展示了将某些个体连接起来的某些属性：</p>
-<p><img src="http://media.zjubiomedit.com/2019-06-11-070121.png" width="40%"></p></li>
+<li>下图展示了将某些个体连接起来的某些属性：</li>
 </ul>
+<p><img src="http://media.zjubiomedit.com/2019-06-11-070121.png" width="40%"></p>
 <h2 id="classes类">Classes（类）</h2>
 <ul>
-<li><p>类可以理解为包含个体的集合</p></li>
-<li><p>类通常使用正式的描述来精确表明其需求</p>
+<li>类可以理解为包含个体的集合</li>
+<li>类通常使用正式的描述来精确表明其需求
 <ul>
 <li>如类 Cat 会包含领域中所有的猫的个体</li>
 </ul></li>
-<li><p>类可以被组织为超类-子类的层级关系，即分类学（taxonomy）</p></li>
-<li><p>OWL 的一个重要特征是超类-子类关系可以由<strong>推理机</strong>自动计算得出</p></li>
-<li><p>下图给出了包含个体的某些类：</p>
-<p><img src="http://media.zjubiomedit.com/2019-06-11-083203.png" width="40%"></p></li>
+<li>类可以被组织为超类-子类的层级关系，即分类学（taxonomy）</li>
+<li>OWL 的一个重要特征是超类-子类关系可以由<strong>推理机</strong>自动计算得出</li>
+<li>下图给出了包含个体的某些类：</li>
 </ul>
+<p><img src="http://media.zjubiomedit.com/2019-06-11-083203.png" width="40%"></p>
 <h1 id="构建一个-owl-本体">构建一个 OWL 本体</h1>
 <ul>
 <li>本章节将介绍如何创建一个披萨本体</li>
 </ul>
 <h2 id="创建本体">创建本体</h2>
 <ul>
-<li><p>File -&gt; New 新建一个本体</p></li>
-<li><p>修改其 IRI（每个本体唯一）</p>
-<p><img src="http://media.zjubiomedit.com/2019-06-18-012711.png" width="80%"></p></li>
-<li><p>以 OWL 形式保存为 “<strong>pizza.owl</strong>”</p>
-<p><img src="http://media.zjubiomedit.com/2019-06-18-012936.png" width="50%"></p></li>
-<li><p>在 Annotation 中可以添加评论</p>
-<p><img src="http://media.zjubiomedit.com/2019-06-18-013100.png" width="60%"></p></li>
-<li><p>当前状态：</p>
-<p><img src="http://media.zjubiomedit.com/2019-06-18-013353.png" width="80%"></p></li>
+<li>File -&gt; New 新建一个本体</li>
+<li>修改其 IRI（每个本体唯一）</li>
 </ul>
+<p><img src="http://media.zjubiomedit.com/2019-06-18-012711.png" width="80%"></p>
+<ul>
+<li>以 OWL 形式保存为 “<strong>pizza.owl</strong>”</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-06-18-012936.png" width="50%"></p>
+<ul>
+<li>在 Annotation 中可以添加评论</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-06-18-013100.png" width="60%"></p>
+<ul>
+<li>当前状态：</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-06-18-013353.png" width="80%"></p>
 <h2 id="创建类">创建类</h2>
 <ul>
-<li><p>在类 Tab 下，新建 Thing 的子类</p>
+<li>在类 Tab 下，新建 Thing 的子类
 <ul>
 <li>Thing 表示所有个体的集合</li>
 <li>选中 Thing 后新建子类
 <ul>
 <li>新建一个子类后可以选择新建兄弟类</li>
 </ul></li>
+</ul></li>
 </ul>
-<p><img src="http://media.zjubiomedit.com/2019-06-18-014344.png" width="40%"></p></li>
-<li><p>类的命名规则应该统一，建议使用驼峰命名</p></li>
-<li><p>新版 protege 中要手动打开 class tab 来设置disjoint</p>
-<p><img src="http://media.zjubiomedit.com/2019-06-19-111357.png" width="60%"></p>
+<p><img src="http://media.zjubiomedit.com/2019-06-18-014344.png" width="40%"></p>
+<ul>
+<li>类的命名规则应该统一，建议使用驼峰命名</li>
+<li>新版 protege 中要手动打开 class tab 来设置disjoint
 <ul>
 <li>disjoint 即一个类的实例无法归属于另一个类</li>
 </ul></li>
 </ul>
+<p><img src="http://media.zjubiomedit.com/2019-06-19-111357.png" width="60%"></p>
 <h3 id="使用-create-class-hierarchy-来创建类">使用 Create Class Hierarchy 来创建类</h3>
 <ul>
-<li><p>下面介绍一种同时创建多个子类的方法</p></li>
-<li><p>选中父类，点击 Tools -&gt; Create class hierarchy</p></li>
-<li><p>在弹出窗口中逐一输入类名即可</p>
-<p><img src="http://media.zjubiomedit.com/2019-06-18-020547.png" width="60%"></p>
+<li>下面介绍一种同时创建多个子类的方法</li>
+<li>选中父类，点击 Tools -&gt; Create class hierarchy</li>
+<li>在弹出窗口中逐一输入类名即可
 <ul>
 <li>类名不可重复</li>
 <li>可批量添加前缀和后缀</li>
 <li>默认类之间 disjoint</li>
 </ul></li>
-<li><p>同理，创建 PIzzaTopping 的子类</p>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-06-18-020547.png" width="60%"></p>
+<ul>
+<li>同理，创建 PIzzaTopping 的子类
 <ul>
 <li>使用 Tab 进一步划分子类</li>
 </ul></li>
-<li><p>最终类层级：</p>
-<p><img src="http://media.zjubiomedit.com/2019-06-18-023825.png" width="40%"></p></li>
-<li><p>在 OWL 本体中，子类意味着其实例均为父类的实例</p>
-<p><img src="http://media.zjubiomedit.com/2019-06-18-024217.png" width="40%"></p></li>
+<li>最终类层级：</li>
 </ul>
+<p><img src="http://media.zjubiomedit.com/2019-06-18-023825.png" width="40%"></p>
+<ul>
+<li>在 OWL 本体中，子类意味着其实例均为父类的实例</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-06-18-024217.png" width="40%"></p>
 <h2 id="owl-属性">OWL 属性</h2>
 <ul>
-<li><p>OWL 属性主要分为两种</p>
+<li>OWL 属性主要分为两种
 <ul>
 <li>Object 属性</li>
 <li>Datatype 属性</li>
 </ul></li>
-<li><p>还有一种属性是 Annotation 属性</p>
+<li>还有一种属性是 Annotation 属性
 <ul>
 <li>用于补充信息</li>
 </ul></li>
-<li><p>下图给出了各个属性的说明</p>
-<p><img src="http://media.zjubiomedit.com/2019-06-19-110658.png" width="50%"></p></li>
-<li><p>在 Object Properties tab 中（需要手动打开）新建如下属性：</p>
-<p><img src="http://media.zjubiomedit.com/2019-06-19-111833.png" width="50%"></p>
+<li>下图给出了各个属性的说明</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-06-19-110658.png" width="50%"></p>
+<ul>
+<li>在 Object Properties tab 中（需要手动打开）新建如下属性：
 <ul>
 <li>建议采用小驼峰命名（使用 has 等前缀提升可读性）</li>
 <li>属性可以拥有子属性
@@ -693,13 +706,16 @@
 </ul></li>
 </ul></li>
 </ul>
+<p><img src="http://media.zjubiomedit.com/2019-06-19-111833.png" width="50%"></p>
 <h3 id="转置属性">转置属性</h3>
 <ul>
-<li><p>每个对象属性都可以拥有一个转置属性</p>
-<p><img src="http://media.zjubiomedit.com/2019-06-19-113836.png" width="40%"></p></li>
-<li><p>通过 inverse of 为之前的属性添加转置属性</p>
-<p><img src="http://media.zjubiomedit.com/2019-06-19-114138.png" width="50%"></p></li>
+<li>每个对象属性都可以拥有一个转置属性</li>
 </ul>
+<p><img src="http://media.zjubiomedit.com/2019-06-19-113836.png" width="40%"></p>
+<ul>
+<li>通过 inverse of 为之前的属性添加转置属性</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-06-19-114138.png" width="50%"></p>
 <h2 id="owl-对象属性特征">OWL 对象属性特征</h2>
 <ul>
 <li>OWL 通过属性特征来使得属性的意义更加丰富</li>
@@ -713,93 +729,97 @@
 <li>如果一个个体通过功能属性连接两个名称不同的个体，则那两个个体必须声明为同一个
 <ul>
 <li>否则系统会推理出矛盾</li>
+</ul></li>
 </ul>
-<img src="http://media.zjubiomedit.com/2019-06-19-114653.png" width="50%"></li>
-</ul>
+<p><img src="http://media.zjubiomedit.com/2019-06-19-114653.png" width="50%"></p>
 <h3 id="转置功能属性">转置功能属性</h3>
 <ul>
-<li><p>转置功能属性指该属性的转置属性为功能属性</p>
-<p><img src="http://media.zjubiomedit.com/2019-06-19-115252.png" width="50%"></p></li>
+<li>转置功能属性指该属性的转置属性为功能属性</li>
 </ul>
+<p><img src="http://media.zjubiomedit.com/2019-06-19-115252.png" width="50%"></p>
 <h3 id="传递属性">传递属性</h3>
 <ul>
-<li><p>传递属性可以将属性关系在个体间传递</p>
-<p><img src="http://media.zjubiomedit.com/2019-06-19-115806.png" width="45%"></p>
+<li>传递属性可以将属性关系在个体间传递
 <ul>
 <li>一个传递属性的转置属性也是传递属性</li>
 <li>传递属性不能是功能属性</li>
 </ul></li>
 </ul>
+<p><img src="http://media.zjubiomedit.com/2019-06-19-115806.png" width="45%"></p>
 <h3 id="对称属性">对称属性</h3>
 <ul>
-<li><p>对称属性的本身即为其转置属性</p>
-<p><img src="http://media.zjubiomedit.com/2019-06-19-120406.png" width="45%"></p></li>
+<li>对称属性的本身即为其转置属性</li>
 </ul>
+<p><img src="http://media.zjubiomedit.com/2019-06-19-120406.png" width="45%"></p>
 <h3 id="非对称属性">非对称属性</h3>
 <ul>
-<li><p>即其转置不为自己的属性</p>
-<p><img src="http://media.zjubiomedit.com/2019-06-19-122347.png" width="45%"></p></li>
+<li>即其转置不为自己的属性</li>
 </ul>
+<p><img src="http://media.zjubiomedit.com/2019-06-19-122347.png" width="45%"></p>
 <h3 id="反身属性">反身属性</h3>
 <ul>
 <li>反身属性一定要关联个体自身
 <ul>
 <li>也可以关联其他个体</li>
+</ul></li>
 </ul>
-<img src="http://media.zjubiomedit.com/2019-06-19-122653.png" width="45%"></li>
-</ul>
+<p><img src="http://media.zjubiomedit.com/2019-06-19-122653.png" width="45%"></p>
 <h3 id="非反身属性">非反身属性</h3>
 <ul>
-<li><p>非反身属性即属性不能关联个体自身</p>
-<p><img src="http://media.zjubiomedit.com/2019-06-19-122902.png" width="45%"></p></li>
+<li>非反身属性即属性不能关联个体自身</li>
 </ul>
+<p><img src="http://media.zjubiomedit.com/2019-06-19-122902.png" width="45%"></p>
 <h3 id="实践">实践</h3>
 <ul>
-<li><p>设置 hasIngredient 及其转置属性为传递属性</p>
-<p><img src="http://media.zjubiomedit.com/2019-06-19-121136.png" width="20%"></p></li>
-<li><p>设置 hasBase 为功能属性</p>
+<li>设置 hasIngredient 及其转置属性为传递属性</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-06-19-121136.png" width="20%"></p>
+<ul>
+<li>设置 hasBase 为功能属性
 <ul>
 <li>其转置为转置功能属性</li>
 </ul></li>
 </ul>
 <h2 id="属性的域和范围">属性的域和范围</h2>
 <ul>
-<li><p>属性可以指定域和范围，将来自域的个体连接到来自范围的个体</p>
+<li>属性可以指定域和范围，将来自域的个体连接到来自范围的个体
 <ul>
 <li>域是指属性左侧的个体所属的类</li>
 <li>范围是指属性右侧的个体所属的类</li>
+</ul></li>
 </ul>
-<p><img src="http://media.zjubiomedit.com/2019-06-25-115947.png" width="60%"></p></li>
-<li><p>属性的域或范围可以有多个类</p>
+<p><img src="http://media.zjubiomedit.com/2019-06-25-115947.png" width="60%"></p>
+<ul>
+<li>属性的域或范围可以有多个类
 <ul>
 <li>取其交集</li>
 </ul></li>
-<li><p>一般来说，一个属性的域是其转置属性的范围，反之亦然</p>
+<li>一般来说，一个属性的域是其转置属性的范围，反之亦然
 <ul>
 <li>最新版 Protege 似乎并不会自动填充，需要手动指定</li>
 </ul></li>
-<li><p>需要注意的是，域和范围并不是一个限制，而是会作为推理的公理</p>
+<li>需要注意的是，域和范围并不是一个限制，而是会作为推理的公理
 <ul>
 <li>比如设置一个 IceCream 个体的 hasTopping 属性，并不会报错，而是会将其推理为 Pizza 的子类</li>
 <li>因此，实际上并不建议设置域和范围，容易在比较大的本体中引起 bug</li>
 </ul></li>
-<li><p>设置 hasTopping 和 hasBase 属性的域和范围（及其转置属性）</p>
-<p><img src="http://media.zjubiomedit.com/2019-06-25-120828.png" width="60%"></p></li>
+<li>设置 hasTopping 和 hasBase 属性的域和范围（及其转置属性）</li>
 </ul>
+<p><img src="http://media.zjubiomedit.com/2019-06-25-120828.png" width="60%"></p>
 <h2 id="描述和定义类">描述和定义类</h2>
 <ul>
-<li><p>创建了这么多属性后，现在我们将使用这些属性来描述与定义类</p></li>
-<li><p>我们可以将所有含有相同属性的个体归到一个<strong>匿名类</strong>中</p>
+<li>创建了这么多属性后，现在我们将使用这些属性来描述与定义类</li>
+<li>我们可以将所有含有相同属性的个体归到一个<strong>匿名类</strong>中
 <ul>
 <li>这种匿名类称为<strong>限制</strong>（Restrictions）</li>
 </ul></li>
-<li><p>OWL 的限制分为三类：</p>
+<li>OWL 的限制分为三类：
 <ul>
 <li>Quantifier 限制</li>
 <li>Cardinality 限制</li>
 <li>hasValue 限制</li>
 </ul></li>
-<li><p>本节我们将介绍 Quantifier 限制，其又可以分为两类：</p>
+<li>本节我们将介绍 Quantifier 限制，其又可以分为两类：
 <ul>
 <li>存在性限制：描述类中的个体<strong>至少包含一个</strong>指定的属性，连接至指定的类中的个体
 <ul>
@@ -810,21 +830,23 @@
 <li>使用 only 关键字</li>
 </ul></li>
 </ul></li>
-<li><p>存在性限制是最常用的一种限制</p>
+<li>存在性限制是最常用的一种限制</li>
+</ul>
 <p><img src="http://media.zjubiomedit.com/2019-07-15-025549.png" width="50%"></p>
 <ul>
 <li>可以将存在性限制理解为一种<strong>必要性</strong>
 <ul>
 <li>如要想成为一个 pizza，其需要有一个（至少一个）pizza 基底</li>
-</ul>
-<img src="http://media.zjubiomedit.com/2019-07-15-030214.png" width="50%"></li>
 </ul></li>
-<li><p>下面我们使用 Class 中的 subclass of 来创建一些不同种类的 pizza，并为其设置存在性限制</p>
-<p><img src="http://media.zjubiomedit.com/2019-07-15-030552.png" width="80%"></p>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-07-15-030214.png" width="50%"></p>
+<ul>
+<li>下面我们使用 Class 中的 subclass of 来创建一些不同种类的 pizza，并为其设置存在性限制
 <ul>
 <li>注意右键设置 make primitive sibilings disjoint</li>
 </ul></li>
 </ul>
+<p><img src="http://media.zjubiomedit.com/2019-07-15-030552.png" width="80%"></p>
 <h2 id="使用推理机">使用推理机</h2>
 <ul>
 <li>使用 OWL-DL 描述的本体的一大特点是其可以通过<strong>推理机</strong>进行处理</li>
@@ -835,10 +857,12 @@
 </ul></li>
 <li>在 protege 中的菜单中选择推理机，执行推理
 <ul>
-<li><p>可选的推理机有很多，这里选择 pellet</p></li>
-<li><p>推理机会给出推理的层级结构，并标红不稳定的类：</p>
-<p><img src="http://media.zjubiomedit.com/2019-07-15-071605.png" width="50%"></p></li>
+<li>可选的推理机有很多，这里选择 pellet</li>
+<li>推理机会给出推理的层级结构，并标红不稳定的类：</li>
 </ul></li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-07-15-071605.png" width="50%"></p>
+<ul>
 <li>上面的类不稳定的原因是其同时属于两个不相交的父类
 <ul>
 <li>因此对于兄弟类，正确地设置其相关性十分重要</li>
@@ -846,80 +870,88 @@
 </ul>
 <h2 id="充要条件原始类与定义类">充要条件（原始类与定义类）</h2>
 <ul>
-<li><p>到目前为止，我们只使用了必要条件来描述类</p>
+<li>到目前为止，我们只使用了必要条件来描述类
 <ul>
 <li>只包含必要条件的类称为<strong>原始类</strong></li>
 </ul></li>
-<li><p>我们可以添加充要条件来定义类</p>
+<li>我们可以添加充要条件来定义类
 <ul>
 <li>包含至少一个充要条件的类称为<strong>定义类</strong></li>
+</ul></li>
 </ul>
-<p><img src="http://media.zjubiomedit.com/2019-07-15-085926.png" width="60%"></p></li>
-<li><p>在 protege 中，右键可以将原始类转换为定义类</p>
-<p><img src="http://media.zjubiomedit.com/2019-07-15-090122.png" width="80%"></p></li>
-<li><p>充要条件的主要作用是帮助推理机推理类的层级结构</p>
+<p><img src="http://media.zjubiomedit.com/2019-07-15-085926.png" width="60%"></p>
+<ul>
+<li>在 protege 中，右键可以将原始类转换为定义类</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-07-15-090122.png" width="80%"></p>
+<ul>
+<li>充要条件的主要作用是帮助推理机推理类的层级结构
 <ul>
 <li>推理机<strong>只会</strong>自动推理定义类下的类</li>
 </ul></li>
 </ul>
 <h2 id="自动化分类">自动化分类</h2>
 <ul>
-<li><p>在较复杂的本体中，使用推理机来推理类的层级结构十分重要</p></li>
-<li><p>通常手工构建的层级结构（asserted hierarchy）建议以<strong>简单树</strong>结构组织</p>
+<li>在较复杂的本体中，使用推理机来推理类的层级结构十分重要</li>
+<li>通常手工构建的层级结构（asserted hierarchy）建议以<strong>简单树</strong>结构组织
 <ul>
 <li>即每个类只有一个子类</li>
 <li>这样做便于维护且不易出错</li>
 </ul></li>
-<li><p>复杂树结构由推理机自动推理完成，下面给出一个例子：</p>
-<p><img src="http://media.zjubiomedit.com/2019-07-16-014444.png" width="60%"></p>
+<li>复杂树结构由推理机自动推理完成，下面给出一个例子：
 <ul>
 <li>注意不能设置 NamedPizza 与 CheesyPizza 的 disjoint</li>
 </ul></li>
-<li><p>由 OWLViz 给出的层状结构如下：</p>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-07-16-014444.png" width="60%"></p>
 <ul>
-<li><p>asserted hierarchy：</p>
-<p><img src="http://media.zjubiomedit.com/2019-07-16-023806.png" width="60%"></p></li>
-<li><p>inferred hierarchy：</p>
-<p><img src="http://media.zjubiomedit.com/2019-07-16-023858.png" width="60%"></p></li>
+<li>由 OWLViz 给出的层状结构如下：
+<ul>
+<li>asserted hierarchy：</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-07-16-023806.png" width="60%"></p>
+<ul>
+<li>inferred hierarchy：</li>
 </ul></li>
 </ul>
+<p><img src="http://media.zjubiomedit.com/2019-07-16-023858.png" width="60%"></p>
 <h2 id="普遍性限制">普遍性限制</h2>
 <ul>
-<li><p>之前我们所说的都是存在性限制</p>
+<li>之前我们所说的都是存在性限制
 <ul>
 <li>其描述类中的个体<strong>至少包含一个</strong>指定的属性，连接至指定的类中的个体</li>
 </ul></li>
-<li><p>现在我们将介绍普遍性限制</p>
+<li>现在我们将介绍普遍性限制
 <ul>
 <li>其表示类中的个体对于给定属性，只能连接至指定的类中的个体，不能为其他</li>
 <li>也被称为 AllValuesFrom 限制</li>
 </ul></li>
-<li><p>需要注意的是，如果一个个体没有给定的属性，它也满足普遍性限制</p>
+<li>需要注意的是，如果一个个体没有给定的属性，它也满足普遍性限制
 <ul>
 <li>普遍性限制给出的是一种 <strong>if 关系</strong>：如果存在给定属性，则其必须指向指定的类</li>
 </ul></li>
-<li><p>下面我们来创建一个 VegetarianPizza 类，并添加普遍性限制</p>
-<p><img src="http://media.zjubiomedit.com/2019-07-16-063514.png" width="50%"></p>
+<li>下面我们来创建一个 VegetarianPizza 类，并添加普遍性限制
 <ul>
-<li><p>注意要使用 or 而不是 and</p>
+<li>注意要使用 or 而不是 and
 <ul>
 <li>否则该条件是无法满足的（因为两个 Topping disjoint）</li>
 </ul></li>
-<li><p>该限制表示此类如果有 Topping，只能是 Cheese 或 Vegetable</p>
-<ul>
+<li>该限制表示此类如果有 Topping，只能是 Cheese 或 Vegetable</li>
 <li>如果此类没有 Topping，也满足条件</li>
 </ul></li>
-<li><p>上述条件是必要条件，下面将其转化为充要条件：</p>
-<p><img src="http://media.zjubiomedit.com/2019-07-16-063827.png" width="50%"></p></li>
-</ul></li>
 </ul>
+<p><img src="http://media.zjubiomedit.com/2019-07-16-063514.png" width="50%"></p>
+<ul>
+<li>上述条件是必要条件，下面将其转化为充要条件：</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-07-16-063827.png" width="50%"></p>
 <h2 id="自动化分类与开放世界推理">自动化分类与开放世界推理</h2>
 <ul>
-<li><p>根据上面的定义，似乎 MargheritaPizza 和 SohoPizza 都应该属于 VegetarianPizza</p>
+<li>根据上面的定义，似乎 MargheritaPizza 和 SohoPizza 都应该属于 VegetarianPizza
 <ul>
 <li>但实际上推理机并不会给出上述推理</li>
 </ul></li>
-<li><p>这是因为推理机的推理是基于开放世界假设的：</p>
+<li>这是因为推理机的推理是基于开放世界假设的：
 <ul>
 <li>如果一个东西没有被声明是真的，它并不能假定为假
 <ul>
@@ -930,26 +962,28 @@
 <li>因此我们需要对 hasTopping 属性设置一个<strong>闭包公理</strong>（closure axiom）</li>
 </ul></li>
 </ul></li>
-<li><p>一个闭包公理就是对指定属性的一个普遍性限制</p>
+<li>一个闭包公理就是对指定属性的一个普遍性限制
 <ul>
-<li><p>可以在存在性限制上右键自动添加</p>
-<p><img src="http://media.zjubiomedit.com/2019-07-16-070537.png" width="50%"></p></li>
-<li><p>注意：单独的普遍性限制并不足够，因为可能包含没有 Topping 的 Pizza</p>
+<li>可以在存在性限制上右键自动添加</li>
+<li>注意：单独的普遍性限制并不足够，因为可能包含没有 Topping 的 Pizza
 <ul>
 <li>对上面的推理来说没有问题，但是从实际生活的角度来说不合理</li>
 </ul></li>
 </ul></li>
-<li><p>断言本体（手工创建）和推理本体如下图所示：</p>
-<p><img src="http://media.zjubiomedit.com/2019-07-16-071044.png" width="70%"></p></li>
 </ul>
+<p><img src="http://media.zjubiomedit.com/2019-07-16-070537.png" width="50%"></p>
+<ul>
+<li>断言本体（手工创建）和推理本体如下图所示：</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-07-16-071044.png" width="70%"></p>
 <h2 id="值分割">值分割</h2>
 <ul>
-<li><p>本章节我们将介绍值分割</p>
+<li>本章节我们将介绍值分割
 <ul>
 <li>它并不是 OWL 的特性，而是一种本体构建中的设计模式</li>
 <li>值分割用于补充我们对类的描述</li>
 </ul></li>
-<li><p>下面给出在 OWL 中创建一个值分割的例子：</p>
+<li>下面给出在 OWL 中创建一个值分割的例子：
 <ol type="1">
 <li>创建一个类 SpicinessValuePartition</li>
 <li>创建其子类表示可能的选项：Hot、Medium 和 Mild</li>
@@ -960,33 +994,40 @@
 </ul></li>
 <li>创建一个功能性对象属性 hasSpiciness</li>
 <li>将该属性的域设置为 SpicinessValuePartition</li>
-</ol>
-<p><img src="http://media.zjubiomedit.com/2019-07-16-111739.png" width="60%"></p></li>
-<li><p>covering 公理的作用是表明该类的全部组成成分，下图给出了很好的说明</p>
-<p><img src="http://media.zjubiomedit.com/2019-07-16-112238.png" width="60%"></p></li>
-<li><p>下面可以添加存在性限制给每个具体的 Topping 类</p>
+</ol></li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-07-16-111739.png" width="60%"></p>
+<ul>
+<li>covering 公理的作用是表明该类的全部组成成分，下图给出了很好的说明</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-07-16-112238.png" width="60%"></p>
+<ul>
+<li>下面可以添加存在性限制给每个具体的 Topping 类
 <ul>
 <li>可以使用 tab 里的 class matrix 批量添加</li>
+</ul></li>
 </ul>
-<p><img src="http://media.zjubiomedit.com/2019-07-16-113928.png" width="50%"></p></li>
-<li><p>最后，我们创建一个 SpicyPizza 类，并使用嵌套语句进行定义：</p>
-<p><img src="http://media.zjubiomedit.com/2019-07-16-114947.png" width="40%"></p></li>
+<p><img src="http://media.zjubiomedit.com/2019-07-16-113928.png" width="50%"></p>
+<ul>
+<li>最后，我们创建一个 SpicyPizza 类，并使用嵌套语句进行定义：</li>
 </ul>
+<p><img src="http://media.zjubiomedit.com/2019-07-16-114947.png" width="40%"></p>
 <h2 id="基数限制">基数限制</h2>
 <ul>
-<li><p>基数限制用于描述关系（对象属性或数据类型属性）的数量，分为：</p>
+<li>基数限制用于描述关系（对象属性或数据类型属性）的数量，分为：
 <ul>
 <li>最少 min</li>
 <li>最多 max</li>
 <li>具体数量 exactly</li>
 </ul></li>
-<li><p>只有关系对应的个体确定不同才会计算为一个关系</p></li>
-<li><p>下面我们设置一个新的 Pizza 类，定义其 hasTopping 关系至少为三条：</p>
-<p><img src="http://media.zjubiomedit.com/2019-07-16-121255.png" width="40%"></p></li>
-<li><p>实际上，我们还可以再缩小基数限制的范围，设置 qualified 基数限制</p>
+<li>只有关系对应的个体确定不同才会计算为一个关系</li>
+<li>下面我们设置一个新的 Pizza 类，定义其 hasTopping 关系至少为三条：</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-07-16-121255.png" width="40%"></p>
 <ul>
-<li><p>只要在设置基数限制时添加具体的类即可</p>
-<p><img src="http://media.zjubiomedit.com/2019-07-16-122214.png" width="40%"></p>
+<li>实际上，我们还可以再缩小基数限制的范围，设置 qualified 基数限制
+<ul>
+<li>只要在设置基数限制时添加具体的类即可
 <ul>
 <li>注意：上面的限制只表明该类需要以 hasTopping 关系连接 4 个 CheeseTopping 个体
 <ul>
@@ -994,100 +1035,109 @@
 <li>我们需要通过普遍性限制（only ）加以约束</li>
 </ul></li>
 </ul></li>
-<li><p>实际上 unqualified 限制的填充类是 Thing</p></li>
+<li>实际上 unqualified 限制的填充类是 Thing</li>
 </ul></li>
 </ul>
+<p><img src="http://media.zjubiomedit.com/2019-07-16-122214.png" width="40%"></p>
 <h1 id="数据类型属性">数据类型属性</h1>
 <ul>
-<li><p>之前我们介绍的都是对象属性，下面介绍另一种属性：数据类型属性</p>
+<li>之前我们介绍的都是对象属性，下面介绍另一种属性：数据类型属性
 <ul>
 <li>数据类型属性将个体和具体数值连接起来
 <ul>
 <li>该数值类型一般为 xml schema datatype 或 rdf literal</li>
 </ul></li>
 </ul></li>
-<li><p>我们可以通过 datatype properties tab 创建 datatype 属性</p>
+<li>我们可以通过 datatype properties tab 创建 datatype 属性
 <ul>
 <li>可以设置属性为 functional 保证每个个体只能有一个该属性</li>
+</ul></li>
 </ul>
-<p><img src="http://media.zjubiomedit.com/2019-07-17-073729.png" width="70%"></p></li>
-<li><p>下面我们将创建两个个体，并设置其 hasCalorificContentValue 属性</p>
-<p><img src="http://media.zjubiomedit.com/2019-07-17-073917.png" width="70%"></p></li>
-<li><p>最后，定义两个新的 Pizza 类，并使用数据类型属性对其进行约束</p>
+<p><img src="http://media.zjubiomedit.com/2019-07-17-073729.png" width="70%"></p>
+<ul>
+<li>下面我们将创建两个个体，并设置其 hasCalorificContentValue 属性</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-07-17-073917.png" width="70%"></p>
+<ul>
+<li>最后，定义两个新的 Pizza 类，并使用数据类型属性对其进行约束
 <ul>
 <li>推理机会自动将上面两个个体归到相应的类中</li>
+</ul></li>
 </ul>
-<p><img src="http://media.zjubiomedit.com/2019-07-17-074436.png" width="70%"></p></li>
-</ul>
+<p><img src="http://media.zjubiomedit.com/2019-07-17-074436.png" width="70%"></p>
 <h1 id="开放世界推理">开放世界推理</h1>
 <ul>
-<li><p>下面我们将创建一个 VegetarianPizza 类的互补类 NonVegetarianPizza</p>
+<li>下面我们将创建一个 VegetarianPizza 类的互补类 NonVegetarianPizza
 <ul>
 <li>以此说明开放世界推理</li>
 </ul></li>
-<li><p>NonVegetarianPizza 类的定义如下：</p>
+<li>NonVegetarianPizza 类的定义如下：
 <ul>
 <li>设置限制时可以使用 tab 自动补全类名</li>
+</ul></li>
 </ul>
-<p><img src="http://media.zjubiomedit.com/2019-07-17-082047.png" width="35%"></p></li>
-<li><p>通过自动推理可以发现，不属于 Vegetarian 的类都被归到了 NonVegetarianPizza 下</p>
-<p><img src="http://media.zjubiomedit.com/2019-07-17-082225.png" width="30%"></p></li>
-<li><p>然而，如果我们创建一个不含有闭包公理的类，其将不会被归到任何一个类下：</p>
-<p><img src="http://media.zjubiomedit.com/2019-07-17-082334.png" width="35%"></p>
+<p><img src="http://media.zjubiomedit.com/2019-07-17-082047.png" width="35%"></p>
+<ul>
+<li>通过自动推理可以发现，不属于 Vegetarian 的类都被归到了 NonVegetarianPizza 下</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-07-17-082225.png" width="30%"></p>
+<ul>
+<li>然而，如果我们创建一个不含有闭包公理的类，其将不会被归到任何一个类下：
 <ul>
 <li>这是因为在<strong>开放世界假设</strong>下，UnclosedPizza 不能确定是否属于 Vegetarian 类，也就不能确定是否属于 NonVegetarianPizza</li>
 </ul></li>
 </ul>
+<p><img src="http://media.zjubiomedit.com/2019-07-17-082334.png" width="35%"></p>
 <h1 id="创建其他的-owl-部件">创建其他的 OWL 部件</h1>
 <h2 id="创建个体">创建个体</h2>
 <ul>
 <li>新建一个 Country 类，创建一些个体
 <ul>
 <li>因为 OWL 不使用唯一命名假设，所以必要时需要设置个体的独立性</li>
-</ul>
-<img src="http://media.zjubiomedit.com/2019-07-17-084827.png" width="20%"></li>
-</ul>
-<h2 id="hasvalue-限制">hasValue 限制</h2>
-<ul>
-<li><p>hasValue 限制用于描述个体至少有一个指向特定个体的关系</p>
-<p><img src="http://media.zjubiomedit.com/2019-07-17-084955.png" width="40%"></p></li>
-</ul>
-<h2 id="枚举类">枚举类</h2>
-<ul>
-<li><p>枚举类用于表示该类只由一些特定的个体组成</p></li>
-<li><p>枚举类本质上是一种匿名类，可以将其与命名类通过 equivalent class 关联起来：</p>
-<p><img src="http://media.zjubiomedit.com/2019-07-17-090336.png" width="50%"></p>
-<ul>
-<li><p>下面的图描述了枚举类和命名类的关系：</p>
-<p><img src="http://media.zjubiomedit.com/2019-07-17-090501.png" width="45%"></p></li>
 </ul></li>
 </ul>
+<p><img src="http://media.zjubiomedit.com/2019-07-17-084827.png" width="20%"></p>
+<h2 id="hasvalue-限制">hasValue 限制</h2>
+<ul>
+<li>hasValue 限制用于描述个体至少有一个指向特定个体的关系</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-07-17-084955.png" width="40%"></p>
+<h2 id="枚举类">枚举类</h2>
+<ul>
+<li>枚举类用于表示该类只由一些特定的个体组成</li>
+<li>枚举类本质上是一种匿名类，可以将其与命名类通过 equivalent class 关联起来：</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-07-17-090336.png" width="50%"></p>
+<ul>
+<li>下面的图描述了枚举类和命名类的关系：</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-07-17-090501.png" width="45%"></p>
 <h2 id="注释属性">注释属性</h2>
 <ul>
 <li>OWL 允许为类、属性、个体和本体本身添加注释属性
 <ul>
 <li>OWL-Full 对注释属性的使用没有限制</li>
 <li>OWL-DL 限制了注释属性的类型和属性公理</li>
+</ul></li>
 </ul>
-<img src="http://media.zjubiomedit.com/2019-07-17-092054.png" width="70%"></li>
-</ul>
+<p><img src="http://media.zjubiomedit.com/2019-07-17-092054.png" width="70%"></p>
 <h2 id="多个充要条件">多个充要条件</h2>
 <ul>
 <li>之前介绍的类都只有一个充要条件
 <ul>
 <li>实际上我们可以通过 add 添加多个充要条件</li>
+</ul></li>
 </ul>
-<img src="http://media.zjubiomedit.com/2019-07-17-092210.png" width="60%"></li>
-</ul>
+<p><img src="http://media.zjubiomedit.com/2019-07-17-092210.png" width="60%"></p>
 <h1 id="附录-a限制类型">附录 A：限制类型</h1>
 <ul>
 <li>本附录将进一步介绍 OWL 中的属性限制类型</li>
 <li>所有类型的限制都是在描述一个包含某些个体的<strong>匿名类</strong>
 <ul>
 <li>当我们在为一个命名类设置限制时，我们实际上是在描述该类的匿名超类</li>
+</ul></li>
 </ul>
-<img src="http://media.zjubiomedit.com/2019-07-18-075224.png" width="60%"></li>
-</ul>
+<p><img src="http://media.zjubiomedit.com/2019-07-18-075224.png" width="60%"></p>
 <h2 id="quantifier-限制">Quantifier 限制</h2>
 <ul>
 <li>量词限制包含三个部分：
@@ -1110,9 +1160,9 @@
 <li>HasValue 限制将属性连接至<strong>特定的个体</strong>，而非特定的类
 <ul>
 <li>其等价于存在性限制，其指向的类为包含特定个体的枚举类</li>
+</ul></li>
 </ul>
-<img src="http://media.zjubiomedit.com/2019-07-18-100640.png" width="50%"></li>
-</ul>
+<p><img src="http://media.zjubiomedit.com/2019-07-18-100640.png" width="50%"></p>
 <h2 id="cardinality-限制">Cardinality 限制</h2>
 <ul>
 <li>基数限制用于规定个体参与指定属性的关系的<strong>数量</strong>，可以分为：
