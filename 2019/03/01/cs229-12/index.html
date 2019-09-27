@@ -105,7 +105,7 @@
 <meta property="og:description" content="本篇博客为 CS229 学习笔记第十二部分，主题是：独立成分分析。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-03-04-065522.png">
-<meta property="og:updated_time" content="2019-03-04T08:49:29.678Z">
+<meta property="og:updated_time" content="2019-09-27T02:30:30.165Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS229 学习笔记之十二：独立成分分析">
 <meta name="twitter:description" content="本篇博客为 CS229 学习笔记第十二部分，主题是：独立成分分析。">
@@ -505,7 +505,7 @@ x = As
 <li>重复的观察可以得到一个数据集 <span class="math inline">\(\{x^{(i)}; i=1, \ldots, m\}\)</span></li>
 <li>我们的目标是通过观察数据恢复出原始数据 <span class="math inline">\(s^{(i)}\)</span>（<span class="math inline">\(x^{(i)} = A s^{(i)}\)</span>）</li>
 </ul></li>
-<li><p>在鸡尾酒宴会问题中：</p>
+<li>在鸡尾酒宴会问题中：
 <ul>
 <li><span class="math inline">\(s^{(i)}\)</span> 是一个 <span class="math inline">\(n\)</span> 维向量，<span class="math inline">\(s_j^{(i)}\)</span> 是说话者 <span class="math inline">\(j\)</span> 在 时间 <span class="math inline">\(i\)</span> 发出的声音</li>
 <li><span class="math inline">\(x^{(i)}\)</span> 是一个 <span class="math inline">\(n\)</span> 维向量，<span class="math inline">\(x_j^{(i)}\)</span> 是麦克风 <span class="math inline">\(j\)</span> 在 时间 <span class="math inline">\(i\)</span> 记录的声音</li>
@@ -551,11 +551,11 @@ W= \left[\begin{array}{cc}
 <ul>
 <li>假定 <span class="math inline">\(n =2\)</span>，<span class="math inline">\(s\)</span> 满足多元高斯分布 <span class="math inline">\(s \in \mathcal{N}(0,I)\)</span>（多元高斯分布的各分量也是独立的）
 <ul>
-<li><p>则其密度函数的图像是一个以原点为中心旋转对称的圆形</p></li>
+<li>则其密度函数的图像是一个以原点为中心旋转对称的圆形</li>
 <li><p>假定我们观测到了某个 <span class="math inline">\(x = As\)</span>，则 x 也满足高斯分布 <span class="math inline">\(x \in \mathcal{N}(0, AA^T)\)</span> <span class="math display">\[
 \text{E}(xx^T) = \text{E}[Ass^TA^T] = AA^TI = AA^T
 \]</span></p></li>
-<li><p>令 R 是一个任意正交矩阵（旋转矩阵），则令 <span class="math inline">\(A&#39; = AR\)</span>，基于 <span class="math inline">\(A&#39;\)</span> 观测得到的 <span class="math inline">\(x&#39; = A&#39;s\)</span> 将满足同样的正态分布 <span class="math inline">\(x&#39; \in \mathcal{N}(0, AA^T)\)</span></p>
+<li>令 R 是一个任意正交矩阵（旋转矩阵），则令 <span class="math inline">\(A&#39; = AR\)</span>，基于 <span class="math inline">\(A&#39;\)</span> 观测得到的 <span class="math inline">\(x&#39; = A&#39;s\)</span> 将满足同样的正态分布 <span class="math inline">\(x&#39; \in \mathcal{N}(0, AA^T)\)</span>
 <ul>
 <li>这会导致我们无法求解出准确的混合矩阵</li>
 </ul></li>
@@ -565,7 +565,7 @@ W= \left[\begin{array}{cc}
 </ul>
 <h1 id="密度函数与线性变换">密度函数与线性变换</h1>
 <ul>
-<li><p>在推导 ICA 算法之前，先简单介绍一下概率密度函数的线性变换</p>
+<li>在推导 ICA 算法之前，先简单介绍一下概率密度函数的线性变换
 <ul>
 <li>概率密度函数的积分为 1（表示概率之和）</li>
 </ul></li>
@@ -579,7 +579,7 @@ p_x(x) = p_s(Wx)|W|
 </ul>
 <h1 id="ica-算法">ICA 算法</h1>
 <ul>
-<li><p>下面将正式介绍 ICA 算法</p>
+<li>下面将正式介绍 ICA 算法
 <ul>
 <li>这里使用极大似然估计进行推导，原始论文中使用了更加复杂的方法（informax principal）</li>
 </ul></li>
@@ -598,9 +598,9 @@ F(z_0) = P(z \le z_0) = \int_{-\infty}^{z_0} p_z(z)dz
 <ul>
 <li>且密度函数与累计分布函数的关系为：<span class="math inline">\(p_z(z) = F&#39;(z)\)</span></li>
 </ul></li>
-<li><p>因此，为了确定 <span class="math inline">\(s_j\)</span> 的密度函数，我们只需要确定其累计分布函数</p>
+<li>因此，为了确定 <span class="math inline">\(s_j\)</span> 的密度函数，我们只需要确定其累计分布函数
 <ul>
-<li><p>累计分布函数是一个从 0 到 1 的单增函数</p></li>
+<li>累计分布函数是一个从 0 到 1 的单增函数</li>
 <li><p>我们不能选择累计分布函数为高斯分布的 cdf 函数，这里将选择 sigmoid 函数（并没有什么特别的理由） <span class="math display">\[
 g(s) = \frac 1 {(1+e^{-s})}
 \]</span></p>
@@ -625,8 +625,8 @@ W := W + \alpha \left(\left[\begin{array}{cc}
 <li><span class="math inline">\(\alpha\)</span> 是学习速率</li>
 </ul></li>
 </ul></li>
-<li><p>最后，当算法收敛后，通过 <span class="math inline">\(s^{(i)} = Wx^{(i)}\)</span> 即可恢复出原始数据</p></li>
-<li><p>注意：在计算似然函数时我们假设了各个训练样本（不是每个训练样本的分量）之间相互独立，然而对于语音信号等数据来说，该假设并不能成立</p>
+<li>最后，当算法收敛后，通过 <span class="math inline">\(s^{(i)} = Wx^{(i)}\)</span> 即可恢复出原始数据</li>
+<li>注意：在计算似然函数时我们假设了各个训练样本（不是每个训练样本的分量）之间相互独立，然而对于语音信号等数据来说，该假设并不能成立
 <ul>
 <li>然而在数据量足够大时，算法仍然能取得不错的效果</li>
 <li>这种情况下（不独立），在运行随机梯度上升前事先打乱原始数据，能够提升收敛的速度</li>

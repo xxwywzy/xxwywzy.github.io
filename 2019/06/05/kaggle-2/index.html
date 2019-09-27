@@ -116,7 +116,7 @@
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-05-09-040311.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-05-09-042153.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-05-09-042925.png">
-<meta property="og:updated_time" content="2019-06-11T12:22:25.367Z">
+<meta property="og:updated_time" content="2019-09-27T02:32:38.148Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Coursera-Kaggle Week2 学习笔记">
 <meta name="twitter:description" content="本篇博客为 Coursera-Kaggle 公开课的第二周学习笔记。">
@@ -500,9 +500,11 @@
 </ul></li>
 <li>在探究模型（比如进行 stacking）之前，先进行 EDA
 <ul>
-<li><p>附：stacking 是一种集成学习方法</p>
-<p><img src="http://media.zjubiomedit.com/2019-04-22-073916.png" width="80%"></p></li>
+<li>附：stacking 是一种集成学习方法</li>
 </ul></li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-04-22-073916.png" width="80%"></p>
+<ul>
 <li>在具体进行 EDA 之前，先要建立对数据的直觉：
 <ul>
 <li>首先需要了解相关的领域知识
@@ -523,11 +525,11 @@
 <ul>
 <li>关于匿名数据：
 <ul>
-<li><p>我们需要尝试去解码这些特征</p>
+<li>我们需要尝试去解码这些特征
 <ul>
 <li>即猜测该特征的真实含义</li>
 </ul></li>
-<li><p>我们需要猜测特征的类型</p>
+<li>我们需要猜测特征的类型
 <ul>
 <li>每种类型对应的预处理方式不同</li>
 </ul></li>
@@ -537,14 +539,16 @@
 </ul>
 <h2 id="数据可视化">数据可视化</h2>
 <ul>
-<li><p>数据可视化可以分为两类：</p>
+<li>数据可视化可以分为两类：
 <ul>
 <li>探索单个特征
 <ul>
 <li>直方图：<code>plt.hist(x)</code></li>
 </ul></li>
+</ul></li>
 </ul>
-<p><img src="http://media.zjubiomedit.com/2019-04-25-014419.png" width="40%"></p></li>
+<p><img src="http://media.zjubiomedit.com/2019-04-25-014419.png" width="40%"></p>
+<ul>
 <li><p>索引与值：<code>plt.plot(x, ‘.’)</code></p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;img src=&quot;http://media.zjubiomedit.com/2019-04-25-014557.png&quot; width=60%&gt;</span><br></pre></td></tr></table></figure>
 <ul>
@@ -552,7 +556,7 @@
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df.describe()</span><br><span class="line">x.mean()</span><br><span class="line">x.var()</span><br></pre></td></tr></table></figure></li>
 <li><p>其他工具：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x.value_counts()</span><br><span class="line">x.isnull()</span><br></pre></td></tr></table></figure></li>
-<li><p>探索特征间的关联性</p>
+<li>探索特征间的关联性
 <ul>
 <li>特征对
 <ul>
@@ -619,13 +623,13 @@
 </ul>
 <h2 id="验证策略">验证策略</h2>
 <ul>
-<li><p>有三种主要的验证策略：</p>
+<li>有三种主要的验证策略：
 <ul>
 <li><p>保留验证（Hold-out）<code>sklearn.model_selection.ShuffleSplit</code></p>
 <p><img src="http://media.zjubiomedit.com/2019-05-09-040311.png" width="35%"></p></li>
 <li><p>K 保留验证（K-fold）<code>sklearn.model_selection.Kfold</code></p>
 <p><img src="http://media.zjubiomedit.com/2019-05-09-042153.png" width="45%"></p></li>
-<li><p>留一验证（Leave-one-out）<code>sklearn.model_selection.LeaveOneOut</code></p></li>
+<li>留一验证（Leave-one-out）<code>sklearn.model_selection.LeaveOneOut</code></li>
 </ul></li>
 <li><p>对于某些情况，上述验证方法可能会存在偏差：</p>
 <p><img src="http://media.zjubiomedit.com/2019-05-09-042925.png" width="40%"></p>
