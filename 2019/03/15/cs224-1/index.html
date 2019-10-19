@@ -538,7 +538,7 @@
 </ul>
 <h1 id="传统词向量">传统词向量</h1>
 <ul>
-<li><p>最简单的词向量表示方法是 <strong>one-hot 向量</strong></p>
+<li>最简单的词向量表示方法是 <strong>one-hot 向量</strong>
 <ol type="1">
 <li>构建一个大小为 <span class="math inline">\(|V|\)</span> 的词典（如果是表示所有英语词汇，则大小约为 1300 万）</li>
 <li>将每个词语表示为一个 <span class="math inline">\(\mathbb{R}^{|V|\times 1}\)</span> 的向量
@@ -619,12 +619,12 @@ w^{aardvark} = \left[\begin{array}{cc}
 <li><p>观察 SVD 得到的奇异值（ <span class="math inline">\(S\)</span> 矩阵的对角线），按照所占的百分比选择适当的 <span class="math inline">\(k\)</span> <span class="math display">\[
 \frac {\sum_{i=1}^k \sigma_i} {\sum_{i=1}^{|V|} \sigma_i}
 \]</span></p></li>
-<li><p>然后选择矩阵 <span class="math inline">\(U\)</span> 的前 <span class="math inline">\(k\)</span> 行作为词向量</p>
+<li>然后选择矩阵 <span class="math inline">\(U\)</span> 的前 <span class="math inline">\(k\)</span> 行作为词向量
 <ul>
 <li>词向量的长度为 <span class="math inline">\(k\)</span></li>
 <li>该向量能够表示词语的语法和语义信息</li>
 </ul></li>
-<li><p>下面两张图给出了 SVD 的求解过程：</p>
+<li>下面两张图给出了 SVD 的求解过程：
 <ul>
 <li><p>使用 SVD 分解共现矩阵：</p>
 <p><img src="http://media.zjubiomedit.com/2019-03-05-055909.png" width="80%"></p></li>
@@ -673,7 +673,7 @@ w^{aardvark} = \left[\begin{array}{cc}
 </ul>
 <h2 id="语言模型">语言模型</h2>
 <ul>
-<li><p>语言模型用于计算一个词语序列的概率</p>
+<li>语言模型用于计算一个词语序列的概率
 <ul>
 <li>如果这个序列是合理的（语义和语法上），其概率就会比较高</li>
 <li>否则输出的概率就会比较低</li>
@@ -687,7 +687,7 @@ P(w_1,w_2,\ldots,w_n) = \prod_{i=1}^n P(w_i)
 <li><p>如果假设每个词语的出现于其前一个词语相关，就可以得到 <strong>Bigram model</strong>： <span class="math display">\[
 P(w_1,w_2,\ldots,w_n) = \prod_{i=2}^n P(w_i|w_{i-1})
 \]</span></p></li>
-<li><p>上述两种模型都过于理想化，实际情况下一个词语的出现概率受到更多因素的影响</p>
+<li>上述两种模型都过于理想化，实际情况下一个词语的出现概率受到更多因素的影响
 <ul>
 <li>下面将介绍如何通过模型学习这些概率</li>
 <li>word2vec 可以理解为是语言模型的副产物</li>
@@ -746,7 +746,7 @@ z = \mathcal{U}\hat{v} \in \mathbb{R}^{|V|}
 <ul>
 <li>softmax 的具体形式为 <span class="math inline">\(\frac {e^{z_i}} {\sum_{k=1}^{|V|} e^{z_k}}\)</span></li>
 </ul></li>
-<li><p>我们希望生成的概率 <span class="math inline">\(\hat{y} \in \mathbb{R}^{|V|}\)</span> 能够匹配真实的概率 <span class="math inline">\(y \in \mathbb{R}^{|V|}\)</span></p>
+<li>我们希望生成的概率 <span class="math inline">\(\hat{y} \in \mathbb{R}^{|V|}\)</span> 能够匹配真实的概率 <span class="math inline">\(y \in \mathbb{R}^{|V|}\)</span>
 <ul>
 <li>该真实概率实际上就是一个 one-hot 向量（对应到待预测的中心词）</li>
 </ul></li>
@@ -755,7 +755,7 @@ z = \mathcal{U}\hat{v} \in \mathbb{R}^{|V|}
 <h3 id="学习方法">学习方法</h3>
 <p><img src="http://media.zjubiomedit.com/2019-03-12-070940.png" width="35%"></p>
 <ul>
-<li><p>了解到模型的计算方法后，我们希望学习得到 <span class="math inline">\(\mathcal{V}\)</span> 和 <span class="math inline">\(\mathcal{U}\)</span></p>
+<li>了解到模型的计算方法后，我们希望学习得到 <span class="math inline">\(\mathcal{V}\)</span> 和 <span class="math inline">\(\mathcal{U}\)</span>
 <ul>
 <li>我们需要构建一个目标函数来进行优化</li>
 <li>这里选择交叉熵函数 <span class="math inline">\(H(\hat{y},y)\)</span> <span class="math display">\[
@@ -808,7 +808,7 @@ H(\hat{y},y) = -y_c \log(\hat{y}_c)
 <ul>
 <li>Skip-Gram 的具体步骤如下：
 <ol type="1">
-<li><p>生成关于中心词的 one-hot 向量作为输入 <span class="math inline">\(x \in \mathbb{R}^{|V|}\)</span></p></li>
+<li>生成关于中心词的 one-hot 向量作为输入 <span class="math inline">\(x \in \mathbb{R}^{|V|}\)</span></li>
 <li><p>与输入词语矩阵相乘，得到中心词的嵌入词向量： <span class="math display">\[
 v_c = \mathcal{V}x \in  \mathbb{R}^{n}
 \]</span></p></li>
@@ -827,7 +827,7 @@ z = \mathcal{U}v_c \in \mathbb{R}^{|V|}
 <h3 id="学习方法-1">学习方法</h3>
 <p><img src="http://media.zjubiomedit.com/2019-03-14-064627.png" width="35%"></p>
 <ul>
-<li><p>在构建 skip-gram 模型的目标函数时，使用了贝叶斯假设（即条件独立假设）</p>
+<li>在构建 skip-gram 模型的目标函数时，使用了贝叶斯假设（即条件独立假设）
 <ul>
 <li>给定中心词的情况下，所有输出词语都完全独立</li>
 </ul></li>
@@ -840,7 +840,7 @@ z = \mathcal{U}v_c \in \mathbb{R}^{|V|}
     &amp;= - \sum_{j=0,j \ne m}^{2m} u_{c-m+j}^Tv_c + 2m \log \sum_{k=1}^{|V|} \exp(u_k^Tv_c)
     \end{aligned}
 \]</span></p></li>
-<li><p>基于上述代价函数，可以通过随机梯度下降更新参数</p></li>
+<li>基于上述代价函数，可以通过随机梯度下降更新参数</li>
 <li><p>注意：代价函数还可以写成如下形式： <span class="math display">\[
 \begin{aligned}
 J &amp;= - \sum_{j=0,j \ne m}^{2m} \log P(u_{c-m+j}|v_c) \\
@@ -863,8 +863,8 @@ J &amp;= - \sum_{j=0,j \ne m}^{2m} \log P(u_{c-m+j}|v_c) \\
 <ul>
 <li>实际上，负采样在优化一个不同的目标函数
 <ul>
-<li><p>考虑一个由一个词语和一个上下文组成的单词对：<span class="math inline">\((w,c)\)</span></p></li>
-<li><p>现在我们考虑的是该单词对是否出自训练数据：</p>
+<li>考虑一个由一个词语和一个上下文组成的单词对：<span class="math inline">\((w,c)\)</span></li>
+<li>现在我们考虑的是该单词对是否出自训练数据：
 <ul>
 <li>定义 <span class="math inline">\(P(D=1|w,c)\)</span> 为 <span class="math inline">\((w,c)\)</span> 出自语料库的概率</li>
 <li>定义 <span class="math inline">\(P(D=0|w,c)\)</span> 为 <span class="math inline">\((w,c)\)</span> 不出自语料库的概率</li>
@@ -875,9 +875,9 @@ P(D=1|w,c) = \sigma(u_w^Tv_c) = \frac 1 {1+e^{(-u_w^Tv_c)}}
 <ul>
 <li>sigmoid 即为 1 维版本的 softmax 函数</li>
 </ul></li>
-<li><p>新的目标函数希望最大化上述两个概率：</p>
+<li>新的目标函数希望最大化上述两个概率：
 <ul>
-<li><p>当单词对实际上出自语料库时，最大化 <span class="math inline">\(P(D=1|w,c)\)</span></p></li>
+<li>当单词对实际上出自语料库时，最大化 <span class="math inline">\(P(D=1|w,c)\)</span></li>
 <li><p>当单词对实际上并不出自语料库时，最大化 <span class="math inline">\(P(D=0|w,c)\)</span> <span class="math display">\[
 \begin{aligned}
 \theta &amp;= \arg\max_\theta \prod_{(w,c)\in D} P(D=1|w,c,\theta) \prod_{(w,c)\in \tilde{D}} P(D=0|w,c,\theta) \\
@@ -918,7 +918,7 @@ J = - \sum_{(w,c)\in D} \log  \frac 1 {1+\exp(-u_w^Tv_c)} - \sum_{(w,c)\in \tild
 - \log \sigma(u_{c}^T \hat{v}) - \sum_{k=1}^{K} \log \sigma(-\tilde{u}_k^T\hat{v})
 \]</span></li>
 </ul></li>
-<li><p>在上述公式中，<span class="math inline">\(\{\tilde{u}_k | k=1\ldots k\}\)</span> 为负样本，随机采样自 <span class="math inline">\(P_n(w)\)</span></p>
+<li>在上述公式中，<span class="math inline">\(\{\tilde{u}_k | k=1\ldots k\}\)</span> 为负样本，随机采样自 <span class="math inline">\(P_n(w)\)</span>
 <ul>
 <li>文献中指出目前最有效的 <span class="math inline">\(P_n(w)\)</span> 是 Unigram Model 的 <span class="math inline">\(3/4\)</span> 次幂</li>
 </ul></li>
@@ -932,7 +932,7 @@ J = - \sum_{(w,c)\in D} \log  \frac 1 {1+\exp(-u_w^Tv_c)} - \sum_{(w,c)\in \tild
 </ul></li>
 <li>Hierarchical softmax 使用一个<strong>二叉树</strong>来表示词典中的所有词语
 <ul>
-<li><p>每个叶子节点都是一个词语</p></li>
+<li>每个叶子节点都是一个词语</li>
 <li><p>从根节点到叶子节点的路径唯一</p>
 <p><img src="http://media.zjubiomedit.com/2019-03-15-032628.jpg" width="50%"></p></li>
 </ul></li>
@@ -978,7 +978,7 @@ P(w|w_i) = \prod_{j=1}^{L(w)-1} \sigma ([n(w,j+1) = ch(n(w,j))] \cdot v_{n(w,j)}
 \right.
 \]</span></li>
 </ul></li>
-<li><p>下面对上述公式进行解释：</p>
+<li>下面对上述公式进行解释：
 <ul>
 <li>首先，我们基于从根节点 <span class="math inline">\(n(w,1)\)</span> 到叶子节点 <span class="math inline">\(n(w)\)</span> 的路径计算向量的点积
 <ul>
@@ -989,7 +989,7 @@ P(w|w_i) = \prod_{j=1}^{L(w)-1} \sigma ([n(w,j+1) = ch(n(w,j))] \cdot v_{n(w,j)}
 <li><p><span class="math inline">\([n(w,j+1) = ch(n(w,j))]\)</span> 保证了选择左边子节点和右边子节点的概率之和为 1： <span class="math display">\[
 \sigma(v_n^Tv_{w_i}) + \sigma(-v_n^Tv_{w_i}) = 1
 \]</span></p></li>
-<li><p>同时也保证了 <span class="math inline">\(\sum_{w=1}^{|V|} P(w|w_i) =1\)</span>（将概率沿树向上累加可以证明）</p></li>
+<li>同时也保证了 <span class="math inline">\(\sum_{w=1}^{|V|} P(w|w_i) =1\)</span>（将概率沿树向上累加可以证明）</li>
 </ul></li>
 <li>最后，将节点概率相乘得到输出
 <ul>
@@ -1001,7 +1001,7 @@ P(w_2|w_i) &amp;= p(n(w_2,1),\text{left}) \cdot p(n(w_2,2),\text{left}) \cdot p(
 \]</span></li>
 </ul></li>
 </ul></li>
-<li><p>为了训练模型，我们的目标依然是最小化负对数似然函数 <span class="math inline">\(-\log P(w|w_i)\)</span></p>
+<li>为了训练模型，我们的目标依然是最小化负对数似然函数 <span class="math inline">\(-\log P(w|w_i)\)</span>
 <ul>
 <li>学习的参数为节点对应的向量和输入矩阵</li>
 </ul></li>
@@ -1165,7 +1165,7 @@ v_{output} = \mathcal{V}x_{input}
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">48</span>
+                    <span class="site-state-item-count">49</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

@@ -111,7 +111,7 @@
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-02-01-013922.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-02-01-020940.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-02-01-023434.png">
-<meta property="og:updated_time" content="2019-02-06T13:19:14.788Z">
+<meta property="og:updated_time" content="2019-02-06T13:19:14.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="deeplearning.ai 第三周：浅层神经网络">
 <meta name="twitter:description" content="本篇博客为 deeplearning.ai 第三周学习笔记，主题是：浅层神经网络。">
@@ -501,13 +501,13 @@
 </ul>
 <h2 id="表示与计算">表示与计算</h2>
 <ul>
-<li><p>本节将定义含有一层隐藏层的神经网络</p>
+<li>本节将定义含有一层隐藏层的神经网络
 <ul>
 <li><code>a0 = x</code> 表示输入层</li>
 <li><code>a1</code> 表示隐藏层的激活值</li>
 <li><code>a2</code> 表示输出层的激活值</li>
 </ul></li>
-<li><p>计算神经网络的层数时，我们一般不考虑输入层（即本节讨论的是两层神经网络）</p></li>
+<li>计算神经网络的层数时，我们一般不考虑输入层（即本节讨论的是两层神经网络）</li>
 <li><p>下图给出了一个神经网络的前向传播计算公式：</p>
 <p><img src="http://media.zjubiomedit.com/2019-01-31-085056.png" width="70%"></p>
 <ul>
@@ -547,8 +547,8 @@
 <h3 id="tanh">tanh</h3>
 <p><img src="http://media.zjubiomedit.com/2019-02-01-013035.png" width="30%"></p>
 <ul>
-<li><p>tanh 激活函数的取值范围是 [-1,1]（sigmoid 函数的偏移版本）</p></li>
-<li><p>对隐藏层来说，tanh 比 sigmoid 的效果更好，因为其输出的平均值更接近0，这使得下一层数据更加靠近中心（便于梯度下降）</p>
+<li>tanh 激活函数的取值范围是 [-1,1]（sigmoid 函数的偏移版本）</li>
+<li>对隐藏层来说，tanh 比 sigmoid 的效果更好，因为其输出的平均值更接近0，这使得下一层数据更加靠近中心（便于梯度下降）
 <ul>
 <li>tanh 与 sigmoid 存在同样的缺点，即如果输入过大或过小，则斜率会趋近于0，导致梯度下降出现问题</li>
 </ul></li>
@@ -558,16 +558,16 @@
 <h3 id="relu">ReLU</h3>
 <p><img src="http://media.zjubiomedit.com/2019-02-01-013542.png" width="30%"></p>
 <ul>
-<li><p>ReLU 函数可以解决梯度下降慢的问题（针对正数）</p></li>
-<li><p>如果你的问题是二元分类（0或1），那么输出层使用 sigmoid，隐藏层使用 ReLU</p></li>
+<li>ReLU 函数可以解决梯度下降慢的问题（针对正数）</li>
+<li>如果你的问题是二元分类（0或1），那么输出层使用 sigmoid，隐藏层使用 ReLU</li>
 <li><p>代码实现：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">ReLU = np.maximum(<span class="number">0</span>,z) <span class="comment"># so if z is negative the slope is 0 and if z is positive the slope remains linear.</span></span><br></pre></td></tr></table></figure></li>
 </ul>
 <h3 id="leaky-relu">leaky ReLU</h3>
 <p><img src="http://media.zjubiomedit.com/2019-02-01-013922.png" width="30%"></p>
 <ul>
-<li><p>leaky RELU 与 ReLU 的区别在于当输入为负值时，斜率会较小（不为0）</p></li>
-<li><p>它和 ReLU 同样有效，但大部分人使用 ReLU</p></li>
+<li>leaky RELU 与 ReLU 的区别在于当输入为负值时，斜率会较小（不为0）</li>
+<li>它和 ReLU 同样有效，但大部分人使用 ReLU</li>
 <li><p>代码实现：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">leaky_ReLU = np.maximum(<span class="number">0.01</span>*z,z)  <span class="comment">#the 0.01 can be a parameter for your algorithm.</span></span><br></pre></td></tr></table></figure></li>
 <li><p>目前激活函数的选择并没有普适性的准则，需要尝试各种激活函数（也可以参考前人的经验）</p></li>
@@ -599,8 +599,8 @@
 <p><img src="http://media.zjubiomedit.com/2019-02-01-020940.png" width="70%"></p>
 <h1 id="随机初始化">随机初始化</h1>
 <ul>
-<li><p>在逻辑回归中随机初始化权重并不重要，而在神经网络中我们需要进行随机初始化</p></li>
-<li><p>如果在神经网络中将所有权重初始化为0，那么神经网络将不能正常工作 (bias初始化为0是可以的):</p>
+<li>在逻辑回归中随机初始化权重并不重要，而在神经网络中我们需要进行随机初始化</li>
+<li>如果在神经网络中将所有权重初始化为0，那么神经网络将不能正常工作 (bias初始化为0是可以的):
 <ul>
 <li>所有隐藏层会完全同步变化（计算同一个函数）</li>
 <li>每次梯度下降迭代所有隐藏层会进行相同的更新</li>
@@ -767,7 +767,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">48</span>
+                    <span class="site-state-item-count">49</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

@@ -105,7 +105,7 @@
 <meta property="og:description" content="本篇博客为 CS229 学习笔记第七部分，主题是：正则化与模型选择。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-07-07-024755.png">
-<meta property="og:updated_time" content="2019-07-07T03:03:33.000Z">
+<meta property="og:updated_time" content="2019-07-07T03:03:33.309Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS229学习笔记之七：正则化与模型选择">
 <meta name="twitter:description" content="本篇博客为 CS229 学习笔记第七部分，主题是：正则化与模型选择。">
@@ -598,8 +598,8 @@
 </ul>
 <h2 id="过滤器特征选择">过滤器特征选择</h2>
 <ul>
-<li><p>相比之下，过滤器特征选择算法的计算代价很小</p></li>
-<li><p>算法思想是计算每个特征 <span class="math inline">\(x_i\)</span> 对其类别标签 <span class="math inline">\(y\)</span> 所能体现的信息量 <span class="math inline">\(S(i)\)</span></p>
+<li>相比之下，过滤器特征选择算法的计算代价很小</li>
+<li>算法思想是计算每个特征 <span class="math inline">\(x_i\)</span> 对其类别标签 <span class="math inline">\(y\)</span> 所能体现的信息量 <span class="math inline">\(S(i)\)</span>
 <ul>
 <li>选择得分最高的 <span class="math inline">\(k\)</span> 个特征作为特征集</li>
 <li>一般将 <span class="math inline">\(S(i)\)</span> 定义为 <span class="math inline">\(x_i\)</span> 与 <span class="math inline">\(y\)</span> 之间的相关程度（基于训练集计算）</li>
@@ -620,14 +620,14 @@
 <li>如果 <span class="math inline">\(x_i\)</span> 和 <span class="math inline">\(y\)</span> 独立同分布，那么我们有 <span class="math inline">\(p(x_i,y) = p(x_i)p(y)\)</span>，其 KL 散度为 0</li>
 </ul></li>
 </ul></li>
-<li><p>当你得到所有的 <span class="math inline">\(S(i)\)</span> 并排序完成后，应该如何选择 <span class="math inline">\(k\)</span> ？</p>
+<li>当你得到所有的 <span class="math inline">\(S(i)\)</span> 并排序完成后，应该如何选择 <span class="math inline">\(k\)</span> ？
 <ul>
 <li>一个标准的方法是使用交叉验证来在 <span class="math inline">\(k\)</span> 的可能选项中选择</li>
 </ul></li>
 </ul>
 <h1 id="贝叶斯统计与正则化">贝叶斯统计与正则化</h1>
 <ul>
-<li><p>本部分将介绍对抗过拟合的另外一个工具</p></li>
+<li>本部分将介绍对抗过拟合的另外一个工具</li>
 <li><p>之前我们介绍了基于最大似然法的参数拟合，其公式如下： <span class="math display">\[
 \theta_{\text{ML}} = \arg \max_\theta \prod_{i=1}^m p(y^{(i)}|x^{(i)};\theta)
 \]</span></p>
@@ -637,7 +637,7 @@
 <li>这是一种<strong>频率学派</strong>的观点</li>
 </ul></li>
 </ul></li>
-<li><p>从<strong>贝叶斯学派</strong>的角度，我们将 <span class="math inline">\(\theta\)</span> 看作一个<strong>未知的随机变量</strong></p>
+<li>从<strong>贝叶斯学派</strong>的角度，我们将 <span class="math inline">\(\theta\)</span> 看作一个<strong>未知的随机变量</strong>
 <ul>
 <li>我们将指定一个 <span class="math inline">\(\theta\)</span> 的先验分布 <span class="math inline">\(p(\theta)\)</span></li>
 </ul></li>
@@ -657,8 +657,8 @@ p(y|x,S) = \int_\theta p(y|x,\theta)p(\theta|S)d\theta
 <li><p>因此，预测的输出为： <span class="math display">\[
 \text{E}[y|x,S] = \int_y yp(y|x,S)dy
 \]</span></p></li>
-<li><p>上述过程是完整的贝叶斯预测，但是实际上该后验分布是很难计算的（因为 <span class="math inline">\(\theta\)</span> 的积分计算难以求出闭合解/解析解）</p></li>
-<li><p>因此，实际应用中我们会对 <span class="math inline">\(\theta\)</span> 的后验分布进行估计</p>
+<li>上述过程是完整的贝叶斯预测，但是实际上该后验分布是很难计算的（因为 <span class="math inline">\(\theta\)</span> 的积分计算难以求出闭合解/解析解）</li>
+<li>因此，实际应用中我们会对 <span class="math inline">\(\theta\)</span> 的后验分布进行估计
 <ul>
 <li>一个常用的估计方法是将后验分布使用一个单点估计来代替</li>
 </ul></li>
@@ -669,7 +669,7 @@ p(y|x,S) = \int_\theta p(y|x,\theta)p(\theta|S)d\theta
 <li>和最大似然相比，只是末尾多了一项 <span class="math inline">\(\theta\)</span> 的先验分布 <span class="math inline">\(p(\theta)\)</span></li>
 <li>在实际应用中，<span class="math inline">\(p(\theta)\)</span> 的一个常用选择是 <span class="math inline">\(\theta \sim \mathcal{N}(0, \tau^2I)\)</span></li>
 </ul></li>
-<li><p>与最大似然相比，拟合出的参数将具有更小的范数，从而使得贝叶斯 MAP 更<strong>易于避免过拟合</strong></p>
+<li>与最大似然相比，拟合出的参数将具有更小的范数，从而使得贝叶斯 MAP 更<strong>易于避免过拟合</strong>
 <ul>
 <li>例如，对于文本分类问题，虽然 <span class="math inline">\(n \gg m\)</span>，贝叶斯逻辑回归仍然是一个比较高效的算法</li>
 </ul></li>
@@ -826,7 +826,7 @@ p(y|x,S) = \int_\theta p(y|x,\theta)p(\theta|S)d\theta
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">48</span>
+                    <span class="site-state-item-count">49</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

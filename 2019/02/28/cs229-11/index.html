@@ -107,7 +107,7 @@
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-02-27-013445.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-02-27-015435.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-02-28-024212.png">
-<meta property="og:updated_time" content="2019-03-01T02:29:55.089Z">
+<meta property="og:updated_time" content="2019-03-01T02:29:55.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS229 学习笔记之十一：主成分分析">
 <meta name="twitter:description" content="本篇博客为 CS229 学习笔记第十一部分，主题是：主成分分析。">
@@ -490,15 +490,15 @@
 <a id="more"></a>
 <h1 id="引入">引入</h1>
 <ul>
-<li><p>在上一章，我们介绍了因子分析，其给出了一种将 <span class="math inline">\(n\)</span> 维数据 <span class="math inline">\(x\)</span> 在 <span class="math inline">\(k\)</span> 维子空间中建模的方法</p>
+<li>在上一章，我们介绍了因子分析，其给出了一种将 <span class="math inline">\(n\)</span> 维数据 <span class="math inline">\(x\)</span> 在 <span class="math inline">\(k\)</span> 维子空间中建模的方法
 <ul>
 <li>其基于概率模型，通过 EM 算法来估计参数</li>
 </ul></li>
-<li><p>本章我们将介绍另一种降维方法：<strong>主成分分析</strong>法（PCA）</p>
+<li>本章我们将介绍另一种降维方法：<strong>主成分分析</strong>法（PCA）
 <ul>
 <li>该方法更加直接，只需要特征向量的计算，不需要 EM 求解</li>
 </ul></li>
-<li><p>给定一个数据集 <span class="math inline">\(\{x^{(i)};i=1,\ldots,m\}\)</span>，其中 <span class="math inline">\(x^{(i)} \in \mathbb{R}^n (n \ll m)\)</span></p>
+<li>给定一个数据集 <span class="math inline">\(\{x^{(i)};i=1,\ldots,m\}\)</span>，其中 <span class="math inline">\(x^{(i)} \in \mathbb{R}^n (n \ll m)\)</span>
 <ul>
 <li>假定该数据集来自对无线电控制直升机飞行员的调查，而其中的两个属性分别为飞行员的技能评估和其对飞行的感兴趣长度</li>
 <li>考虑到飞行的特殊性，这两个属性是存在正相关关系的，即实际上数据的信息量是 n-1 维的</li>
@@ -527,7 +527,7 @@
 </ul>
 <h2 id="计算主方向">计算主方向</h2>
 <ul>
-<li><p>计算主方向的方法之一是找到单位向量 <span class="math inline">\(u\)</span>，使得数据在该方向上的投影的<strong>方差最大化</strong></p>
+<li>计算主方向的方法之一是找到单位向量 <span class="math inline">\(u\)</span>，使得数据在该方向上的投影的<strong>方差最大化</strong>
 <ul>
 <li>直观上来看，原始数据必然存在一定的方差（信息），而我们希望投影后的数据（降维后）在子空间尽量保留原始数据的信息，即方差最大化</li>
 </ul></li>
@@ -537,9 +537,9 @@
 <li>可以看到，图 2 方向上的投影相比图 3 距离原点更远，方差更大</li>
 <li>我们希望能够自动找到类似图 2 的方向</li>
 </ul></li>
-<li><p>下面给出寻找该方向的方法：</p>
+<li>下面给出寻找该方向的方法：
 <ul>
-<li><p>给定一个单位向量 <span class="math inline">\(u\)</span> 和一个点 <span class="math inline">\(x\)</span>，其投影长度（距离原点）为 <span class="math inline">\(x^Tu\)</span></p></li>
+<li>给定一个单位向量 <span class="math inline">\(u\)</span> 和一个点 <span class="math inline">\(x\)</span>，其投影长度（距离原点）为 <span class="math inline">\(x^Tu\)</span></li>
 <li><p>因此，为了最大化投影的方差，即最大化： <span class="math display">\[
 \begin{aligned}
 \frac 1 m \sum_{i=1}^m (x^{(i)^T}u)^2 &amp;= \frac 1 m \sum_{i=1}^m u^Tx^{(i)}x^{(i)^T}u \\ &amp;= u^T\left(\frac 1 m \sum_{i=1}^m x^{(i)}x^{(i)^T}\right) u
@@ -549,7 +549,7 @@
 <li>对于归一化后的数据，其投影点的均值也为 0，因此方差计算为直接平方</li>
 <li>该公式有一个约束条件：<span class="math inline">\(||u||_2 =1\)</span></li>
 </ul></li>
-<li><p>利用拉格朗日方程，可以求得该最大化问题的解即为经验协方差矩阵 <span class="math inline">\(\Sigma = \frac 1 m \sum_{i=1}^m x^{(i)}x^{(i)^T}\)</span> 的<strong>主要特征向量</strong></p>
+<li>利用拉格朗日方程，可以求得该最大化问题的解即为经验协方差矩阵 <span class="math inline">\(\Sigma = \frac 1 m \sum_{i=1}^m x^{(i)}x^{(i)^T}\)</span> 的<strong>主要特征向量</strong>
 <ul>
 <li><p>构建如下拉格朗日方程： <span class="math display">\[
 \ell = u^T\Sigma u - \lambda(u^Tu-1)
@@ -567,8 +567,8 @@
 <li>令导数为 0，得 <span class="math inline">\(\Sigma u = \lambda u\)</span>，即 <span class="math inline">\(u\)</span> 为 <span class="math inline">\(\Sigma\)</span> 的特征向量，其特征值为 <span class="math inline">\(\lambda\)</span></li>
 </ul></li>
 </ul></li>
-<li><p>综上所述，如果我们需要将数据降至 1 维，则应该选择 <span class="math inline">\(\Sigma\)</span> 的主要特征向量 <span class="math inline">\(u\)</span> 作为主方向（特征值最大）</p></li>
-<li><p>当需要将数据降为 k 维时（<span class="math inline">\(k&lt;n\)</span>），我们应该选择 <span class="math inline">\(\Sigma\)</span> 的前 k 个特征向量 <span class="math inline">\(u_1, \ldots, u_k\)</span> 作为主方向（因为 <span class="math inline">\(\Sigma\)</span> 是对称矩阵，所以其可以得到 n 个相互正交的特征向量）</p>
+<li>综上所述，如果我们需要将数据降至 1 维，则应该选择 <span class="math inline">\(\Sigma\)</span> 的主要特征向量 <span class="math inline">\(u\)</span> 作为主方向（特征值最大）</li>
+<li>当需要将数据降为 k 维时（<span class="math inline">\(k&lt;n\)</span>），我们应该选择 <span class="math inline">\(\Sigma\)</span> 的前 k 个特征向量 <span class="math inline">\(u_1, \ldots, u_k\)</span> 作为主方向（因为 <span class="math inline">\(\Sigma\)</span> 是对称矩阵，所以其可以得到 n 个相互正交的特征向量）
 <ul>
 <li>前 k 个即最大的 k 个特征值所对应的特征向量</li>
 <li>这些特征向量形成了一个新的正交基底（k 维）</li>
@@ -779,7 +779,7 @@ u_k^Tx^{(i)}
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">48</span>
+                    <span class="site-state-item-count">49</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

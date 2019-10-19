@@ -107,7 +107,7 @@
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-01-15-013548.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-01-30-020919.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-02-28-021935.png">
-<meta property="og:updated_time" content="2019-02-28T02:25:43.020Z">
+<meta property="og:updated_time" content="2019-02-28T02:25:43.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS229 学习笔记之九：聚类问题与 EM 算法">
 <meta name="twitter:description" content="本篇博客为 CS229 学习笔记第九部分，主题是：聚类问题与 EM 算法。">
@@ -490,8 +490,8 @@
 <a id="more"></a>
 <h1 id="k-means-聚类">K-means 聚类</h1>
 <ul>
-<li><p>聚类问题是一种无监督学习，给定训练集 <span class="math inline">\(\{x^{(1)}, \ldots, x^{(m)}\}\)</span>，我们希望将其聚合成几个特定的类</p></li>
-<li><p>k-means 聚类算法的流程如下：</p>
+<li>聚类问题是一种无监督学习，给定训练集 <span class="math inline">\(\{x^{(1)}, \ldots, x^{(m)}\}\)</span>，我们希望将其聚合成几个特定的类</li>
+<li>k-means 聚类算法的流程如下：
 <ol type="1">
 <li>随机初始化<strong>聚类中心</strong> <span class="math inline">\(\mu_1,\mu_2,\dots, \mu_k \in \mathbb{R}^n\)</span></li>
 <li>重复以下步骤直至收敛：
@@ -504,7 +504,7 @@ c^{(i)} := \arg \min_j ||x^{(i)}-\mu_j||^2
 \]</span></p></li>
 </ul></li>
 </ol></li>
-<li><p>该算法的思想为：</p>
+<li>该算法的思想为：
 <ol type="1">
 <li>将每个训练样本 <span class="math inline">\(x^{(i)}\)</span> 分配到距离其最近的中心 <span class="math inline">\(\mu_j\)</span></li>
 <li>将每个聚类中心移动到第一步中分配到该中心的样本的均值</li>
@@ -520,7 +520,7 @@ J(c,\mu) = \sum_{i=1}^m ||x^{(i)}-\mu_{c^{(i)}}||^2
 <li>因此，<span class="math inline">\(J\)</span> 一定会持续下降，最终达到收敛</li>
 <li>一般 <span class="math inline">\(c\)</span> 和 <span class="math inline">\(\mu\)</span> 也会收敛，但理论上存在同时出现多种聚类组合的可能性，使得失真函数的值一样</li>
 </ul></li>
-<li><p>失真函数是一个非凸函数，这意味着坐标上升并不能保证其收敛至全局最优，存在收敛到局部最优的可能性</p>
+<li>失真函数是一个非凸函数，这意味着坐标上升并不能保证其收敛至全局最优，存在收敛到局部最优的可能性
 <ul>
 <li>一般情况下这不会发生</li>
 <li>可以通过多次运行 k-means 算法，选择最优解来解决这个问题</li>
@@ -528,8 +528,8 @@ J(c,\mu) = \sum_{i=1}^m ||x^{(i)}-\mu_{c^{(i)}}||^2
 </ul>
 <h1 id="混合高斯分布">混合高斯分布</h1>
 <ul>
-<li><p>混合高斯分布可以用于软聚类问题，即输出一个样本属于各个类的概率</p></li>
-<li><p>我们可以将数据的类别看作一个隐含随机变量 <span class="math inline">\(z\)</span>，并给出如下假设：</p>
+<li>混合高斯分布可以用于软聚类问题，即输出一个样本属于各个类的概率</li>
+<li>我们可以将数据的类别看作一个隐含随机变量 <span class="math inline">\(z\)</span>，并给出如下假设：
 <ol type="1">
 <li><span class="math inline">\(z\)</span> 服从多项式分布 <span class="math inline">\(z^{(i)} \sim \text{Multinomial}(\phi)\)</span></li>
 <li>给定不同的 <span class="math inline">\(z\)</span> ，<span class="math inline">\(x\)</span> 服从不同的高斯分布 <span class="math inline">\(x^{(i)} | z^{(i)} = j \sim \mathcal{N}(\mu_i, \Sigma_j)\)</span></li>
@@ -540,7 +540,7 @@ J(c,\mu) = \sum_{i=1}^m ||x^{(i)}-\mu_{c^{(i)}}||^2
 &amp;= \sum_{i=1}^m \log \sum_{z^{(i)} = 1}^k p(x^{(i)}| z^{(i)};\mu, \Sigma)p(z^{(i)};\phi)
 \end{aligned}
 \]</span></p></li>
-<li><p>该问题无法求出闭合解</p></li>
+<li>该问题无法求出闭合解</li>
 <li><p>如果 <span class="math inline">\(z^{(i)}\)</span> 已知，即我们知道每个样本来自于哪个高斯分布，那么极大似然估计的求解是容易的，似然函数如下： <span class="math display">\[
 \ell(\phi,\mu,\Sigma) = \sum_{i=1}^m \left(\log p(x^{(i)}| z^{(i)};\mu, \Sigma)+ \log p(z^{(i)};\phi)\right)
 \]</span></p>
@@ -584,8 +584,8 @@ p(z^{(i)} = j|x^{(i)};\phi,\mu,\Sigma) = \frac {p(x^{(i)}|z^{(i)} = j;\mu,\Sigma
 <ul>
 <li>该概率代表我们对 <span class="math inline">\(z^{(i)}\)</span> 值的软猜测（即以概率值代替具体的值）</li>
 </ul></li>
-<li><p>在 M-step 中，参数的更新公式与之前已知 <span class="math inline">\(z^{(i)}\)</span> 的公式相比，只是把指示函数替换为了概率</p></li>
-<li><p>与 K-means 算法相比，EM 算法输出的是样本属于各个类的概率，这是一种软聚类</p>
+<li>在 M-step 中，参数的更新公式与之前已知 <span class="math inline">\(z^{(i)}\)</span> 的公式相比，只是把指示函数替换为了概率</li>
+<li>与 K-means 算法相比，EM 算法输出的是样本属于各个类的概率，这是一种软聚类
 <ul>
 <li>与 K-means 相似，EM 算法容易陷入局部最优，因此多次尝试不同的初始参数可能是一个好主意</li>
 </ul></li>
@@ -628,9 +628,9 @@ p(z^{(i)} = j|x^{(i)};\phi,\mu,\Sigma) = \frac {p(x^{(i)}|z^{(i)} = j;\mu,\Sigma
 <li>这里假定 <span class="math inline">\(z\)</span> 是离散变量（连续变量需要使用积分）</li>
 <li>直接最大化 <span class="math inline">\(\ell(\theta)\)</span> 是难以求解的</li>
 </ul></li>
-<li><p>EM 算法的思想是先构建一个 <span class="math inline">\(\ell\)</span> 的下界（E-step），然后去优化这个下界（M-step），达到间接最大化 <span class="math inline">\(\ell\)</span> 的目的</p>
+<li>EM 算法的思想是先构建一个 <span class="math inline">\(\ell\)</span> 的下界（E-step），然后去优化这个下界（M-step），达到间接最大化 <span class="math inline">\(\ell\)</span> 的目的
 <ul>
-<li><p>对于每个 <span class="math inline">\(i\)</span>，设 <span class="math inline">\(Q_i\)</span> 是 <span class="math inline">\(z\)</span> 的某种概率分布（<span class="math inline">\(\sum_z Q_i(z) = 1, Q_i(z) \ge 0\)</span>）</p></li>
+<li>对于每个 <span class="math inline">\(i\)</span>，设 <span class="math inline">\(Q_i\)</span> 是 <span class="math inline">\(z\)</span> 的某种概率分布（<span class="math inline">\(\sum_z Q_i(z) = 1, Q_i(z) \ge 0\)</span>）</li>
 <li><p>根据期望的定义以及 Jensen 不等式，我们有： <span class="math display">\[
 \begin{align*}
 \sum_i \log p(x^{(i)};\theta) &amp;= \sum_i \log \sum_{z^{(i)}} p(x^{(i)},z^{(i)};\theta) \tag{1} \\
@@ -643,7 +643,7 @@ p(z^{(i)} = j|x^{(i)};\phi,\mu,\Sigma) = \frac {p(x^{(i)}|z^{(i)} = j;\mu,\Sigma
 <li><span class="math inline">\(f(x) = \log x\)</span> 是一个凹函数，应用 Jensen 不等式时注意方向对调</li>
 </ul></li>
 </ul></li>
-<li><p>为了执行 EM 算法，我们需要选择合适的 <span class="math inline">\(Q_i\)</span> 以保证在当前的参数设置下取到下界，即目前的 <span class="math inline">\(\theta\)</span> 值能够使得 <span class="math inline">\((3)\)</span> 式的等号成立</p>
+<li>为了执行 EM 算法，我们需要选择合适的 <span class="math inline">\(Q_i\)</span> 以保证在当前的参数设置下取到下界，即目前的 <span class="math inline">\(\theta\)</span> 值能够使得 <span class="math inline">\((3)\)</span> 式的等号成立
 <ul>
 <li><p>之前的定理表明等号成立的条件是随机变量为<strong>常数</strong> <span class="math display">\[
 \frac {p(x^{(i)},z^{(i)};\theta)}{Q_i(z^{(i)})} = c
@@ -663,9 +663,9 @@ Q_i(z^{(i)}) &amp;= \frac {p(x^{(i)},z^{(i)};\theta)} {\sum_z p(x^{(i)},z^{(i)};
 \end{aligned}
 \]</span></p></li>
 </ul></li>
-<li><p>根据上述推导，我们只需要将 <span class="math inline">\(Q_i\)</span> 设置为给定 <span class="math inline">\(x^{(i)}\)</span> 时 <span class="math inline">\(z^{(i)}\)</span> 的后验分布即可（以 <span class="math inline">\(\theta\)</span> 为参数）</p></li>
+<li>根据上述推导，我们只需要将 <span class="math inline">\(Q_i\)</span> 设置为给定 <span class="math inline">\(x^{(i)}\)</span> 时 <span class="math inline">\(z^{(i)}\)</span> 的后验分布即可（以 <span class="math inline">\(\theta\)</span> 为参数）</li>
 </ul></li>
-<li><p>综上所述，EM 算法的具体步骤为：</p>
+<li>综上所述，EM 算法的具体步骤为：
 <ul>
 <li><p><strong>E-step</strong>：对于每个 <span class="math inline">\(i\)</span>，令 <span class="math display">\[
 Q_i(z^{(i)}) := p(z^{(i)}|x^{(i)};\theta)
@@ -680,7 +680,7 @@ Q_i(z^{(i)}) := p(z^{(i)}|x^{(i)};\theta)
 <ul>
 <li>下面证明该算法的收敛性
 <ul>
-<li><p>假定 <span class="math inline">\(\theta^{(t)}\)</span> 和 <span class="math inline">\(\theta^{(t+1)}\)</span> 来自于 EM 算法的两次成功的迭代，那么通过证明 <span class="math inline">\(\ell(\theta^{(t)}) \le \ell(\theta^{(t+1)})\)</span>，就可以表明 EM 算法是单调收敛的（对数似然函数单调递增）</p></li>
+<li>假定 <span class="math inline">\(\theta^{(t)}\)</span> 和 <span class="math inline">\(\theta^{(t+1)}\)</span> 来自于 EM 算法的两次成功的迭代，那么通过证明 <span class="math inline">\(\ell(\theta^{(t)}) \le \ell(\theta^{(t+1)})\)</span>，就可以表明 EM 算法是单调收敛的（对数似然函数单调递增）</li>
 <li><p>当参数为 <span class="math inline">\(\theta^{(t)}\)</span> 时，根据算法步骤，我们令 <span class="math inline">\(Q_i^{(t)}(z^{(i)}) := p(z^{(i)}|x^{(i)};\theta^{(t)})\)</span>，这一选择保证了等号成立，即： <span class="math display">\[
 \ell(\theta^{(t)}) = \sum_i \sum_{z^{(i)}} Q_i^{(t)}(z^{(i)}) \log \frac {p(x^{(i)},z^{(i)};\theta^{(t)})}{Q_i^{(t)}(z^{(i)})}
 \]</span></p></li>
@@ -696,7 +696,7 @@ Q_i(z^{(i)}) := p(z^{(i)}|x^{(i)};\theta)
 <li><span class="math inline">\((5)\)</span> 式的得出来源于 <span class="math inline">\(\theta^{(t+1)}\)</span> 是上一步的下界最大化的结果</li>
 <li><span class="math inline">\((6)\)</span> 式的得出之前已经证明（满足等号成立的条件）</li>
 </ul></li>
-<li><p>综上所述，EM 算法可以保证似然函数的<strong>单调收敛</strong></p>
+<li>综上所述，EM 算法可以保证似然函数的<strong>单调收敛</strong>
 <ul>
 <li>一个可取的收敛条件是 <span class="math inline">\(\ell(\theta)\)</span> 的增长速度小于某个临界值</li>
 </ul></li>
@@ -710,7 +710,7 @@ J(Q,\theta) = \sum_i \sum_{z^{(i)}} Q_i(z^{(i)}) \log \frac {p(x^{(i)},z^{(i)};\
 <ul>
 <li>从之前的推导可以知道 <span class="math inline">\(\ell(\theta) \ge J(Q,\theta)\)</span></li>
 </ul></li>
-<li><p>EM 算法可以看做是对 <span class="math inline">\(J\)</span> 的坐标上升法</p>
+<li>EM 算法可以看做是对 <span class="math inline">\(J\)</span> 的坐标上升法
 <ul>
 <li>在 E-step 中，关于 <span class="math inline">\(Q\)</span> 最大化 <span class="math inline">\(J\)</span></li>
 <li>在 M-step 中，关于 <span class="math inline">\(\theta\)</span> 最大化 <span class="math inline">\(J\)</span></li>
@@ -718,7 +718,7 @@ J(Q,\theta) = \sum_i \sum_{z^{(i)}} Q_i(z^{(i)}) \log \frac {p(x^{(i)},z^{(i)};\
 </ul>
 <h1 id="混合高斯模型复盘">混合高斯模型复盘</h1>
 <ul>
-<li><p>下面将使用 EM 算法的一般形式来对之前混合高斯模型中的公式进行推导</p>
+<li>下面将使用 EM 算法的一般形式来对之前混合高斯模型中的公式进行推导
 <ul>
 <li>由于篇幅所限，这里只给出 <span class="math inline">\(\phi\)</span> 和 <span class="math inline">\(\mu_j\)</span> 的推导过程</li>
 </ul></li>
@@ -756,7 +756,7 @@ w_j^{(i)} = Q_i(z^{(i)} = j) = P(z^{(i)} = j|x^{(i)};\phi,\mu,\Sigma)
 \sum_{i=1}^m\sum_{j=1}^k w_j^{(i)}\log \phi_j
 \]</span></p>
 <ul>
-<li><p>这里我们还有一个额外的约束条件：<span class="math inline">\(\sum_{j=1}^k\phi_j = 1\)</span></p></li>
+<li>这里我们还有一个额外的约束条件：<span class="math inline">\(\sum_{j=1}^k\phi_j = 1\)</span></li>
 <li><p>因此，我们需要构建拉格朗日算子： <span class="math display">\[
 \mathcal{L}(\phi) = \sum_{i=1}^m\sum_{j=1}^k w_j^{(i)}\log \phi_j + \beta (\sum_{j=1}^k \phi -1)
 \]</span></p>
@@ -926,7 +926,7 @@ w_j^{(i)} = Q_i(z^{(i)} = j) = P(z^{(i)} = j|x^{(i)};\phi,\mu,\Sigma)
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">48</span>
+                    <span class="site-state-item-count">49</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

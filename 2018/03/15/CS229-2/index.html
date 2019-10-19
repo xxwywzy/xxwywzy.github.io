@@ -107,7 +107,7 @@
 <meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-133612.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-133622.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-101558.png">
-<meta property="og:updated_time" content="2019-03-25T15:45:23.000Z">
+<meta property="og:updated_time" content="2019-04-14T06:29:54.399Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS229学习笔记之二：分类与逻辑回归">
 <meta name="twitter:description" content="本篇博客为 CS229 学习笔记第二部分，主题是：分类与逻辑回归。">
@@ -515,7 +515,7 @@ g\prime (z) &amp;= \frac d {dz} \frac 1 {1+e^{-z}} \\
 &amp;= g(z)(1-g(z))
 \end{align*}
 \]</span></p></li>
-<li><p>确定了模型之后，我们需要找到合适的 <span class="math inline">\(\theta\)</span> 的值</p>
+<li>确定了模型之后，我们需要找到合适的 <span class="math inline">\(\theta\)</span> 的值
 <ul>
 <li>这里采用之前使用的<strong>最大似然法</strong>来选择参数（假设函数可以直接看作概率分布）</li>
 </ul></li>
@@ -545,9 +545,9 @@ L(\theta) &amp;= p(\vec y \mid X; \theta) \\
 \end{align*}
 \]</span></li>
 </ul></li>
-<li><p>下面要做的是找到<span class="math inline">\(\theta\)</span>使得<span class="math inline">\(\ell(θ)\)</span>最大，由于这里是找最大值而非最小值，所以使用<strong>梯度上升</strong>（gradient ascent）</p>
+<li>下面要做的是找到<span class="math inline">\(\theta\)</span>使得<span class="math inline">\(\ell(θ)\)</span>最大，由于这里是找最大值而非最小值，所以使用<strong>梯度上升</strong>（gradient ascent）
 <ul>
-<li><p>参数的更新规则是<span class="math inline">\(\theta := \theta +\alpha \nabla_\theta \ell(\theta)\)</span></p></li>
+<li>参数的更新规则是<span class="math inline">\(\theta := \theta +\alpha \nabla_\theta \ell(\theta)\)</span></li>
 <li><p>对于随机梯度上升（每次只考虑一个样本），求导过程如下： <span class="math display">\[
 \begin{align*}
 \frac{\partial}{\partial \theta_j}\ell(\theta) &amp;= \left(y \frac 1 {g(\theta^Tx)}-(1-y)\frac 1 {1-g(\theta^Tx)}\right)\frac{\partial}  {\partial \theta_j}g(\theta^Tx)\\
@@ -556,7 +556,7 @@ L(\theta) &amp;= p(\vec y \mid X; \theta) \\
 &amp;= \left(y-h_\theta(x)\right)x_j
 \end{align*}
 \]</span></p></li>
-<li><p>在计算过程中使用到了 S 型函数的求导性质</p></li>
+<li>在计算过程中使用到了 S 型函数的求导性质</li>
 </ul></li>
 <li><p>综上所述，我们得到随机梯度上升的更新规则是： <span class="math display">\[
 \theta_j := \theta_j +\alpha\left(y^{(i)}-h_\theta(x^{(i)})\right)x^{(i)}_j
@@ -568,10 +568,10 @@ L(\theta) &amp;= p(\vec y \mid X; \theta) \\
 </ul>
 <h1 id="牛顿方法">牛顿方法</h1>
 <ul>
-<li><p>下面我们介绍另外一种算法来求解 <span class="math inline">\(\ell (\theta)\)</span> 的最大值，称为<strong>牛顿方法</strong></p></li>
+<li>下面我们介绍另外一种算法来求解 <span class="math inline">\(\ell (\theta)\)</span> 的最大值，称为<strong>牛顿方法</strong></li>
 <li><p>我们通过如下的几张图来理解牛顿方法：</p>
 <p><img src="http://media.zjubiomedit.com/2018-05-28-133622.png" width="70%" height="70%"></p></li>
-<li><p>对于梯度下降，每次只是在梯度方向上下降一小步（取决于学习速率）</p></li>
+<li>对于梯度下降，每次只是在梯度方向上下降一小步（取决于学习速率）</li>
 <li><p>而牛顿方法是一直下降到导数（切线）和<span class="math inline">\(\theta\)</span>轴交界的那个<span class="math inline">\(\theta\)</span>。因此牛顿方法的更新规则是： <span class="math display">\[
 \theta := \theta - \frac {f(\theta)} {f&#39; (\theta)}
 \]</span></p></li>
@@ -587,7 +587,7 @@ L(\theta) &amp;= p(\vec y \mid X; \theta) \\
 H_{ij}=\frac {\partial^2 \ell(\theta)} {\partial \theta_i \partial \theta_j}
 \]</span></li>
 </ul></li>
-<li><p>和（批量）梯度下降相比，牛顿方法会带来更快的收敛速度和更少的迭代次数</p>
+<li>和（批量）梯度下降相比，牛顿方法会带来更快的收敛速度和更少的迭代次数
 <ul>
 <li>虽然每次迭代由于要计算 <span class="math inline">\(H^{-1}\)</span>，导致计算量较大，但对于参数数量不是特别大的情况，总的来说它还是更快的</li>
 <li>将牛顿方法用于求解逻辑回归的对数似然函数最大值，也被称为<strong>费雪评分</strong></li>
@@ -595,7 +595,7 @@ H_{ij}=\frac {\partial^2 \ell(\theta)} {\partial \theta_i \partial \theta_j}
 </ul>
 <h1 id="感知器学习算法">感知器学习算法</h1>
 <ul>
-<li><p>下面介绍另一种二分类方法：<strong>感知器学习算法</strong></p></li>
+<li>下面介绍另一种二分类方法：<strong>感知器学习算法</strong></li>
 <li><p>感知器学习算法的假设函数为： <span class="math display">\[
 h_\theta(x)=g(\theta^Tx)=\left\{
 \begin{align*}
@@ -611,8 +611,8 @@ h_\theta(x)=g(\theta^Tx)=\left\{
 <li><p>感知器学习算法的参数更新规则如下： <span class="math display">\[
 \theta_j := \theta_j +\alpha\left(y^{(i)}-  h_\theta(x^{(i)})\right)x^{(i)}_j
 \]</span></p></li>
-<li><p>19世纪60年代，感知器被看作是大脑工作中独立神经元的粗糙的模型</p></li>
-<li><p>虽然直观看上去，感知器和之前看到的逻辑回归或线性回归很像，但是其实是非常不一样的算法</p>
+<li>19世纪60年代，感知器被看作是大脑工作中独立神经元的粗糙的模型</li>
+<li>虽然直观看上去，感知器和之前看到的逻辑回归或线性回归很像，但是其实是非常不一样的算法
 <ul>
 <li>因为，对于感知器，很难赋予一种有意义的概率解释，或使用最大似然估计算法来进行推导</li>
 </ul></li>
@@ -770,7 +770,7 @@ h_\theta(x)=g(\theta^Tx)=\left\{
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">48</span>
+                    <span class="site-state-item-count">49</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

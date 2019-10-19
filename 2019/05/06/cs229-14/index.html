@@ -109,7 +109,7 @@
 <meta property="og:image" content="http://media.zjubiomedit.com/blog/20190505/R51oMqIqrES6.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/blog/20190506/hXIjs5SntGHp.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-05-09-033012.png">
-<meta property="og:updated_time" content="2019-05-09T03:31:00.620Z">
+<meta property="og:updated_time" content="2019-05-09T03:31:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS229 学习笔记之十四：隐马尔可夫模型基础">
 <meta name="twitter:description" content="本篇博客为 CS229 学习笔记第十四部分，主题是：隐马尔可夫模型。">
@@ -533,7 +533,7 @@ P\left(z_{t} | z_{t-1}, \ldots, z_{1}\right)=P\left(z_{t} | z_{t-1}, \ldots, z_{
 </ul></li>
 <li>我们通过定义一个状态转移矩阵 $A ^{(|S|+1) (|S|+1)} $ 来参数化这些转变
 <ul>
-<li><p><span class="math inline">\(A_{i j}\)</span> 的值表示在任意时刻 <span class="math inline">\(t\)</span> 从状态 <span class="math inline">\(i\)</span> 转移到状态 <span class="math inline">\(j\)</span> 的概率</p></li>
+<li><span class="math inline">\(A_{i j}\)</span> 的值表示在任意时刻 <span class="math inline">\(t\)</span> 从状态 <span class="math inline">\(i\)</span> 转移到状态 <span class="math inline">\(j\)</span> 的概率</li>
 <li><p>下面给出关于天气状态的转换矩阵：</p>
 <p><img src="http://media.zjubiomedit.com/2019-04-25-061642.png" width="45%"></p>
 <ul>
@@ -571,7 +571,7 @@ P\left(s_{s u n} | s_{0}\right) P\left(s_{c l o u d} | s_{s u n}\right) P\left(s
 </ul>
 <h2 id="最大似然参数赋值">最大似然参数赋值</h2>
 <ul>
-<li><p>从学习的观点来看，我们希望找到 <span class="math inline">\(A\)</span> 的参数来最大化观测序列 <span class="math inline">\(\vec{z}\)</span> 的对数似然函数</p>
+<li>从学习的观点来看，我们希望找到 <span class="math inline">\(A\)</span> 的参数来最大化观测序列 <span class="math inline">\(\vec{z}\)</span> 的对数似然函数
 <ul>
 <li><p>一个马尔可夫模型的对数似然函数定义如下： <span class="math display">\[
 \begin{aligned} l(A) &amp;=\log P(\vec{z} ; A) \\ &amp;=\log \prod_{t=1}^{T} A_{z_{t-1} z_{t}} \\ &amp;=\sum_{t=1}^{T} \log A_{z_{t-1} z_{t}} \\ &amp;=\sum_{i=1}^{|S|} \sum_{j=1}^{|S|} \sum_{t=1}^{T} 1\left\{z_{t-1}=s_{i} \wedge z_{t}=s_{j}\right\} \log A_{i j} \end{aligned}
@@ -591,7 +591,7 @@ A_{i j} \geq 0, \; i, j=1 . .|S|
 \end{align*}
 \]</span></p>
 <ul>
-<li><p>我们将等式约束用到乘子构建中，而不等式约束可以被忽略</p>
+<li>我们将等式约束用到乘子构建中，而不等式约束可以被忽略
 <ul>
 <li>因为解总是为正数</li>
 </ul></li>
@@ -670,7 +670,7 @@ P\left(x_{t}=v_{k} | z_{t}=s_{j}\right)=P\left(x_{t}=v_{k} | x_{1}, \ldots, x_{T
 </ul>
 <h2 id="观测序列的概率前向算法">观测序列的概率：前向算法</h2>
 <ul>
-<li><p>在 HMM 中，我们假设观测序列是通过如下流程生成的：</p>
+<li>在 HMM 中，我们假设观测序列是通过如下流程生成的：
 <ul>
 <li>假设存在一个基于时间序列的状态序列 <span class="math inline">\(\vec{z}\)</span>
 <ul>
@@ -682,7 +682,7 @@ P\left(x_{t}=v_{k} | z_{t}=s_{j}\right)=P\left(x_{t}=v_{k} | x_{1}, \ldots, x_{T
 \begin{aligned} P(\vec{x} ; A, B) &amp;=\sum_{\vec{z}} P(\vec{x}, \vec{z} ; A, B) \\ &amp;=\sum_{\vec{z}} P(\vec{x} | \vec{z} ; A, B) P(\vec{z} ; A, B) \end{aligned}
 \]</span></p>
 <ul>
-<li><p>上述公式对任何概率分布均成立</p></li>
+<li>上述公式对任何概率分布均成立</li>
 <li><p>HMM 假设可以让我们对上述表达式进行简化： <span class="math display">\[
 \begin{aligned} P(\vec{x} ; A, B) &amp;=\sum_{\vec{z}} P(\vec{x} | \vec{z} ; A, B) P(\vec{z} ; A, B) \\ &amp;=\sum_{\vec{z}}\left(\prod_{t=1}^{T} P\left(x_{t} | z_{t} ; B\right)\right)\left(\prod_{t=1}^{T} P\left(z_{t} | z_{t-1} ; A\right)\right) \\ &amp;=\sum_{\vec{z}}\left(\prod_{t=1}^{T} B_{z_{t} x_{t}}\right)\left(\prod_{t=1}^{T} A_{z_{t-1} z_{t}}\right) \end{aligned}
 \]</span></p>
@@ -694,9 +694,9 @@ P\left(x_{t}=v_{k} | z_{t}=s_{j}\right)=P\left(x_{t}=v_{k} | x_{1}, \ldots, x_{T
 </ul></li>
 </ul></li>
 </ul></li>
-<li><p>幸运的是，我们可以通过一种动态规划算法：<strong>前向算法</strong>来更快地计算 <span class="math inline">\(P(\vec{x} ; A, B)\)</span></p>
+<li>幸运的是，我们可以通过一种动态规划算法：<strong>前向算法</strong>来更快地计算 <span class="math inline">\(P(\vec{x} ; A, B)\)</span>
 <ul>
-<li><p>首先我们定义一个量：<span class="math inline">\(\alpha_{i}(t)=P\left(x_{1}, x_{2}, \ldots, x_{t}, z_{t}=s_{i} ; A, B\right)\)</span></p>
+<li>首先我们定义一个量：<span class="math inline">\(\alpha_{i}(t)=P\left(x_{1}, x_{2}, \ldots, x_{t}, z_{t}=s_{i} ; A, B\right)\)</span>
 <ul>
 <li>其代表时间长度为 <span class="math inline">\(t\)</span> 的所有观测值（状态不限）以及在时刻 <span class="math inline">\(t\)</span> 状态为 <span class="math inline">\(s_i\)</span> 的联合概率</li>
 <li>通过这样一个量，我们可以将之前的公式表示为： <span class="math display">\[
@@ -727,7 +727,7 @@ P\left(x_{t}=v_{k} | z_{t}=s_{j}\right)=P\left(x_{t}=v_{k} | x_{1}, \ldots, x_{T
 <li>第一步运用了贝叶斯法则</li>
 <li>第二步的依据是分母不与 <span class="math inline">\(\vec{z}\)</span> 直接相关</li>
 </ul></li>
-<li><p>我们可以通过枚举法进行求解，但时间复杂度为 <span class="math inline">\(O(|S|^T)\)</span></p>
+<li>我们可以通过枚举法进行求解，但时间复杂度为 <span class="math inline">\(O(|S|^T)\)</span>
 <ul>
 <li>与之前类似，我们可以使用动态规划的方法来简化运算</li>
 </ul></li>
@@ -740,7 +740,7 @@ P\left(x_{t}=v_{k} | z_{t}=s_{j}\right)=P\left(x_{t}=v_{k} | x_{1}, \ldots, x_{T
 </ul>
 <h2 id="参数学习基于-em-算法的-hmm">参数学习：基于 EM 算法的 HMM</h2>
 <ul>
-<li><p>关于 HMM 的最后一个问题是：给定一个状态序列集，如何求解矩阵 <span class="math inline">\(A\)</span> 和 <span class="math inline">\(B\)</span> 中的参数？</p>
+<li>关于 HMM 的最后一个问题是：给定一个状态序列集，如何求解矩阵 <span class="math inline">\(A\)</span> 和 <span class="math inline">\(B\)</span> 中的参数？
 <ul>
 <li><p>本节将使用 <a href="https://xxwywzy.github.io/2019/02/12/cs229-9/">EM 算法</a>来进行求解，下图给出了算法的基本流程（针对单个样本）</p>
 <p><img src="http://media.zjubiomedit.com/blog/20190505/R51oMqIqrES6.png" width="70%"></p>
@@ -769,7 +769,7 @@ A,B &amp;= \arg \max _{A, B} \sum_{\vec{z}} Q(\vec{z}) \log \frac{P(\vec{x}, \ve
 <li>第三行应用了马尔可夫假设</li>
 <li>第五行使用指示函数来按状态索引 <span class="math inline">\(A\)</span> 和 <span class="math inline">\(B\)</span></li>
 </ul></li>
-<li><p>下面构建拉格朗日乘子：</p>
+<li>下面构建拉格朗日乘子：
 <ul>
 <li>与之前一样，因为解必为非负，所以不等约束可以忽略</li>
 </ul>
@@ -797,7 +797,7 @@ A,B &amp;= \arg \max _{A, B} \sum_{\vec{z}} Q(\vec{z}) \log \frac{P(\vec{x}, \ve
 \begin{aligned} \hat{A}_{i j} &amp;=\frac{\sum_{\vec{z}} Q(\vec{z}) \sum_{t=1}^{T} 1\left\{z_{t-1}=s_{i} \wedge z_{t}=s_{j}\right\}}{\sum_{\vec{z}} Q(\vec{z}) \sum_{t=1}^{T} 1\left\{z_{t-1}=s_{i}\right\}} \\ \hat{B}_{j k} &amp;=\frac{\sum_{\vec{z}} Q(\vec{z}) \sum_{t=1}^{T} 1\left\{z_{t}=s_{j} \wedge x_{t}=v_{k}\right\}}{\sum_{\vec{z}} Q(\vec{z}) \sum_{t=1}^{T} 1\left\{z_{t}=s_{j}\right\}} \end{aligned}
 \]</span></p></li>
 </ul></li>
-<li><p>上述公式需要遍历所有状态序列，我们可以使用前向和后向概率来进行化简</p>
+<li>上述公式需要遍历所有状态序列，我们可以使用前向和后向概率来进行化简
 <ul>
 <li><p>首先对 <span class="math inline">\(\hat{A}_{i j}\)</span> 的分子进行化简： <span class="math display">\[
 \begin{aligned}
@@ -834,7 +834,7 @@ A,B &amp;= \arg \max _{A, B} \sum_{\vec{z}} Q(\vec{z}) \log \frac{P(\vec{x}, \ve
 \hat{B}_{j k}=\frac{\sum_{i=1}^{|S|} \sum_{t=1}^{T} 1\left\{x_{t}=v_{k}\right\} \alpha_{i}(t) A_{i j} B_{j x_{t}} \beta_{j}(t+1)}{\sum_{i=1}^{|S|} \sum_{t=1}^{T} \alpha_{i}(t) A_{i j} B_{j x_{t}} \beta_{j}(t+1)}
 \]</span></p></li>
 </ul></li>
-<li><p>基于上述结果，可以提出用于 HMM 参数学习的前向-后向算法</p>
+<li>基于上述结果，可以提出用于 HMM 参数学习的前向-后向算法
 <ul>
 <li>该算法也被称为 Baum-Welch 算法</li>
 </ul>
@@ -1004,7 +1004,7 @@ A,B &amp;= \arg \max _{A, B} \sum_{\vec{z}} Q(\vec{z}) \log \frac{P(\vec{x}, \ve
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">48</span>
+                    <span class="site-state-item-count">49</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

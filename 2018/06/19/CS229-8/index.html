@@ -105,7 +105,7 @@
 <meta property="og:description" content="本篇博客为 CS229 学习笔记第八部分，主题是：在线学习。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-07-07-034611.png">
-<meta property="og:updated_time" content="2019-07-07T03:50:45.000Z">
+<meta property="og:updated_time" content="2019-07-07T03:50:54.427Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS229学习笔记之八：在线学习">
 <meta name="twitter:description" content="本篇博客为 CS229 学习笔记第八部分，主题是：在线学习。">
@@ -512,7 +512,7 @@
 </ul>
 <h1 id="感知器与大间隔分类器">感知器与大间隔分类器</h1>
 <ul>
-<li><p>下面将给出感知器算法的在线学习误差数量的上界</p>
+<li>下面将给出感知器算法的在线学习误差数量的上界
 <ul>
 <li>为了简化推导，这里将分类标签定义为 <span class="math inline">\(y \in \{-1,1\}\)</span></li>
 </ul></li>
@@ -529,7 +529,7 @@ g(z)=\left\{
 \right.
 \]</span></li>
 </ul></li>
-<li><p>给定一个训练样本 <span class="math inline">\((x,y)\)</span>，感知器算法的学习规则如下：</p>
+<li>给定一个训练样本 <span class="math inline">\((x,y)\)</span>，感知器算法的学习规则如下：
 <ul>
 <li><p>如果 <span class="math inline">\(h_\theta(x) = y\)</span>，那么参数不发生变化，否则： <span class="math display">\[
 \theta := \theta + yx
@@ -539,19 +539,19 @@ g(z)=\left\{
 <li>此外，学习速率被省略了，这只会影响到参数的大小，对算法本身的行为没有影响</li>
 </ul></li>
 </ul></li>
-<li><p>下面的定理将给出感知器算法在线学习误差数量的上界</p>
+<li>下面的定理将给出感知器算法在线学习误差数量的上界
 <ul>
 <li>当其作为在线算法运行时，每一次得到分类样本错误的时候会进行一次更新</li>
 <li>注意下面给出的误差数量上界与序列样本数量 <span class="math inline">\(m\)</span> 和输入维度 <span class="math inline">\(n\)</span> 并没有直接关系</li>
 </ul></li>
-<li><p><strong>定理</strong>（Block, 1962, and Novikoﬀ, 1962）：</p>
+<li><strong>定理</strong>（Block, 1962, and Novikoﬀ, 1962）：
 <ul>
 <li>给定一个样本序列 <span class="math inline">\((x^{(1)},y^{(1)}),(x^{(2)},y^{(2)}),\ldots, (x^{(m)},y^{(m)})\)</span> ，假设对于所有的样本，都有 <span class="math inline">\(||x^{(i)}|| \le D\)</span>（欧几里得范数），并且存在一个单位长度向量 <span class="math inline">\(u\)</span>（<span class="math inline">\(||u||= 1\)</span>），使得对于所有样本都有：<span class="math inline">\(y^{(i)} \cdot (u^Tx^{(i)}) \ge \gamma\)</span> 成立（即 <span class="math inline">\(u\)</span> 将数据以至少为 <span class="math inline">\(\gamma\)</span> 的间隔分离）</li>
 <li>那么感知器算法对于该序列的总预测误差数量最多为 <span class="math inline">\((D/\gamma)^2\)</span></li>
 </ul></li>
-<li><p><strong>证明</strong>：</p>
+<li><strong>证明</strong>：
 <ul>
-<li><p>感知器只有当发现错误时才会更新参数，定义 <span class="math inline">\(\theta^{(k)}\)</span> 为出现第 <span class="math inline">\(k\)</span> 个错误时的权重</p>
+<li>感知器只有当发现错误时才会更新参数，定义 <span class="math inline">\(\theta^{(k)}\)</span> 为出现第 <span class="math inline">\(k\)</span> 个错误时的权重
 <ul>
 <li>那么有 <span class="math inline">\(\theta^{(1)}=\vec 0\)</span>（因为权重初始化为0）</li>
 <li>如果第 <span class="math inline">\(k\)</span> 个错误出现时的样本为 <span class="math inline">\((x^{(m)},y^{(m)})\)</span>，那么 <span class="math inline">\(g((x^{(i)})^T\theta^{(k)}) \ne y^{(i)}\)</span>，即： <span class="math display">\[
@@ -745,7 +745,7 @@ g(z)=\left\{
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">48</span>
+                    <span class="site-state-item-count">49</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
