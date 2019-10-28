@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2"/>
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0"/>
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/favicon.png?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本篇博客为对 LDA 的原理解读第二篇的下半部分，参考论文《Parameter estimation for text analysis》的前半部分（version 2.9）。">
+<meta name="keywords" content="LDA">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LDA 原理第二部分：文本分析的参数估计（下）">
+<meta property="og:url" content="https://xxwywzy.github.io/2019/10/26/lda-2-2/index.html">
+<meta property="og:site_name" content="xxwywzy&#39;s Blog">
+<meta property="og:description" content="本篇博客为对 LDA 的原理解读第二篇的下半部分，参考论文《Parameter estimation for text analysis》的前半部分（version 2.9）。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-10-16-140357.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-10-17-025449.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-10-17-025836.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-10-22-025436.png">
+<meta property="og:updated_time" content="2019-10-28T11:47:05.829Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LDA 原理第二部分：文本分析的参数估计（下）">
+<meta name="twitter:description" content="本篇博客为对 LDA 的原理解读第二篇的下半部分，参考论文《Parameter estimation for text analysis》的前半部分（version 2.9）。">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2019-10-16-140357.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://xxwywzy.github.io/2019/10/26/lda-2-2/"/>
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>LDA 原理第二部分：文本分析的参数估计（下） | xxwywzy's Blog</title>
+  
+
+
+
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a02b5462e7522b1ed191c4cea6b1d6e6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xxwywzy's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Long may the sunshine</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br/>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br/>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br/>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br/>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br/>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2019/10/26/lda-2-2/"/>
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zheyu Wang"/>
+      <meta itemprop="description" content="相信过程"/>
+      <meta itemprop="image" content="/images/avatar.png"/>
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xxwywzy's Blog"/>
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">LDA 原理第二部分：文本分析的参数估计（下）
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-10-26 10:53:34" itemprop="dateCreated datePublished" datetime="2019-10-26T10:53:34+08:00">2019-10-26</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/人工智能/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/人工智能/机器学习/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <a href="/2019/10/26/lda-2-2/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/10/26/lda-2-2/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+            <span id="/2019/10/26/lda-2-2/" class="leancloud_visitors" data-flag-title="LDA 原理第二部分：文本分析的参数估计（下）">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <div class="note info">
+            本篇博客为对 LDA 的原理解读第二篇的下半部分，参考论文《Parameter estimation for text analysis》的前半部分（version 2.9）。 
+          </div>
+<a id="more"></a>
+<h1 id="隐含狄利克雷分布">隐含狄利克雷分布</h1>
+<p>LDA 是一个概率生成模型，用于通过无监督学习估计多项式观察的属性。在文本建模领域，LDA 对应于一种被称为<strong>潜在语义分析</strong>（LSA）的方法，LSA 的核心思想是找出文本中所蕴含的主题，该主题能够反映出文本的真实含义。我们可以通过文本中单词的共现结构来恢复出潜在的主题结构。LDA 本质上是对 PLSA（基于概率的潜在语义分析）的拓展，其引入参数的先验分布，定义了一个完整的生成过程。</p>
+<h2 id="混合模型">混合模型</h2>
+<p>LDA 是一种混合模型，即通过组件概率分布的凸组合来对观察过程建模。凸组合指加权因子和为 1 的加权和。在 LDA 中，一个词语 <span class="math inline">\(w\)</span> 由一个主题 <span class="math inline">\(z\)</span> 的凸组合生成，如下所示： <span class="math display">\[
+p(w=t)=\sum_{k} p(w=t | z=k) p(z=k), \quad \sum_{k} p(z=k)=1 \tag{55}
+\]</span> 其中每个混合组件 <span class="math inline">\(p(w=t | z=k) p(z=k)\)</span> 是对应于潜在主题 <span class="math inline">\(z=k\)</span> 的词语的多项分布，加权因子为 <span class="math inline">\(p(z=k)\)</span>. 需要注意的是，LDA 并不是基于全局的主题分布加权，而是<strong>基于词语所属文档</strong>的主题分布加权，即 <span class="math inline">\(p(z=k|d=m)\)</span>.</p>
+<p>基于上述表述，我们可以给出 LDA 推理的主要目标：</p>
+<ol type="1">
+<li>给出每个主题 <span class="math inline">\(k\)</span> 下的词语分布概率 <span class="math inline">\(p(t | z=k)=\vec{\varphi}_{k}\)</span></li>
+<li>给出每篇文档 <span class="math inline">\(m\)</span> 下的主题分布概率 <span class="math inline">\(p(z | d=m)=\vec{\vartheta}_{m}\)</span></li>
+</ol>
+<p>估计参数集 <span class="math inline">\(\underline{\Phi}=\left\{\vec{\varphi}_{k}\right\}_{k=1}^{K}\)</span> 和 <span class="math inline">\(\underline{\Theta}=\{\vec{\vartheta}_{m}\}_{m=1}^{M}\)</span> 是对词语及文档潜在语义表达的基础。</p>
+<h2 id="生成模型">生成模型</h2>
+<p>为了给出推理策略，我们将 LDA 看作一个生成过程。下图给出了 LDA 的贝叶斯网络：</p>
+<p><img src="http://media.zjubiomedit.com/2019-10-16-140357.png" width="40%"></p>
+<p>我们可以通过如下生成过程理解该贝叶斯网络：</p>
+<p>LDA 以文档 <span class="math inline">\(\vec{w}_m\)</span> 为划分，生成观察词语流 <span class="math inline">\(w_{m,n}\)</span>.</p>
+<ul>
+<li>对于整个语料库，为每个主题生成一个主题-词语概率向量 <span class="math inline">\(\vec{\varphi}_k\)</span></li>
+<li>对于每篇文档，生成一个文档-主题概率向量 <span class="math inline">\(\vec{\vartheta}_m\)</span></li>
+<li>对于每个词语，先基于文档-主题分布概率 <span class="math inline">\(\vec{\vartheta}_m\)</span> 生成一个主题 <span class="math inline">\(z_{m,n}\)</span>，再基于对应的主题-词语分布概率 <span class="math inline">\(\vec{\varphi}_{z_{m, n}}\)</span> 生成一个词语 <span class="math inline">\(w_{m,n}\)</span></li>
+</ul>
+<p>下图给出了完整的生成过程和符号表述：</p>
+<p><img src="http://media.zjubiomedit.com/2019-10-17-025449.png" width="70%"></p>
+<p><img src="http://media.zjubiomedit.com/2019-10-17-025836.png" width="70%"></p>
+<h2 id="似然函数">似然函数</h2>
+<p>基于贝叶斯网络的拓扑结构，我们可以给出一篇文档的全数据似然函数，即给定超参数下所有已知和隐藏变量的联合分布： <span class="math display">\[
+p(\vec{w}_{m}, \vec{z}_{m}, \vec{\vartheta}_{m}, \underline{\Phi} | \vec{\alpha}, \vec{\beta})=\overbrace{\underbrace{\prod_{n=1}^{N_{m}} p(w_{m, n} | \vec{\varphi}_{z_{m,n}}) p(z_{m, n} |\vec{\vartheta}_{m}) }_{\text{word plate}}\cdot p(\vec{\vartheta}_{m} | \vec{\alpha})}^{\text{document plate (1 document)}} \cdot \underbrace{p(\underline{\Phi} | \vec{\beta})}_{\text {topic plate }}  \tag{56}
+\]</span> 而对于单个词语 <span class="math inline">\(w_{m,n}\)</span>，其为特定词语 <span class="math inline">\(t\)</span> 的概率如下： <span class="math display">\[
+p(w_{m, n}=t | \vec{\vartheta}_{m}, \underline{\Phi})=\sum_{k=1}^{K} p(w_{m, n}=t | \vec{\varphi}_{k}) p(z_{m, n}=k | \vec{\vartheta}_{m}) \tag{57}
+\]</span> 即之前所述的混合模型。整个语料库的似然函数为各文档的似然函数相乘（独立事件）： <span class="math display">\[
+p(\mathcal{W} | \underline{\Theta}, \underline{\Phi})=\prod_{m=1}^{M} p(\vec{w}_{m} | \vec{\vartheta}_{m}, \underline{\Phi})=\prod_{m=1}^{M} \prod_{n=1}^{N_{m}} p(w_{m, n} | \vec{\vartheta}_{m}, \underline{\Phi})  \tag{58}
+\]</span></p>
+<h2 id="基于吉布斯采样的推理">基于吉布斯采样的推理</h2>
+<p>虽然 LDA 看上去并不复杂，但进行精确的推理（求解）是十分困难的。因此我们需要使用近似推理算法，这里使用的方法是<strong>吉布斯采样</strong>。</p>
+<p>吉布斯采样（Gibbs Sampling）是马尔科夫链蒙特卡洛模拟（MCMC）的一个特例，可用于为高维模型（如 LDA）的近似推理提供相对简单的算法。MCMC 方法可以通过马尔科夫链的平稳行为来采样高维概率分布 <span class="math inline">\(p(\vec{x})\)</span> ，即当马尔科夫链达到稳定状态时，每一次传递生成的样本服从平稳分布，我们只需要想办法让平稳分布为待采样分布。</p>
+<p>吉布斯采样的思路是：每次只更新分布中的一个维度 <span class="math inline">\(x_i\)</span> ，以除去该维度的其他维度 <span class="math inline">\(\vec{x}_{\neg i}\)</span> 为条件：</p>
+<ol type="1">
+<li>选择一个维度 <span class="math inline">\(i\)</span>（随机或按某种顺序）</li>
+<li>基于 <span class="math inline">\(p(x_i|\vec{x}_{\neg i})\)</span> 采样 <span class="math inline">\(x_i\)</span></li>
+</ol>
+<p>最终收敛后的得到的样本即为 <span class="math inline">\(p(\vec{x})\)</span> 的样本。</p>
+<p>为了构建一个吉布斯采样器，我们需要找出单变量条件分布 <span class="math inline">\(p(x_i|\vec{x}_{\neg i})\)</span>，可以通过下式计算： <span class="math display">\[
+p\left(x_{i} | \vec{x}_{\neg i}\right)=\frac{p(\vec{x})}{p\left(\vec{x}_{-i}\right)}=\frac{p(\vec{x})}{\int p(\vec{x}) \mathrm{d} x_{i}} \text { with } \vec{x}=\left\{x_{i}, \vec{x}_{\neg i}\right\}  \tag{59}
+\]</span> 而对于包含隐藏变量 <span class="math inline">\(\vec{z}\)</span> ，我们一般想要知道其后验分布 <span class="math inline">\(p(\vec{z} | \vec{x})\)</span>。基于式 <span class="math inline">\((59)\)</span> ，吉布斯采样器的公式如下： <span class="math display">\[
+p\left(z_{i} | \vec{z}_{\neg i}, \vec{x}\right)=\frac{p(\vec{z}, \vec{x})}{p\left(\vec{z}_{\neg i}, \vec{x}\right)}=\frac{p(\vec{z}, \vec{x})}{\int_{Z} p(\vec{z}, \vec{x}) \mathrm{d} z_{i}}  \tag{60}
+\]</span> 其中的积分对于离散变量来说为求和。基于吉布斯采样得到足够的样本 <span class="math inline">\(\tilde{\vec{z}}_{r}, r \in[1, R]\)</span> 后，我们可以通过下式来估计潜在变量的后验分布： <span class="math display">\[
+p(\vec{z} | \vec{x}) \approx \frac{1}{R} \sum_{r=1}^{R} \delta\left(\vec{z}-\tilde{z}_{r}\right)  \tag{61}
+\]</span> 其中克罗内克函数 <span class="math inline">\(\delta(\vec{u})=\{1 \text { if } \vec{u}=0 ; 0 \text { otherwise }\}\)</span>.</p>
+<h2 id="lda-吉布斯采样器">LDA 吉布斯采样器</h2>
+<p>下面我们将给出 LDA 的吉布斯采样的详细过程。</p>
+<p>我们将使用上述隐藏变量的公式，在 LDA 中，隐藏变量即语料库中每个词语 <span class="math inline">\(w_{m,n}\)</span> 对应的主题 <span class="math inline">\(z_{m,n}\)</span>。对于参数集 <span class="math inline">\(\underline{\Theta}\)</span> 和 <span class="math inline">\(\underline{\Phi}\)</span>，我们认为其只是马尔科夫链中稳定变量的统计学关联，会通过积分消去这些参数，这种策略在模型推理中被称为 “collapsed”，经常用于吉布斯推理之中。</p>
+<p>基于上一节所述，推理的目标是 <span class="math inline">\(p(\vec{z}| \vec{w})\)</span>，其可以通过下式得到： <span class="math display">\[
+p(\vec{z} | \vec{w})=\frac{p(\vec{z}, \vec{w})}{p(\vec{w})}=\frac{\prod_{i=1}^{W} p\left(z_{i}, w_{i}\right)}{\prod_{i=1}^{W} \sum_{k=1}^{K} p\left(z_{i}=k, w_{i}\right)} \tag{62}
+\]</span> 其中略去了超参数。该公式是难以直接求解的，需要引入吉布斯采样。为了模拟 <span class="math inline">\(p(\vec{z} | \vec{w})\)</span>，我们要基于 <span class="math inline">\((60)\)</span> 推导单变量条件概率 <span class="math inline">\(p\left(z_{i} | \vec{z}_{-i}, \vec{w}\right)\)</span>.</p>
+<h3 id="联合概率分布">联合概率分布</h3>
+<p>我们首先推导<strong>联合概率分布</strong>。在 LDA 中，联合概率分布可以拆分为两个部分： <span class="math display">\[
+p(\vec{w}, \vec{z} | \vec{\alpha}, \vec{\beta})=p(\vec{w} | \vec{z}, \vec{\beta}) p(\vec{z} | \vec{\alpha})  \tag{63}
+\]</span> 上式利用了贝叶斯公式 <span class="math inline">\(P(A,B) = P(A|B)P(B)\)</span>，而因为第一项中 <span class="math inline">\(\vec{w}|\vec{z}\)</span> 与 <span class="math inline">\(\vec{\alpha}\)</span> 条件独立（<span class="math inline">\(\vec{w} \perp \vec{\alpha} | \vec{z}\)</span>，可通过贝叶斯球推导），而第二项中 <span class="math inline">\(\vec{z}\)</span> 与 <span class="math inline">\(\vec{\beta}\)</span> 独立。下面我们分别来推导第一项和第二项的概率。</p>
+<p>第一项 <span class="math inline">\(p(\vec{w} | \vec{z})\)</span> 可以通过给定相关联主题下的多项分布进行化简： <span class="math display">\[
+p(\vec{w} | \vec{z}, \underline{\Phi})=\prod_{i=1}^{W} p\left(w_{i} | z_{i}\right)=\prod_{i=1}^{W} \varphi_{z_{i}, w_{i}} \tag{64}
+\]</span> 上式相当于进行了 <span class="math inline">\(W\)</span> 次独立的多项试验（词袋模型不考虑词语间的顺序信息），我们可以进一步将其转换为一个遍历的乘积与一个遍历词表的乘积： <span class="math display">\[
+p(\vec{w} | \vec{z}, \underline{\Phi})=\prod_{k=1}^{K} \prod_{\left\{i: z_{i}=k\right\}} p\left(w_{i}=t | z_{i}=k\right)=\prod_{k=1}^{K} \prod_{t=1}^{V} \varphi_{k, t}^{n_{k}^{(t)}} \tag{65}
+\]</span> 其中 <span class="math inline">\(n_{k}^{(t)}\)</span> 表示词语 <span class="math inline">\(t\)</span> 被观察到主题 <span class="math inline">\(k\)</span> 的次数。基于上述公式，我们通过积分消去 <span class="math inline">\(\underline{\Phi}\)</span>，具体推导如下： <span class="math display">\[
+\begin{align*} p(\vec{w} | \vec{z}, \vec{\beta}) &amp;=\int p(\vec{w} | \vec{z}, \underline{\Phi}) p(\underline{\Phi} | \vec{\beta}) \mathrm{d} \underline{\Phi} \tag{66}\\ &amp;=\int \prod_{z=1}^{K} \frac{1}{\Delta(\vec{\beta})} \prod_{t=1}^{V} \varphi_{z, t}^{n_{z}^{(0)}+\beta_{t}-1} \mathrm{d} \vec{\varphi}_{z} \tag{67}\\ &amp;=\prod_{z=1}^{K} \frac{\Delta(\vec{n}_{z}+\vec{\beta})}{\Delta(\vec{\beta})}, \quad \vec{n}_{z}=\{n_{z}^{(t)}\}_{t=1}^{V} \tag{68}\end{align*}
+\]</span> 上式可以理解为 <span class="math inline">\(K\)</span> 个狄利克雷-多项模型的乘积.（类比 <span class="math inline">\((52)\)</span> 式）</p>
+<p>与第一项类似，第二项主题分布 <span class="math inline">\(p(\vec{z} | \vec{\alpha})\)</span> 可以表达为如下形式： <span class="math display">\[
+p(\vec{z} | \underline{\Theta})=\prod_{i=1}^{W} p\left(z_{i} | d_{i}\right)=\prod_{m=1}^{M} \prod_{k=1}^{K} p\left(z_{i}=k | d_{i}=m\right)=\prod_{m=1}^{M} \prod_{k=1}^{K} \vartheta_{m, k}^{n_{m}^{(k)}} \tag{69}
+\]</span> 其中 <span class="math inline">\(d_i\)</span> 表示词语 <span class="math inline">\(i\)</span> 所属的文档，<span class="math inline">\(\boldsymbol{n}_{m}^{(k)}\)</span> 表示文档 <span class="math inline">\(m\)</span> 中主题 <span class="math inline">\(k\)</span> 随词语出现的次数。对 <span class="math inline">\(\underline{\Theta}\)</span> 积分，可以得到： <span class="math display">\[
+\begin{align*} p(\vec{z} | \vec{\alpha}) &amp;=\int p(\vec{z} | \underline{\Theta}) p(\underline{\Theta} | \vec{\alpha}) \mathrm{d} \underline{\Theta} \tag{70}\\ &amp;=\int \prod_{m=1}^{M} \frac{1}{\Delta(\vec{\alpha})} \prod_{k=1}^{K} \vartheta_{m, k}^{n_{m}^{(k)}+\alpha_{k}-1} \mathrm{d} \vec{\vartheta}_{m} \tag{71}\\ &amp;=\prod_{m=1}^{M} \frac{\Delta\left(\vec{n}_{m}+\vec{\alpha}\right)}{\Delta(\vec{\alpha})}, \quad \vec{n}_{m}=\{n_{m}^{(k)}\}_{k=1}^{K} \tag{72}\end{align*}
+\]</span> 综上所述，联合概率分布为： <span class="math display">\[
+p(\vec{z}, \vec{w} | \vec{\alpha}, \vec{\beta})=\prod_{z=1}^{K} \frac{\Delta(\vec{n}_{z}+\vec{\beta})}{\Delta(\vec{\beta})} \cdot \prod_{m=1}^{M} \frac{\Delta\left(\vec{n}_{m}+\vec{\alpha}\right)}{\Delta(\vec{\alpha})} \tag{73}
+\]</span></p>
+<h3 id="单变量条件分布">单变量条件分布</h3>
+<p>基于联合概率分布， 我们可以推导出一个词语的单变量条件分布，其下标为 <span class="math inline">\(i = (m,n)\)</span>，该分布即为吉布斯采样的更新公式，具体的推导过程如下： <span class="math display">\[
+\begin{align*}
+p\left(z_{i}=k | \vec{z}_{\neg i}, \vec{w}\right)&amp;=\frac{p(\vec{w}, \vec{z})}{p\left(\vec{w}, \vec{z}_{\neg i}\right)}=\frac{p(\vec{w} | \vec{z})}{p\left(\vec{w}_{\neg i} | \vec{z}_{\neg i}\right) p\left(w_{i}\right)} \cdot \frac{p(\vec{z})}{p\left(\vec{z}_{\neg i}\right)} \tag{74} \\ &amp; \propto\frac{\Delta(\vec{n}_{z}+\vec{\beta})}{\Delta(\vec{n}_{z,\neg i}+\vec{\beta})} \cdot \frac{\Delta(\vec{n}_{m}+\vec{\alpha})}{\Delta(\vec{n}_{m, \neg i}+\vec{\alpha})}  \tag{75} \\ &amp;= \frac{\Gamma(n_{k}^{(t)}+\beta_{t}) \Gamma(\sum_{t=1}^{V} n_{k,\neg i}^{(t)}+\beta_{t})}{\Gamma(n_{k,\neg i}^{(t)}+\beta_{t}) \Gamma(\sum_{t=1}^{V} n_{k}^{(t)}+\beta_{t})} \cdot \frac{\Gamma(n_{m}^{(k)}+\alpha_{k}) \Gamma(\sum_{k=1}^{K} n_{m, \neg i}^{(k)}+\alpha_{k})}{\Gamma(n_{m,\neg i}^{(k)}+\alpha_{k}) \Gamma(\sum_{k=1}^{K} n_{m}^{(k)}+\alpha_{k})} \tag{76} \\
+&amp;= \frac{n_{k,\neg{i}}^{(t)}+\beta_{t}}{\sum_{t=1}^{V} n_{k, \neg{i}}^{(t)}+\beta_{t}} \cdot \frac{n_{m,\neg{i}}^{(k)}+\alpha_{k}}{[\sum_{k=1}^{K} n_{m}^{(k)}+\alpha_{k}]-1} \tag{77}
+\\&amp; \propto \frac{n_{k, \neg i}^{(t)}+\beta_{t}}{\sum_{t=1}^{V} n_{k, \neg i}^{(t)}+\beta_{t}}\left(n_{m, \neg i}^{(k)}+\alpha_{k}\right) \tag{78}
+\end{align*}
+\]</span> 其中式 <span class="math inline">\((74)\)</span> 利用了独立假设 <span class="math inline">\(w_{i} \perp z_{\neg i}\)</span>，并省略了常数项 <span class="math inline">\(p(w_i)\)</span>. 式 <span class="math inline">\((75)\)</span> 只保留了词语 <span class="math inline">\(i\)</span> 所属的主题与文档向量， 式 <span class="math inline">\((77)\)</span> 省略了第二项的分母因为其与 <span class="math inline">\(k\)</span> 无关。</p>
+<h3 id="多项参数">多项参数</h3>
+<p>最后，我们需要找出对应马尔科夫链状态 <span class="math inline">\(\vec{z}\)</span> 的多项参数集 <span class="math inline">\(\underline{\Theta}\)</span> 和 <span class="math inline">\(\underline{\Phi}\)</span>. 基于共轭分布的性质和之前的推导结果，可以得到参数的如下后验分布： <span class="math display">\[
+\begin{align*}p(\vec{\vartheta}_{m} | \vec{z}_{m}, \vec{\alpha})&amp;=\frac{1}{Z_{\theta_{m}}} \prod_{n=1}^{N_{m}} p(z_{m, n} | \vec{\vartheta}_{m}) \cdot p(\vec{\vartheta}_{m} | \vec{\alpha})=\operatorname{Dir}(\vec{\vartheta}_{m} | \vec{n}_{m}+\vec{\alpha}) \tag{79} \\ p(\vec{\varphi}_{k} | \vec{z}, \vec{w}, \vec{\beta}) &amp;=\frac{1}{Z_{\varphi_{k}}} \prod_{[i: z_{i}=k]} p(w_{i} | \vec{\varphi}_{k}) \cdot p(\vec{\varphi}_{k} | \vec{\beta})=\operatorname{Dir}(\vec{\varphi}_{k} | \vec{n}_{k}+\vec{\beta}) \tag{80} \end{align*}
+\]</span> 其中 <span class="math inline">\(\vec{n}_m\)</span> 是文档 <span class="math inline">\(m\)</span> 的主题观察数，<span class="math inline">\(\vec{n}_k\)</span> 是主题 <span class="math inline">\(k\)</span> 的词语观察数。使用狄利克雷分布的期望：<span class="math inline">\(\langle\operatorname{Dir}(d)\rangle= a_{i} / \sum_{i} a_{i}\)</span>，可以推导出参数的估计： <span class="math display">\[
+\begin{align*} \varphi_{k, t} &amp;=\frac{n_{k}^{(t)}+\beta_{t}}{\sum_{t=1}^{V} n_{k}^{(t)}+\beta_{t}} \tag{81}\\ \vartheta_{m, k} &amp;=\frac{n_{m}^{(k)}+\alpha_{k}}{\sum_{k=1}^{K} n_{m}^{(k)}+\alpha_{k}} \tag{82}\end{align*}
+\]</span></p>
+<h3 id="吉布斯采样算法">吉布斯采样算法</h3>
+<p>使用公式 <span class="math inline">\((78)\)</span>，<span class="math inline">\((81)\)</span> 和 <span class="math inline">\((82)\)</span>，我们可以给出下图所示的吉布斯采样过程。关于采样的次数，有很多种准则，我们可以手动去确认聚类是否合理。关于模型参数的获取，一种方法是直接使用收敛后某次采样的数据计算，另一种方法是根据多次采样的结果求平均，注意求平均时每次采样会间隔 <span class="math inline">\(L\)</span> 次迭代，来消除相邻马尔可夫状态之间的相关性。</p>
+<p><img src="http://media.zjubiomedit.com/2019-10-22-025436.png" width="80%"></p>
+<h1 id="lda-超参数">LDA 超参数</h1>
+<p>在上一节中，我们假设超参数（狄利克雷分布的参数）是已知的，这些超参数对模型的行为有着重要影响。在 LDA 中，一般使用对称先验，即所有主题分配给一个文档的概率以及所有词语分配给一个主题的概率是一致的。本章节将对超参数的含义进行解释并给出基于数据估计超参数值的方法。</p>
+<h2 id="理解">理解</h2>
+<p>狄利克雷超参数对多项参数一般具有<strong>平滑效应</strong>。通过减小 <span class="math inline">\(\alpha\)</span> 和 <span class="math inline">\(\beta\)</span> 的值，我们可以减少 LDA 中的这种平滑效应，产生更具决定性的主题关联，即 <span class="math inline">\(\underline{\Phi}\)</span> 和 <span class="math inline">\(\underline{\Theta}\)</span> 变得更加<strong>稀疏</strong>。</p>
+<p><span class="math inline">\(\underline{\Phi}\)</span> 的稀疏性（由 <span class="math inline">\(\beta\)</span> 控制）导致模型趋向于为每个主题分配更少的词语，这会进一步影响模型中主题的数量。对于稀疏的主题来说，如果主题数量 <span class="math inline">\(K\)</span> 设置得较高，模型可能会拟合得更好，因为模型并不情愿为一个给定的词语分配多个主题。而 <span class="math inline">\(\underline{\Theta}\)</span> 的稀疏性（由 <span class="math inline">\(\alpha\)</span> 控制）导致模型趋向于使用较少的主题来描述文档（也会影响主题数量）。</p>
+<p>上述理解表明超参数取值、主题数量与模型行为之间相互影响。根据已有经验，一个效果比较好的超参数取值为 <span class="math inline">\(\alpha = 50/ K\)</span> 和 <span class="math inline">\(\beta = 0.01\)</span>。我们也可以基于数据来估计超参数（给定主题数量 <span class="math inline">\(K\)</span>），发现数据集中的具体特性。然而，对于超参数估计的解释并不简单，且其对于特定文档集的影响仍有待研究。下一节我们将给出对 <span class="math inline">\(\alpha\)</span> 的估计（<span class="math inline">\(\theta\)</span> 的估计类似）。</p>
+<h2 id="估计">估计</h2>
+<p>估计超参数 <span class="math inline">\(\alpha\)</span> 的方法有很多种，但这些方法都没有给出精确的闭合解，也不存在可直接进行贝叶斯推断（推断 <span class="math inline">\(\alpha\)</span>） 的先验共轭分布。目前最准确的方法是<strong>迭代估计</strong>。我们将使用吉布斯采样器中已得到的信息（即关于主题的计数信息）来进行估计，参考式 <span class="math inline">\((52)\)</span>，通过最大似然估计迭代更新参数： <span class="math display">\[
+ p(\mathcal{W} | \vec{\alpha}) =\frac{\Delta(\vec{n}+\vec{\alpha})}{\Delta(\vec{\alpha})}, \quad \vec{n}=\{n^{(v)}\}_{v=1}^{V} \tag{52}
+\]</span> 对于<strong>无约束的向量化狄利克雷参数</strong>，一个简单的定点更新式的最大似然估计如下： <span class="math display">\[
+\alpha_{k} \leftarrow \frac{\alpha_{k}\left[\left(\sum_{m=1}^{M} \Psi\left(n_{m, k}+\alpha_{k}\right)\right)-M \Psi\left(\alpha_{k}\right)\right]}{\left[\sum_{m=1}^{M} \Psi\left(n_{m}+\sum_{k} \alpha_{k}\right)\right]-M \Psi\left(\sum_{k} \alpha_{k}\right)} \tag{83}
+\]</span> 其中 <span class="math inline">\(\Psi(x)\)</span> 是 digamma 函数，为 <span class="math inline">\(\log \Gamma(x)\)</span>的导数。我们可以先基于某种方法初始化超参数，然后执行数次迭代直至收敛。</p>
+<p>对于<strong>对称狄利克雷分布</strong>（LDA 中更常用），文献中并没有给出吉布斯采样器中这些超参数的估计方法，我们使用简单的 <span class="math inline">\(K\)</span> 等分方式： <span class="math display">\[
+\alpha \leftarrow \frac{\alpha\left[\left(\sum_{m=1}^{M} \sum_{k=1}^{K} \Psi\left(n_{m, k}+\alpha\right)\right)-M K \Psi(\alpha)\right]}{K\left[\left(\sum_{m=1}^{M} \Psi\left(n_{m}+K \alpha\right)\right)-M \Psi(K \alpha)\right]} \tag{84}
+\]</span> 除了上述最大似然估计，我们也可以考虑引入先验分布，通过最大后验分布估计或是 MCMC 方法来采样超参数。</p>
+<h1 id="分析主题模型">分析主题模型</h1>
+<p>本节我们将使用给定语料库的潜在主题结构来：</p>
+<ul>
+<li>分析新文档的主题结构</li>
+<li>分析主题的聚类质量</li>
+<li>基于主题推理新的关联（如文档或词语的相似性）</li>
+</ul>
+<p>下面介绍 LDA 的几个实际应用场景。</p>
+<h2 id="querying">Querying</h2>
+<p>给定一个文档，主题模型提供了两种方法来查询与其相似的文档：</p>
+<ol type="1">
+<li>通过文档参数的相似性分析</li>
+<li>通过预测性的文档似然函数</li>
+</ol>
+<p>上述两种方法都需要先给出查询文档的主题估计。</p>
+<h3 id="主题采样">主题采样</h3>
+<p>对于一个查询文档，其由一个词语向量 <span class="math inline">\(\tilde{\vec{w}}\)</span> 组成，我们将基于训练得到的 LDA 模型 <span class="math inline">\(\mathcal{M}\)</span> 来采样主题，进而计算文档-主题分布参数 <span class="math inline">\(\tilde{\vec{\theta}}_m\)</span>.</p>
+<p>采样的方式仍为吉布斯采样，对应于 <span class="math inline">\((78)\)</span> 式，但需要注意的是主题-词语分布参数 <span class="math inline">\(\underline{\Phi}\)</span> 和超参数 <span class="math inline">\(\alpha\)</span> 来自于训练好的模型，我们只需要对新文档中的每个词语的主题进行采样（先随机分配主题），如下式所示： <span class="math display">\[
+p(\tilde{z}_{i}=k | \tilde{w}_{i}=t, \tilde{\vec{z}}_{\neg i}, \tilde{\vec{w}}_{\neg i} ; \mathcal{M}) \propto \varphi_{k, t}(n_{\tilde{m}, \neg i}^{(k)}+\alpha_{k}) \tag{85}
+\]</span> 采样完成后，使用式 <span class="math inline">\((82)\)</span> 来计算未知文档的主题分布： <span class="math display">\[
+\vartheta_{\tilde{m}, k} =\frac{n_{\tilde{m}}^{(k)}+\alpha_{k}}{\sum_{k=1}^{K} n_{\tilde{m}}^{(k)}+\alpha_{k}} \tag{86}
+\]</span> 该采样同样适用于多篇文档。</p>
+<h3 id="相似性排序">相似性排序</h3>
+<p>得到了文档-主题分布 <span class="math inline">\(\vec{\vartheta}_{\tilde{m}}\)</span> 后，我们可以使用两种方法来计算其与语料库中的文档-主题分布 <span class="math inline">\(\underline{\Theta}\)</span> 的相似性。</p>
+<p>第一种是 KL 散度，其基于两个离散变量定义： <span class="math display">\[
+D_{\mathrm{KL}}(X \| Y)=\sum_{n=1}^{N} p(X=n)\left[\log _{2} p(X=n)-\log _{2} p(Y=n)\right] \tag{87}
+\]</span> KL 散度可以理解为交叉熵 <span class="math inline">\(H(X \| Y)=-\sum_{n} p(X=n) \log _{2} p(Y=n)\)</span> 和 <span class="math inline">\(X\)</span> 的熵 <span class="math inline">\(H(X)=-\sum_{n} p(X=n) \log _{2}p(X = n)\)</span> 之间的差异，只有两个分布相同时， KL 散度才会为 0。</p>
+<p>第二种方法是基于距离的测量（KL 散度不对称，无法度量距离），使用 Jensen-Shannon 距离： <span class="math display">\[
+D_{\mathrm{JS}}(X \| Y)=\frac{1}{2}\left[D_{\mathrm{KL}}(X \| M)+D_{\mathrm{KL}}(Y \| M)\right] \tag{88}
+\]</span> 其中平均变量 <span class="math inline">\(M = \frac 1 2(X+Y)\)</span>.</p>
+<h3 id="预测性似然排序">预测性似然排序</h3>
+<p>另一种查询的方法是计算语料库中文档 <span class="math inline">\(m\)</span> 可以基于查询文档 <span class="math inline">\(\tilde{m}\)</span> 生成的可能性（仅考虑主题分布，不考虑具体词语），使用贝叶斯规则，可以得到下式： <span class="math display">\[
+\begin{align*} p(m | \tilde{m}) &amp;=\sum_{k=1}^{K} p(m | z=k) p(z=k | \tilde{m}) \tag{89}\\ &amp;=\sum_{k=1}^{K} \frac{p(z=k | m) p(m)}{p(z=k)} p(z=k | \tilde{m}) \tag{90}\\ &amp;=\sum_{k=1}^{K} \vartheta_{m, k} \frac{n_{m}}{n_{k}} \vartheta_{\tilde{m}, k} \tag{91}\end{align*}
+\]</span> 上式中假定 <span class="math inline">\(p(m) = n_m / W\)</span> 和 <span class="math inline">\(p(z=k)=n_{k} / W\)</span>。直观上看，式 <span class="math inline">\((91)\)</span> 是一个主题向量间的加权标量乘积</p>
+<p>，惩罚了短文档和强主题。</p>
+<h3 id="检索">检索</h3>
+<p>对于上述基于主题模型的查询策略，我们可以将其应用于信息检索领域。关于检索效果的评估，最常用的评估指标是准确率和召回率。准确率是指所有检索返回的文档中相关文档的比例；而召回率则是指所有相关文档中被检索返回文档的比例。由于准确率 <span class="math inline">\(P\)</span> 和召回率 <span class="math inline">\(R\)</span> 通常相互制约，我们可以使用 <span class="math inline">\(F_{1}=2 P R /(P+R)\)</span> 或加权值 <span class="math inline">\(F_{w}=\left(\lambda_{P}+\lambda_{R}\right) P R /\left(\lambda_{P} P+\lambda_{R} R\right)\)</span> 来评价检索效果。</p>
+<p>这里有两个问题需要说明，第一个是基于主题模型的检索可能或导致准确率的下降（对应于召回率的上升），因为其考虑了文档的潜在主题结构而非字面量。我们可以考虑将主题模型检索与其他检索方法进行结合。第二个是应当使用与主题分布相关的查询构造策略，如通过未知文档构造出的主题分布。</p>
+<h2 id="clustering">Clustering</h2>
+<p>LDA 还可以用于对文档与词语的聚类，其主题分布提供了一种软聚类的结果。基于主题分布，我们可以计算文档或主题之间的相似性（上一节所述）来查看聚类结果。</p>
+<h3 id="vi-距离评估">VI 距离评估</h3>
+<p>对聚类质量的评估也十分重要。原则上，我们可以直接基于计算得到的相似性来主观评价聚类质量，而一种更加客观的评估方法是将模型应用于已经分好类的语料库，比较模型给出的聚类结果与先验结果。下面我们将介绍一种比较聚类结果的方法，叫做 Variation of Information distance （VI 距离），其能够计算类数量不同的软聚类或硬聚类之间的距离。</p>
+<p>VI 距离的计算公式如下：假定每个文档都有两种主题分布（软聚类）：<span class="math inline">\(p(c=j | d_{m})\)</span> 和 <span class="math inline">\(p(z=k | d_{m})\)</span>，其中主题 <span class="math inline">\(j \in [1,J]\)</span> 和 <span class="math inline">\(k \in [1, K]\)</span>。整个语料库上的主题分布取平均：<span class="math inline">\(p(c=j)=1 / M \sum_{m} p\left(c=j | d_{m}\right)\)</span> 和 <span class="math inline">\(p(z=k)=1 / M \sum_{m} p\left(z=k | d_{m}\right)\)</span>.</p>
+<p>对于相似的聚类，主题往往趋向于成对 <span class="math inline">\((c = j,z = k)\)</span> 出现；而对于不相似的聚类，则对应于主题分布的相互独立：<span class="math inline">\(p(c=j, z=k)=p(c=j)p(z=k)\)</span>. 为了衡量相似程度，我们使用<strong>真实分布与假定独立的分布之间的 KL 散度</strong>，在信息论中这对应于随机变量 <span class="math inline">\(C\)</span> 和 <span class="math inline">\(Z\)</span> 之间的互信息： <span class="math display">\[
+\begin{align*} I(C, Z) &amp;=D_{\mathrm{KL}}\{p(c, z) \| p(c) p(z)\} \\ &amp;=\sum_{j=1}^{J} \sum_{k=1}^{K} p(c=j, z=k)\left[\log _{2} p(c=j, z=k)-\log _{2} p(c=j) p(z=k)\right] \tag{92} \end{align*}
+\]</span> 其中联合分布 <span class="math inline">\(p(c=j,z=k) = \frac{1}{M} \sum_{m=1}^{M} p\left(c=j | d_{m}\right) p\left(z=k | d_{m}\right)\)</span> . 只有两个变量间相互独立，其互信息才为 0。</p>
+<p>进一步地，我们有 <span class="math inline">\(I(C, Z) \leq \min \{H(C), H(Z)\}\)</span>，其中 <span class="math inline">\(H(C)=-\sum_{j=1}^{J} p(c=j) \log _{2} p(c=j)\)</span> 表示 <span class="math inline">\(C\)</span> 的熵。当且仅当两个聚类相等时等号成立 <span class="math inline">\(I(C,Z) = H(C) = H(Z)\)</span>。利用这一性质，我们定义 VI 距离的计算公式如下： <span class="math display">\[
+D_{\mathrm{VI}}(C, Z)=H(C)+H(Z)-2 I(C, Z) \tag{93}
+\]</span> <span class="math inline">\(D_{\mathrm{VI}}(C, Z)\)</span> 始终非负，且满足三角不等式：<span class="math inline">\(D_{\mathrm{VI}}(C, Z)+D_{\mathrm{VI}}(Z, X) \geq D_{\mathrm{VI}}(C, X)\)</span>。VI 距离只取决于聚类情况，与数据本身的绝对数量不相关。</p>
+<h3 id="困惑度评估">困惑度评估</h3>
+<p>除了上述基于先验结果的评估之外，我们还可以直接基于保留数据（即未参与模型训练的数据）的似然函数进行评估。然而似然值通常为较大的负数（对数函数特性），所以我们使用<strong>困惑度</strong>（perplexity）来作为评估标准： <span class="math display">\[
+\mathrm{P}(\tilde{\mathcal{W}} | \mathcal{M})=\exp -\frac{\sum_{m=1}^{M} \log p\left(\tilde{\vec{w}}_{\tilde{m}} | \mathcal{M}\right)}{\sum_{m=1}^{M} N_{m}} \tag{94}
+\]</span> 困惑度可以直观地理解为模型生成测试数据所需要的均匀分布的词典大小。困惑度越低，表示模型对测试数据中词语的表示越好。对于 LDA，困惑度中似然函数的计算公式如下： <span class="math display">\[
+\begin{align*} p\left(\tilde{\vec{w}}_{\tilde{m}} | \mathcal{M}\right) &amp;=\prod_{n=1}^{N_{\tilde{m}}} \sum_{k=1}^{K} p\left(w_{n}=t | z_{n}=k\right) \cdot p\left(z_{n}=k | d=\tilde{m}\right)=\prod_{t=1}^{V}\left(\sum_{k=1}^{K} \varphi_{k, t} \cdot \vartheta_{\tilde{m}, k}\right)^{n_{\tilde{m}}^{(t)}} \tag{95}\\ \log p\left(\tilde{\vec{w}}_{\tilde{m}} | \mathcal{M}\right) &amp;=\sum_{t=1}^{V} n_{\tilde{m}}^{(t)} \log \left(\sum_{k=1}^{K} \varphi_{k, t} \cdot \vartheta_{\tilde{m}, k}\right) \tag{96}\end{align*}
+\]</span> 其中 <span class="math inline">\(\vartheta_{\tilde{m}, k}\)</span> 基于之前的 <span class="math inline">\((85)\)</span> 式采样得到。</p>
+<p>除了用于评估聚类质量，困惑度还可以用来判断吉布斯采样过程是否收敛。通过计算训练集的困惑度，我们可以了解模型是否存在过拟合，据此判断何时停止采样过程。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Zheyu Wang</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://xxwywzy.github.io/2019/10/26/lda-2-2/" title="LDA 原理第二部分：文本分析的参数估计（下）">https://xxwywzy.github.io/2019/10/26/lda-2-2/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/LDA/" rel="tag"># LDA</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/19/lda-2-1/" rel="next" title="LDA 原理第二部分：文本分析的参数估计（上）">
+                <i class="fa fa-chevron-left"></i> LDA 原理第二部分：文本分析的参数估计（上）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Zheyu Wang"/>
+            
+              <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+              <p class="site-description motion-element" itemprop="description">相信过程</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">50</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">16</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">20</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/xxwywzy" title="GitHub &rarr; https://github.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://twitter.com/xxwywzy" title="Twitter &rarr; https://twitter.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="http://weibo.com/xxwywzy" title="Weibo &rarr; http://weibo.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://instagram.com/xxwywzy" title="Instagram &rarr; https://instagram.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#隐含狄利克雷分布"><span class="nav-number">1.</span> <span class="nav-text">隐含狄利克雷分布</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#混合模型"><span class="nav-number">1.1.</span> <span class="nav-text">混合模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生成模型"><span class="nav-number">1.2.</span> <span class="nav-text">生成模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#似然函数"><span class="nav-number">1.3.</span> <span class="nav-text">似然函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于吉布斯采样的推理"><span class="nav-number">1.4.</span> <span class="nav-text">基于吉布斯采样的推理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lda-吉布斯采样器"><span class="nav-number">1.5.</span> <span class="nav-text">LDA 吉布斯采样器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#联合概率分布"><span class="nav-number">1.5.1.</span> <span class="nav-text">联合概率分布</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单变量条件分布"><span class="nav-number">1.5.2.</span> <span class="nav-text">单变量条件分布</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多项参数"><span class="nav-number">1.5.3.</span> <span class="nav-text">多项参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#吉布斯采样算法"><span class="nav-number">1.5.4.</span> <span class="nav-text">吉布斯采样算法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lda-超参数"><span class="nav-number">2.</span> <span class="nav-text">LDA 超参数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#理解"><span class="nav-number">2.1.</span> <span class="nav-text">理解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#估计"><span class="nav-number">2.2.</span> <span class="nav-text">估计</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分析主题模型"><span class="nav-number">3.</span> <span class="nav-text">分析主题模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#querying"><span class="nav-number">3.1.</span> <span class="nav-text">Querying</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#主题采样"><span class="nav-number">3.1.1.</span> <span class="nav-text">主题采样</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#相似性排序"><span class="nav-number">3.1.2.</span> <span class="nav-text">相似性排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#预测性似然排序"><span class="nav-number">3.1.3.</span> <span class="nav-text">预测性似然排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#检索"><span class="nav-number">3.1.4.</span> <span class="nav-text">检索</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#clustering"><span class="nav-number">3.2.</span> <span class="nav-text">Clustering</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#vi-距离评估"><span class="nav-number">3.2.1.</span> <span class="nav-text">VI 距离评估</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#困惑度评估"><span class="nav-number">3.2.2.</span> <span class="nav-text">困惑度评估</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.5.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.0.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz',
+    appKey: 'IxP5URFEhxow4TfWyVNiowbH',
+    placeholder: '请在这里评论=￣ω￣=',
+    avatar: 'retro',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+</script>
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+  
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .fail(function ({ responseJSON }) {
+                console.log(`Failed to save Visitor num, with error message: ${responseJSON.error}`);
+              })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1 }))
+                .done(function() {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function() {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+        .fail(function ({ responseJSON }) {
+          console.log(`LeanCloud Counter Error: ${responseJSON.code} ${responseJSON.error}`);
+        });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz',
+                'X-LC-Key': 'IxP5URFEhxow4TfWyVNiowbH',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            addCount(Counter);
+          
+        });
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: "AMS"
+      }
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+      for (i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+<script src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+  overflow: auto hidden;
+}
+</style><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+    
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
