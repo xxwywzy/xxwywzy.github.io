@@ -113,7 +113,7 @@
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-11-01-114616.png">
 <meta property="og:image" content="https://jalammar.github.io/images/t/transformer_multi-headed_self-attention-recap.png">
 <meta property="og:image" content="http://media.zjubiomedit.com/2019-11-03-103653.png">
-<meta property="og:updated_time" content="2019-11-04T07:30:09.021Z">
+<meta property="og:updated_time" content="2019-11-04T07:35:16.250Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Transformer 原理解析">
 <meta name="twitter:description" content="本篇博客为对 Transformer 原始论文（ Attention Is All You Need ）的解读。。">
@@ -564,9 +564,9 @@ lrate=d_{\text {model }}^{-0.5} \cdot \min \left(step\_num^{-0.5}, step\_num\cdo
 \]</span> 学习率会先线性增大，再逐渐减小。原文中使用 <span class="math inline">\(warm\_steps =4000\)</span>.</p>
 <h2 id="regularization">Regularization</h2>
 <p>在训练过程中，使用了两种正则化手段：</p>
-<p>第一种是 <strong>Residual Dropout</strong>。在每一层进行残差连接和归一化之前，先执行 dropout。此外，编码器与解码器中嵌入编码与位置编码之和也应用了 dropout。对于基础模型，原文使用 <span class="math inline">\(P_{drop} = 0.1\)</span>.</p>
+<p>第一种是 <strong>Residual Dropout</strong>。在每一层进行残差连接和归一化之前，先执行 dropout [6]。此外，编码器与解码器中嵌入编码与位置编码之和也应用了 dropout。对于基础模型，原文使用 <span class="math inline">\(P_{drop} = 0.1\)</span>.</p>
 <p>第二种是 <strong>Label Smoothing</strong>。在训练过程中，使用了标签平滑策略 [7]，参数设置 <span class="math inline">\(\epsilon_{ls} = 0.1\)</span>。这种策略会增加模型的不确定性，影响困惑度（perplexity），但会提升准确率与 BLEU 得分。</p>
-<p><strong>PS</strong>：以上就是论文主要内容的解读，训练章节中对于具体的方法没有展开介绍，详细内容可以查阅参考文献。论文的结果部分主要描述了模型在机器翻译任务中的表现以及不同参数设置下模型的表现，这里不作赘述，总的来说就是比其他模型都牛批。</p>
+<p><strong>PS</strong>：以上就是论文主要内容的解读，训练章节中对于具体的方法没有展开介绍，详细内容可以查阅参考文献。论文的结果部分主要描述了模型在机器翻译任务中的表现以及不同参数设置下模型的表现，这里不作赘述，一句话概括就是比其他模型都牛批。</p>
 <h1 id="参考文献">参考文献</h1>
 <ol type="1">
 <li><a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener">Attention is all you need</a></li>
