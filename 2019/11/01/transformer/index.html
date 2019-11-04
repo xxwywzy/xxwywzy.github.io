@@ -96,27 +96,35 @@
 
 
 
-  <meta name="description" content="本篇博客为《游戏引擎架构》的第一章读书笔记。">
-<meta name="keywords" content="游戏引擎架构">
+  <meta name="description" content="本篇博客为对 Transformer 原始论文（ Attention Is All You Need ）的解读。。">
+<meta name="keywords" content="Transformer">
 <meta property="og:type" content="article">
-<meta property="og:title" content="《游戏引擎架构》读书笔记之一：导论">
-<meta property="og:url" content="https://xxwywzy.github.io/2018/04/22/game-engine-1/index.html">
+<meta property="og:title" content="Transformer 原理解析">
+<meta property="og:url" content="https://xxwywzy.github.io/2019/11/01/transformer/index.html">
 <meta property="og:site_name" content="xxwywzy&#39;s Blog">
-<meta property="og:description" content="本篇博客为《游戏引擎架构》的第一章读书笔记。">
+<meta property="og:description" content="本篇博客为对 Transformer 原始论文（ Attention Is All You Need ）的解读。。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-135927.png">
-<meta property="og:updated_time" content="2019-03-24T10:34:36.000Z">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-10-29-122616.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-11-01-013208.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-11-01-020727.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-11-01-021450.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-11-01-112737.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-11-01-113649.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-11-01-114616.png">
+<meta property="og:image" content="https://jalammar.github.io/images/t/transformer_multi-headed_self-attention-recap.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-11-03-103653.png">
+<meta property="og:updated_time" content="2019-11-04T07:30:09.021Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="《游戏引擎架构》读书笔记之一：导论">
-<meta name="twitter:description" content="本篇博客为《游戏引擎架构》的第一章读书笔记。">
-<meta name="twitter:image" content="http://media.zjubiomedit.com/2018-05-28-135927.png">
+<meta name="twitter:title" content="Transformer 原理解析">
+<meta name="twitter:description" content="本篇博客为对 Transformer 原始论文（ Attention Is All You Need ）的解读。。">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2019-10-29-122616.png">
 
 
 
 
 
 
-  <link rel="canonical" href="https://xxwywzy.github.io/2018/04/22/game-engine-1/"/>
+  <link rel="canonical" href="https://xxwywzy.github.io/2019/11/01/transformer/"/>
 
 
 
@@ -126,7 +134,7 @@
   };
 </script>
 
-  <title>《游戏引擎架构》读书笔记之一：导论 | xxwywzy's Blog</title>
+  <title>Transformer 原理解析 | xxwywzy's Blog</title>
   
 
 
@@ -356,7 +364,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2018/04/22/game-engine-1/"/>
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2019/11/01/transformer/"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Zheyu Wang"/>
@@ -373,7 +381,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">《游戏引擎架构》读书笔记之一：导论
+          <h1 class="post-title" itemprop="name headline">Transformer 原理解析
 
               
             
@@ -399,7 +407,7 @@
                 
               
 
-              <time title="创建时间：2018-04-22 10:31:18" itemprop="dateCreated datePublished" datetime="2018-04-22T10:31:18+08:00">2018-04-22</time>
+              <time title="创建时间：2019-11-01 10:22:19" itemprop="dateCreated datePublished" datetime="2019-11-01T10:22:19+08:00">2019-11-01</time>
             
 
             
@@ -417,14 +425,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/游戏/" itemprop="url" rel="index"><span itemprop="name">游戏</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/人工智能/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/游戏/游戏开发/" itemprop="url" rel="index"><span itemprop="name">游戏开发</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/人工智能/深度学习/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a></span>
 
                 
                 
@@ -442,8 +450,8 @@
                   <i class="fa fa-comment-o"></i>
                 </span>
             
-                <a href="/2018/04/22/game-engine-1/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/04/22/game-engine-1/" itemprop="commentCount"></span>
+                <a href="/2019/11/01/transformer/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/11/01/transformer/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -451,7 +459,7 @@
 
           
           
-            <span id="/2018/04/22/game-engine-1/" class="leancloud_visitors" data-flag-title="《游戏引擎架构》读书笔记之一：导论">
+            <span id="/2019/11/01/transformer/" class="leancloud_visitors" data-flag-title="Transformer 原理解析">
               <span class="post-meta-divider">|</span>
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
@@ -482,282 +490,93 @@
       
 
       
-        <div class="note primary">
-            本篇博客为《游戏引擎架构》的第一章读书笔记。 
+        <div class="note info">
+            本篇博客为对 Transformer 原始论文（ Attention Is All You Need ）的解读。。 
           </div>
 <a id="more"></a>
-<h1 id="典型游戏团队的结构">典型游戏团队的结构</h1>
+<p>对于序列模型，传统的神经网络结构存在着<strong>难以处理长期依赖</strong>和<strong>计算效率低</strong>等问题。尽管研究者们提出了 LSTM、注意力机制、CNN 结合 RNN 等手段，但仍无法有效解决这些问题。<strong>Transformer</strong> 是一种新的神经网络结构，其仅基于注意力机制，抛弃了传统的循环或卷积神经网络结构。</p>
+<h1 id="model-architecture">Model Architecture</h1>
+<p>Transformer 基于现有的序列-序列模型，使用 <strong>encoder-decoder</strong> 架构。在 encoder-decoder 架构中，编码器（encoder）将输入序列 <span class="math inline">\((x_1, \ldots,x_n)\)</span> 转换为一个连续的表达 <span class="math inline">\(\mathbf{z}=\left(z_{1}, \dots, z_{n}\right)\)</span> ，然后解码器再基于该表达生成输出序列 <span class="math inline">\((y_1, \ldots, y_m)\)</span>。</p>
+<p>基于该架构，模型的整体结构如下图所示：</p>
+<p><img src="http://media.zjubiomedit.com/2019-10-29-122616.png" width="45%"></p>
+<h2 id="encoder-and-decoder-stacks">Encoder and Decoder Stacks</h2>
+<p>模型由 encoder 和 decoder 堆叠而成，每一层的具有相同的结构，如下图所示：</p>
+<p><img src="http://media.zjubiomedit.com/2019-11-01-013208.png" width="60%"></p>
+<h3 id="encoder">Encoder</h3>
+<p>由 6 层组成，每一层包括两个子层：<strong>第一层</strong>是 multi-head self-attention 层，<strong>第二层</strong>是一个简单的全连接前馈网络。在每个子层后，都接了一个<strong>残差连接以及归一化</strong>，即每个子层的输出为 <span class="math inline">\(\text { LayerNorm }(x+\text { Sublayer }(x))\)</span>. 为了方便残差连接，模型中的所有子层，包括 embedding 层（初始词嵌入），输出向量维度均为 <span class="math inline">\(d_{\text{model}} = 512\)</span>.</p>
+<h3 id="decoder">Decoder</h3>
+<p>同样由 6 层组成，每一层包括三个子层：<strong>第一层</strong>是 masked multi-head self-attention 层，注意其输入仅包含<strong>当前位置之前的词语信息</strong>，这样设计的目的是解码器是按顺序解码的，其当前输出只能基于已输出的部分。<strong>第二层</strong>是 multi-head self-attention 层，其输入包含编码器的输出信息（矩阵 K 和矩阵 V ），<strong>第三层</strong>是全连接前馈网络。每个子层后同样加入了<strong>残差连接和归一化</strong>。下图给出了编码器和解码器的内部结构，注意前馈神经网络对于序列每个位置的独立性。</p>
+<p><img src="http://media.zjubiomedit.com/2019-11-01-020727.png" width="80%"></p>
+<h3 id="linear-and-softmax-layer">Linear and Softmax Layer</h3>
+<p>解码器的输出被输入到一个线性层中，转化为一个超长向量（词典长度），再输入到 softmax 层中转化为概率，最后运用适当策略（如贪婪搜索或束搜索）选择输出的词语，注意<strong>一次只输出一个词语</strong>。已输出的序列会作为解码器的输入。下图给出了贪婪搜索策略下的运行流程。</p>
+<p><img src="http://media.zjubiomedit.com/2019-11-01-021450.png" width="60%"></p>
+<h2 id="attention">Attention</h2>
+<p>下面对模型中使用的 attention 机制进行解读。</p>
+<h3 id="scaled-dot-product-attention">Scaled Dot-Product Attention</h3>
+<p>Transformer 中使用的注意力机制被称为 ”Scaled Dot-Product Attention“。该机制的示意图如下所示。该模块的输入包括三个向量：查询向量 <strong>Q</strong>、键向量 <strong>K</strong> 和值向量 <strong>V</strong>。三个向量均基于输入向量计算得出（最初的输入向量为词嵌入），查询向量和键向量的维数为 <span class="math inline">\(d_k\)</span>，值向量的维数为 <span class="math inline">\(d_v\)</span>。我们先计算单个查询向量和所有键向量的点积，然后将其除以 <span class="math inline">\(\sqrt{d_k}\)</span>，最后通过一个 softmax 函数得到对应的权重，再与值向量进行加权。</p>
+<p><img src="http://media.zjubiomedit.com/2019-11-01-112737.png" width="25%"></p>
+<p>上述过程可以通过下图进行理解。其中除以 <span class="math inline">\(\sqrt{d_k}\)</span> 进行的缩放操作的目的是提供更稳定的梯度，便于之后的训练。简单来说，该模块将<strong>一个输入向量转化为了一个包含其他位置权重的向量</strong>。</p>
+<p><img src="http://media.zjubiomedit.com/2019-11-01-113649.png" width="60%"></p>
+<p>在实际应用中，我们会基于矩阵来进行并行计算，该过程可以表达为如下公式： <span class="math display">\[
+\text { Attention }(Q, K, V)=\operatorname{softmax}\left(\frac{Q K^{T}}{\sqrt{d_{k}}}\right) V \tag{1}
+\]</span></p>
+<h3 id="multi-head-attention">Multi-Head Attention</h3>
+<p>研究人员发现，比起使用一个注意力函数得到 <span class="math inline">\(d_{\text{model}}\)</span> 维数的值向量，并行地训练多个值向量，再将它们拼接在一起得到输出效果更好。上述思想即 Transformer 中的 Multi-Head Attention，如下图所示。</p>
+<p><img src="http://media.zjubiomedit.com/2019-11-01-114616.png" width="30%"></p>
+<p>具体来说，给定一个输入矩阵，我们基于不同的参数矩阵计算得到多组 V、K、Q 矩阵，然后通过多个注意力函数计算得出多个加权后的 V 矩阵，最后将这些矩阵拼接起来，通过一个权重矩阵 <span class="math inline">\(W^{O}\)</span> 得到最终的输出。下图描绘出了整个流程。</p>
+<figure>
+<img src="https://jalammar.github.io/images/t/transformer_multi-headed_self-attention-recap.png" alt="img"><figcaption>img</figcaption>
+</figure>
+<p>上述过程用公式可以表达如下： <span class="math display">\[
+\begin{aligned} \text { MultiHead }(Q, K, V) &amp;\left.=\text { Concat (head }_{1}, \ldots, \text { head }_{\mathrm{h}}\right) W^{O} \\ \text { where head }_{\mathrm{i}} &amp;=\text { Attention }\left(Q W_{i}^{Q}, K W_{i}^{K}, V W_{i}^{V}\right) \end{aligned}
+\]</span> 注意参数矩阵的维数 <span class="math inline">\(W_{i}^{Q} \in \mathbb{R}^{d_{\text {model }} \times d_{k}}, W_{i}^{K} \in \mathbb{R}^{d_{\text {model }} \times d_{k}}, W_{i}^{V} \in \mathbb{R}^{d_{\text {model }} \times d_{v}}, W^{O} \in \mathbb{R}^{h d_{v} \times d_{\text {model }}}\)</span>，注意公式中 <span class="math inline">\(QW_i^Q\)</span> 并不是矩阵相乘。</p>
+<p>在本研究中，我们取 <span class="math inline">\(h = 8\)</span>，即 8 个并行的注意力层。对于每个注意力层，我们取 <span class="math inline">\(d_{k}=d_{v}=d_{\text {model }} / h=64\)</span>. 由于每个注意力层中向量的维数被均分了，所以该方法与使用单个头部的注意力相比计算成本相差并不大。</p>
+<h3 id="applications-of-attention-in-transformer">Applications of Attention in Transformer</h3>
+<p>在 Transformer 中，多头部注意力以三种不同的方式进行了应用：</p>
 <ul>
-<li>游戏工作室通常由 5 个基本专业领域的人员构成，包括<strong>工程师、艺术家、游戏设计师、制作人及其他管理/支持人员</strong></li>
+<li>编码器中的使用了自我注意力层，即三个矩阵均来源于同一个地方（上一个解码器的输出或初始输入）</li>
+<li>在解码器的第一层中，为了保证只基于当前位置之前的信息（解码器按顺序解码），在缩放点积操作之后新增了一个 mask 操作，将所有当前位置之后的数值设为 <span class="math inline">\(-\infty\)</span></li>
+<li>在解码器的第二层中，查询矩阵 Q 来自于上一个解码器的输出，而值矩阵 V 和键矩阵 K 则来自于编码器的输出</li>
 </ul>
-<h2 id="工程师">工程师</h2>
-<ul>
-<li>工程师设计并实现软件，使游戏及工具得以运行</li>
-<li>工程师通常分为两类：<strong>运行时</strong>程序员和<strong>工具</strong>程序员
-<ul>
-<li>运行时程序员：制作引擎和游戏本身</li>
-<li>工具程序员：制作离线工具，供整个团队使用，以提供团队的工作效率</li>
-</ul></li>
-</ul>
-<h2 id="艺术家">艺术家</h2>
-<ul>
-<li>艺术家肩负制作游戏中所有视听内容的重任
-<ul>
-<li>而这些内容的品质能够决定游戏成败</li>
-</ul></li>
-<li>艺术家又可以细分为很多种：
-<ul>
-<li><strong>概念艺术家</strong>：通过素描或绘画，让团队了解游戏的预设最终面貌</li>
-<li><strong>三维建模师</strong>：为游戏世界的所有事物制作三维几何模型
-<ul>
-<li>这类人员通常会再细分为两类：前景建模师和背景建模师</li>
-</ul></li>
-<li><strong>纹理艺术家</strong>：制作称为纹理的二维影像
-<ul>
-<li>这些纹理用来贴附于三维模型之上，以增加模型的细节及真实感</li>
-</ul></li>
-<li><strong>灯光师</strong>：布置游戏世界的静态和动态光源</li>
-<li><strong>动画师</strong>：为游戏中的角色及物体加入动作</li>
-<li><strong>动画捕捉演员</strong>：提供一些原始的动作数据
-<ul>
-<li>这些数据经由动画师整理后，置于游戏中</li>
-</ul></li>
-<li><strong>音效设计师</strong>：与工程师紧密合作，制作并混合游戏中的音效及音乐</li>
-<li><strong>配音演员</strong>：为游戏角色配音</li>
-<li><strong>作曲家</strong>：为游戏创作音乐</li>
-</ul></li>
-</ul>
-<h2 id="游戏设计师">游戏设计师</h2>
-<ul>
-<li>游戏设计师负责设计玩家体验的互动部分
-<ul>
-<li>这部分一般称为<strong>游戏性</strong></li>
-</ul></li>
-<li>不同种类的游戏设计师，从事不同细致程度的工作</li>
-<li>有些游戏团队会聘请一位或多位<strong>作家</strong>来创作故事</li>
-</ul>
-<h2 id="制作人">制作人</h2>
-<ul>
-<li>在不同的工作室里，制作人的角色不尽相同
-<ul>
-<li>有些制作人负责管理时间表，并同时承担人力资源经理的职责</li>
-<li>有些制作人主要做资深游戏设计师的工作</li>
-<li>有些制作人是开发团队和商业部门之间的联系人</li>
-</ul></li>
-</ul>
-<h2 id="其他职员">其他职员</h2>
-<ul>
-<li>游戏开发团队通常需要一支非常重要的支持团队，包括：
-<ul>
-<li>工作室的行政管理团队</li>
-<li>市场策划团队</li>
-<li>行政人员</li>
-<li>IT 部门</li>
-</ul></li>
-</ul>
-<h1 id="游戏是什么">游戏是什么</h1>
-<ul>
-<li>“游戏”一词泛指棋类游戏、纸牌游戏、赌场游戏、军事战争游戏、计算机游戏、孩子们一起玩耍的多种游戏
-<ul>
-<li>本书将聚焦于计算机游戏，其由二维或三维虚拟世界组成，并有少量的玩家</li>
-</ul></li>
-</ul>
-<h2 id="电子游戏作为软实时模拟">电子游戏作为软实时模拟</h2>
-<ul>
-<li>大部分二维或三维的电子游戏，会被计算机科学家称为<strong>软实时互动基于代理的计算机模拟</strong>（<em>soft real-time interactive agent-based computer simulations</em>）
-<ul>
-<li><strong>计算机模拟</strong>：大部分电子游戏会用数学方式来为一些真实世界（或<strong>想象</strong>世界）的子集<strong>建模</strong>，这些模型只是现实或想象世界的简化或近似版本</li>
-<li><strong>基于代理</strong>：模拟中多个独立的实体（称为代理）
-<ul>
-<li>三维游戏中的载具、人物角色、火球、豆子等都可以视为代理</li>
-</ul></li>
-<li><strong>实时互动</strong>：大部分互动电子游戏都是<strong>时间性模拟</strong>，并实时回应玩家输入
-<ul>
-<li><strong>时限</strong>是所有实时模拟的核心概念
-<ul>
-<li>在电子游戏中，一个明显的例子是屏幕需要每秒最少更新24次，以制造运动的错觉</li>
-</ul></li>
-</ul></li>
-<li><strong>软实时</strong>：即使错过期限也不会造成灾难性后果
-<ul>
-<li>所有游戏都是<strong>软实时系统</strong>——如果帧数不足，人类玩家在现实中不会因此而死亡</li>
-<li>与此相比，<strong>硬实时系统</strong>错过期限可能会导致操作者损伤甚至死亡</li>
-</ul></li>
-</ul></li>
-<li>模拟真实世界的数学模型可以分为<strong>解析式</strong>或<strong>数值式</strong>
-<ul>
-<li>解析式模型可为其自变量设任何值来求值
-<ul>
-<li>例如，一个刚体因地心引力以恒定加速度落下，其解析式（闭合式）数学模型可写为： <span class="math display">\[
-y(t) = \frac 1 2 gt^2 + v_0t + y_0
-\]</span></li>
-</ul></li>
-<li>但在实际情况下，大部分数学问题难以求出闭合解，此时就需要基于数值式模型
-<ul>
-<li><p>刚体受地心引力落下的数值式模型可以写为： <span class="math display">\[
-y(t+ \Delta t) = F(y(t), \dot{y(t)}, \ddot{y(t)},\ldots)
-\]</span></p></li>
-<li>在电子游戏中，用户输入是不能预知的，因此我们不能期望可以对整个游戏完全用解析式建模</li>
-<li><p>为实现数值式模拟，通常要不断重复计算，以决定每个离散时步的系统状态</p></li>
-</ul></li>
-</ul></li>
-</ul>
-<h1 id="游戏引擎是什么">游戏引擎是什么</h1>
-<ul>
-<li>游戏引擎这个术语在20世纪90年代中期形成，可以理解为一系列可以复用的软件组件
-<ul>
-<li>基于游戏引擎，只要制作新的美术、关卡布局、武器、角色、载具、游戏规则等，对引擎做出很少的修改，就可以开发一款新游戏</li>
-</ul></li>
-<li>通常，游戏和其引擎之间的分界线是很模糊的
-<ul>
-<li><p>我们可以根据每个引擎的可复用性，把引擎放置于一个连续谱之上</p>
-<p><img src="http://media.zjubiomedit.com/2018-05-28-135927.png" width="90%" height="90%"></p></li>
-<li>大部分游戏引擎是针对特定游戏及特定硬件平台所精心制作及微调的</li>
-<li><p>虽然随着技术的发展，不同游戏类型的引擎差异已经缩小，但通用性和最优性仍然需要取舍</p></li>
-</ul></li>
-</ul>
-<h1 id="不同游戏类型中的引擎差异">不同游戏类型中的引擎差异</h1>
-<ul>
-<li>通常在某种程度上游戏引擎是为某种游戏类型而设的</li>
-<li>但各种引擎也有很大的重叠部分
-<ul>
-<li>例如无论是什么类型的三维游戏，都需要某形式的低阶用户输入、某形式的三维网格渲染等</li>
-</ul></li>
-<li>下面介绍几个常见的游戏类型，并探讨每个类型的技术需求</li>
-</ul>
-<h2 id="第一人称射击fps">第一人称射击（FPS）</h2>
-<ul>
-<li>FPS 是开发技术难度极高的游戏类型之一
-<ul>
-<li>游戏业界的巨大技术创新都来自这种游戏</li>
-</ul></li>
-<li>FPS 游戏常会注重技术，例如：
-<ul>
-<li>高效地渲染大型三维虚拟世界
-<ul>
-<li>其使用地渲染技术几乎总是经过高度优化，并且按特定地场景类型仔细调整过的</li>
-</ul></li>
-<li>快速反应地摄像机控制及瞄准机制</li>
-<li>各种各样地手持武器</li>
-<li>宽容的玩家角色运动及碰撞模型
-<ul>
-<li>通常使游戏有种“漂浮”的感觉</li>
-</ul></li>
-<li>NPC 的逼真动画和人工智能</li>
-<li>小规模在线多人游戏的能力</li>
-</ul></li>
-<li>FPS 的技术需求时业界里最严格，也是最全面的
-<ul>
-<li>其要让玩家面对一个精细而超现实的世界时感到身临其境</li>
-</ul></li>
-</ul>
-<h2 id="平台游戏及其他第三人称游戏">平台游戏及其他第三人称游戏</h2>
-<ul>
-<li>平台游戏是指基于人物角色的第三人称游戏
-<ul>
-<li>在这类游戏中，主要的游戏机制是在平台之间跳跃</li>
-</ul></li>
-<li>从技术需求上说，平台游戏通常可以和第三人称射击/动作/冒险游戏类型一起考虑</li>
-<li>第三人称游戏和第一人称射击游戏有许多共通之处
-<ul>
-<li>但第三人称游戏比较看重主角的能力和运动模式</li>
-<li>此外，这个类型游戏的主角化身需要高度逼真的全身动画</li>
-</ul></li>
-<li>在平台游戏中，游戏主角通常是比较卡通而不是很真实或细腻的
-<ul>
-<li>但第三人称射击通常使用非常真实的人形玩家角色</li>
-<li>这两种类型都需要非常丰富的行为和动画</li>
-</ul></li>
-<li>第三人称游戏特别注重的技术如下：
-<ul>
-<li>移动平台、梯子、绳子、棚架及其他有趣的运动模式</li>
-<li>用来解谜的环境元素</li>
-<li>第三人称的“跟踪摄像机”会一直注视玩家角色
-<ul>
-<li>通常也会让玩家自己旋转摄像机（右摇杆或鼠标）</li>
-<li>注意：虽然 PC 上有很多流行的第三人称射击游戏，但平台游戏几乎是游戏主机上独有的（著名的）</li>
-</ul></li>
-<li>复杂的摄像机碰撞系统
-<ul>
-<li>保证视点不会穿过背景几何物体或动态的前景物体</li>
-</ul></li>
-</ul></li>
-</ul>
-<h2 id="格斗游戏">格斗游戏</h2>
-<ul>
-<li>格斗游戏通常是两个玩家控制角色在一个擂台上互相对打</li>
-<li>传统的格斗游戏注重以下技术：
-<ul>
-<li>丰富的格斗动画</li>
-<li>准确的攻击判定</li>
-<li>能侦测复杂按钮及摇杆组合的玩家输入系统</li>
-<li>人群，或相对静态的背景</li>
-</ul></li>
-<li>由于这些游戏的三维世界较小，且摄像机一直位于动作的中心，以往这些游戏只有很少甚至不需要世界细分或遮挡删除
-<ul>
-<li>同样，这些游戏不要求使用高阶的三维音频传播模型</li>
-</ul></li>
-<li>现代的格斗游戏把技术提升到另一个层次，其有如下特点：
-<ul>
-<li>高清的角色图形
-<ul>
-<li>包括仿真的皮肤着色器，着色器模拟了次表面散射及冒汗效果</li>
-</ul></li>
-<li>照片般逼真的光影和粒子效果</li>
-<li>逼真的角色动画</li>
-<li>基于物理的布料及头发模拟</li>
-</ul></li>
-<li>值得注意的是，一些格斗游戏是在一个大型的环境下而不是受限的竞技场进行的
-<ul>
-<li>实际上很多人认为这是另一个游戏类比，有时称其为 brawler</li>
-<li>这种格斗游戏的技术需求比较近似于第三人称射击或策略游戏</li>
-</ul></li>
-</ul>
-<h2 id="竞速游戏">竞速游戏</h2>
-<ul>
-<li>竞速游戏包括所有以赛道上驾驶车辆或其他载具为主要任务的游戏</li>
-<li>这个游戏类型有几个子类别：
-<ul>
-<li>着重模拟的竞速游戏：力求模仿真实的驾驶体验</li>
-<li>街机竞速游戏：偏好娱乐性多于真实感</li>
-<li>街头竞速亚文化：采用可改装汽车</li>
-<li>卡丁赛车：使用一些平台游戏或电视卡通角色为主角，驾驶怪诞的汽车</li>
-</ul></li>
-<li>竞速游戏也不一定是和时间有关的比赛
-<ul>
-<li>例如一些卡丁车游戏让玩家去射击对手、收集物品，或参与其他计时或不计时的任务</li>
-</ul></li>
-<li>竞速游戏通常是非常线性的，类似于旧式的 FPS 游戏
-<ul>
-<li>但移动速度一般比 FPS 游戏快许多</li>
-</ul></li>
-<li>这类游戏经常使用非常长的走廊式赛道和环形赛道
-<ul>
-<li>有时候加入一些可选分支或捷径</li>
-</ul></li>
-<li>竞速游戏把图形的细节集中在载具、赛道及近景
-<ul>
-<li>卡丁车游戏还需要投放足够的渲染及动画资源到驾驶角色上</li>
-</ul></li>
-<li>典型竞速游戏具有如下技术特性：
-<ul>
-<li>使用多种“窍门”去渲染遥远的背景
-<ul>
-<li>例如使用二维纸板形式的树木、山岳和山脉</li>
-</ul></li>
-<li>赛道通常切开成较简单的二维区域，称为“分区”
-<ul>
-<li>这些数据结构用来实现渲染优化、可见性判断，帮助非玩家操控车辆的人工智能及路径搜寻，以及解决很多其他技术问题</li>
-</ul></li>
-<li>第三人称视角摄像机通常追随在车辆背后，第一人称摄像机有时候会置于驾驶舱里</li>
-<li>如果赛道经过天桥底及其他狭窄空间，必须花精力防止摄像机和背景几何物体碰撞</li>
-</ul></li>
-</ul>
-<h2 id="实时策略游戏rts">实时策略游戏（RTS）</h2>
-<h2 id="大型多人在线游戏mmog">大型多人在线游戏（MMOG）</h2>
-<h2 id="玩家创作内容">玩家创作内容</h2>
-<h2 id="虚拟增强以及混合现实">虚拟、增强以及混合现实</h2>
-<h2 id="其他游戏类型">其他游戏类型</h2>
+<h2 id="position-wise-feed-forward-networks">Position-wise Feed-Forward Networks</h2>
+<p>在 Transformer 中，编码器和解码器的每一层都包含了一个相同结构的全连接前馈网络，独立地应用于序列的每一个位置。该网络由两层线性连接组成，中间接了一个 ReLU 激活函数，如下式所示： <span class="math display">\[
+\operatorname{FFN}(x)=\max \left(0, x W_{1}+b_{1}\right) W_{2}+b_{2} \tag{2}
+\]</span> 每一层的参数不共享。网络中输入和输出的维度均为 <span class="math inline">\(d_{\text{model}} = 512\)</span>，中间层额维度为 <span class="math inline">\(d_{ff} = 2048\)</span>.</p>
+<h2 id="embeddings-and-softmax">Embeddings and Softmax</h2>
+<p>在 Transformer 中，编码器输入与解码器输入（即最终输出）使用的词嵌入来源于同一权重矩阵，且该矩阵会随着训练不断迭代更新。最终输出 softmax 层前的线性转换层也使用了该矩阵。在 Embedding 层中，我们将权重乘上了 <span class="math inline">\(\sqrt{d_\text{model}}\)</span>.</p>
+<h2 id="positional-encoding">Positional Encoding</h2>
+<p>为了让模型中序列的特征能够体现，我们需要将序列的位置信息编码到输入中。将位置编码和嵌入编码相加（保证维数相同），即可得到最终的输入向量。总的来说，编码位置信息有两种方式：一种是基于公式的编码，另一种是通过训练动态学习的编码。原文作者经过测试，两种方法的效果基本相同，而基于公式的编码不需要额外训练，且能够处理训练集中未出现过的长度的序列，因此 Transformer 中使用了基于公式的位置编码： <span class="math display">\[
+\begin{array}{c}{P E_{(pos, 2 i)}=\sin (pos / 10000^{2 i / d_{\text {model}}})} \\ {P E_{(pos,2i+1)}=\cos (pos / 10000^{2 i / d_{\text {model }}})}\end{array}
+\]</span> 其中 <span class="math inline">\(pos\)</span> 表示当前 item 在序列中的位置，<span class="math inline">\(i\)</span> 表示该 item 向量中的具体维数。</p>
+<h1 id="why-self-attention">Why Self-Attention</h1>
+<p>下表给出了自我注意力机制与传统卷积神经网络或循环神经网络的对比。这里假设输入和输出序列长度均为 <span class="math inline">\(n\)</span>，向量维数为 <span class="math inline">\(d\)</span>。总的来看，自我注意力机制在层内复杂度、序列操作复杂度与最大路径长度上都有一定的优势。</p>
+<p>具体来说，自我注意力机制的序列操作复杂度和最大路径长度均为 <span class="math inline">\(O(1)\)</span>，路径长度越短，模型越容易学习到长期依赖。对于每一层的计算复杂度（时间）在序列长度小于向量维数（常见情况）时，自我注意力的优势更大。如果序列很长，可以将注意力限制在当前位置的大小为 <span class="math inline">\(r\)</span> 的窗口内，这时相对应的最大路径长度会有所提升。</p>
+<p><img src="http://media.zjubiomedit.com/2019-11-03-103653.png" width="80%"></p>
+<h1 id="training">Training</h1>
+<p>下面对 Transformer 的训练策略进行简介。</p>
+<h2 id="training-data-and-batching">Training Data and Batching</h2>
+<p>原文作者使用了两套数据集：一套是 WMT 2014 English-German dataset，包含约 4.5 million 个句子对，编码方式为 byte-pair 编码；另一套是 WMT 2014 English-French dataset，包含约 36M 个句子，编码方式为 word-piece 编码。关于具体的编码方式可以参考引文 3-4。每一个训练 batch 包含大约 25000 个句子对。</p>
+<h2 id="hardware-and-schedule">Hardware and Schedule</h2>
+<p>模型的训练环境是一个包含 8 个 NIVIDIA P1000 GPU 的计算机。原文中共训练了两种模型，一种是基于上文所描述参数的基础模型，训练时长 12 小时（每一次完整的训练约 0.4 秒）。另一种是参数量提升的 big 模型，训练时长 3.5 天，每次训练约 1 秒。关于大模型的具体参数可以参考原论文。</p>
+<h2 id="optimizer">Optimizer</h2>
+<p>原文使用了 Adam 优化器 [5]，参数设置为 <span class="math inline">\(\beta_{1}=0.9, \beta_{2}=0.98, \epsilon=10^{-9}\)</span>。学习率随训练过程动态变化，基于下列公式： <span class="math display">\[
+lrate=d_{\text {model }}^{-0.5} \cdot \min \left(step\_num^{-0.5}, step\_num\cdot warmup\_steps^{-1.5}\right) \tag{3}
+\]</span> 学习率会先线性增大，再逐渐减小。原文中使用 <span class="math inline">\(warm\_steps =4000\)</span>.</p>
+<h2 id="regularization">Regularization</h2>
+<p>在训练过程中，使用了两种正则化手段：</p>
+<p>第一种是 <strong>Residual Dropout</strong>。在每一层进行残差连接和归一化之前，先执行 dropout。此外，编码器与解码器中嵌入编码与位置编码之和也应用了 dropout。对于基础模型，原文使用 <span class="math inline">\(P_{drop} = 0.1\)</span>.</p>
+<p>第二种是 <strong>Label Smoothing</strong>。在训练过程中，使用了标签平滑策略 [7]，参数设置 <span class="math inline">\(\epsilon_{ls} = 0.1\)</span>。这种策略会增加模型的不确定性，影响困惑度（perplexity），但会提升准确率与 BLEU 得分。</p>
+<p><strong>PS</strong>：以上就是论文主要内容的解读，训练章节中对于具体的方法没有展开介绍，详细内容可以查阅参考文献。论文的结果部分主要描述了模型在机器翻译任务中的表现以及不同参数设置下模型的表现，这里不作赘述，总的来说就是比其他模型都牛批。</p>
+<h1 id="参考文献">参考文献</h1>
+<ol type="1">
+<li><a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener">Attention is all you need</a></li>
+<li><a href="https://jalammar.github.io/illustrated-transformer/" target="_blank" rel="noopener">The Illustrated Transformer</a></li>
+<li><a href="https://arxiv.org/abs/1703.03906" target="_blank" rel="noopener">Massive exploration of neural machine translation architectures</a></li>
+<li><a href="https://arxiv.org/abs/1609.08144" target="_blank" rel="noopener">Google’s neural machine translation system: Bridging the gap between human and machine translation</a></li>
+<li><a href="https://arxiv.org/abs/1412.6980" target="_blank" rel="noopener">Adam: A method for stochastic optimization</a></li>
+<li><a href="http://jmlr.org/papers/v15/srivastava14a.html" target="_blank" rel="noopener">Dropout: a simple way to prevent neural networks from overﬁtting</a></li>
+<li><a href="https://arxiv.org/abs/1512.00567" target="_blank" rel="noopener">Rethinking the inception architecture for computer vision</a></li>
+</ol>
 
       
     </div>
@@ -791,7 +610,7 @@ y(t+ \Delta t) = F(y(t), \dot{y(t)}, \ddot{y(t)},\ldots)
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
     
-    <a href="https://xxwywzy.github.io/2018/04/22/game-engine-1/" title="《游戏引擎架构》读书笔记之一：导论">https://xxwywzy.github.io/2018/04/22/game-engine-1/</a>
+    <a href="https://xxwywzy.github.io/2019/11/01/transformer/" title="Transformer 原理解析">https://xxwywzy.github.io/2019/11/01/transformer/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
@@ -804,7 +623,7 @@ y(t+ \Delta t) = F(y(t), \dot{y(t)}, \ddot{y(t)},\ldots)
       
         <div class="post-tags">
           
-            <a href="/tags/游戏引擎架构/" rel="tag"># 游戏引擎架构</a>
+            <a href="/tags/Transformer/" rel="tag"># Transformer</a>
           
         </div>
       
@@ -817,8 +636,8 @@ y(t+ \Delta t) = F(y(t), \dot{y(t)}, \ddot{y(t)},\ldots)
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/04/19/CS229-7/" rel="next" title="CS229学习笔记之七：正则化与模型选择">
-                <i class="fa fa-chevron-left"></i> CS229学习笔记之七：正则化与模型选择
+              <a href="/2019/10/26/lda-2-2/" rel="next" title="LDA 原理第二部分：文本分析的参数估计（下）">
+                <i class="fa fa-chevron-left"></i> LDA 原理第二部分：文本分析的参数估计（下）
               </a>
             
           </div>
@@ -826,10 +645,6 @@ y(t+ \Delta t) = F(y(t), \dot{y(t)}, \ddot{y(t)},\ldots)
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/04/25/deep-1/" rel="prev" title="deeplearning.ai 第一周：深度学习引言">
-                deeplearning.ai 第一周：深度学习引言 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -1111,7 +926,7 @@ y(t+ \Delta t) = F(y(t), \dot{y(t)}, \ddot{y(t)},\ldots)
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#典型游戏团队的结构"><span class="nav-number">1.</span> <span class="nav-text">典型游戏团队的结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#工程师"><span class="nav-number">1.1.</span> <span class="nav-text">工程师</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#艺术家"><span class="nav-number">1.2.</span> <span class="nav-text">艺术家</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#游戏设计师"><span class="nav-number">1.3.</span> <span class="nav-text">游戏设计师</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#制作人"><span class="nav-number">1.4.</span> <span class="nav-text">制作人</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他职员"><span class="nav-number">1.5.</span> <span class="nav-text">其他职员</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#游戏是什么"><span class="nav-number">2.</span> <span class="nav-text">游戏是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#电子游戏作为软实时模拟"><span class="nav-number">2.1.</span> <span class="nav-text">电子游戏作为软实时模拟</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#游戏引擎是什么"><span class="nav-number">3.</span> <span class="nav-text">游戏引擎是什么</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#不同游戏类型中的引擎差异"><span class="nav-number">4.</span> <span class="nav-text">不同游戏类型中的引擎差异</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#第一人称射击fps"><span class="nav-number">4.1.</span> <span class="nav-text">第一人称射击（FPS）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#平台游戏及其他第三人称游戏"><span class="nav-number">4.2.</span> <span class="nav-text">平台游戏及其他第三人称游戏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#格斗游戏"><span class="nav-number">4.3.</span> <span class="nav-text">格斗游戏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#竞速游戏"><span class="nav-number">4.4.</span> <span class="nav-text">竞速游戏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实时策略游戏rts"><span class="nav-number">4.5.</span> <span class="nav-text">实时策略游戏（RTS）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#大型多人在线游戏mmog"><span class="nav-number">4.6.</span> <span class="nav-text">大型多人在线游戏（MMOG）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#玩家创作内容"><span class="nav-number">4.7.</span> <span class="nav-text">玩家创作内容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#虚拟增强以及混合现实"><span class="nav-number">4.8.</span> <span class="nav-text">虚拟、增强以及混合现实</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他游戏类型"><span class="nav-number">4.9.</span> <span class="nav-text">其他游戏类型</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#model-architecture"><span class="nav-number">1.</span> <span class="nav-text">Model Architecture</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#encoder-and-decoder-stacks"><span class="nav-number">1.1.</span> <span class="nav-text">Encoder and Decoder Stacks</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#encoder"><span class="nav-number">1.1.1.</span> <span class="nav-text">Encoder</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#decoder"><span class="nav-number">1.1.2.</span> <span class="nav-text">Decoder</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#linear-and-softmax-layer"><span class="nav-number">1.1.3.</span> <span class="nav-text">Linear and Softmax Layer</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#attention"><span class="nav-number">1.2.</span> <span class="nav-text">Attention</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#scaled-dot-product-attention"><span class="nav-number">1.2.1.</span> <span class="nav-text">Scaled Dot-Product Attention</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#multi-head-attention"><span class="nav-number">1.2.2.</span> <span class="nav-text">Multi-Head Attention</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#applications-of-attention-in-transformer"><span class="nav-number">1.2.3.</span> <span class="nav-text">Applications of Attention in Transformer</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#position-wise-feed-forward-networks"><span class="nav-number">1.3.</span> <span class="nav-text">Position-wise Feed-Forward Networks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#embeddings-and-softmax"><span class="nav-number">1.4.</span> <span class="nav-text">Embeddings and Softmax</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#positional-encoding"><span class="nav-number">1.5.</span> <span class="nav-text">Positional Encoding</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#why-self-attention"><span class="nav-number">2.</span> <span class="nav-text">Why Self-Attention</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#training"><span class="nav-number">3.</span> <span class="nav-text">Training</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#training-data-and-batching"><span class="nav-number">3.1.</span> <span class="nav-text">Training Data and Batching</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hardware-and-schedule"><span class="nav-number">3.2.</span> <span class="nav-text">Hardware and Schedule</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#optimizer"><span class="nav-number">3.3.</span> <span class="nav-text">Optimizer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#regularization"><span class="nav-number">3.4.</span> <span class="nav-text">Regularization</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考文献"><span class="nav-number">4.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
             
 
           </div>
