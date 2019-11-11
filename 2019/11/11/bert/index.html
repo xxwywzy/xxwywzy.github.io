@@ -96,27 +96,34 @@
 
 
 
-  <meta name="description" content="本篇博客为《Game AI Pro》的第一章读书笔记。">
-<meta name="keywords" content="Game AI Pro">
+  <meta name="description" content="本篇博客为对 BERT 原始论文（ BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding ）的解读。">
+<meta name="keywords" content="BERT">
 <meta property="og:type" content="article">
-<meta property="og:title" content="《Game AI Pro》第一章笔记：What is Game AI?">
-<meta property="og:url" content="https://xxwywzy.github.io/2019/02/28/game-ai-pro-1/index.html">
+<meta property="og:title" content="BERT 原理解析">
+<meta property="og:url" content="https://xxwywzy.github.io/2019/11/11/bert/index.html">
 <meta property="og:site_name" content="xxwywzy&#39;s Blog">
-<meta property="og:description" content="本篇博客为《Game AI Pro》的第一章读书笔记。">
+<meta property="og:description" content="本篇博客为对 BERT 原始论文（ BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding ）的解读。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://media.zjubiomedit.com/2019-01-26-092855.png">
-<meta property="og:updated_time" content="2019-03-03T03:09:15.000Z">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-10-29-112626.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-11-07-022231.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-11-07-031002.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-11-11-071544.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-11-11-065437.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-11-11-064714.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-11-11-065555.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-11-11-065822.png">
+<meta property="og:updated_time" content="2019-11-11T07:21:29.469Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="《Game AI Pro》第一章笔记：What is Game AI?">
-<meta name="twitter:description" content="本篇博客为《Game AI Pro》的第一章读书笔记。">
-<meta name="twitter:image" content="http://media.zjubiomedit.com/2019-01-26-092855.png">
+<meta name="twitter:title" content="BERT 原理解析">
+<meta name="twitter:description" content="本篇博客为对 BERT 原始论文（ BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding ）的解读。">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2019-10-29-112626.png">
 
 
 
 
 
 
-  <link rel="canonical" href="https://xxwywzy.github.io/2019/02/28/game-ai-pro-1/"/>
+  <link rel="canonical" href="https://xxwywzy.github.io/2019/11/11/bert/"/>
 
 
 
@@ -126,7 +133,7 @@
   };
 </script>
 
-  <title>《Game AI Pro》第一章笔记：What is Game AI? | xxwywzy's Blog</title>
+  <title>BERT 原理解析 | xxwywzy's Blog</title>
   
 
 
@@ -356,7 +363,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2019/02/28/game-ai-pro-1/"/>
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2019/11/11/bert/"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Zheyu Wang"/>
@@ -373,7 +380,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">《Game AI Pro》第一章笔记：What is Game AI?
+          <h1 class="post-title" itemprop="name headline">BERT 原理解析
 
               
             
@@ -399,7 +406,7 @@
                 
               
 
-              <time title="创建时间：2019-02-28 20:02:59" itemprop="dateCreated datePublished" datetime="2019-02-28T20:02:59+08:00">2019-02-28</time>
+              <time title="创建时间：2019-11-11 15:17:08" itemprop="dateCreated datePublished" datetime="2019-11-11T15:17:08+08:00">2019-11-11</time>
             
 
             
@@ -417,14 +424,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/游戏/" itemprop="url" rel="index"><span itemprop="name">游戏</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/人工智能/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/游戏/游戏开发/" itemprop="url" rel="index"><span itemprop="name">游戏开发</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/人工智能/深度学习/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a></span>
 
                 
                 
@@ -442,8 +449,8 @@
                   <i class="fa fa-comment-o"></i>
                 </span>
             
-                <a href="/2019/02/28/game-ai-pro-1/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/02/28/game-ai-pro-1/" itemprop="commentCount"></span>
+                <a href="/2019/11/11/bert/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/11/11/bert/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -451,7 +458,7 @@
 
           
           
-            <span id="/2019/02/28/game-ai-pro-1/" class="leancloud_visitors" data-flag-title="《Game AI Pro》第一章笔记：What is Game AI?">
+            <span id="/2019/11/11/bert/" class="leancloud_visitors" data-flag-title="BERT 原理解析">
               <span class="post-meta-divider">|</span>
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
@@ -482,82 +489,68 @@
       
 
       
-        <div class="note primary">
-            本篇博客为《Game AI Pro》的第一章读书笔记。 
+        <div class="note info">
+            本篇博客为对 BERT 原始论文（ BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding ）的解读。 
           </div>
 <a id="more"></a>
-<h1 id="介绍">介绍</h1>
+<p>BERT（<strong>B</strong>idirectional <strong>E</strong>ncoder <strong>R</strong>epresentations from <strong>T</strong>ransformers）是一种<strong>预训练模型</strong>，旨在通过考虑所有层中的<strong>双侧上下文</strong>信息来得到<strong>深度的双向表示</strong>。该表示连接上一层输出层后，仅需微调训练就可以在很多 NLP 任务中取得惊人的效果。在介绍模型之前，我们需要先简单了解 BERT 的提出背景。</p>
+<h1 id="背景">背景</h1>
+<p><strong>基于语言模型</strong>的预训练（pre-training）已经被证明可以有效提升各种 NLP 任务的表现。而将预训练得到的表示用于下游任务时有两种策略：<strong>基于特征</strong>（feature-based）和<strong>微调</strong>（fine-tuning）。基于特征的策略使用任务特定的架构，将预训练的表示作为额外的特征，其代表为 ELMo；基于微调的策略使用最少的任务特定参数，通过简单的微调预训练参数来训练下游任务，其代表 OpenAI GPT。</p>
+<p>之前的研究的局限性在于，其在预训练时使用的目标函数均基于<strong>单向语言模型</strong>，没有同时考虑到双向的上下文信息。BERT 模型旨在解决这一局限性，通过提出一种新的预训练目标：<strong>masked language model</strong>（MLM）。简单来说，MLM 随机地从输入中遮蔽一些词语，然后训练目标是基于被遮蔽词语的双侧上下文来预测该词语在词典中的 id。此外，BERT 模型还引入了一个 <strong>next sentence prediction</strong> 任务，来预训练文本对的联合表示。</p>
+<p>下图给出了 BERT、ELMo 和 OpenAI GPT 三者之间的结构比较。只有 BERT 真正同时使用了左右两侧上下文的信息。</p>
+<p><img src="http://media.zjubiomedit.com/2019-10-29-112626.png" width="95%"></p>
+<h1 id="模型">模型</h1>
+<p>本节将介绍 BERT 模型的实现细节。在 BERT 中，总共包括两个步骤：<strong>预训练</strong>和<strong>微调</strong>。在预训练中，模型基于无标签数据，在不同的预训练任务上进行训练。在微调中，模型首先基于预训练得到的参数初始化，然后使用来自下游具体任务的标签数据对所有参数进行微调。每个下游任务都拥有独立的微调模型，即便其使用相同的预训练参数初始化。BERT 的特征在于对于不同的任务，其模型结构统一，预训练架构与最终的下游架构仅存在细微差别。下图以智能问答为例，给出了 BERT 的整体架构。</p>
+<p><img src="http://media.zjubiomedit.com/2019-11-07-022231.png" width="85%"></p>
+<h2 id="模型结构">模型结构</h2>
+<p>BERT 模型的结构是一个<strong>多层双向 Transformer encoder</strong>，基于原始论文（<strong><em>Attention is all you need</em></strong>）实现。Transformer encoder 的特点是其关注了双侧的上下文，而 Transformer decoder 则仅使用了左侧的上下文（通过 masked 方法）。在本研究中，定义 Transformer 堆叠层数为 <span class="math inline">\(L\)</span>，隐藏向量维数为 <span class="math inline">\(H\)</span>，自我注意力头部数量为 <span class="math inline">\(A\)</span>，全连接网络隐藏层维数为 <span class="math inline">\(4H\)</span>。本研究包括了两种大小的 BERT 模型：</p>
 <ul>
-<li>游戏 AI 的作用是：<strong>帮助开发者为玩家创造一次难忘的游戏体验</strong></li>
-<li>我们可以将 AI 划分为三类：学术 AI、电影 AI、游戏 AI</li>
+<li><span class="math inline">\(\text{BERT}_\text{BASE}\)</span>: <span class="math inline">\(L=12, H=768, A=12\)</span>, 总参数量为 110M</li>
+<li><span class="math inline">\(\text{BERT}_\text{LARGE}\)</span>: <span class="math inline">\(L=24, H=1024, A=16\)</span>, 总参数量为 340M</li>
 </ul>
-<h2 id="学术-ai">学术 AI</h2>
-<ul>
-<li>学术 AI 的目的是设计一种智能代理（系统），能够感知环境并采取最可能获得成功的行动</li>
-</ul>
-<h2 id="电影-ai">电影 AI</h2>
-<ul>
-<li>电影 AI 即虚构的角色，它的目的并不是为了采取最可能获得成功的行动，而是为了剧本而服务，帮助观影者获得最佳的观影体验</li>
-</ul>
-<h2 id="游戏-ai">游戏 AI</h2>
-<ul>
-<li>游戏 AI 与电影 AI 更加类似，目的是娱乐而非成功</li>
-</ul>
-<h1 id="创造体验">创造体验</h1>
-<ul>
-<li>我们可以从以下几个方面来对游戏 AI 如何创造难忘的体验进行阐述</li>
-</ul>
-<h2 id="暂停怀疑">暂停怀疑</h2>
-<ul>
-<li><strong>暂停怀疑</strong>是指玩家在游戏作者的引导下，暂时停止质疑游戏中的不合理情节，专心体验游戏</li>
-<li>一般玩家对游戏 AI 是比较宽容的
-<ul>
-<li>只要 AI 行为基本合理，玩家就会自行为 AI 行为脑补合理的解释</li>
-</ul></li>
-<li>过分复杂的 AI 反而会让玩家觉得其行为是随机或是错误的，起到反效果</li>
-<li>在进行游戏 AI 设计时要避免“人工的愚蠢”，即采取了一个看上去明显错误或无意义的行动
-<ul>
-<li>例如撞墙、卡顿、忽视玩家以及频繁地改变想法</li>
-<li>虽然某些行为对于人类来说是合理的（如频繁地改变想法），但是玩家可能会认为是算法缺陷</li>
-</ul></li>
-<li>可以通过一些方法来避免人工的愚蠢
-<ul>
-<li>故意设计一些愚蠢的角色，如僵尸，他们的愚蠢行为玩家愿意接受</li>
-<li>显示 AI 的行为，如在其头顶显示其想法，表明其要做什么</li>
-</ul></li>
-</ul>
-<h2 id="反应性不确定性和可控性">反应性、不确定性和可控性</h2>
-<ul>
-<li>在进行游戏 AI 的设计时，需要考虑的三个要素是<strong>反应性</strong>、<strong>不确定性</strong>和<strong>可控性</strong></li>
-<li>反应性是指游戏 AI 能够根据感知环境并采取恰当的行动</li>
-<li>可控性是指 AI 的作者能够主动调整 AI 来保证玩家的体验
-<ul>
-<li>可控性与反应性之间需要进行权衡，两者应该相互协调，不同的游戏对两者的需求有所不同</li>
-<li><p>下图给出了常用的 AI 结构在可控性与反应性之间的权衡关系</p>
-<p><img src="http://media.zjubiomedit.com/2019-01-26-092855.png" width="75%"></p></li>
-</ul></li>
-<li>不确定性是指我们希望在游戏角色中加入一些随机要素来使得其行为不会过于容易被玩家预测
-<ul>
-<li>需要注意随机要素也应该具有一定的合理性，不至于出现明显的错误</li>
-</ul></li>
-</ul>
-<h2 id="简单性和扩展性">简单性和扩展性</h2>
-<ul>
-<li>游戏 AI 的开发是一个迭代的过程</li>
-<li>游戏 AI 中使用的算法通常都是比较简单的，易于理解与调试，同时具有较高的扩展性</li>
-</ul>
-<h2 id="技巧与作弊">技巧与作弊</h2>
-<ul>
-<li>有时候游戏 AI 会采取一些作弊行为来给予玩家更好的游戏体验
-<ul>
-<li>例如无限制地生成资源或是感知玩家位置</li>
-</ul></li>
-</ul>
-<h1 id="结论">结论</h1>
-<ul>
-<li>学术 AI 可以做很多伟大的事情，但是对于游戏来说是不需要的</li>
-<li>游戏 AI 只需要完成一件事情：<strong>帮助开发者为玩家创造一次难忘的游戏体验</strong></li>
-</ul>
+<p>其中 BERT base 选择了与 OpenAI GPT 同样的大小，方便两者之间的比较。</p>
+<h2 id="输入输出表示">输入/输出表示</h2>
+<p>为了让 BERT 能够处理一系列的下游任务，模型的输入表示需要能够在一个序列中明确地表示单个句子以及句子对（如问题-答案）。注意在本研究中，一个”句子“并不一定是实际的句子，可以是任意范围内的连续文本；一个”序列“表示 BERT 中的输入 token 序列（即词语序列），可以是单个句子，也可以是两个句子打包在一起。</p>
+<p>本研究中使用了 <strong>WordPiece</strong> 嵌入（大小为 30000 的词典）来生成词嵌入向量。每个序列的第一个 token 为一个特殊的分类标志 <span class="math inline">\(\text{[CLS]}\)</span>，该 token 的最终隐藏状态用来聚合序列，执行分类任务。句子对被打包到单个序列中，通过两种方式进行区分：第一种是两个句子间插入一个特殊标志 <span class="math inline">\(\text{[SEP]}\)</span>，第二种是对于每个 token，添加一个可以学习的嵌入向量来表示其属于句子 A 还是 B。如图 1 所示，输入嵌入向量标记为 <span class="math inline">\(E\)</span>，特殊标志 <span class="math inline">\(\text{[CLS]}\)</span> 的最终隐藏向量标记为 <span class="math inline">\(C \in \mathbb{R}^H\)</span>，第 <span class="math inline">\(i\)</span> 个输入 token 的最终隐藏向量标记为 <span class="math inline">\(T_i \in \mathbb{R}^H\)</span>.</p>
+<p>对于一个给定的 token，其输入表示由三部分相加得到，如下图所示。第一个是词嵌入（基于 WordPiece 生成），第二个是 segment 嵌入（表示该 token 所属的句子），第三个是位置嵌入（表明该 token 在序列中的位置信息）。</p>
+<p><img src="http://media.zjubiomedit.com/2019-11-07-031002.png" width="75%"></p>
+<h2 id="预训练-bert">预训练 BERT</h2>
+<p>我们使用两个无监督任务来预训练 BERT，如图 1 左侧所示。</p>
+<h3 id="任务一masked-lm">任务一：Masked LM</h3>
+<p>对于标准的条件语言模型，其只能进行单向训练，否则词语会”看到它们自己“，引起模型训练的混乱。为了同时利用双侧上下文的信息，原文提出了一种方案：<strong>将输入序列的部分 token 随机遮挡起来，然后预测这些被遮挡起来的 token</strong>。该方法被称为”masked LM“ (MLM)，其思想来源于著名的 Cloze task。在该任务中，被遮挡的 token 的最终隐藏向量会被转换为一个词典长度的 softmax 向量输出，用于预测词语 id。在原文的试验中，随机遮挡了每个序列中 <strong>15%</strong> 的 WordPiece 向量。</p>
+<p>MLM 任务可以允许模型利用双侧上下文的信息进行预训练，但是其存在着一个问题：预训练和微调存在着不匹配，因为 <span class="math inline">\(\text{[MASK]}\)</span> token 并不会出现在微调训练中。为了减轻这一影响，我们并不总是用 <span class="math inline">\(\text{[MASK]}\)</span> token 来替换被遮挡的词语。如之前所述，训练数据生成器随机选择 15% 的 token 位置用于预测，如果第 <span class="math inline">\(i\)</span> 个位置的 token 被选中，则其会按照如下策略进行替换：</p>
+<ol type="1">
+<li>80% 的可能使用 <span class="math inline">\(\text{[MASK]}\)</span> token</li>
+<li>10% 的可能使用随机 token</li>
+<li>10% 的可能保持 token 不变</li>
+</ol>
+<p>之后，输出 <span class="math inline">\(T_i\)</span> 会被用于预测原始的 token，使用交叉熵损失函数。</p>
+<h3 id="任务二next-sentence-prediction-nsp">任务二：Next Sentence Prediction (NSP)</h3>
+<p>很多重要的下游任务，如智能问答（QA）和自然语言推理（NLI），都是基于理解<strong>两个句子之间的联系</strong>，而标准的语言模型并不能直接捕捉这一联系。BERT 提出了一种<strong>二元 next sentence prediction 任务</strong>进行预训练，能够在任意单语言语料库上实现。具体来说，当选择每个训练样本的句子对 A 和 B 时，B 有 50% 的概率是 A 的真实的后一句（标签为 <span class="math inline">\(\text{IsNext}\)</span>）；有 50% 的概率是语料库中的随机一句（标签为 <span class="math inline">\(\text{NotNext}\)</span>）。如图 1 所示，<span class="math inline">\(C\)</span> 用来预测是否为下一个句子。虽然这种方法很简单，但是在 QA 和 NLI 上均取得了不错的效果。</p>
+<h3 id="预训练数据">预训练数据</h3>
+<p>预训练语料库采用了 BooksCorpus （800M 词语）以及 English Wikipedia（2500M 词语）。需要注意的是作者使用了文档层面的语料库而非打乱的句子层面的语料库，因为预训练需要提取序列之间的关系。</p>
+<h2 id="微调-bert">微调 BERT</h2>
+<p>得益于 Transformer 的自我注意力机制，BERT 的微调过程比较直接。对于每个任务，只需要将任务对应的<strong>输入及输出</strong>拖入 BERT结构，然后<strong>端对端微调</strong>所有参数即可。举例来说，对于输入，预训练中的句子对 A 和 B 对应于：</p>
+<ol type="1">
+<li>文本复述任务（paraphrasing）中的句子对</li>
+<li>文本蕴涵（entailment）任务中的 hypothesis-premise 对</li>
+<li>智能问答任务中的 question-passage 对</li>
+<li>文本分类或序列标注任务中的 text-∅ 对（即单个句子）</li>
+</ol>
+<p>而对于输出，<strong>token 的表示</strong>被注入到一个输出层中，用于 token-level 的任务，如序列标注或智能问答。而 <strong><span class="math inline">\(\text{[CLS]}\)</span> 表示</strong>则被注入到输出层中，用于分类任务，如文本蕴涵、情感分析等。下图给出了不同下游任务下 BERT 微调结构的不同，其中 a 和 b 对应序列层面的任务，c 和 d 对应词语层面的任务。</p>
+<p><img src="http://media.zjubiomedit.com/2019-11-11-071544.png" width="60%"></p>
+<p>与预训练相比，微调部分的算力要求相对较低，如果你有一块 TPU，最多一个小时就可以复现原文中的所有结果（基于预训练模型）。</p>
+<h1 id="实验-消融研究">实验 &amp; 消融研究</h1>
+<p>文章的第 4-5 节描述了 BERT 模型在各下游任务上的表现以及针对模型本身的消融实验，这里仅作简单的介绍。</p>
+<p>原文中展示了 BERT 微调结构在 11 个 NLP 任务上的表现，包括 GLUE （包括 9 个任务）、SQuAD v1.1、SQuAD v2.0 以及 SWAG，结果都十分的牛批。下表给出了 GLUE 的测试结果。</p>
+<p><img src="http://media.zjubiomedit.com/2019-11-11-065437.png" width="70%"></p>
+<p>在消融实验中，原文主要进行了三个实验：第一个实验是<strong>预训练任务</strong>的影响，结果如下表所示。可以看到同时执行 BERT 所提出的两项预训练任务的表现要优于其他模型。</p>
+<p><img src="http://media.zjubiomedit.com/2019-11-11-064714.png" width="45%/"></p>
+<p>第二个实验是模型大小的影响。结果如下表所示。作者指出当针对下游任务时模型仅需要微调时（即仅使用很小一部分随机初始化的参数），模型越大取得的结果越好，即便下游任务的数据量很小。而基于特征的方法可能存在模型大小的上界，即增加到一定程度后效果并不会变好。</p>
+<p><img src="http://media.zjubiomedit.com/2019-11-11-065555.png" width="45%"></p>
+<p>第三个实验探索 BERT 在基于特征的方法中的应用，结果如下表所示。可以看到 BERT 对于微调方法和基于特征的方法均可以取得较好效果。</p>
+<p><img src="http://media.zjubiomedit.com/2019-11-11-065822.png" width="45%"></p>
+<p><strong>PS</strong>：以上就是对 BERT 原论文的主要内容的解读。值得一提的是，网上大多数的总结是基于 v1 版本的，而原作者在 2019 年上传了一个 v2 版本，对文章的整体结构进行了调整。关于模型的更多细节请阅读原论文。</p>
 
       
     </div>
@@ -591,7 +584,7 @@
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
     
-    <a href="https://xxwywzy.github.io/2019/02/28/game-ai-pro-1/" title="《Game AI Pro》第一章笔记：What is Game AI?">https://xxwywzy.github.io/2019/02/28/game-ai-pro-1/</a>
+    <a href="https://xxwywzy.github.io/2019/11/11/bert/" title="BERT 原理解析">https://xxwywzy.github.io/2019/11/11/bert/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
@@ -604,7 +597,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Game-AI-Pro/" rel="tag"># Game AI Pro</a>
+            <a href="/tags/BERT/" rel="tag"># BERT</a>
           
         </div>
       
@@ -617,8 +610,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/02/28/cs229-11/" rel="next" title="CS229 学习笔记之十一：主成分分析">
-                <i class="fa fa-chevron-left"></i> CS229 学习笔记之十一：主成分分析
+              <a href="/2019/11/01/transformer/" rel="next" title="Transformer 原理解析">
+                <i class="fa fa-chevron-left"></i> Transformer 原理解析
               </a>
             
           </div>
@@ -626,10 +619,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/03/01/cs229-12/" rel="prev" title="CS229 学习笔记之十二：独立成分分析">
-                CS229 学习笔记之十二：独立成分分析 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -913,7 +902,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#学术-ai"><span class="nav-number">1.1.</span> <span class="nav-text">学术 AI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#电影-ai"><span class="nav-number">1.2.</span> <span class="nav-text">电影 AI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#游戏-ai"><span class="nav-number">1.3.</span> <span class="nav-text">游戏 AI</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#创造体验"><span class="nav-number">2.</span> <span class="nav-text">创造体验</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#暂停怀疑"><span class="nav-number">2.1.</span> <span class="nav-text">暂停怀疑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#反应性不确定性和可控性"><span class="nav-number">2.2.</span> <span class="nav-text">反应性、不确定性和可控性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单性和扩展性"><span class="nav-number">2.3.</span> <span class="nav-text">简单性和扩展性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#技巧与作弊"><span class="nav-number">2.4.</span> <span class="nav-text">技巧与作弊</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结论"><span class="nav-number">3.</span> <span class="nav-text">结论</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#模型"><span class="nav-number">2.</span> <span class="nav-text">模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#模型结构"><span class="nav-number">2.1.</span> <span class="nav-text">模型结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#输入输出表示"><span class="nav-number">2.2.</span> <span class="nav-text">输入/输出表示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#预训练-bert"><span class="nav-number">2.3.</span> <span class="nav-text">预训练 BERT</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#任务一masked-lm"><span class="nav-number">2.3.1.</span> <span class="nav-text">任务一：Masked LM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#任务二next-sentence-prediction-nsp"><span class="nav-number">2.3.2.</span> <span class="nav-text">任务二：Next Sentence Prediction (NSP)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#预训练数据"><span class="nav-number">2.3.3.</span> <span class="nav-text">预训练数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#微调-bert"><span class="nav-number">2.4.</span> <span class="nav-text">微调 BERT</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实验-消融研究"><span class="nav-number">3.</span> <span class="nav-text">实验 &amp; 消融研究</span></a></li></ol></div>
             
 
           </div>
