@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2"/>
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0"/>
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/favicon.png?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本文是 ACL 2020 最佳论文的详细解读。">
+<meta name="keywords" content="自然语言处理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于 CheckList 的 NLP 模型行为测试">
+<meta property="og:url" content="https://xxwywzy.github.io/2020/08/05/checklist/index.html">
+<meta property="og:site_name" content="xxwywzy&#39;s Blog">
+<meta property="og:description" content="本文是 ACL 2020 最佳论文的详细解读。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/blog/20200711/KhUboATsLk9R.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/blog/20200711/j5O50FEWDwnj.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-07-13-011742.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-07-13-013443.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-07-13-014058.png">
+<meta property="og:updated_time" content="2020-08-05T08:10:31.531Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基于 CheckList 的 NLP 模型行为测试">
+<meta name="twitter:description" content="本文是 ACL 2020 最佳论文的详细解读。">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/blog/20200711/KhUboATsLk9R.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://xxwywzy.github.io/2020/08/05/checklist/"/>
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>基于 CheckList 的 NLP 模型行为测试 | xxwywzy's Blog</title>
+  
+
+
+
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a02b5462e7522b1ed191c4cea6b1d6e6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xxwywzy's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Long may the sunshine</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br/>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br/>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br/>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br/>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br/>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2020/08/05/checklist/"/>
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zheyu Wang"/>
+      <meta itemprop="description" content="相信过程"/>
+      <meta itemprop="image" content="/images/avatar.png"/>
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xxwywzy's Blog"/>
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">基于 CheckList 的 NLP 模型行为测试
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-08-05 20:49:23" itemprop="dateCreated datePublished" datetime="2020-08-05T20:49:23+08:00">2020-08-05</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/人工智能/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/人工智能/深度学习/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <a href="/2020/08/05/checklist/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2020/08/05/checklist/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+            <span id="/2020/08/05/checklist/" class="leancloud_visitors" data-flag-title="基于 CheckList 的 NLP 模型行为测试">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <div class="note info">
+            本文是 ACL 2020 最佳论文的详细解读。 
+          </div>
+<a id="more"></a>
+<p>本文是对 ACL 2020 最佳论文 <strong><em>Beyond Accuracy: Behavioral Testing of NLP Models with CheckList</em></strong> 的详细解读。</p>
+<h1 id="背景">背景</h1>
+<p>训练 NLP 模型的一个主要目标是提升其<strong>泛化性</strong>。当前的一种标准化的评估方法是将数据集划分为<strong>训练-验证-测试</strong>集，在测试集上评估模型的准确率。这种评估方式存在着一定的局限性，如测试集数据并不全面，和训练集存在同样的偏差。此外，将模型的表现总结为单个指标，很难去找到模型失败的具体原因，也就无法去修复它。</p>
+<p>近年来，大量的其他评估方法被提出，但是这些方法基本都专注于具体的任务（如问答）或者是单一的能力（如鲁棒性），并不能提供模型评估的全面指导。在软件工程领域，对于复杂的软件系统通常采用<strong>行为测试</strong>的方法，通过验证输入输出行为来测试一个系统的不同的能力。</p>
+<p>本研究借鉴了这一思想，提出了 <strong>CheckList</strong>，一种用于全面测试 NLP 模型行为的评估方法及配套工具。CheckList 通过提供一个<strong>语言学能力</strong>列表告诉用户要测试的内容，其适用于大部分的任务，同时还给出了三种不同的<strong>测试类型</strong>，来满足不同能力的特定行为需求。最后，原文中的 CheckList 实现还包括了多种<strong>抽象</strong>以帮助用户生成大量的测试用例。</p>
+<h1 id="checklist-详解">CheckList 详解</h1>
+<p>CheckList 遵循行为测试中的“<strong>将实现与测试分离</strong>” 的原则，将模型看作一个黑盒子，从而提升评估方法的通用性。下图给出了 CheckList 的一个使用案例，其评估的是一个情感分析模型，以矩阵的形式呈现，矩阵的行代表<strong>模型的能力</strong>，矩阵的列代表<strong>测试的类型</strong>，我们通过测试用例去填充这个矩阵。下面将围绕这个案例说明 CheckList 的这三个要素。</p>
+<p><img src="http://media.zjubiomedit.com/blog/20200711/KhUboATsLk9R.png" width="60%"></p>
+<h2 id="能力">能力</h2>
+<p>不同于现代 NLP 模型常常仅关注特定的任务，CheckList 希望去评估一个模型的多方面能力，这些能力有的是模型通用的，有的则是面向特定的任务或领域。原文中列举了如下的一些通用性能力：</p>
+<ul>
+<li><strong><em>Vocabulary+POS</em></strong>：是否掌握任务相关的词汇及词性</li>
+<li><strong><em>Taxonomy</em></strong>：是否理解同义词、反义词</li>
+<li><strong><em>Robustness</em></strong>：是否能够应对拼写错误和不相关的变化</li>
+<li><strong><em>NER</em></strong>：是否能够识别相关的命名实体</li>
+<li><strong><em>Negation</em></strong>：是否理解否定词</li>
+<li><strong><em>Coreference</em></strong>：是否理解指代关系</li>
+<li><strong><em>Semantic Role Labeling</em></strong>：是否理解各种角色</li>
+<li><strong>Logic</strong>：是否能够处理对称性、前后一致性以及连接词</li>
+</ul>
+<p>有时还需要根据具体任务去添加其他特定的能力。上面的案例中分别通过不同的测试类型评估了模型的 Negation、NER 和 Vocabulary 能力。</p>
+<h2 id="测试类型">测试类型</h2>
+<p>对于每种能力，CheckList 给出了三种可能的测试类型：最小功能测试、不变性测试以及定向期望测试。</p>
+<p><strong>最小功能测试</strong>（MFT）受启发于软件工程领域的单元测试，通过大量简单但是具有针对性的样例对目标能力进行测试。在上面的案例 A 中，通过模板（下一节介绍）生成了具有否定词的测试用例来测试模型的否定能力。</p>
+<p><strong>不变性测试</strong>（INV）和 <strong>定向期望测试</strong>（DIR）都受启发于软件蜕变测试，INT 对模型输入做一些不影响结果的轻微变化，期望模型的输出保持不变；而 DIR 则是对原有数据做少许改动，期望模型的输出朝一个期望的方向变化。</p>
+<p>在上面的案例（B &amp; C）中，对于 NER 能力使用了 INV 进行测试，通过替换地名相关的命名实体检测模型的输出是否发生变化；对于词汇能力则使用 DIR 进行了测试，通过加入消极的短语，判断模型是否不会变得更积极。对于 INV 和 DIR，其可以基于<strong>无标签数据</strong>进行测试，因为我们关注的不是真实结果，而是加入扰动前后输出结果的变化关系。</p>
+<h2 id="生成测试用例">生成测试用例</h2>
+<p>CheckList 通过提供一系列的抽象来帮助用户快速地生成大规模<strong>测试用例</strong>，这些用例可以直接创造，也可以通过改动已有数据得到。原文介绍了两种抽象方式：模板和扩展模板。</p>
+<p><strong>模板</strong>提供了一个通用的句式，其中的成分只给出其词性，每个成分下用户可以创造一系列的可选词语，系统会基于笛卡尔积（即所有可能的组合）生成测试用例。在上面的案例中，<code>I {NEGATION} {POS_VERB} the {THING}</code> 就是一个模板，其中 <code>{NEGATION}={didn’t, can’t say I, ...}</code>，<code>{POS_VERB}={love, like, ...}</code>，<code>{THING}={food, flight, service, ...}</code>。</p>
+<p><strong>扩展模板</strong>。基于模板生成的用例需要依赖用户为每个缺失成分添加可选词语列表，CheckList 还提供了一种生成词语的方式，用户可以将一个模板的某个部分遮挡起来，CheckList 会自动为被遮罩的部分生成一些可选词语（基于 <strong>RoBERTa</strong> 实现），用户可以将这些词语过滤为特定的词语列表（如积极、消极、中性词语）用于多个测试，有时候生成的词语可能不需要过滤。RoBERTa 的生成建议也可以和 WordNet 结合在一起输出一些特定的近义词或反义词列表。此外，原文表示还提供了一些现成的常用填充词语，如姓名和地点的命名实体。下图给出了一个基于 MLM 的模板的例子：</p>
+<p><img src="http://media.zjubiomedit.com/blog/20200711/j5O50FEWDwnj.png" width="40%"></p>
+<p>作者在 github 上提供了 CheckList 的开源实现，针对上述三要素提供了各种各样的可视化和抽象方法，感兴趣可以前往 https://github.com/marcotcr/checklist 把玩。下面给出针对三种任务类型的代码示例：</p>
+<p><strong>MFT</strong>：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> checklist</span><br><span class="line"><span class="keyword">from</span> checklist.editor <span class="keyword">import</span> Editor</span><br><span class="line"><span class="keyword">from</span> checklist.perturb <span class="keyword">import</span> Perturb</span><br><span class="line"><span class="keyword">from</span> checklist.test_types <span class="keyword">import</span> MFT, INV, DIR</span><br><span class="line">editor = Editor()</span><br><span class="line"></span><br><span class="line">t = editor.template(<span class="string">'This is &#123;a:adj&#125; &#123;mask&#125;.'</span>,  </span><br><span class="line">                      adj=[<span class="string">'good'</span>, <span class="string">'great'</span>, <span class="string">'excellent'</span>, <span class="string">'awesome'</span>]) <span class="comment"># MLM和模板结合</span></span><br><span class="line">test1 = MFT(t.data, labels=<span class="number">1</span>, name=<span class="string">'Simple positives'</span>,</span><br><span class="line">           capability=<span class="string">'Vocabulary'</span>, description=<span class="string">''</span>) <span class="comment"># 注意要添加标签</span></span><br></pre></td></tr></table></figure>
+<p><strong>INV</strong>：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">dataset = [<span class="string">'This was a very nice movie directed by John Smith.'</span>,</span><br><span class="line">           <span class="string">'Mary Keen was brilliant.'</span>,</span><br><span class="line">          <span class="string">'I hated everything about this.'</span>,</span><br><span class="line">          <span class="string">'This movie was very bad.'</span>,</span><br><span class="line">          <span class="string">'I really liked this movie.'</span>,</span><br><span class="line">          <span class="string">'just bad.'</span>,</span><br><span class="line">          <span class="string">'amazing.'</span>,</span><br><span class="line">          ]</span><br><span class="line">t = Perturb.perturb(dataset, Perturb.add_typos)</span><br><span class="line">test2 = INV(**t) <span class="comment"># 关键字参数，将任意个参数以字典形式传入</span></span><br></pre></td></tr></table></figure>
+<p><strong>DIR</strong>：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> checklist.expect <span class="keyword">import</span> Expect</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add_negative</span><span class="params">(x)</span>:</span></span><br><span class="line">    phrases = [<span class="string">'Anyway, I thought it was bad.'</span>, <span class="string">'Having said this, I hated it'</span>, <span class="string">'The director should be fired.'</span>]</span><br><span class="line">    <span class="keyword">return</span> [<span class="string">'%s %s'</span> % (x, p) <span class="keyword">for</span> p <span class="keyword">in</span> phrases]</span><br><span class="line"></span><br><span class="line">t = Perturb.perturb(dataset, add_negative) <span class="comment"># 为dataset添加后缀</span></span><br><span class="line">monotonic_decreasing = Expect.monotonic(label=<span class="number">1</span>, increasing=<span class="keyword">False</span>, tolerance=<span class="number">0.1</span>) <span class="comment"># 这里还是要给原始数据设置标签，希望模型单调下降（应该是标签类对应的概率？）</span></span><br><span class="line">test3 = DIR(**t, expect=monotonic_decreasing)</span><br></pre></td></tr></table></figure>
+<h1 id="sota-模型测试">SOTA 模型测试</h1>
+<p>原文针对三个 NLP 任务对当前的一些 SOTA 模型进行了 CheckList 测试，具体如下所示：</p>
+<ul>
+<li><strong>情感分析</strong>（Sentiment Analysis）：共测试了五个模型，包括商业界的微软、谷歌和亚马逊的付费 API，以及学术界的 BERT-base 和 RoBERTa-base（在 SST-2 数据集上微调，acc 分别达到 92.7% 和 94.8%）</li>
+<li><strong>重复问题检测</strong>（Quora Question Pair）：测试了 BERT-base 和 RoBERTa-base（在 QQP 数据集上微调，acc 分别达到 91.1% 和 91.3%）</li>
+<li><strong>机器阅读理解</strong>（Machine Comprehension）：测试了基于 SQuAD 的 BERT-large，F1 值达到 93.2%</li>
+</ul>
+<p>下面将分别对这三项任务的测试结果进行介绍。</p>
+<h2 id="情感分析">情感分析</h2>
+<p>下表给出了部分的测试结果及测试用例。可以看到在部分任务（如 Negation）上，所有模型的表现都很糟糕。关于其他具体的表现这里不作赘述，可以查看表格。</p>
+<p><img src="http://media.zjubiomedit.com/2020-07-13-011742.png" width="80%"></p>
+<h2 id="重复问题检测">重复问题检测</h2>
+<p>下表给出了部分的测试结果及测试用例。可以看出虽然两种模型在传统评估方法下的准确率很高，但是 CheckList 表明它们离真正地区分重复问题还有很大的距离。</p>
+<p><img src="http://media.zjubiomedit.com/2020-07-13-013443.png" width="80%"></p>
+<h2 id="机器阅读理解">机器阅读理解</h2>
+<p>下表给出了部分的测试结果及测试用例。可以看出模型在大部分能力上的表现都一言难尽。</p>
+<p><img src="http://media.zjubiomedit.com/2020-07-13-014058.png" width="80%"></p>
+<p>总的来看，我们将相同的测试方法应用于了三种不同的任务，虽然部分具体的测试内容面向特定的任务，但是测试类型及大部分的测试内容是通用的。虽然这些模型在传统的评估指标下表现都不赖，但是在 CheckList 的部分测试下还是表现出了较高的失败率。通过这样的测试，我们能够更精确地评估模型的能力。</p>
+<h1 id="用户评估">用户评估</h1>
+<p>本节通过用户评估进一步验证 CheckList 的有效性和灵活性，原文中面向两类用户进行了评估，一类用户已经对待测试的模型进行过基于其他方法的仔细评估，另一类用户则对待测试的任务（模型）缺乏了解。</p>
+<p>第一类用户表示他们可以通过 CheckList 进一步测试模型，发现一些之前没有考虑到的问题；第二类用户虽然缺乏经验，但是依然可以通过 CheckList 进行一系列测试，并发现一些模型的问题。具体的评估过程请阅读原文。</p>
+<h1 id="总结">总结</h1>
+<p>传统的基于准确率的评估并不足以完全评估 NLP 模型的真实表现，本文借鉴软件工程中行为测试的思想，提出了 <strong>CheckList</strong>，一种模型无关和任务无关的测试方法，其通过三种不同的<strong>测试类型</strong>测试模型的各种<strong>语言学能力</strong>。为了说明其有用性，文章在三种不同的任务上测试了多个模型，暴露了大量传统的评估方法难以发现的问题。用户评估表明，CheckList 非常易于学习和使用，对各类用户都是有帮助的。此外，CheckList 的开源实现所提供的抽象方法和工具能够更加轻松地创造测试用例，进行面向各种任务的测试。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Zheyu Wang</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://xxwywzy.github.io/2020/08/05/checklist/" title="基于 CheckList 的 NLP 模型行为测试">https://xxwywzy.github.io/2020/08/05/checklist/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/自然语言处理/" rel="tag"># 自然语言处理</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/08/05/ptm/" rel="next" title="自然语言处理中的预训练模型">
+                <i class="fa fa-chevron-left"></i> 自然语言处理中的预训练模型
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Zheyu Wang"/>
+            
+              <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+              <p class="site-description motion-element" itemprop="description">相信过程</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">56</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">16</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/xxwywzy" title="GitHub &rarr; https://github.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://twitter.com/xxwywzy" title="Twitter &rarr; https://twitter.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="http://weibo.com/xxwywzy" title="Weibo &rarr; http://weibo.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://instagram.com/xxwywzy" title="Instagram &rarr; https://instagram.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#checklist-详解"><span class="nav-number">2.</span> <span class="nav-text">CheckList 详解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#能力"><span class="nav-number">2.1.</span> <span class="nav-text">能力</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试类型"><span class="nav-number">2.2.</span> <span class="nav-text">测试类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生成测试用例"><span class="nav-number">2.3.</span> <span class="nav-text">生成测试用例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sota-模型测试"><span class="nav-number">3.</span> <span class="nav-text">SOTA 模型测试</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#情感分析"><span class="nav-number">3.1.</span> <span class="nav-text">情感分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重复问题检测"><span class="nav-number">3.2.</span> <span class="nav-text">重复问题检测</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#机器阅读理解"><span class="nav-number">3.3.</span> <span class="nav-text">机器阅读理解</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#用户评估"><span class="nav-number">4.</span> <span class="nav-text">用户评估</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.5.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.0.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz',
+    appKey: 'IxP5URFEhxow4TfWyVNiowbH',
+    placeholder: '请在这里评论=￣ω￣=',
+    avatar: 'retro',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+</script>
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+  
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .fail(function ({ responseJSON }) {
+                console.log(`Failed to save Visitor num, with error message: ${responseJSON.error}`);
+              })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1 }))
+                .done(function() {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function() {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+        .fail(function ({ responseJSON }) {
+          console.log(`LeanCloud Counter Error: ${responseJSON.code} ${responseJSON.error}`);
+        });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz',
+                'X-LC-Key': 'IxP5URFEhxow4TfWyVNiowbH',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            addCount(Counter);
+          
+        });
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: "AMS"
+      }
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+      for (i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+<script src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+  overflow: auto hidden;
+}
+</style><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+    
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

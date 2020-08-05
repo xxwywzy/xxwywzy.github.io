@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2"/>
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0"/>
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/favicon.png?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本篇博客主要介绍编程问题中常考的一种数列：卡特兰数。">
+<meta name="keywords" content="卡特兰数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="卡特兰数入门">
+<meta property="og:url" content="https://xxwywzy.github.io/2020/08/05/catalan/index.html">
+<meta property="og:site_name" content="xxwywzy&#39;s Blog">
+<meta property="og:description" content="本篇博客主要介绍编程问题中常考的一种数列：卡特兰数。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-08-02-032202.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-08-02-033348.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-08-02-043302.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-08-02-070904.png">
+<meta property="og:updated_time" content="2020-08-05T08:13:59.728Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="卡特兰数入门">
+<meta name="twitter:description" content="本篇博客主要介绍编程问题中常考的一种数列：卡特兰数。">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2020-08-02-032202.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://xxwywzy.github.io/2020/08/05/catalan/"/>
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>卡特兰数入门 | xxwywzy's Blog</title>
+  
+
+
+
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a02b5462e7522b1ed191c4cea6b1d6e6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xxwywzy's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Long may the sunshine</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br/>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br/>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br/>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br/>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br/>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2020/08/05/catalan/"/>
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zheyu Wang"/>
+      <meta itemprop="description" content="相信过程"/>
+      <meta itemprop="image" content="/images/avatar.png"/>
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xxwywzy's Blog"/>
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">卡特兰数入门
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-08-05 09:06:06" itemprop="dateCreated datePublished" datetime="2020-08-05T09:06:06+08:00">2020-08-05</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/编程/" itemprop="url" rel="index"><span itemprop="name">编程</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/编程/算法/" itemprop="url" rel="index"><span itemprop="name">算法</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <a href="/2020/08/05/catalan/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2020/08/05/catalan/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+            <span id="/2020/08/05/catalan/" class="leancloud_visitors" data-flag-title="卡特兰数入门">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <div class="note danger">
+            本篇博客主要介绍编程问题中常考的一种数列：卡特兰数。 
+          </div>
+<a id="more"></a>
+<h1 id="简介">简介</h1>
+<p><strong>卡特兰数</strong>是组合数学中一个常在各种计数问题中出现的数列，其对应的序列为：</p>
+<p><img src="http://media.zjubiomedit.com/2020-08-02-032202.png" width="50%"></p>
+<p>其通项公式为： <span class="math display">\[
+H_{n}=C_{2 n}^{n} - C_{2 n}^{n + 1} = \frac{C_{2 n}^{n}}{n+1}\left(n \geq 2, n \in \mathbf{N}_{+} \right)
+\]</span> 我们可以基于通项公式得出如下递推关系： <span class="math display">\[
+\begin{aligned}
+H_{n+1}&amp;=\frac{H_{n}(4 n+2)}{n+2} \\
+H_{n}&amp;=\left\{\begin{array}{ll}
+\sum_{i=1}^{n} H_{i-1} H_{n-i} &amp; n \geq 2, n \in \mathbf{N}_{+} \\
+1 &amp; n=0,1
+\end{array}\right.
+\end{aligned}
+\]</span> 下面我们将通过一些经典的题目介绍卡特兰数的基本原理，应用场景及其变式。</p>
+<h1 id="基本原理">基本原理</h1>
+<p>我们可以通过<strong>括号匹配</strong>这个问题来了解卡特兰数的基本原理。该题目的描述如下：</p>
+<blockquote>
+<p>对于 n 对括号，其共有多少种合法的匹配方式？</p>
+</blockquote>
+<p>括号的合法匹配方式为：一个左括号对应一个右括号，且左括号必须要在右括号前面出现。为了方便说明，这里将左括号记作 +1，右括号记作 -1，则一个合法序列和一个非法序列可以表示为如下形式：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">()(()) -&gt; +1 -1 +1 +1 -1 -1</span><br><span class="line">())()( -&gt; +1 -1 -1 +1 -1 +1</span><br></pre></td></tr></table></figure>
+<p>我们可以证明，对于合法序列来说，其<strong>所有前缀和</strong>必然大于等于 0，而对于非法序列来说，其必然存在前缀和小于 0 的情况。下面我们将尝试去推导序列长度为 2n 时非法序列的数量。</p>
+<p>对于一个非法序列，我们找到其<strong>第一个</strong>和小于 0 的前缀，并对其中每一位进行取反。以上面的非法序列为例，我们会得到：<code>-1 +1 +1 +1 -1 +1</code>，此时该序列中共有 <code>3+1</code> 个 +1 和 <code>3-1</code> 个 -1。直观上来看，第一个小于 0 的前缀和必为 -1，即 -1 比 +1 多一个，取反后则 -1 比 + 1 少一个，这样总数上看 +1 必变为 <code>n+1</code> 个，-1 则变为 <code>n-1</code> 个（因为原来二者相等）。我们可以将该结论推广为（严格的证明省略）：</p>
+<blockquote>
+<p>对于 <code>n</code> 对括号的每种非法匹配序列 A，都会有一个含有 <code>n+1</code> 个 +1 和 <code>n-1</code> 个 -1 的序列 B 与其一一对应。</p>
+</blockquote>
+<p>B 的数量我们可以通过 <span class="math inline">\(C_{2n}^{n+1}\)</span> 来计算（等价于 <span class="math inline">\(C_{2 n}^{n-1}\)</span>），即非法序列的数量为 <span class="math inline">\(C_{2n}^{n+1}\)</span>。而序列的总数量为 <span class="math inline">\(C_{2n}^{n}\)</span>（从 2n 个位置中选择 n 个位置放左括号，无先后顺序），因此合法的匹配序列数量为： <span class="math display">\[
+C_{2 n}^{n}-C_{2 n}^{n+1}=\frac{C_{2 n}^{n}}{n+1}
+\]</span> 此即为卡特兰数的通项公式。</p>
+<h1 id="应用场景">应用场景</h1>
+<p>卡特兰数可以应用于很多有趣的组合数学问题，如：</p>
+<blockquote>
+<p>给定 <code>n</code> 个数的入栈顺序，求其有多少种出栈序列？</p>
+</blockquote>
+<p>将进栈看做 +1，出栈看做 -1，则其为一个标准的卡特兰数，对应的结果为 <span class="math inline">\(H_n = \frac{C_{2 n}^{n}}{n+1}\)</span>。</p>
+<blockquote>
+<p>对于有 <code>n+1</code> 个叶子节点，其能构成多少种形状不同的满二叉树？</p>
+</blockquote>
+<p>这里的<strong>满二叉树</strong>使用国际定义，即如果一棵二叉树的节点要么是叶子节点，要么有两个子节点，则其为满二叉树。</p>
+<p>我们可以证明，包含 <code>n+1</code> 个叶子节点（总节点个数为 <code>2n+1</code>）需要进行 <code>2n</code> 次扩展来形成满二叉树，如下图所示（月牙形表示叶子节点）。扩展即从父节点向左或向右添加子节点的过程，我们可以将其理解为左右括号匹配问题，则总共可以构成 <span class="math inline">\(H_n = \frac{C_{2 n}^{n}}{n+1}\)</span> 种形状不同的满二叉树。</p>
+<p><img src="http://media.zjubiomedit.com/2020-08-02-033348.png" width="50%"></p>
+<p>此外，上图还可以看做 <code>n</code> 个节点组成不同二叉树的方案数，其中圆形表示节点，月牙形表示什么都没有。我们可以基于卡特兰数的递推关系得出该方案数即为 <span class="math inline">\(H_n\)</span>，具体请参考 Leetcode 第 96 题。</p>
+<blockquote>
+<p>在一个 <code>n*n</code> 的方格中从左下角走到右上角，不穿过对角线的单调路线有多少种？</p>
+</blockquote>
+<p>通过下图我们可以发现，只存在向右走和向上走两种选择，两者的总数需匹配且任意时刻向上走的数量不能多于向右走。很明显这也是一个卡特兰数，对应的单调路线有 <span class="math inline">\(H_n\)</span> 种。</p>
+<p><img src="http://media.zjubiomedit.com/2020-08-02-043302.png" width="50%"></p>
+<blockquote>
+<p>将 <code>n</code> 边的凸多边形以不相交的对角线分成 <code>n-2</code> 个三角形，共有多少种方法？</p>
+</blockquote>
+<p>这个问题我们需要从递归的角度来考虑。因为凸 <span class="math inline">\(n\)</span> 边形的任意一条边必定属于某一个三角形，所以我们以某一条边为基准，将这条边的两个顶点分别记作 <span class="math inline">\(P_1\)</span> 和 <span class="math inline">\(P_{n}\)</span>，将该凸多边形的顶点依序标记为 <span class="math inline">\(P_1,P_2,\ldots,P_{n}\)</span>，再在该凸多边形中选择任意一个不属于这两个顶点的顶点 <span class="math inline">\(P_k\)</span>（<span class="math inline">\(2 \le k \le n-1\)</span>），来构成一个三角形，用这个三角形把该凸多边形划分为两个凸多边形，其中一个凸多边形为由 <span class="math inline">\(P_{1}, P_{2}, \ldots, P_{k}\)</span> 构成的凸 <span class="math inline">\(k\)</span> 边形，另一个则是由 <span class="math inline">\(P_{k}, P_{k+1}, \ldots, P_{n}\)</span> 构成的凸 <span class="math inline">\(n-k+1\)</span> 边形。根据乘法原理，问题的解 <span class="math inline">\(f(n)\)</span> 等价于凸 <span class="math inline">\(k\)</span> 边形的划分方案数乘以凸 <span class="math inline">\(n-k+1\)</span> 边形的划分方案数，遍历所有的 <span class="math inline">\(k\)</span>，可以得到： <span class="math display">\[
+f(n)=\left\{\begin{array}{ll}
+\sum_{k=2}^{n-1} f(k)f(n-k+1) &amp; n \geq 4, n \in \mathbf{N}_{+} \\
+1 &amp; n=2,3
+\end{array}\right.
+\]</span> 可以看到，对于一个凸 <span class="math inline">\(n\)</span> 边形来说，其分割方法数即等价于 <span class="math inline">\(H_{n-2}\)</span>。下图给出了一个正六边形的分割方案，共有 <span class="math inline">\(H_4 = 14\)</span> 种。</p>
+<p><img src="http://media.zjubiomedit.com/2020-08-02-070904.png" width="40%"></p>
+<p>在实际编程中，这类问题通常可以通过找出递归关系，然后基于动态规划的方式求解。如果可以直接分辨出其为卡特兰数，那么使公式进行求解是一种最快的方法。</p>
+<h1 id="变式">变式</h1>
+<p>下面介绍一种卡特兰数的变式，也是编程面试中常考的一种问题：<strong>买票</strong>问题。</p>
+<blockquote>
+<p>假设一张门票 5 元，售票房没有额外的零钱。现在有 <code>m</code> 个人持有 5 元的纸币，<code>n</code> 个人持有 10 元的纸币排队买票，问有多少种排队方式，可以让每个人都买到电影票。</p>
+</blockquote>
+<p>这道题本质上就是要让持有 5 元纸币的人和持有 10 元纸币的人保持匹配，且 5 元纸币的人需要在前面，如果将持有 5 元纸币的人看做左括号，持有 10 元纸币的人看做右括号，不难理解这就是一个卡特兰数的问题。</p>
+<p>然而，与标准卡特兰数相比，这里的求解还有两个不同之处：首先是持有 5 元纸币的人数 <code>m</code> 和持有 10 元纸币的人数 <code>n</code> 不一定相等（注意 <code>m</code> 需要不少于 <code>n</code> ），这样我们不能直接套用卡特兰数的通项公式，而应该从原理出发重新推导，基于<strong>总序列数减去非法序列数</strong>的思想，合法序列数为 <span class="math inline">\(C_{m+n}^{m}-C_{m+n}^{m+1}\)</span>。此外，我们还需要考虑排队的先后顺序，因此总的排队方式数为： <span class="math display">\[
+\begin{aligned}
+C_{n} &amp;=C_{m+n}^{m}-C_{m+n}^{m+1} \\
+&amp;=\frac{(m+n) !}{m ! * n !}-\frac{(m+n) !}{(m+1) ! *(n-1) !} \\
+&amp;=\frac{(m+n) !}{m ! * n !}-\frac{(m+n) ! * \frac{1}{m+1} * n}{m ! * n !} \\
+&amp;=\frac{(m+n) !}{m ! * n !} *\left(1-\frac{1}{m+1} * n\right) \\
+&amp;=\frac{(m+n) !}{m ! * n !} * \frac{m+1-n}{m+1} \\
+A_n &amp;= C_{n} * m ! * n ! \\
+&amp;= (m+n)! * \frac {m+1-n}{m+1}
+\end{aligned}
+\]</span> 注：本篇文章的整体思路与部分内容参考自 LeetCode 上的一篇<a href="https://leetcode-cn.com/circle/article/lWYCzv/" title="「算法入门笔记」卡特兰数" target="_blank" rel="noopener">笔记</a>，图片则来自 <a href="https://zh.wikipedia.org/wiki/%E5%8D%A1%E5%A1%94%E5%85%B0%E6%95%B0" title="卡塔兰数" target="_blank" rel="noopener">wiki 百科</a>。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Zheyu Wang</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://xxwywzy.github.io/2020/08/05/catalan/" title="卡特兰数入门">https://xxwywzy.github.io/2020/08/05/catalan/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/卡特兰数/" rel="tag"># 卡特兰数</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/11/bert/" rel="next" title="BERT 原理解析">
+                <i class="fa fa-chevron-left"></i> BERT 原理解析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/08/05/cs229-17/" rel="prev" title="CS229 学习笔记之十七：策略梯度">
+                CS229 学习笔记之十七：策略梯度 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Zheyu Wang"/>
+            
+              <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+              <p class="site-description motion-element" itemprop="description">相信过程</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">56</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">16</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/xxwywzy" title="GitHub &rarr; https://github.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://twitter.com/xxwywzy" title="Twitter &rarr; https://twitter.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="http://weibo.com/xxwywzy" title="Weibo &rarr; http://weibo.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://instagram.com/xxwywzy" title="Instagram &rarr; https://instagram.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基本原理"><span class="nav-number">2.</span> <span class="nav-text">基本原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#应用场景"><span class="nav-number">3.</span> <span class="nav-text">应用场景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#变式"><span class="nav-number">4.</span> <span class="nav-text">变式</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.5.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.0.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz',
+    appKey: 'IxP5URFEhxow4TfWyVNiowbH',
+    placeholder: '请在这里评论=￣ω￣=',
+    avatar: 'retro',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+</script>
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+  
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .fail(function ({ responseJSON }) {
+                console.log(`Failed to save Visitor num, with error message: ${responseJSON.error}`);
+              })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1 }))
+                .done(function() {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function() {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+        .fail(function ({ responseJSON }) {
+          console.log(`LeanCloud Counter Error: ${responseJSON.code} ${responseJSON.error}`);
+        });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz',
+                'X-LC-Key': 'IxP5URFEhxow4TfWyVNiowbH',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            addCount(Counter);
+          
+        });
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: "AMS"
+      }
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+      for (i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+<script src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+  overflow: auto hidden;
+}
+</style><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+    
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
