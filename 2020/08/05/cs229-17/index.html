@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2"/>
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0"/>
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/favicon.png?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本篇博客为 CS229 学习笔记第十七部分，主题是：强化学习中的各种算法。">
+<meta name="keywords" content="CS229">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CS229 学习笔记之十七：策略梯度">
+<meta property="og:url" content="https://xxwywzy.github.io/2020/08/05/cs229-17/index.html">
+<meta property="og:site_name" content="xxwywzy&#39;s Blog">
+<meta property="og:description" content="本篇博客为 CS229 学习笔记第十七部分，主题是：强化学习中的各种算法。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/blog/20200626/nCRbxRq67Fnu.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-06-28-012217.png">
+<meta property="og:updated_time" content="2020-08-05T07:50:59.454Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CS229 学习笔记之十七：策略梯度">
+<meta name="twitter:description" content="本篇博客为 CS229 学习笔记第十七部分，主题是：强化学习中的各种算法。">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/blog/20200626/nCRbxRq67Fnu.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://xxwywzy.github.io/2020/08/05/cs229-17/"/>
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>CS229 学习笔记之十七：策略梯度 | xxwywzy's Blog</title>
+  
+
+
+
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a02b5462e7522b1ed191c4cea6b1d6e6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xxwywzy's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Long may the sunshine</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br/>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br/>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br/>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br/>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br/>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2020/08/05/cs229-17/"/>
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zheyu Wang"/>
+      <meta itemprop="description" content="相信过程"/>
+      <meta itemprop="image" content="/images/avatar.png"/>
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xxwywzy's Blog"/>
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">CS229 学习笔记之十七：策略梯度
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-08-05 18:49:23" itemprop="dateCreated datePublished" datetime="2020-08-05T18:49:23+08:00">2020-08-05</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/人工智能/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/人工智能/机器学习/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <a href="/2020/08/05/cs229-17/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2020/08/05/cs229-17/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+            <span id="/2020/08/05/cs229-17/" class="leancloud_visitors" data-flag-title="CS229 学习笔记之十七：策略梯度">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <div class="note info">
+            本篇博客为 CS229 学习笔记第十七部分，主题是：强化学习中的各种算法。 
+          </div>
+<a id="more"></a>
+<h1 id="算法简介">算法简介</h1>
+<p>本节将介绍一种 model-free 的算法，叫做<strong>策略梯度</strong>。该算法不需要像 model-based 的算法一样定义值函数，同时也不需要像 Q-learning 一样定义 Q 函数（Q-learning 也是 model-free 的）。我们将在<strong>有限范围</strong>的假设下介绍策略梯度：定义轨迹 <span class="math inline">\(\tau=\left(s_{0}, a_{0}, \dots, s_{T-1}, a_{T-1}, s_{T}\right)\)</span>，其中 <span class="math inline">\(T &lt; \infty\)</span> 为轨迹的长度。此外，策略梯度仅适用于学习<strong>随机策略</strong>（即用概率表示），我们使用 <span class="math inline">\(\pi_{\theta}(a|s)\)</span> 表示策略 <span class="math inline">\(\pi_{\theta}\)</span> 在状态 <span class="math inline">\(s\)</span> 输出动作 <span class="math inline">\(a\)</span> 的概率。</p>
+<p>使用策略梯度的优点在于我们只需要假定我们可以基于转移概率 <span class="math inline">\(\left\{P_{s a}\right\}\)</span> 进行采样，并且可以在状态 <span class="math inline">\(s\)</span> 和 <span class="math inline">\(a\)</span> 处查询到奖励函数 <span class="math inline">\(R(s,a)\)</span> 即可，并不需要去知道转移概率或奖励函数的精确解析形式。我们并不用明确地去学习转移概率和奖励函数。</p>
+<p>令 <span class="math inline">\(s_0\)</span> 采样自某个分布 <span class="math inline">\(\mu\)</span>。我们考虑基于参数 <span class="math inline">\(\theta\)</span> 优化策略 <span class="math inline">\(\pi_{\theta}\)</span> 的期望总收益，如下式所示： <span class="math display">\[
+\eta(\theta) \triangleq \mathrm{E}\left[\sum_{t=0}^{T-1} \gamma^{t} R\left(s_{t}, a_{t}\right)\right] \tag{1}
+\]</span> 其中 <span class="math inline">\(s_{t} \sim P_{s_{t-1} a_{t-1}}\)</span> 以及 <span class="math inline">\(a_{t} \sim \pi_{\theta}\left(\cdot \mid s_{t}\right)\)</span>。注意如果我们忽略有限和无限范围的差别，则 <span class="math inline">\(\eta(\theta) = {E}_{s_{0} \sim P}\left[V^{\pi_{\theta}}\left(s_{0}\right)\right]\)</span>。我们希望使用梯度上升来最大化 <span class="math inline">\(\eta(\theta)\)</span>，但是困难在于我们需要在不知道奖励函数和转移概率具体形式的前提下去计算 <span class="math inline">\(\eta(\theta)\)</span> 的梯度。</p>
+<p>我们定义一个变量 <span class="math inline">\(\tau\)</span>，其分布由策略 <span class="math inline">\(\pi_{\theta}\)</span> 生成，记作 <span class="math inline">\(P_{\theta}(\tau)\)</span>。令 <span class="math inline">\(f(\tau)=\sum_{t=0}^{T-1} \gamma^{t} R\left(s_{t}, a_{t}\right)\)</span>。我们可以将 <span class="math inline">\(\eta(\theta)\)</span> 重写为： <span class="math display">\[
+\eta(\theta)=\mathrm{E}_{\tau \sim P_{\theta}}[f(\tau)] \tag{2}
+\]</span> 上述函数的优化和变分自编码器（VAE）类似，都需要关于一个期望下的变量求解梯度（依赖于 <span class="math inline">\(\theta\)</span> 的分布 <span class="math inline">\(P_{\theta}\)</span>）。在 VAE 中，可以使用重参数化技术解决这一问题，但是在上式中，由于不知道奖励函数的精确形式（但我们可以通过观察奖励的加权和来估计 <span class="math inline">\(f\)</span>），我们无法计算函数 <span class="math inline">\(f\)</span> 的梯度。</p>
+<p>策略梯度算法使用另一种方法来估计 <span class="math inline">\(\eta(\theta)\)</span> 的梯度。首先执行如下推导： <span class="math display">\[
+\begin{align*}
+\nabla_{\theta} \mathrm{E}_{\tau \sim P_{\theta}}[f(\tau)] &amp;=\nabla_{\theta} \int P_{\theta}(\tau) f(\tau) d \tau \\
+&amp;=\int \nabla_{\theta}\left(P_{\theta}(\tau) f(\tau)\right) d \tau \quad(\text { swap integration with gradient }) \\
+&amp;=\int\left(\nabla_{\theta} P_{\theta}(\tau)\right) f(\tau) d \tau \quad(\text { becaue } f \text { does not depend on } \theta) \\
+&amp;=\int P_{\theta}(\tau)\left(\nabla_{\theta} \log P_{\theta}(\tau)\right) f(\tau) d \tau \quad(\text { because } \nabla \log P_{\theta}(\tau)=\frac{\nabla P_{\theta}(\tau)}{P_{\theta}(\tau)}) \\
+&amp;= \mathrm{E}_{\tau \sim P_{\theta}}\left[\left(\nabla_{\theta} \log P_{\theta}(\tau)\right) f(\tau)\right] \tag{3}
+\end{align*}
+\]</span> 现在，我们得到了一个针对 <span class="math inline">\(\nabla_{\theta} \mathrm{E}_{\tau \sim P_{\theta}}[f(\tau)]\)</span> 的基于样本的估计器。令 <span class="math inline">\(\tau^{(1)}, \ldots, \tau^{(n)}\)</span> 表示 <span class="math inline">\(n\)</span> 个采样自 <span class="math inline">\(P_{\theta}\)</span> 的经验样本，这些样本是通过执行策略 <span class="math inline">\(\pi_{\theta}\)</span> n 次，每次 <span class="math inline">\(T\)</span> 步得到的。我们可以通过下式来估计 <span class="math inline">\(\eta(\theta)\)</span> 的梯度： <span class="math display">\[
+\begin{align*}
+\nabla_{\theta} \mathrm{E}_{\tau \sim P_{\theta}}[f(\tau)] &amp;=\mathrm{E}_{\tau \sim P_{\theta}}\left[\left(\nabla_{\theta} \log P_{\theta}(\tau)\right) f(\tau)\right] \tag{4}\\
+&amp; \approx \frac{1}{n} \sum_{i=1}^{n}(\nabla_{\theta} \log P_{\theta}(\tau^{(i)})) f(\tau^{(i)}) \tag{5}
+\end{align*}
+\]</span> 接下来的问题是：如何去计算 <span class="math inline">\(\log P_{\theta}(\tau)\)</span>。我们推导出了 <span class="math inline">\(\log P_{\theta}(\tau)\)</span> 的解析公式，并计算其关于 <span class="math inline">\(\theta\)</span> 的梯度（使用自动微分）。基于 <span class="math inline">\(\tau\)</span> 的定义，我们有： <span class="math display">\[
+P_{\theta}(\tau)=\mu\left(s_{0}\right) \pi_{\theta}\left(a_{0} | s_{0}\right) P_{s_{0} a_{0}}\left(s_{1}\right) \pi_{\theta}\left(a_{1} | s_{1}\right) P_{s_{1} a_{1}}\left(s_{2}\right) \cdots P_{s_{T-1} a_{T-1}}\left(s_{T}\right) \tag{6}
+\]</span> 其中 <span class="math inline">\(\mu\)</span> 表示分布 <span class="math inline">\(s_0\)</span> 的密度。等式两边同时取对数，可以得到： <span class="math display">\[
+\begin{align*}
+\log P_{\theta}(\tau) &amp;=\log \mu\left(s_{0}\right)+\log \pi_{\theta}\left(a_{0}| s_{0}\right)+\log P_{s_{0} a_{0}}\left(s_{1}\right)+\log \pi_{\theta}\left(a_{1}| s_{1}\right) \\
+&amp;+\log P_{s_{1} a_{1}}\left(s_{2}\right)+\cdots+\log P_{s_{T-1} a_{T-1}}\left(s_{T}\right) \tag{7}
+\end{align*}
+\]</span> 关于 <span class="math inline">\(\theta\)</span> 求梯度（导数），可以得到： <span class="math display">\[
+\nabla_{\theta} \log P_{\theta}(\tau)=\nabla_{\theta} \log \pi_{\theta}\left(a_{0} | s_{0}\right)+\nabla_{\theta} \log \pi_{\theta}\left(a_{1} | s_{1}\right)+\cdots+\nabla_{\theta} \log \pi_{\theta}\left(a_{T-1} | s_{T-1}\right)
+\]</span> 由于转移概率相关的项与 <span class="math inline">\(\theta\)</span> 无关，所以其梯度均为 0（恰好我们也不知道具体的概率是多少）。将上式代入公式 <span class="math inline">\((4)\)</span>，可以得到： <span class="math display">\[
+\begin{align*}
+\nabla_{\theta} \eta(\theta)=\nabla_{\theta} \mathrm{E}_{\tau \sim P_{\theta}}[f(\tau)] &amp;=\mathrm{E}_{\tau \sim P_{\theta}}\left[\left(\sum_{t=0}^{T-1} \nabla_{\theta} \log \pi_{\theta}\left(a_{t}|s_{t}\right)\right) \cdot f(\tau)\right] \\
+&amp;=\mathrm{E}_{\tau \sim P_{\theta}}\left[\left(\sum_{t=0}^{T-1} \nabla_{\theta} \log \pi_{\theta}\left(a_{t}|s_{t}\right)\right) \cdot\left(\sum_{t=0}^{T-1} \gamma^{t} R\left(s_{t}, a_{t}\right)\right)\right] \tag{8}
+\end{align*}
+\]</span> 我们可以通过经验样本的轨迹来估计等式的右边，并且该估计是无偏的（估计的期望等于真值的估计称为<strong>无偏估计</strong>）。使用估计的梯度，通过梯度上升迭代式地更新参数，就构成了下文所述的 vanilla 策略梯度算法。</p>
+<h1 id="对策略梯度公式的改进">对策略梯度公式的改进</h1>
+<p>对于 <span class="math inline">\(\nabla_{\theta} P_{\theta}(\tau)=\sum_{t=0}^{T-1} \nabla_{\theta} \log \pi_{\theta}\left(a_{t}|s_{t}\right)\)</span>，可以直观地理解为使得轨迹 <span class="math inline">\(\tau\)</span> 更容易发生（即增加选择动作 <span class="math inline">\(a_{0}, \dots, a_{t-1}\)</span> 的概率）的 <span class="math inline">\(\theta\)</span> 的变化方向。而 <span class="math inline">\(f(\tau)\)</span> 则是该轨迹的总收益。因此，通过一个梯度步骤，直观上我们尝试去提升所有观察轨迹的似然性，但是对于每个 <span class="math inline">\(\tau\)</span> 赋予不同的权重（通过 <span class="math inline">\(f(\tau)\)</span>）。如果 <span class="math inline">\(\tau\)</span> 的收益很大，则尝试尽量向增加该轨迹概率的方向移动；如果 <span class="math inline">\(\tau\)</span> 的收益很小，则通过小的权重削弱其影响。</p>
+<p>从公式 <span class="math inline">\((3)\)</span> 我们可以得出一个有趣的事实： <span class="math display">\[
+\mathrm{E}_{\tau \sim P_{\theta}}\left[\sum_{t=0}^{T-1} \nabla_{\theta} \log \pi_{\theta}\left(a_{t}| s_{t}\right)\right]=0 \tag{9}
+\]</span> 我们令 <span class="math inline">\(f(\tau) = 1\)</span>（即奖励为常数），那么 <span class="math inline">\((8)\)</span> 式的左边为 0（因为总收益为常数），因此 <span class="math inline">\((8)\)</span> 式的右边为 0，即 <span class="math inline">\((9)\)</span> 式。</p>
+<p>实际上，我们可以进一步证明对于任意固定的 <span class="math inline">\(t\)</span> 和 <span class="math inline">\(s^t\)</span>，都有 <span class="math inline">\(\mathrm{E}_{a_{t} \sim \pi_{\theta}\left(\cdot|s_{t}\right)} \nabla_{\theta} \log \pi_{\theta}\left(a_{t} | s_{t}\right)=0\)</span>。基于这一事实，我们可以简化公式 <span class="math inline">\((8)\)</span> 为： <span class="math display">\[
+\begin{align*}
+\nabla_{\theta} \eta(\theta) &amp;=\sum_{t=0}^{T-1} \mathrm{E}_{\tau \sim P_{\theta}}\left[\nabla_{\theta} \log \pi_{\theta}\left(a_{t} | s_{t}\right) \cdot\left(\sum_{j=0}^{T-1} \gamma^{j} R\left(s_{j}, a_{j}\right)\right)\right] \\
+&amp;=\sum_{t=0}^{T-1} \mathrm{E}_{\tau \sim P_{\theta}}\left[\nabla_{\theta} \log \pi_{\theta}\left(a_{t} | s_{t}\right) \cdot\left(\sum_{j \geq t}^{T-1} \gamma^{j} R\left(s_{j}, a_{j}\right)\right)\right] \tag{10}
+\end{align*}
+\]</span> 其中第二个等式来源于： <span class="math display">\[
+\begin{array}{l}
+\mathrm{E}_{\tau \sim P_{\theta}}\left[\nabla_{\theta} \log \pi_{\theta}\left(a_{t} \mid s_{t}\right) \cdot\left(\sum_{0 \leq j &lt; t} \gamma^{j} R\left(s_{j}, a_{j}\right)\right)\right] \\
+=\mathrm{E}\left[\mathrm{E}\left[\nabla_{\theta} \log \pi_{\theta}\left(a_{t} | s_{t}\right) | s_{0}, a_{0}, \ldots, s_{t-1}, a_{t-1}, s_{t}\right] \cdot\left(\sum_{0 \leq j &lt; t} \gamma^{j} R\left(s_{j}, a_{j}\right)\right)\right] \\
+=0  \quad(\text { becaue } \mathrm{E}\left[\nabla_{\theta} \log \pi_{\theta}\left(a_{t} | s_{t}\right) \mid s_{0}, a_{0}, \ldots, s_{t-1}, a_{t-1}, s_{t}\right]=0)
+\end{array}
+\]</span> 上式的推导基于全期望公式 <span class="math inline">\(\mathbb{E}_{\mathrm{Y}}\left\{\mathbb{E}_{\mathrm{X} | \mathrm{Y}}[X | Y]\right\}=\mathbb{E}_{\mathrm{X}}[x]\)</span> ，因为期望是针对 t 时间以内的，所以要对奖励函数进行分割。第二行中外面的期望关于随机变量 <span class="math inline">\(s_{0}, a_{0}, \dots, a_{t-1}, s_{t}\)</span>，而内部的期望则关于 <span class="math inline">\(a_t\)</span>（以 <span class="math inline">\(s_{0}, a_{0}, \dots, a_{t-1}, s_{t}\)</span> 为条件）。通过上面的推导，我们将估计器进行了简化。</p>
+<p>进一步地，基于 <span class="math inline">\(\mathrm{E}_{a_{t} \sim \pi_{\theta}\left(\cdot | s_{t}\right)} \nabla_{\theta} \log \pi_{\theta}\left(a_{t} | s_{t}\right)=0\)</span>，我们可以得出对于任意的值 <span class="math inline">\(B(s_t)\)</span>（其只依赖于 <span class="math inline">\(s_t\)</span>），下式成立： <span class="math display">\[
+\begin{array}{l}
+\mathrm{E}_{\tau \sim P_{\theta}}\left[\nabla_{\theta} \log \pi_{\theta}\left(a_{t} \mid s_{t}\right) \cdot B\left(s_{t}\right)\right] \\
+=\mathrm{E}\left[\mathrm{E}\left[\nabla_{\theta} \log \pi_{\theta}\left(a_{t}  s_{t}\right) | s_{0}, a_{0}, \ldots, s_{t-1}, a_{t-1}, s_{t}\right] B\left(s_{t}\right)\right] \\
+=0 \quad\left(\text { because } \mathrm{E}\left[\nabla_{\theta} \log \pi_{\theta}\left(a_{t} | s_{t}\right) | s_{0}, a_{0}, \ldots, s_{t-1}, a_{t-1}, s_{t}\right]=0\right)
+\end{array}
+\]</span> 上式的推导与之前类似，同样基于全期望公式。现在，我们可以对 <span class="math inline">\((11)\)</span> 式进行如下变化： <span class="math display">\[
+\begin{align*}
+\nabla_{\theta} \eta(\theta) &amp;=\sum_{t=0}^{T-1} \mathrm{E}_{\tau \sim P_{\theta}}\left[\nabla_{\theta} \log \pi_{\theta}\left(a_{t} | s_{t}\right) \cdot\left(\sum_{j \geq t}^{T-1} \gamma^{j} R\left(s_{j}, a_{j}\right)-\gamma^{t} B\left(s_{t}\right)\right)\right] \\
+&amp;=\sum_{t=0}^{T-1} \mathrm{E}_{\tau \sim P_{\theta}}\left[\nabla_{\theta} \log \pi_{\theta}\left(a_{t} | s_{t}\right) \cdot \gamma^{t}\left(\sum_{j \geq t}^{T-1} \gamma^{j-t} R\left(s_{j}, a_{j}\right)-B\left(s_{t}\right)\right)\right] \tag{11}
+\end{align*}
+\]</span> 因此，对于不同选择的 <span class="math inline">\(B(\cdot)\)</span>，我们会得到用于估计 <span class="math inline">\(\nabla \eta(\theta)\)</span> 的不同估计器。引入适当的 <span class="math inline">\(B(\cdot)\)</span> 的好处在于，其可以帮助减少估计器的方差。我们也将 <span class="math inline">\(B(\cdot)\)</span> 称为<strong>基线</strong>。实际上，可以证明 <span class="math inline">\(B\)</span> 的接近最优的选择是未来收益的期望 <span class="math inline">\(\mathrm{E}\left[\sum_{j \geq t}^{T-1} \gamma^{j-t} R\left(s_{j}, a_{j}\right) | s_{t}\right]\)</span>，在忽略有限和无限范围的区别时（之前只有无限范围才有折扣因子）即等同于值函数 <span class="math inline">\(V^{\pi_{\theta}}\left(s_{t}\right)\)</span>。这里我们可以对该值函数进行一个模糊的估计，因为其具体值并不影响估计整体估计器的均值，只影响其方差。将上述方法整合起来，即可得到下面的算法：</p>
+<p><img src="http://media.zjubiomedit.com/blog/20200626/nCRbxRq67Fnu.png" width="60%"></p>
+<p>注意 <span class="math inline">\((13)\)</span> 式和 <span class="math inline">\((11)\)</span> 式稍有不同，去除了折扣因子（以及期望的归一化），经验上来看这可以带来更大的更新，有助于算法收敛。</p>
+<h1 id="思维导图">思维导图</h1>
+<p><img src="http://media.zjubiomedit.com/2020-06-28-012217.png" width="70%"></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Zheyu Wang</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://xxwywzy.github.io/2020/08/05/cs229-17/" title="CS229 学习笔记之十七：策略梯度">https://xxwywzy.github.io/2020/08/05/cs229-17/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CS229/" rel="tag"># CS229</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/11/bert/" rel="next" title="BERT 原理解析">
+                <i class="fa fa-chevron-left"></i> BERT 原理解析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/08/05/ptm/" rel="prev" title="自然语言处理中的预训练模型">
+                自然语言处理中的预训练模型 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Zheyu Wang"/>
+            
+              <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+              <p class="site-description motion-element" itemprop="description">相信过程</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">54</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">16</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">23</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/xxwywzy" title="GitHub &rarr; https://github.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://twitter.com/xxwywzy" title="Twitter &rarr; https://twitter.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="http://weibo.com/xxwywzy" title="Weibo &rarr; http://weibo.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://instagram.com/xxwywzy" title="Instagram &rarr; https://instagram.com/xxwywzy" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#算法简介"><span class="nav-number">1.</span> <span class="nav-text">算法简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#对策略梯度公式的改进"><span class="nav-number">2.</span> <span class="nav-text">对策略梯度公式的改进</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#思维导图"><span class="nav-number">3.</span> <span class="nav-text">思维导图</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.5.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.0.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz',
+    appKey: 'IxP5URFEhxow4TfWyVNiowbH',
+    placeholder: '请在这里评论=￣ω￣=',
+    avatar: 'retro',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+</script>
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+  
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .fail(function ({ responseJSON }) {
+                console.log(`Failed to save Visitor num, with error message: ${responseJSON.error}`);
+              })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1 }))
+                .done(function() {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function() {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+        .fail(function ({ responseJSON }) {
+          console.log(`LeanCloud Counter Error: ${responseJSON.code} ${responseJSON.error}`);
+        });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'FDq9lQI6SeKwqcOLjtAnvkN1-gzGzoHsz',
+                'X-LC-Key': 'IxP5URFEhxow4TfWyVNiowbH',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            addCount(Counter);
+          
+        });
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: "AMS"
+      }
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+      for (i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+<script src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+  overflow: auto hidden;
+}
+</style><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+    
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
