@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/resources/favicon/favicon.png">
+  <link rel="mask-icon" href="/resources/favicon/favicon.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"xxwywzy.github.io","root":"/","images":"/resources/img/","scheme":"Gemini","darkmode":true,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"livere","storage":true,"lazyload":false,"nav":null,"activeClass":"livere"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本篇博客为 Coursera 上一门关于 kaggle 的公开课的第一周学习笔记。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Coursera-Kaggle Week1 学习笔记">
+<meta property="og:url" content="https://xxwywzy.github.io/2019/04/30/kaggle-1/">
+<meta property="og:site_name" content="口仆">
+<meta property="og:description" content="本篇博客为 Coursera 上一门关于 kaggle 的公开课的第一周学习笔记。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-29-024844.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-29-025849.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-29-075548.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-12-061319.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-12-062659.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-12-063359.png">
+<meta property="article:published_time" content="2019-04-30T01:43:18.000Z">
+<meta property="article:modified_time" content="2023-08-05T07:36:29.000Z">
+<meta property="article:author" content="Zheyu Wang">
+<meta property="article:tag" content="Kaggle">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2019-03-29-024844.png">
+
+
+<link rel="canonical" href="https://xxwywzy.github.io/2019/04/30/kaggle-1/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://xxwywzy.github.io/2019/04/30/kaggle-1/","path":"2019/04/30/kaggle-1/","title":"Coursera-Kaggle Week1 学习笔记"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Coursera-Kaggle Week1 学习笔记 | 口仆</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/resources/fonts/longcang/longcang-regular.css" >
+<link rel="stylesheet" href="/resources/fonts/lxgw/lxgwwenkailite-regular.css" >
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">口仆</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Long may the sunshine</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-culture"><a href="/culture/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>MEME</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AB%9E%E8%B5%9B%E5%9F%BA%E7%A1%80"><span class="nav-number">1.</span> <span class="nav-text">竞赛基础</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E5%9B%9E%E9%A1%BE"><span class="nav-number">2.</span> <span class="nav-text">算法回顾</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BD%AF%E7%A1%AC%E4%BB%B6%E9%9C%80%E6%B1%82"><span class="nav-number">3.</span> <span class="nav-text">软硬件需求</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E9%A2%84%E5%A4%84%E7%90%86%E4%B8%8E%E7%94%9F%E6%88%90"><span class="nav-number">4.</span> <span class="nav-text">特征预处理与生成</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E5%80%BC%E7%89%B9%E5%BE%81"><span class="nav-number">4.1.</span> <span class="nav-text">数值特征</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E7%B1%BB%E5%92%8C%E5%BA%8F%E6%95%B0%E7%89%B9%E5%BE%81"><span class="nav-number">4.2.</span> <span class="nav-text">分类和序数特征</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%B6%E9%97%B4%E4%B8%8E%E5%9D%90%E6%A0%87%E7%89%B9%E5%BE%81"><span class="nav-number">4.3.</span> <span class="nav-text">时间与坐标特征</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%BA%E5%A4%B1%E5%80%BC"><span class="nav-number">4.4.</span> <span class="nav-text">缺失值</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%8E%E6%96%87%E5%AD%97%E5%92%8C%E5%9B%BE%E7%89%87%E4%B8%AD%E6%8F%90%E5%8F%96%E7%89%B9%E5%BE%81"><span class="nav-number">5.</span> <span class="nav-text">从文字和图片中提取特征</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%8D%E8%A2%8B%E6%A8%A1%E5%9E%8B"><span class="nav-number">5.1.</span> <span class="nav-text">词袋模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%8D%E5%90%91%E9%87%8F"><span class="nav-number">5.2.</span> <span class="nav-text">词向量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E7%89%87"><span class="nav-number">5.3.</span> <span class="nav-text">图片</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%9C%E4%B8%9Apandas-%E5%9F%BA%E7%A1%80"><span class="nav-number">6.</span> <span class="nav-text">作业：Pandas 基础</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zheyu Wang"
+      src="/resources/favicon/avatar.png">
+  <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+  <div class="site-description" itemprop="description">相信过程</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">85</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xxwywzy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/xxwywzy" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/xxwywzy" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/xxwywzy" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2019/04/30/kaggle-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resources/favicon/avatar.png">
+      <meta itemprop="name" content="Zheyu Wang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="口仆">
+      <meta itemprop="description" content="相信过程">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Coursera-Kaggle Week1 学习笔记 | 口仆">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Coursera-Kaggle Week1 学习笔记
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-04-30 09:43:18" itemprop="dateCreated datePublished" datetime="2019-04-30T09:43:18+08:00">2019-04-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">课程笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>7 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><div class="note info"><p>本篇博客为 Coursera 上一门关于 kaggle 的公开课的第一周学习笔记。</p>
+</div>
+<span id="more"></span>
+<p><a target="_blank" rel="noopener" href="https://www.coursera.org/learn/competitive-data-science/home/welcome">课程地址</a></p>
+<h1 id="竞赛基础">竞赛基础</h1>
+<ul>
+<li>一个竞赛涉及的主要概念包括：
+<ul>
+<li>数据</li>
+<li>模型</li>
+<li>提交</li>
+<li>评估</li>
+<li>排行榜</li>
+</ul></li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-03-29-024844.png" width=60%></p>
+<ul>
+<li>当前主要的竞赛平台有：
+<ul>
+<li>Kaggle</li>
+<li>DrivenData</li>
+<li>CrowdAnalityx</li>
+<li>天池 &amp; 科赛</li>
+</ul></li>
+<li>竞赛和实际应用的区别在于：
+<ul>
+<li>实际问题往往更加复杂</li>
+<li>竞赛是一种很好的学习方式（不涉及提出问题、部署模型以及测试等步骤）</li>
+</ul></li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-03-29-025849.png" width=60%></p>
+<h1 id="算法回顾">算法回顾</h1>
+<p>在竞赛中，常用的 ML 算法可以分为四类（以下解释基于分类问题）：</p>
+<ul>
+<li><strong>线性模型</strong>：线性模型将空间分为两个子空间</li>
+<li><strong>基于树的方法</strong>：基于树的方法将空间分为盒子</li>
+<li><strong>K近邻方法</strong>： K近邻方法主要取决于如何测量点之间的距离</li>
+<li><strong>神经网络</strong>：神经网络方法产生平滑的非线性决策边界</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-03-29-075548.png" width=100%></p>
+<ul>
+<li>没有完美适用于所有问题的算法
+<ul>
+<li>一般情况下，最有效的方法是<strong>梯度提升决策树</strong>和<strong>神经网络</strong></li>
+</ul></li>
+<li>关于 GBDT 和 RF 的问题
+<ul>
+<li>如果训练一个 GBDT 或 RF 模型，并丢弃模型中的第一棵树或最后一棵树
+<ul>
+<li>对于 GBDT，其每一棵树之间互相关联，后面的树提升前面所有树的结果
+<ul>
+<li>如果丢弃第一棵树，后面所有的树都会出现偏差，总的表现会明显下降（学习率较大时）</li>
+<li>如果丢弃最后一棵树，之前所有树的结果不会受到影响，总的表现变化不大</li>
+</ul></li>
+<li>对于 RF，每一棵树之间相互独立，最后只是取平均
+<ul>
+<li>因此去除一棵树对结果并无较大影响</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+<h1 id="软硬件需求">软硬件需求</h1>
+<ul>
+<li>硬件配置（GPU 未提及）：
+<ul>
+<li>内存：越大越好</li>
+<li>核心：越多越好</li>
+<li>存储：SSD 最佳</li>
+</ul></li>
+<li>云训练平台：
+<ul>
+<li>Amazon AWS</li>
+<li>Microsoft Azure</li>
+<li>Google Cloud</li>
+</ul></li>
+<li>软件推荐：
+<ul>
+<li>语言：Python！</li>
+<li>基本软件栈：
+<ul>
+<li>numpy：线性代数库</li>
+<li>pandas：数据读取与处理</li>
+<li>sckit-learn：机器学习算法库</li>
+<li>matplotlib：可视化</li>
+</ul></li>
+<li>IDE：jupyter notebook</li>
+<li>特别软件包：
+<ul>
+<li>XGBoost：基于决策树的梯度提升</li>
+<li>LightGBM：同上</li>
+<li>tsne：降维可视化</li>
+<li>libFM：分解机</li>
+</ul></li>
+<li>深度学习：
+<ul>
+<li>tensorflow</li>
+<li>keras</li>
+<li>pytorch</li>
+</ul></li>
+</ul></li>
+</ul>
+<h1 id="特征预处理与生成">特征预处理与生成</h1>
+<ul>
+<li>三个主要观点：
+<ul>
+<li>特征预处理非常必要</li>
+<li>特征生成是一个有力工具</li>
+<li>预处理和特征生成的流水线取决于模型的类型</li>
+</ul></li>
+</ul>
+<h2 id="数值特征">数值特征</h2>
+<ul>
+<li>对于树模型和非树模型，数值特征的预处理有所不同
+<ul>
+<li>树模型并不依赖于特征缩放与分级</li>
+<li>非树模型非常依赖于特征缩放与分级</li>
+</ul></li>
+<li>最常使用的预处理方法有：
+<ul>
+<li>基于最大最小值的缩放：缩放至 <span class="math inline">\([0,1]\)</span>：<code>sklearn.preprocessing.MinMaxScaler</code> <span class="math display">\[
+X=(X-X.min ( )) /(X.max ( )-X.min ( ))
+\]</span></li>
+<li>基于标准差的缩放：缩放至平均值为 0，标准差为 1：<code>sklearn.preprocessing.StandardScaler</code> <span class="math display">\[
+X=(X-X .mean( )) / X . std( )
+\]</span></li>
+<li>异常值处理：采用剪切的方法（设置上下阈值）</li>
+<li>分级：使有序变量之间的距离相等：<code>scipy.stats.rankdata</code>
+<ul>
+<li>可以在缩放的同时处理异常值</li>
+</ul></li>
+<li>对数与幂处理：<code>np.log(1+x)</code> 以及 <code>np.sqrt(1+x)</code>
+<ul>
+<li>使得过大的数值更加趋向于平均值，同时也使得在原点附近的数据更容易区分</li>
+<li>适用于神经网络等非线性模型</li>
+</ul></li>
+</ul></li>
+<li>特征生成的驱动力为：
+<ul>
+<li>先验知识</li>
+<li>探索性数据分析（EDA）</li>
+</ul></li>
+</ul>
+<h2 id="分类和序数特征">分类和序数特征</h2>
+<ul>
+<li>序数特征是一种特殊的分类特征，其中的值按某种有意义的顺序排列
+<ul>
+<li>比如船票等级、驾照等级等</li>
+</ul></li>
+<li><strong>标签编码</strong>可以将分类变量映射为数字
+<ul>
+<li>可以按照字母表顺序映射：<code>sklearn.preprocessing.LabelEncoder</code></li>
+<li>也可以按照在数据集中出现的顺序映射：<code>Pandas.factorize</code></li>
+</ul></li>
+<li><strong>频率编码</strong>可以将分类变量映射为其出现频率
+<ul>
+<li>对于多个频率重复的情况，可以使用 <code>scipy.stats.rankdata</code> <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">encoding = titanic.groupby(‘Embarked’).size()</span><br><span class="line">encoding = encoding/<span class="built_in">len</span>(titanic)</span><br><span class="line">titanic[‘enc’] = titanic.Embarked.<span class="built_in">map</span>(encoding)</span><br></pre></td></tr></table></figure></li>
+</ul></li>
+<li>标签和频率编码通常对基于树的模型很有用
+<ul>
+<li>有时也对线性模型有用</li>
+</ul></li>
+<li>对于非树模型，通常使用独热编码处理分类变量
+<ul>
+<li>如果分类变量类别过多，考虑使用稀疏举证</li>
+</ul></li>
+<li>基于分类变量的融合特征生成可以对线性模型和 KNN 产生帮助</li>
+</ul>
+<h2 id="时间与坐标特征">时间与坐标特征</h2>
+<ul>
+<li>时间特征的常见类型
+<ul>
+<li>周期性特征：如 day of week</li>
+<li>自从（或距离）某个事件的时间
+<ul>
+<li>行不相关事件：如距离某个共同时刻的时间</li>
+<li>行相关事件：如距离下一个假日的时间（每行对应的假日时间不同）</li>
+</ul></li>
+<li>两个日期之间的差值</li>
+</ul></li>
+<li>坐标特征的常见类型
+<ul>
+<li>来自数据中的有趣的地点</li>
+<li>坐标聚类的中心</li>
+<li>聚合数据（如某个地点周边的垃圾桶数量）</li>
+</ul></li>
+<li>对于树模型，可以对坐标适当旋转作为一个新的特征，提高准确率</li>
+</ul>
+<h2 id="缺失值">缺失值</h2>
+<ul>
+<li>对于 NaN（Not a Number）变量，其<strong>填充</strong>方法的选择取决于具体情况
+<ul>
+<li>通常使用超出范围的特征来替代（如 -999）
+<ul>
+<li>也可以使用均值或中位数</li>
+</ul></li>
+<li>有时候可以重新构建缺失值</li>
+</ul></li>
+<li>有时候缺失值可能已经被数据提供者进行了处理</li>
+<li>可以使用二元特征 isnull 来表明哪些数据含有缺失值</li>
+<li>一般来说，在进行特征生成时，避免对 NaN 进行填充
+<ul>
+<li>直接忽略这些缺失值</li>
+</ul></li>
+<li>XgBoost 可以<strong>直接处理</strong> NaN 变量
+<ul>
+<li>树模型算法本身对缺失值不敏感，但实际的工具需要有专门的缺失值处理函数</li>
+</ul></li>
+<li>有时候如果缺失值比例较大，可以考虑<strong>删除</strong>样本或特征</li>
+</ul>
+<h1 id="从文字和图片中提取特征">从文字和图片中提取特征</h1>
+<h2 id="词袋模型">词袋模型</h2>
+<p><img src="http://media.zjubiomedit.com/2019-04-12-061319.png" width=60%></p>
+<ul>
+<li>使用词袋模型的流水线：
+<ol type="1">
+<li>预处理：
+<ul>
+<li>大小写处理、词干提取、词形还原、停用词过滤</li>
+</ul></li>
+<li>建立词袋模型：基于词语出现次数
+<ul>
+<li>行对应一个句子，列对应一个词语</li>
+<li>可以使用 Ngrams 体现上下文信息</li>
+</ul></li>
+<li>后处理：TFIDF</li>
+</ol></li>
+</ul>
+<h2 id="词向量">词向量</h2>
+<p><img src="http://media.zjubiomedit.com/2019-04-12-062659.png" width=60%></p>
+<ul>
+<li>与词袋模型相比，得到的向量维度相对小
+<ul>
+<li>常见的词向量构建方法包括 Word2vec、Glove、FastText、BERT 等
+<ul>
+<li>还有句向量的构建方法如 Doc2vec 等</li>
+</ul></li>
+<li>词向量通常是预训练好的模型
+<ul>
+<li>其向量的各维度的值可能无法解释（词袋模型可以）</li>
+<li>相似语义的词语通常有相似的向量表达</li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="图片">图片</h2>
+<p><img src="http://media.zjubiomedit.com/2019-04-12-063359.png" width=60%></p>
+<ul>
+<li>通常使用卷积神经网络来处理图片
+<ul>
+<li>可以通过不同的层来提取图片特征</li>
+</ul></li>
+<li>谨慎地选择预训练网络能够对特征提取提供帮助
+<ul>
+<li>对预训练模型的微调可以帮助提升效果</li>
+</ul></li>
+<li>对于数据量不够的情况，通过一些手段增加数据能够提升模型表现
+<ul>
+<li>如对图片进行旋转操作</li>
+<li>在测试时也可以使用数据增加来平均预测结果</li>
+</ul></li>
+</ul>
+<h1 id="作业pandas-基础">作业：Pandas 基础</h1>
+<p><a target="_blank" rel="noopener" href="https://www.kaggle.com/c/competitive-data-science-final-project/data">数据说明</a></p>
+<ol type="1">
+<li>求 2014 年 9 月所有商店的收益的最大值
+<ul>
+<li>第一步：筛选出 2014 年 9 月的数据</li>
+<li>第二步：对收益按商店进行分组，然后求和求最大</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">tran_1 = transactions[transactions[<span class="string">&quot;date_block_num&quot;</span>] == <span class="number">20</span>]</span><br><span class="line">max_revenue = (tran_1[<span class="string">&quot;item_price&quot;</span>] * tran_1[<span class="string">&quot;item_cnt_day&quot;</span>]).groupby(tran_1[<span class="string">&quot;shop_id&quot;</span>]).<span class="built_in">sum</span>().<span class="built_in">max</span>()</span><br></pre></td></tr></table></figure></li>
+<li>哪一个商品类别在 2014 年夏季的收益最大？
+<ul>
+<li>第一步：筛选出 2014 年 6-8 月的数据</li>
+<li>第二步：将销售记录数据与商品类别数据合并</li>
+<li>第三步：对收益按照商品类别分组， 然后求和求参数最大</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">tran_2 = transactions[(transactions[<span class="string">&quot;date_block_num&quot;</span>] &gt;= <span class="number">17</span>) &amp; (transactions[<span class="string">&quot;date_block_num&quot;</span>] &lt;= <span class="number">19</span>)]</span><br><span class="line">tran_2 = pd.merge(tran_2, items, how=<span class="string">&quot;left&quot;</span>, on=<span class="string">&quot;item_id&quot;</span>)</span><br><span class="line">category_id_with_max_revenue = (tran_2[<span class="string">&quot;item_price&quot;</span>] * tran_2[<span class="string">&quot;item_cnt_day&quot;</span>]).groupby(tran_2[<span class="string">&quot;item_category_id&quot;</span>]).<span class="built_in">sum</span>().argmax()</span><br></pre></td></tr></table></figure></li>
+<li>有多少商品的价格一直没有发生过变化？
+<ul>
+<li>按商品 id 进行分组，并判断 <code>nunique()</code> 是否为 1（即只有一个独特的值）
+<ul>
+<li>对其求和即可得到商品的数量（True 为 1，False 为 0）</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">num_items_constant_price = (transactions[<span class="string">&quot;item_price&quot;</span>].groupby(transactions[<span class="string">&quot;item_id&quot;</span>]).nunique() == <span class="number">1</span>).<span class="built_in">sum</span>()</span><br></pre></td></tr></table></figure></li>
+</ul></li>
+<li>计算 <code>shop_id</code> 为 25 的商店在 2014 年 12 月每天卖出的商品的<a target="_blank" rel="noopener" href="https://math.stackexchange.com/questions/496627/the-difference-between-unbiased-biased-estimator-variance">无偏方差</a>
+<ul>
+<li>第一步：筛选出该商店的数据</li>
+<li>第二步：对每天销售的商品数按日期分组，并求和</li>
+<li>第三步：使用 <code>var()</code> 求出方差</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">tran_3 = transactions[transactions[<span class="string">&quot;date_block_num&quot;</span>] == <span class="number">23</span>]</span><br><span class="line">tran_3 = tran_3[tran_3[<span class="string">&quot;shop_id&quot;</span>] == shop_id]</span><br><span class="line">tran_3 = tran_3[<span class="string">&quot;item_cnt_day&quot;</span>].groupby(tran_3[<span class="string">&quot;date&quot;</span>]).<span class="built_in">sum</span>()</span><br><span class="line">total_num_items_sold_var = tran_3.var()</span><br></pre></td></tr></table></figure></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+
+
+
+<div class="license">
+  <div class="license-title">Coursera-Kaggle Week1 学习笔记</div>
+  <div class="license-link">
+    <a href="https://xxwywzy.github.io/2019/04/30/kaggle-1/">https://xxwywzy.github.io/2019/04/30/kaggle-1/</a>
+  </div>
+  <div class="license-meta">
+    <div class="license-meta-item">
+      <div class="license-meta-title">本文作者</div>
+      <div class="license-meta-text">
+          Zheyu Wang
+      </div>
+    </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">发布于</div>
+        <div class="license-meta-text">
+          2019-04-30
+        </div>
+      </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">更新于</div>
+        <div class="license-meta-text">
+          2023-08-05
+        </div>
+      </div>
+    <div class="license-meta-item">
+      <div class="license-meta-title">许可协议</div>
+      <div class="license-meta-text">
+          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank">CC BY-NC-SA 4.0</a>
+      </div>
+    </div>
+  </div>
+  <div class="license-statement">
+      转载或引用本文时，请遵守上述许可协议，注明出处、不得用于商业用途！
+  </div>
+</div>
+          <div class="post-tags">
+              <a href="/tags/Kaggle/" rel="tag"># Kaggle</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/04/19/cs229-13/" rel="prev" title="CS229 学习笔记之十三：决策树与集成方法">
+                  <i class="fa fa-angle-left"></i> CS229 学习笔记之十三：决策树与集成方法
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/05/06/cs229-14/" rel="next" title="CS229 学习笔记之十四：隐马尔可夫模型基础">
+                  CS229 学习笔记之十四：隐马尔可夫模型基础 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81ODgyNi8zNTI4OA=="></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">332k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">18:26</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+
+
+  <style>
+    #taboola-livere { display: none;}
+  </style>
+
+
+
+<script type="text/javascript">
+var linkLists = document.querySelectorAll(".link-list");
+
+linkLists.forEach(function(linkList) {
+  var listPath = linkList.getAttribute('json-src');
+  var iconPath = linkList.getAttribute('icon-src');
+  
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', listPath, true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      var data = JSON.parse(xhr.responseText);
+      
+      var li = "";
+      linkList.innerHTML = '';
+
+      for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+        var info = data[infoIndex];
+        var labelWarn = info['warn'] ? '<span class="label warn">' + info['warn'] + '</span>' : '';
+        var labelInfo = info['info'] ? '<span class="label info">' + info['info'] + '</span>' : '';
+
+        li += '<div class="link-list-container">';
+        li += '<img class="link-list-image" src="' + iconPath + info['logo'] + '">';
+        li += '<p>' + info['title'] + labelInfo + labelWarn + '</p>';
+        li += '<p>' + info['intro'] + '</p>';
+        li += '<a href="' + info['url'] + '" rel="noopener" target="_blank" data-pjax-state=""></a>';
+        li += '</div>';
+      }
+      
+      linkList.innerHTML = li;
+    }
+  };
+  xhr.send();
+});
+</script>
+
+
+<script type="text/javascript">
+var cultureList = document.querySelectorAll(".culture-list");
+if (cultureList.length !== 0) {
+  var j = -1;
+  for (var i = 0; i < cultureList.length; i++) {
+    const listPath = cultureList[i].getAttribute('json-src');
+    const coverPath = cultureList[i].getAttribute('cover-src');
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', listPath, true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        j++;
+        var data = JSON.parse(xhr.responseText);
+        var li = "";
+        
+        cultureList[j].innerHTML = '';
+
+        for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+          var info = data[infoIndex];
+          
+          var title = info['title'];
+          if (info['link']) {
+            title = '<a href="' + info['link'] + '">' + info['title'] + '</a>';
+          }
+
+          var author = info['author'] ? '<span class="author">' + info['author'] + '</span>' : '';
+
+          var intro = info['intro'] ? info['intro'] : '';
+
+          var star = '';
+          if (info['score'] == null) {
+            star = '';
+          } else {
+            var colorStar = '';
+            var greyStar = '';
+            var int = Math.floor(info['score']); //整数部分
+            var fract = 0;
+            if (info['score'] % 1 !== 0) {
+              fract = 1;
+            }
+            for (var m = 0; m < int; m++) {
+              colorStar += '★';
+            }
+            if (fract !== 0) {
+              colorStar += '☆';
+            }
+            for (var m = 0; m < (5 - fract - int); m++) {
+              greyStar += '☆';
+            }
+            if (info['score'] !== 5) {
+              star = '<span class="star-score">' + colorStar + '<span class="grey-star">' + greyStar + '</span></span>';
+            } else {
+              star = '<span class="star-score">' + colorStar + '</span>';
+            }
+          }
+
+          li += '<div class="media">';
+          li += '<div class="media-cover" style="background-image:url(' + coverPath + info['cover'] + ')"></div>';
+          li += '<div class="media-meta">';
+          li += '<div class="media-meta-item title">' + title + '</div>';
+          li += '<div class="media-meta-item">' + author + star + '</div>';
+          li += '<div class="media-meta-item intro">' + intro + '</div>';
+          li += '</div></div>';
+        }
+        
+        cultureList[j].innerHTML = li;
+      }
+    };
+    xhr.send();
+  }
+}
+</script>
+
+
+
+
+<script src="/resources/minigrid.min.js"></script>
+<script type="text/javascript">
+var album = document.querySelector(".album");
+if (album) {
+  // 相册列表 JSON 数据
+  var imgDataPath = album.getAttribute('json-src');
+  // 照片存储路径
+  var imgPath = album.getAttribute('photo-src');
+  // 最多显示数量
+  var imgMaxNum = 50;
+  // 获取窗口大小以决定图片宽度
+  var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  var imageWidth;
+
+  if (windowWidth < 768) {
+    imageWidth = 145; // 移动端图片宽度
+  } else {
+    imageWidth = 235;
+  }
+
+  // 腾讯云自定义样式 (数据万象外网流量需要付费)
+  //var imgStyle = '!' + imageWidth + 'x';
+  //var imgStyle = '!300x';
+
+  // 生成相册
+  var linkDataPath = imgDataPath;
+  var photo = {
+    page: 1,
+    offset: imgMaxNum,
+    init: function () {
+      var that = this;
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", linkDataPath, true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var data = JSON.parse(xhr.responseText);
+          that.render(that.page, data);
+        }
+      };
+      xhr.send();
+    },
+    render: function (page, data) {
+      var begin = (page - 1) * this.offset;
+      var end = page * this.offset;
+      if (begin >= data.length) return;
+      var imgNameWithPattern, imgName, imageSize, imageX, imageY, li = "";
+      for (var i = begin; i < end && i < data.length; i++) {
+        imgNameWithPattern = data[i].split(' ')[1];
+        imgName = imgNameWithPattern.split('.')[0];
+        imageSize = data[i].split(' ')[0];
+        imageX = imageSize.split('.')[0];
+        imageY = imageSize.split('.')[1];
+        li += '<div class="card" style="width:' + imageWidth + 'px" >';
+        li += '<div class="album-photo" style="height:'+ imageWidth * imageY / imageX + 'px">';
+        li += '<a class="fancybox fancybox.image" href="' + imgPath + imgNameWithPattern + '" itemscope="" itemtype="http://schema.org/ImageObject" itemprop="url" data-fancybox="group" rel="group" data-caption="' + imgName + '" title="' +  imgName + '">';
+        li += '<img data-src="' + imgPath + imgNameWithPattern + '" src="' + imgPath + imgNameWithPattern + '" alt="' +  imgName + '" data-loaded="true">';
+        li += '</a>';
+        li += '</div>';
+        li += '</div>';
+      }
+      album.insertAdjacentHTML('beforeend', li);
+      this.minigrid();
+    },
+    minigrid: function () {
+      var grid = new Minigrid({
+        container: '.album',
+        item: '.card',
+        gutter: 12
+      });
+      grid.mount();
+      window.addEventListener('resize', function () {
+        grid.mount();
+      });
+    }
+  };
+  photo.init();
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/resources/favicon/favicon.png">
+  <link rel="mask-icon" href="/resources/favicon/favicon.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"xxwywzy.github.io","root":"/","images":"/resources/img/","scheme":"Gemini","darkmode":true,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"livere","storage":true,"lazyload":false,"nav":null,"activeClass":"livere"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本文是最近比较火的一篇关于预训练模型的综述的阅读笔记。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="自然语言处理中的预训练模型">
+<meta property="og:url" content="https://xxwywzy.github.io/2020/08/05/ptm/">
+<meta property="og:site_name" content="口仆">
+<meta property="og:description" content="本文是最近比较火的一篇关于预训练模型的综述的阅读笔记。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-04-16-092606.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-04-16-091613.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-04-17-033607.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-04-28-033048.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-04-30-142231.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-05-09-062151.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-05-09-062843.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-05-19-084535.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-05-20-031631.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-05-20-071135.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-05-20-073727.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-05-22-025627.png">
+<meta property="article:published_time" content="2020-08-05T11:49:23.000Z">
+<meta property="article:modified_time" content="2023-08-05T08:54:51.000Z">
+<meta property="article:author" content="Zheyu Wang">
+<meta property="article:tag" content="自然语言处理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2020-04-16-092606.png">
+
+
+<link rel="canonical" href="https://xxwywzy.github.io/2020/08/05/ptm/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://xxwywzy.github.io/2020/08/05/ptm/","path":"2020/08/05/ptm/","title":"自然语言处理中的预训练模型"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>自然语言处理中的预训练模型 | 口仆</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/resources/fonts/longcang/longcang-regular.css" >
+<link rel="stylesheet" href="/resources/fonts/lxgw/lxgwwenkailite-regular.css" >
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">口仆</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Long may the sunshine</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-culture"><a href="/culture/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>MEME</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%95%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%83%8C%E6%99%AF"><span class="nav-number">2.</span> <span class="nav-text">背景</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%AD%E8%A8%80%E8%A1%A8%E7%A4%BA%E5%AD%A6%E4%B9%A0"><span class="nav-number">2.1.</span> <span class="nav-text">语言表示学习</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E4%B8%8A%E4%B8%8B%E6%96%87%E5%B5%8C%E5%85%A5"><span class="nav-number">2.1.1.</span> <span class="nav-text">非上下文嵌入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E5%B5%8C%E5%85%A5"><span class="nav-number">2.1.2.</span> <span class="nav-text">上下文嵌入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A5%9E%E7%BB%8F%E4%B8%8A%E4%B8%8B%E6%96%87%E7%BC%96%E7%A0%81%E5%99%A8"><span class="nav-number">2.2.</span> <span class="nav-text">神经上下文编码器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E9%A2%84%E8%AE%AD%E7%BB%83"><span class="nav-number">2.3.</span> <span class="nav-text">为什么要预训练？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nlp-%E4%B8%AD%E7%9A%84-ptm-%E5%8F%91%E5%B1%95%E7%AE%80%E5%8F%B2"><span class="nav-number">2.4.</span> <span class="nav-text">NLP 中的 PTM 发展简史</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ptm-%E6%A6%82%E8%BF%B0"><span class="nav-number">3.</span> <span class="nav-text">PTM 概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%84%E8%AE%AD%E7%BB%83%E4%BB%BB%E5%8A%A1"><span class="nav-number">3.1.</span> <span class="nav-text">预训练任务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8Blm"><span class="nav-number">3.1.1.</span> <span class="nav-text">语言模型（LM）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A9%E7%A0%81%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8Bmlm"><span class="nav-number">3.1.2.</span> <span class="nav-text">掩码语言模型（MLM）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%92%E5%88%97%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8Bplm"><span class="nav-number">3.1.3.</span> <span class="nav-text">排列语言模型（PLM）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%BB%E5%99%AA%E5%A3%B0%E8%87%AA%E7%BC%96%E7%A0%81%E5%99%A8dae"><span class="nav-number">3.1.4.</span> <span class="nav-text">去噪声自编码器（DAE）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0ctl"><span class="nav-number">3.1.5.</span> <span class="nav-text">对比学习（CTL）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ptm-%E5%88%86%E7%B1%BB"><span class="nav-number">3.2.</span> <span class="nav-text">PTM 分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E5%88%86%E6%9E%90"><span class="nav-number">3.3.</span> <span class="nav-text">模型分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E4%B8%8A%E4%B8%8B%E6%96%87%E5%B5%8C%E5%85%A5-1"><span class="nav-number">3.3.1.</span> <span class="nav-text">非上下文嵌入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E5%B5%8C%E5%85%A5-1"><span class="nav-number">3.3.2.</span> <span class="nav-text">上下文嵌入</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ptm-%E6%8B%93%E5%B1%95"><span class="nav-number">4.</span> <span class="nav-text">PTM 拓展</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E5%85%A5%E7%9F%A5%E8%AF%86%E7%9A%84-ptm"><span class="nav-number">4.1.</span> <span class="nav-text">引入知识的 PTM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E8%AF%AD%E8%A8%80%E5%92%8C%E7%89%B9%E5%AE%9A%E8%AF%AD%E8%A8%80%E7%9A%84-ptm"><span class="nav-number">4.2.</span> <span class="nav-text">多语言和特定语言的 PTM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E8%AF%AD%E8%A8%80-ptm"><span class="nav-number">4.2.1.</span> <span class="nav-text">多语言 PTM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E5%AE%9A%E8%AF%AD%E8%A8%80%E7%9A%84-ptm"><span class="nav-number">4.2.2.</span> <span class="nav-text">特定语言的 PTM</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E6%A8%A1%E6%80%81-ptm"><span class="nav-number">4.3.</span> <span class="nav-text">多模态 PTM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%86%E9%A2%91-%E6%96%87%E6%9C%AC-ptm"><span class="nav-number">4.3.1.</span> <span class="nav-text">视频-文本 PTM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%BE%E5%83%8F-%E8%AF%AD%E8%A8%80-ptm"><span class="nav-number">4.3.2.</span> <span class="nav-text">图像-语言 PTM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9F%B3%E9%A2%91-%E6%96%87%E6%9C%AC-ptm"><span class="nav-number">4.3.3.</span> <span class="nav-text">音频-文本 PTM</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E5%AE%9A%E9%A2%86%E5%9F%9F%E5%92%8C%E7%89%B9%E5%AE%9A%E4%BB%BB%E5%8A%A1%E7%9A%84-ptm"><span class="nav-number">4.4.</span> <span class="nav-text">特定领域和特定任务的 PTM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9"><span class="nav-number">4.5.</span> <span class="nav-text">模型压缩</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E5%89%AA%E6%9E%9D"><span class="nav-number">4.5.1.</span> <span class="nav-text">模型剪枝</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8F%E5%8C%96"><span class="nav-number">4.5.2.</span> <span class="nav-text">量化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E5%85%B1%E4%BA%AB"><span class="nav-number">4.5.3.</span> <span class="nav-text">模型共享</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E8%92%B8%E9%A6%8F"><span class="nav-number">4.5.4.</span> <span class="nav-text">知识蒸馏</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E6%9B%BF%E6%8D%A2"><span class="nav-number">4.5.5.</span> <span class="nav-text">模型替换</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B0%86-ptm-%E5%BA%94%E7%94%A8%E8%87%B3%E4%B8%8B%E6%B8%B8%E4%BB%BB%E5%8A%A1"><span class="nav-number">5.</span> <span class="nav-text">将 PTM 应用至下游任务</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0"><span class="nav-number">5.1.</span> <span class="nav-text">迁移学习</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E8%BF%81%E7%A7%BB"><span class="nav-number">5.2.</span> <span class="nav-text">如何迁移</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E5%90%88%E9%80%82%E7%9A%84%E9%A2%84%E8%AE%AD%E7%BB%83%E4%BB%BB%E5%8A%A1%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84%E5%92%8C%E8%AF%AD%E6%96%99"><span class="nav-number">5.2.1.</span> <span class="nav-text">选择合适的预训练任务、模型结构和语料</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E5%90%88%E9%80%82%E7%9A%84-layers"><span class="nav-number">5.2.2.</span> <span class="nav-text">选择合适的 layers</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%98%AF%E5%90%A6%E8%BF%9B%E8%A1%8C%E5%BE%AE%E8%B0%83"><span class="nav-number">5.2.3.</span> <span class="nav-text">是否进行微调</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%AE%E8%B0%83%E7%AD%96%E7%95%A5"><span class="nav-number">5.3.</span> <span class="nav-text">微调策略</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ptm-%E8%B5%84%E6%BA%90"><span class="nav-number">6.</span> <span class="nav-text">PTM 资源</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BA%94%E7%94%A8"><span class="nav-number">7.</span> <span class="nav-text">应用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E7%94%A8%E8%AF%84%E4%BC%B0%E6%A0%87%E5%87%86"><span class="nav-number">7.1.</span> <span class="nav-text">通用评估标准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E7%AD%94"><span class="nav-number">7.2.</span> <span class="nav-text">问答</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%83%85%E6%84%9F%E5%88%86%E6%9E%90"><span class="nav-number">7.3.</span> <span class="nav-text">情感分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%91%BD%E5%90%8D%E5%AE%9E%E4%BD%93%E8%AF%86%E5%88%AB"><span class="nav-number">7.4.</span> <span class="nav-text">命名实体识别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%BA%E5%99%A8%E7%BF%BB%E8%AF%91"><span class="nav-number">7.5.</span> <span class="nav-text">机器翻译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%91%98%E8%A6%81"><span class="nav-number">7.6.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E6%8A%97%E6%94%BB%E5%87%BB%E5%92%8C%E9%98%B2%E5%BE%A1"><span class="nav-number">7.7.</span> <span class="nav-text">对抗攻击和防御</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%AA%E6%9D%A5%E6%96%B9%E5%90%91"><span class="nav-number">8.</span> <span class="nav-text">未来方向</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ptm-%E7%9A%84%E4%B8%8A%E7%95%8C"><span class="nav-number">8.1.</span> <span class="nav-text">PTM 的上界</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ptm-%E7%9A%84%E7%BB%93%E6%9E%84"><span class="nav-number">8.2.</span> <span class="nav-text">PTM 的结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%A2%E5%90%91%E4%BB%BB%E5%8A%A1%E7%9A%84%E9%A2%84%E8%AE%AD%E7%BB%83%E5%92%8C%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9"><span class="nav-number">8.3.</span> <span class="nav-text">面向任务的预训练和模型压缩</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%AE%E8%B0%83%E4%B9%8B%E4%B8%8A%E7%9A%84%E7%9F%A5%E8%AF%86%E8%BF%81%E7%A7%BB"><span class="nav-number">8.4.</span> <span class="nav-text">微调之上的知识迁移</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ptm-%E7%9A%84%E5%8F%AF%E8%A7%A3%E9%87%8A%E6%80%A7%E5%92%8C%E5%8F%AF%E9%9D%A0%E6%80%A7"><span class="nav-number">8.5.</span> <span class="nav-text">PTM 的可解释性和可靠性</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E5%AF%BC%E5%9B%BE"><span class="nav-number">9.</span> <span class="nav-text">知识导图</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zheyu Wang"
+      src="/resources/favicon/avatar.png">
+  <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+  <div class="site-description" itemprop="description">相信过程</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">85</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xxwywzy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/xxwywzy" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/xxwywzy" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/xxwywzy" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2020/08/05/ptm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resources/favicon/avatar.png">
+      <meta itemprop="name" content="Zheyu Wang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="口仆">
+      <meta itemprop="description" content="相信过程">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="自然语言处理中的预训练模型 | 口仆">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          自然语言处理中的预训练模型
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-08-05 19:49:23" itemprop="dateCreated datePublished" datetime="2020-08-05T19:49:23+08:00">2020-08-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/%E6%96%87%E7%AB%A0%E7%B2%BE%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">文章精读</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>13k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>45 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><div class="note info"><p>本文是最近比较火的一篇关于预训练模型的综述的阅读笔记。</p>
+</div>
+<span id="more"></span>
+<p>本文是最近比较火的一篇关于预训练模型的综述 <strong><em>Pre-trained Models for Natural Language Processing: A Survey</em></strong> 的阅读笔记。</p>
+<p><img src="http://media.zjubiomedit.com/2020-04-16-092606.png" width=90%></p>
+<h1 id="引言">引言</h1>
+<p>随着深度学习的发展，各种各样的神经网络被用来解决<strong>自然语言处理</strong>（NLP）问题，例如卷积神经网络、循环神经网络、图神经网络、注意力机制等等。与传统方法相比，神经模型的一个优点是可以<strong>缓解特征工程问题</strong>。传统方法通常严重依赖于人工提取的特征，而神经方法通常使用低维且低密度的向量（即分布式表示）来含蓄地表达语言的句法及语法特征，这些表示会在具体的 NLP 任务中学习得到。因此，神经方法让人们能够更轻松地开发各种 NLP 系统。</p>
+<p>虽然神经模型在 NLP 任务中已经取得了成功，但是其性能提升相对计算机视觉领域来说还是不够明显。一个主要原因在于目前的数据集对于大部分有监督 NLP 任务来说都很小（除了机器翻译），深度神经网络通常有大量的参数，而较小的训练数据集会导致过拟合的出现。因此，早期的面向 NLP 任务的神经模型都相对较浅，往往只包含 1-3 层。</p>
+<p>近年来，大量的研究表明基于大型语料库的<strong>预训练模型</strong>（PTM）可以学习通用的语言表示，有利于下游 NLP 任务，同时能够避免从零开始训练模型。随着计算能力的发展，深度模型的出现（即 Transformer）和训练技巧的增强使得 PTM 不断发展，由浅变深。总的来看，PTM 的发展可以分为两个时代。第一代的 PTM 旨在学习<strong>单一的词嵌入</strong>，例如 Skip-Gram 和 GloVe。这些模型并不会用于下游任务，通常为了计算效率而保持较浅。虽然这些预训练的词嵌入可以捕获词语的语义，但是它们与上下文无关，无法捕捉到上下文中更高层次的概念。第二代的 PTM 聚焦于学习<strong>上下文相关的词嵌入</strong>，例如 CoVe、ELMo、OpenAI GPT 和 BERT。这些学习到的编码器在下游任务中也会用于表示词语。此外，各种各样的预训练任务也被提出以基于不同的目的学习 PTM。</p>
+<h1 id="背景">背景</h1>
+<h2 id="语言表示学习">语言表示学习</h2>
+<p>一般来说，一个好的表示应该表达通用的先验知识，这种知识虽然不面向于特定场景，但是能够帮助计算机解决特定的 AI 任务。对于语言来说，一个好的表示应该捕捉潜在的语言规则和文本中隐藏的常识知识，例如词语含义、句法结构、语义角色甚至语用。</p>
+<p>分布式表示的核心思想是通过<strong>低维实值向量</strong>来描述文本片段（一般指词语）的含义。向量的每一个维度都没有具体的含义，但是整体却表示一个具体的概念，我们将这种向量称之为<strong>词嵌入</strong>。下图给出了 NLP 中通用的神经体系架构：</p>
+<p><img src="http://media.zjubiomedit.com/2020-04-16-091613.png" width=60%></p>
+<p>词嵌入可以分为两类，<strong>非上下文嵌入</strong>和<strong>上下文嵌入</strong>。两者的区别在于一个词语的嵌入是否随着上下文的不同而动态地变化。</p>
+<h3 id="非上下文嵌入">非上下文嵌入</h3>
+<p>表示语言的第一步就是将分离的语言符号映射到分布式嵌入空间中。形式上看，对于每个位于词典 <span class="math inline">\(\mathcal{V}\)</span> 中的词语 <span class="math inline">\(x\)</span>，我们将其映射到一个向量 <span class="math inline">\(\mathbf{e}_{x} \in \mathbb{R}^{D_{e}}\)</span>，构成一个查询表 <span class="math inline">\(\mathbf{E} \in \mathbb{R}^{D_{e} \times|\mathcal{V}|}\)</span>。其中 <span class="math inline">\(D_e\)</span> 是表示词嵌入维度的超参数。</p>
+<p>这种嵌入存在两个主要局限性：第一个是嵌入是静态的，与上下文无关，无法处理多义词；第二个是难以处理不在词汇表中的词。针对第二个问题，很多 NLP 任务提出了字符级或词根级的词语表示，例如 CharCNN、FastText 和 Byte-Pair Encoding (BPE)。</p>
+<h3 id="上下文嵌入">上下文嵌入</h3>
+<p>为了解决多义性和词语上下文依赖特性的问题，我们需要区分不同上下文中词语的语义。给定一个文本 <span class="math inline">\(x_{1}, x_{2}, \cdots, x_{T}\)</span>，其中每一个 token <span class="math inline">\(x_{t} \in \mathcal{V}\)</span> 表示一个词语或词根，<span class="math inline">\(x_t\)</span> 的上下文表示依赖于整个文本： <span class="math display">\[
+\left[\mathbf{h}_{1}, \mathbf{h}_{2}, \cdots, \mathbf{h}_{T}\right]=f_{\mathrm{enc}}\left(x_{1}, x_{2}, \cdots, x_{T}\right) \tag{1}
+\]</span> 其中 <span class="math inline">\(f_{\mathrm{enc}}(\cdot)\)</span> 是一个神经编码器，将在下一节中介绍。<span class="math inline">\(\mathbf{h}_{t}\)</span> 被称为 token <span class="math inline">\(x_t\)</span> 的上下文嵌入或动态嵌入。</p>
+<h2 id="神经上下文编码器">神经上下文编码器</h2>
+<p>大部分的神经上下文编码器都可以归为三类：卷积模型、序列模型和基于图的模型。下图展示了这些模型的结构：</p>
+<p><img src="http://media.zjubiomedit.com/2020-04-17-033607.png" width=80%></p>
+<p><strong>卷积模型</strong>：卷积模型通过卷积操作将词语的嵌入和其相邻的局部信息集成，通常比较容易训练，可以捕捉到局部的上下文信息。</p>
+<p><strong>序列模型</strong>：序列模型通常以序列的顺序捕捉词语的上下文表示，使用经典的 RNN 例如 LSTM 和 GRU。在实践中，通常使用双向 RNN 来收集词语两边的信息，但是其表现往往会受到长期依赖问题的影响（注意序列模型中 seq2seq 涉及的编解码器和神经上下文编码器的含义有所不同，后者包含前者的所有部分）。</p>
+<p><strong>基于图的模型</strong>：不同于上述两个模型，基于图的模型将词语视作节点，基于一个预先定义的语言结构（如句法结构或语义联系）来学习上下文表示。虽然语义感知的图结构可以提供有用的归纳偏差，但是构建一个好的图结构严重依赖于专家知识或外部 NLP 工具，例如依存分析器。</p>
+<p>在实践中，一种更加直接的方式是使用一个全连接图来对每两个词语之间的关系建模，让模型自己去学习结构，连接参数一般通过自我注意力机制计算。这种想法的一个成功实现就是 <strong>Transformer</strong>，其采用全连接自我注意力结构，并结合了其他一些有用的设计，如位置嵌入、层归一化和残差连接。</p>
+<p><strong>分析</strong>：卷积模型和序列模型学习到的上下文表示都存在局部偏差，难以捕捉较长范围的词语联系。而 Transformer 可以直接对序列中任意两个词语的关系建模，因此更加适合于对语言建模。然而，由于其较复杂的结构和随之产生的较少的模型偏差，Transformer 通常需要非常大的训练语料，很容易在中小型数据集上过拟合。</p>
+<h2 id="为什么要预训练">为什么要预训练？</h2>
+<p>随着深度学习的发展，模型参数的数量飞速增长。为了训练这些参数，需要更大的数据集来避免过拟合。然而，对于大部分 NLP 任务来说，构建大规模的标注数据集非常困难（成本过高），特别是对于句法和语义相关的任务。</p>
+<p>相比之下，大规模的未标注语料库的构建则相对容易，为了利用这些数据，我们可以先从其中学习到一个好的表示，再将这些表示应用到其他任务中。最近的研究表明，基于大规模未标注语料库的<strong>预训练模型</strong>（ PTM）在很多 NLP 任务上取得了很好的表现。</p>
+<p>预训练的优点可以总结为以下三点：</p>
+<ol type="1">
+<li>在大规模语料库上的预训练可以学习到通用语言表示，对下游任务很有帮助</li>
+<li>预训练提供了更好的模型初始化，使得在目标任务上有更好的泛化性能和更快的收敛速度</li>
+<li>预训练可以看做一种避免在小数据集上过拟合的正则化方法</li>
+</ol>
+<h2 id="nlp-中的-ptm-发展简史">NLP 中的 PTM 发展简史</h2>
+<p>关于 NLP 中 PTM 的发展历史，原文通过文字的形式进行了回顾，这里通过一张大图将一些代表性的研究串联在了一起，感兴趣的读者可以自行搜索相关论文。</p>
+<p><img src="http://media.zjubiomedit.com/2020-04-28-033048.png" width=80%></p>
+<h1 id="ptm-概述">PTM 概述</h1>
+<p>不同 PTM 间的区别主要体现在<strong>上下文编码器</strong>的使用以及<strong>预训练的任务和目标</strong>上。我们已经在 2.2 节中简单介绍了上下文编码器的不同结构，本章我们将专注于预训练任务，并给出一种 PTM 的分类方法。</p>
+<h2 id="预训练任务">预训练任务</h2>
+<p>预训练任务对于学习语言的通用表示至关重要。通常，这些预训练任务应该具有一定的挑战性，并且有足够的训练数据支撑。原文将预训练任务分为了三类：<strong>监督学习</strong>、<strong>无监督学习</strong>和<strong>自监督学习</strong>。</p>
+<ul>
+<li>监督学习（SL）基于包含输入输出对的训练数据学习一个将输入映射到输出的函数</li>
+<li>无监督学习（UL）旨在从无标签数据中找到内在的知识，例如聚类、密度、潜在表示等。</li>
+<li>自监督学习（SSL）是监督学习和无监督学习的结合，其学习方式和监督学习一样，但是训练数据的标签是自动生成的。SSL 的核心思想在于以某种形式预测输入的任意部分，基于该部分之外的其他部分。例如，掩码语言模型（MLM）是一种自监督任务，其尝试去遮住句子中的一个词语，基于剩余的词语来预测它。</li>
+</ul>
+<p>在 CV 领域，PTM 大部分是基于巨大的监督训练集（例如 ImageNet）训练而成，然而在 NLP 领域，大部分的监督数据集的大小都不足以训练出好的 PTM。唯一的例外是<strong>机器翻译</strong>领域（MT），其中较著名的数据集是 WMT 2017。基于 MT 数据集训练的 PTM 可以用于各种各样的下游预训练任务。本节我们将介绍除此之外的一些常用预训练任务，它们都属于自监督学习，下表总结了这些任务及其损失函数。</p>
+<p><img src="http://media.zjubiomedit.com/2020-04-30-142231.png" width=80%></p>
+<h3 id="语言模型lm">语言模型（LM）</h3>
+<p>概率语言模型是 NLP 中最常见的无监督任务，其实一个经典的概率密度估计问题。虽然 LM 是一个广义的概念，但是在实践中一般指<strong>自回归</strong> LM 或<strong>单向</strong> LM（两者是一个意思）。给定一个文本序列： <span class="math display">\[
+\mathbf{x}_{1: T}=\left[x_{1}, x_{2}, \cdots, x_{T}\right]
+\]</span> 其联合概率 <span class="math inline">\(p(x_1:T)\)</span> 可以被分解为： <span class="math display">\[
+p\left(\mathbf{x}_{1: T}\right)=\prod_{t=1}^{T} p\left(x_{t} | \mathbf{x}_{0: t-1}\right) \tag{2}
+\]</span> 其中 <span class="math inline">\(x_0\)</span> 指序列最开头的词语。上下文 <span class="math inline">\(\mathbf{x}_{0: t-1}\)</span> 可以通过神经编码器 <span class="math inline">\(f_{\mathrm{enc}}(\cdot)\)</span> 建模，条件概率 <span class="math inline">\(p(x_t|\mathbf{x}_{0: t-1})\)</span> 可以理解为在给定上下文的情况下整个词典的概率分布，通过下式计算： <span class="math display">\[
+p\left(x_{t} | \mathbf{x}_{0: t-1}\right)=g_{\mathrm{LM}}\left(f_{\mathrm{enc}}\left(\mathbf{x}_{0: t-1}\right)\right) \tag{3}
+\]</span> 其中 <span class="math inline">\(g_{\mathrm{LM}}(\cdot)\)</span> 是一个预测层。基于上述概率，给定一个巨大的语料库，我们可以通过<strong>最大似然估计</strong>（MLE）训练整个网络。</p>
+<p>单向 LM 的一个缺点是只能编码一个词左侧的上下文和其自身，而更好的上下文应该编码左右两侧的文本。针对这一缺点，一个解决方案是使用<strong>双向</strong> LM（BiLM），其由两个单向 LM 组成：从左向右的正向 LM 和从右向左的反向 LM。</p>
+<h3 id="掩码语言模型mlm">掩码语言模型（MLM）</h3>
+<p>掩码语言模型的前身是 Taylor 在 1953 年提出的 Cloze task。Devlin 等人在 BERT 的原始论文中正式提出了这一概念，并将其作为一种创新的预训练任务来克服单向 LM 的缺点。简单来说，MLM 首先在输入句子中遮挡住部分的词语（token），然后训练模型来基于剩下的词语预测被遮住的词语。但是，该训练方法会引起预训练阶段和微调阶段的不匹配，因为 mask 标记并不会出现在微调阶段。为了解决这一问题，Devlin 等人对于被选中遮住的词语（总词语数的 15%），80% 的可能使用 mask 将其遮起来，10% 的可能使用随机词语替换，10% 的可能保留原词语。</p>
+<p>基于上述标准的 MLM，还衍生出了几种变式 MLM。第一种是<strong>序列到序列 MLM</strong>（Seq2Seq MLM）。原始的 MLM 一般用于解决分类问题，我们将被遮罩的序列输入到一个神经编码器中，其输出又被输入到一个 softmax 分类器中来预测被遮罩的输出。相应地，我们可以在 MLM 中使用序列到序列的结构，其中的编码器输入一个遮罩序列，而解码器则以自回归的形式输出被遮罩的词语。这种 MLM 在 <strong>MASS</strong> 和 <strong>T5</strong> 中得到应用，被证明能够提升诸如问答、总结和机器翻译等 Seq2Seq 类型的下游任务的表现。</p>
+<p>第二种是<strong>增强 MLM</strong>（E-MLM）。多个研究在 BERT 的基础上提出了不同增强版本的 MLM 来提升表现。<strong>RoBERTa</strong> 提出了动态 masking；<strong>UniLM</strong> 将对 mask 的预测任务扩展到了三种类型的语言模型任务：单向、双向和序列到序列预测；<strong>XLM</strong> 在一连串平行的双语句子对上执行 MLM，称为<strong>翻译语言模型</strong>（TLM）；<strong>SpanBERT</strong> 使用 <em>Random Contiguous Words Masking</em> 和 <em>Span Boundary Objective</em> 来集成结构化信息，其要求系统基于 span 的边界来预测被遮罩的 span；<strong>StructBERT</strong> 则引入 <em>Span Order Recovery</em> 任务来进一步包含句子的结构。</p>
+<p>此外，另一种丰富 MLM 的方法是包含外部知识，将在 4.1 节中详细介绍。</p>
+<h3 id="排列语言模型plm">排列语言模型（PLM）</h3>
+<p>针对 MLM 任务在预训练过程中引入的 mask 等特殊标记可能会导致与下游任务不匹配的问题，<strong>XLNet</strong> 提出排列了<strong>排列语言模型</strong>（PLM）。简单来说，PLM 是一个基于输入序列的随机排列的语言模型，一个排列来自于所有可能排列的随机采样，排列并不会影响输入序列的原始位置。我们将排列序列的某些词语作为目标，训练模型来基于其他的词语和目标词语的原始位置预测这些目标。为了保证收敛速度，原文中只选用了排列序列最后的一些词语作为预测目标。此外，原文还提出了一种特殊的 two-stream 自我注意力机制以帮助表示目标。</p>
+<h3 id="去噪声自编码器dae">去噪声自编码器（DAE）</h3>
+<p>去噪声自编码器的基本思想是：基于添加噪声的输入去重构原始的不含噪声的输入。一般使用特定语言的序列到序列模型（如标准的 Transformer）来进行重构。而向输入中添加噪声一般有如下几种方式：</p>
+<p><strong>Token Masking</strong>。从输入中随机选取词语并将其遮住（使用 <code>[MASK]</code> ）。</p>
+<p><strong>Token Deletion</strong>。从输入中随机删除一些词语，与 masking 的区别在于模型需要去决定缺失输入的位置。</p>
+<p><strong>Text Infilling</strong>。采样一系列文本片段并将其替换为单个的 <code>[MASK]</code> 标记，每个文本段落的长度采样自泊松分布（<span class="math inline">\(\lambda=3\)</span>）。模型需要去预测缺失片段的词语数量。（这里以 <strong>SpanBERT</strong> 为例）</p>
+<p><strong>Sentence Permutation</strong>。将文档拆分为句子并进行随机打乱。</p>
+<p><strong>Document Rotation</strong>。随机选择一个词语，并将文档旋转以从词语开始。模型需要去识别文档真正的起始位置。</p>
+<p>基于上述方式我们可以看出，MLM 实际上可以理解为 DAE 的一种。</p>
+<h3 id="对比学习ctl">对比学习（CTL）</h3>
+<p>对比学习基于 “learning by comparison” 的思想，假定某些观测到的文本对要比随机采样文本在语义上更相似，通过学习文本对 <span class="math inline">\((x,y)\)</span> 的评分函数 <span class="math inline">\(s(x, y)\)</span> 来最小化如下目标函数： <span class="math display">\[
+\mathcal{L}_{\mathrm{CTL}}=\mathbb{E}_{x,y^{+},y^{-}}\left[-\log \frac{\exp \left(s\left(x, y^{+}\right)\right)}{\exp \left(s\left(x, y^{+}\right)\right)+\exp \left(s\left(x, y^{-}\right)\right)}\right]  \tag{4}
+\]</span></p>
+<p>其中 <span class="math inline">\((x,y^{+})\)</span> 为相似文本对而 <span class="math inline">\(y^{-}\)</span> 则相对与 <span class="math inline">\(x\)</span> 不相似。一般将 <span class="math inline">\(y^{+}\)</span> 和 <span class="math inline">\(y^{-}\)</span> 称为正样本和负样本。评分函数 <span class="math inline">\(s(x,y)\)</span> 通常通过可学习的神经编码器以如下两种方式计算：<span class="math inline">\(s(x, y)=f_{\mathrm{enc}(x)}^{\mathrm{T}} f_{\mathrm{enc}(y)}\)</span> 或 <span class="math inline">\(s(x, y)=f_{\mathrm{enc}}(x \oplus y)\)</span>。</p>
+<p>和 LM 相比，CTL 通常具有更低的计算复杂度，因此在某些场景下值得作为 PTM 的任务选择。Collobert 等人提出了 <em>pairwise ranking task</em> 来区分真假词组，模型需要对真正的词组给出比随机生成的词组更高的分数。Mnih 等人提出了<strong>噪声对比估计</strong>（NCE），训练了一个二元分类器来区分真假样本，这一思想也被用在了著名的 word2vec 中（负采样）。注意这里给出的两个研究训练的都是静态词嵌入，而非上下文词嵌入。</p>
+<p>下面将介绍几个最近提出的 CTL 任务。</p>
+<p><strong>Deep InfoMax</strong>。DIM 最早用于 CV 领域，通过最大化图像表示与其局部特征的互信息来提升整体表示的质量。Kong 等人将 DIM 引入语言表示学习，将序列 <span class="math inline">\(x\)</span> 的全局表示定义为第一个词语的隐藏状态，通过神经编码器 <span class="math inline">\(f_{\mathrm{enc}}(\mathbf{x})\)</span> 得到。DIM 的目标是为 <span class="math inline">\(f_{\mathrm{enc}}\left(\mathbf{x}_{i:j}\right)^{\mathrm{T}} f_{\mathrm{enc}}\left(\hat{\mathbf{x}}_{i:j}\right)\)</span> 分配比 <span class="math inline">\(f_{\mathrm{enc}}\left(\tilde{\mathbf{x}}_{i:j}\right)^{\mathrm{T}} f_{\mathrm{enc}}\left(\hat{\mathbf{x}}_{i:j}\right)\)</span> 更高的分数，其中 <span class="math inline">\(\mathbf{x}_{i:j}\)</span> 表示一个 <span class="math inline">\(\mathbf{x}\)</span> 中从 i 到 j 的 n-gram 片段，<span class="math inline">\(\hat{\mathbf{x}}_{i:j}\)</span> 表示从 i 到 j 进行遮罩的片段，而 <span class="math inline">\(\tilde{\mathbf{x}}_{i:j}\)</span> 则表示从语料库随机采样的负样本。</p>
+<p><strong>Replaced Token Detection</strong>。RTD 和 NCE 的思想相同，区别在于预测的是根据上下文一个词语是否被替换。word2vec 中 CBOW 结合负采样的方法就是 RTD 的一种简单版本。<strong>ELECTRA</strong> 提出了一种生成器-判别器框架，通过生成器来替换序列中的部分词语，以提升 RTD 的效果。具体来说，对于一个生成器 <span class="math inline">\(G\)</span> 和一个判别器 <span class="math inline">\(D\)</span>，首先利用 MLM 任务训练生成器，再用训练后生成器的权重初始化判别器，最后通过判别任务训练判别器（这里的判别任务即判断哪些输入词语被生成器替换了）。预训练完成后，只保留判别器用于下游任务的微调。类似地，<strong>WKLM</strong> 提出了实体层面的词语替换（之前的都是 token 层面），其将部分实体替换为与其相同类型的其他实体，训练模型来区分该实体是否被替换。RTD 可以一定程度上解决 MLM 中的不匹配问题。</p>
+<p><strong>Next Sentence Prediction</strong>。NSP 利用文本数据中句子的划分来进行预训练。<strong>BERT</strong> 中首次提出了该任务，作者训练模型区分两个输入句子是否在语料库中连续出现。在选择训练句对时，有 50% 的可能第二句是第一句实际的连续片段。NSP 能够教会模型理解两个输入句子的联系，有利于对这种信息敏感的下游任务（如 QA 和 NLI）。</p>
+<p>然而近年来，后续的研究对 NSP 的必要性提出了不少质疑。XLNet 的作者发现 NSP 任务的影响并不可靠；SpanBERT 的作者发现不用 NSP 的单句训练要优于使用 NSP 的句对训练；RoBERTa 的作者对 NSP 进行了进一步分析，发现基于来自单个文本的文本块训练时，去除 NSP 会一定程度上提升下游任务的性能。</p>
+<p><strong>Sentence Order Prediction</strong>。为了更好地对句子间的连贯性建模，<strong>ALBERT</strong> 将 NSP loss 替换为了 SOP loss。与 NSP 的不同在于，SOP 将来自同一个文档的两个连续片段作为正样本，而将这两个片段交换顺序后作为负样本。原作者认为，NSP 实际上是在单个任务中融合了主题预测和连贯性预测（因为其负样本是随机采样的），由于主题预测更容易，所以模型将更依赖于主题预测，而降低对连贯性的预测效果。采用了 SOP 的 ALBERT 在多项下游任务中都要优于 BERT。此外，<strong>StructBERT</strong> 和 <strong>BERTje</strong> 也将 SOP 作为其自监督学习任务。</p>
+<h2 id="ptm-分类">PTM 分类</h2>
+<p>为了更好地梳理 NLP 中现有 PTM 之间的关系，本文从不同的角度对 PTM 进行了分类：</p>
+<ol type="1">
+<li><strong>表示类型</strong>。用于下游任务的表示，分为非上下文模型和上下文模型。</li>
+<li><strong>结构</strong>。PTM 中使用的网络骨架，主要包括 LSTM、Transformer encoder、Transformer decoder 和 Transformer 全架构。encoder 和 decoder 的区别在于一个是双侧上下文而一个是单侧上下文（通过 masked self-attention 实现）</li>
+<li><strong>预训练任务类型</strong>。PTM 使用的预训练任务的类型，包括监督学习、无监督学习 / 自监督学习。</li>
+<li><strong>扩展</strong>。针对各种场景特别设计的 PTM，包括知识增强 PTM、多语言和特定语言的 PTM、领域特定 PTM 和压缩 PTM（下一节介绍）</li>
+</ol>
+<p>下图列出了不同分类学下的代表性研究：</p>
+<p><img src="http://media.zjubiomedit.com/2020-05-09-062151.png" width=70%></p>
+<p>下表对一些代表性 PTM 进行了更深层次的对比：</p>
+<p><img src="http://media.zjubiomedit.com/2020-05-09-062843.png" width=80%></p>
+<h2 id="模型分析">模型分析</h2>
+<p>由于 PTM 取得的巨大成功，研究者们希望去理解其究竟捕获了怎样的知识，以及如何从中提取这些知识。大量的文献分析了存储在预训练嵌入（非上下文和上下文）中的<strong>语言知识</strong>和<strong>世界知识</strong>。</p>
+<h3 id="非上下文嵌入-1">非上下文嵌入</h3>
+<p>从静态词向量中，研究人员提取出了各种语言知识。Mikolov 等人发现神经网络语言模型学习的词表示可以捕获语言规律性，词语之间的关系可以通过一个特定的关系向来来表征。进一步的类比实验表明，skim-gram 模型给出的词向量可以同时捕获句法层面和语义层面的词语关系，如 <em>vec(“China”) − vec(“Beijing”) ≈ vec(“Japan”) - vec(“Tokyo”)</em>。此外，他们还发现了词向量的合成性质，如 <em>vec(“Germany”) + vec(“capital”)</em> 与 <em>vec(“Berlin”)</em> 接近。受上述工作启发，Rubinstein 等人发现分布式词语表示（即词嵌入）擅长预测分类（狗是一种动物）而不擅长学习属性（天鹅是白色的）。类似地，Gupta 等人发现 word2vec 嵌入可以较好地编码实体的相关属性，其验证了结合简单监督模型的分布式词向量可以学习预测实体的数值和二元属性。</p>
+<h3 id="上下文嵌入-1">上下文嵌入</h3>
+<p>大量研究调查并提取了上下文嵌入中的各种知识。总的来看，这些知识可以分为两类：语言知识和世界知识。</p>
+<p><strong>语言知识</strong>。这里作者主要围绕对 BERT 的探索展开，介绍了很多相关研究。BERT 被发现可以在很多简单的句法任务上表现良好，例如词性识别和成分标记，但是在语义和细致的句法任务上表现一般。此外，有人分析了 BERT 的每一层在不同任务中的角色，发现 BERT 解决任务的顺序与 NLP pipeline 类似。此外，BERT 中还存在主语-动词一致性和语义角色的知识。此外，有人从 BERT 中提取了依赖树和成分树，表明其能够编码句法结构。还有人探索了 BERT 中内部表示的几何结构，并发现：1）语言特征似乎被表示在单独的语义和句法子空间； 2）attention 矩阵包含了语法表示； 3）BERT 可以很精细地区分词义。</p>
+<p><strong>世界知识</strong>。除了语言知识，PTM 也可能存储了训练数据中包含的世界知识。这里列举的研究仍然围绕 BERT 展开。一种比较直接的调查世界知识的方法是使用<strong>完形填空</strong>（cloze statements）对 BERT 进行查询，如 <em>“Dante was born in <code>[MASK]</code>”</em>。Petroni 等人构建了 <strong>LAMA</strong> 任务（语言模型分析），基于多个知识源手工创建了单个词语的完形填空数据集。他们的实验表明 BERT 包含的世界知识能够与传统的信息抽取方法抗衡。由于 LAMA 的简单性，其可靠程度也得到了一些质疑。Jiang 等人认为 LAMA 只测量了语言模型的下限，并提出了更多改进方法来生成更多有效的查询。还有一些研究从用于BERT 中抽取了可以用于下游任务的关系知识和常识知识。</p>
+<h1 id="ptm-拓展">PTM 拓展</h1>
+<h2 id="引入知识的-ptm">引入知识的 PTM</h2>
+<p>PTM 通常是基于大规模文本语料训练通用的语言表示，而缺乏领域特定的知识。通过外部知识库引入领域知识被证明可以提升模型结果。这些外部知识包括：语言知识、语义知识、常识知识、事实知识和其他领域特定的知识等。</p>
+<p>一方面，外部知识可以在预训练阶段进行引入。早期的一些研究专注于联合学习知识图谱嵌入和词嵌入，而从 BERT 开始，研究者们提出了一些专为引入外部知识而设计的预训练任务，例如：<strong>LIBERT</strong> 通过一个附加的语言约束任务引入了<strong>语言知识</strong>；<strong>SentiLR</strong> 通过对每个单词添加情感极性，将 MLM 拓展为 Label-Aware MLM，在多种情感分类任务上达到 SOTA（<strong>语言知识</strong>）；<strong>SenseBERT</strong> 在预训练时不仅预测被遮罩的词语，还预测其在 WordNet 中的 supersenses（对词语的一种分类，属于<strong>语义知识</strong>）；<strong>ERINE</strong> 将在知识图谱中预训练的图谱嵌入结合到对应的实体上，来增强文本表示（<strong>事实知识</strong>）；类似地，<strong>KnowBERT</strong> 将 BERT 与一个实体连接模型联合训练，以端到端的方式集成实体表示（<strong>事实知识</strong>）；<strong>KEPLER</strong> 则联合优化知识嵌入和语言模型目标（<strong>事实知识</strong>）。而不同于上述这些工作通过实体嵌入引入知识图谱的结构化信息，K-BERT 直接将知识图谱中的相关三元组引入句子，得到一个 BERT 的扩展树形输入（<strong>事实知识</strong>）。<strong>K-Adapter</strong> 通过为不同预训练任务单独训练不同的适配器，来注入多种知识，以解决上述模型在注入多种知识时出现的遗忘问题（<strong>语言知识</strong>）。</p>
+<p>另一方面，外部知识可以直接引入预训练模型，而无需从零开始预训练，例如：之前提到的 <strong>K-BERT</strong> 支持将事实知识在下游任务的微调阶段注入；Guan 等人利用<strong>常识知识</strong>库、ConceptNet 和 ATOMIC，来增强 GPT-2 在故事生成上的表现。Yang 等人提出了一种知识-文本融合模型来获得相关的语言和事实知识，用于机器阅读理解。</p>
+<p>此外，还有人将语言模型扩展为了<strong>知识图谱语言模型</strong>（KGLM）和<strong>潜在关系语言模型</strong>（LRLM），两者均允许以知识图谱为条件进行预测。这些以 KG 为条件的语言模型展现了用于预训练的潜力。</p>
+<h2 id="多语言和特定语言的-ptm">多语言和特定语言的 PTM</h2>
+<h3 id="多语言-ptm">多语言 PTM</h3>
+<p>学习多语言的文本表示对于很多跨语言的 NLP 任务是很重要的。我们可以将多语言 PTM 按下游任务分为两类：<strong>跨语言语言理解</strong>（XLU）和<strong>跨语言语言生成</strong>（XLG）。</p>
+<p><strong>跨语言语言理解</strong>。大部分的早期工作聚焦于学习来自同一语义空间的多语言的词嵌入，这一方法往往缺乏语言间的校准。近期围绕着 BERT 又涌现出了一些新方法，如：<strong>mBERT</strong> 基于 104 种语言的维基文本训练 MLM（共享参数），每个训练样本都是单语言的，且没有专门设计跨语言目标，即便如此，该模型还是在跨语言任务上表现良好；<strong>XLM</strong> 在 mBERT 的基础上进行了改进，引入跨语言任务（TLM），在一系列平行的双语句对上执行 MLM；<strong>Unicoder</strong> 进一步地提出三种新的跨语言预训练任务，包括跨语言词语修复、跨语言释义分类和跨语言 MLM；<strong>XLM-RoBERTa</strong> 是一个基于大规模多语种语料训练的多语言 encoder，其训练任务仅为单语言的 MLM，但是在多个跨语言任务上取得了 SOTA（数据多就是任性）。</p>
+<p><strong>跨语言语言生成</strong>。XLG 的任务目标是基于输入语言生成不同语言的文本，如机器翻译和跨语言摘要总结。不同于 XLU，XLG 使用的 PTM 通常需要联合预训练 encoder 和 decoder，而前者通常只需要专注于 encoder。<strong>MASS</strong> 基于多个语言的单语种 Seq2Seq MLM 预训练了一个 Seq2Seq 模型，在无监督神经机器翻译上取得了显著效果；<strong>XNLG</strong> 为跨语言神经语言生成提出了两步预训练：第一步基于单语种 MLM 和跨语言 MLM 任务预训练 encoder，第二步保持 encoder 不变，通过单语种 DAE 和跨语言自编码任务预训练 decoder。实验表明 XNLG 在跨语言问题生成和摘要总结上表现良好；<strong>mBART</strong> 是 BART 的多语言版本，其在包含 25 种语言的大规模单语种语料库上基于 Seq2Seq DAE 任务联合预训练 encoder 和 decoder，在各种机器翻译任务上取得了性能提升。</p>
+<h3 id="特定语言的-ptm">特定语言的 PTM</h3>
+<p>虽然多语言 PTM 在很多语言上表现良好，但近期的研究表明面向一种特定语言训练的 PTM 的效果还是优于多语言的效果。对于中文（词语间没有间隔），研究表明更大的粒度或多粒度的词语表示能够取得很好的结果。此外，还有很多面向不同语种的 PTM，如面向<strong>法语</strong>的 CamemBERT 和 FlauBERT；面向<strong>芬兰语</strong>的 FinBERT；面向<strong>荷兰语</strong>的 BERTje 和 RobBERT；面向<strong>阿拉伯语</strong>的 AraBERT 等。</p>
+<h2 id="多模态-ptm">多模态 PTM</h2>
+<p>随着 PTM 在多个 NLP 任务中取得了成功，一些多模态 PTM 也被设计出来，用来获取通用的视觉（听觉）和语言特征编码。这些模型基于大规模的多模态语料库进行预训练，如包含字幕的视频，包含标注的图片等。一些多模态限定的预训练任务也被提出以更好地提取多模态特征，例如 <em>visual-based MLM</em>、<em>masked visual-feature modeling</em> 和 <em>visual-linguistic matching</em>。下面将从<strong>视频</strong>、<strong>图像</strong>和<strong>音频</strong>三个方面介绍目前的一些代表性研究。</p>
+<h3 id="视频-文本-ptm">视频-文本 PTM</h3>
+<p><strong>VideoBERT</strong> 和 <strong>CBT</strong> 都是视频文本联合模型，为了得到视觉-语言表示，它们分别通过基于 CNN 的编码器和现有的语音识别技术对视频进行了预处理。之后训练一个单独的 Transformer 编码器来学习用于下游任务的联合表示。此外，<strong>UNIViLM</strong> 引入生成任务来进一步预训练下游任务中的解码器。</p>
+<h3 id="图像-语言-ptm">图像-语言 PTM</h3>
+<p>一些研究将 PTM 引入图像-文本对，旨在处理诸如视觉问答（VQA）、视觉常识推理（VCR）等下游任务。部分研究采用两个分离的编码器用于分别训练图像和文本表示，如 <strong>ViLBERT</strong> 和 <strong>LXMERT</strong>；部分研究则提出了单流统一 Transformer，诸如 <strong>VisualBERT</strong>、<strong>B2T2</strong>、<strong>VLBERT</strong>、<strong>Unicoder-VL</strong> 和 <strong>UNITER</strong>。虽然上述模型的架构不尽相同，但是其都使用了类似的预训练任务，如 MLM 和图像文本配对。为了更好地利用视觉元素，图像会在预训练编码前被转化为区域的序列，利用 RoI 或 bounding box提取技术。</p>
+<h3 id="音频-文本-ptm">音频-文本 PTM</h3>
+<p>此外，还有一些研究探索了将 PTM 用于音频文本对的可能性，如 <strong>SpeechBERT</strong>。该工作尝试去构建一个端到端的语音问答模型（SQA），将语音和文本语料库通过一个 Transformer 编码器编码，基于 MLM 进行预训练，再在问答语料上进行微调。</p>
+<h2 id="特定领域和特定任务的-ptm">特定领域和特定任务的 PTM</h2>
+<p>大部分公开的 PTM 都是基于通用领域的语料库（如维基百科）进行训练的，这限制了其在特定领域或任务中的应用。最近，一些研究提出了在特殊语料库上训练的 PTM，如用于生物医学文本的 <strong>BioBERT</strong>，用于科学文本的 <strong>SciBERT</strong>，用于临床文本的 <strong>ClinicalBERT</strong> 等。</p>
+<p>除了预训练领域特定的 PTM，一些研究尝试去针对目标应用调整预训练模型，例如生物医学实体归一化，专利分类、关键词抽取等。一些面向任务的预训练模型也被提出，诸如 <strong>SentiLR</strong> 中的情绪 <em>Label-Aware MLM</em>（用于情绪分析），用于文本总结的 <em>Gap Sentence Generation</em>（GSG），用于不流畅语流检测的 <em>Noisy Words Detection</em> 等。</p>
+<h2 id="模型压缩">模型压缩</h2>
+<p>由于 PTM 通常包含至少几千万个参数，其难以被部署在在线服务或是资源受限的硬件上。模型压缩是一种可以减小模型尺寸，提升计算效率的手段。下面介绍五种常用的模型压缩方法。</p>
+<h3 id="模型剪枝">模型剪枝</h3>
+<p><strong>模型剪枝</strong>即移出神经网络的部分元素，如权重、神经元、网络层、通道、attention 头部等。</p>
+<h3 id="量化">量化</h3>
+<p><strong>量化</strong>指将高精度的参数压缩为低精度的参数，对硬件的兼容性有所要求。</p>
+<h3 id="模型共享">模型共享</h3>
+<p><strong>模型共享</strong>在相似的模型单元间共享参数，通常广泛应用于 CNN、RNN 和 Transformer。<strong>ALBERT</strong> 使用 <em>cross-layer parameter sharing</em> 和 <em>factorized embedding parameterization</em> 来减少 PTM 的参数。</p>
+<h3 id="知识蒸馏">知识蒸馏</h3>
+<p><strong>知识蒸馏</strong>旨在训练一个小的 student 模型，来重现原始大模型（teacher 模型）的行为。不同于模型压缩，蒸馏技术通过一些优化目标来从固定的 teacher 模型中学习 student 模型，而压缩技术则旨在搜索一个稀疏结构。一般来说，蒸馏方法可以分为三类：</p>
+<p><strong>从软目标概率蒸馏</strong>。Bucilua 等人发现让 student 模型逼近 teacher 模型可以帮助传递知识。一种常用的方法是逼近 teacher 模型的对数。DistilBERT 通过一个基于 teacher 模型软目标概率的蒸馏损失训练 student 模型： <span class="math display">\[
+\mathcal{L}_{\mathrm{KD}-\mathrm{CE}}=\sum_{i} t_{i} * \log \left(s_{i}\right) \tag{5}
+\]</span> 其中 <span class="math inline">\(t_i\)</span> 和 <span class="math inline">\(s_i\)</span> 分别表示 teacher 模型和 student 模型估计的概率。从软目标概率蒸馏也可以应用在特定任务的模型中，例如信息抽取、序列标注等。</p>
+<p><strong>从其他知识蒸馏</strong>。上述蒸馏方法将 teacher 模型看做一个黑盒子，只关注其输出。而分解 teacher 模型可以为 student 模型带来提升。<strong>TinyBERT</strong> 对嵌入输出、隐藏状态和 self-attention 分布进行了 layer-to-layer 的蒸馏；<strong>MobileBERT</strong> 对软目标概率、隐藏状态和 self-attention 分布进行了 layer-to-layer 的蒸馏；<strong>MiniLM</strong> 从 teacher 模型中蒸馏了 self-attention 分布和 self-attention 值的关系。</p>
+<p><strong>蒸馏至其他结构</strong>。一般来说，student 模型的结构与 teacher 模型的结构相同，除了更小的层数和更小的隐藏神经源数量。然而，部分研究表明在蒸馏时，除了减少参数，简化模型结构也可以减少计算复杂度，如将 Transformer 简化为 RNN 或 CNN。</p>
+<h3 id="模型替换">模型替换</h3>
+<p><strong>模型替换</strong>是一种减少模型大小的简单方法，其将原始 PTM 中的较大模块替换成更加小巧的模块。Xu 等人提出了 <strong>Theseus 压缩</strong>，其渐近地用更少参数的模块替换原模型中的模块。不同于知识蒸馏，该方法只需要一个任务特定的损失函数。压缩后的模型 <strong>BERT-of-Theseus</strong> 的速度接近原始模式的两倍，但性能几乎保持不变。</p>
+<p>下表给出了一些代表性的压缩 PTM 的比较：</p>
+<p><img src="http://media.zjubiomedit.com/2020-05-19-084535.png" width=70%></p>
+<h1 id="将-ptm-应用至下游任务">将 PTM 应用至下游任务</h1>
+<p>虽然 PTM 从大型语料库中捕捉到了通用的语言知识，但是如何将这些知识有效地适应到下游任务中仍然是一个关键问题。</p>
+<h2 id="迁移学习">迁移学习</h2>
+<p><strong>迁移学习</strong>指将知识从源任务（或领域）适应至目标任务（或领域），下图简单说明了迁移学习的整体思路：</p>
+<p><img src="http://media.zjubiomedit.com/2020-05-20-031631.png" width=60%></p>
+<p>NLP 中的迁移学习有很多种，将 PTM 适应至下游任务属于<strong>序列迁移学习</strong>任务，其任务是序列式地进行学习的且目标任务包含标注数据。</p>
+<h2 id="如何迁移">如何迁移</h2>
+<p>为了将 PTM 中的知识迁移到下游 NLP 任务中，我们需要考虑以下几个问题：</p>
+<h3 id="选择合适的预训练任务模型结构和语料">选择合适的预训练任务、模型结构和语料</h3>
+<p>不同的 PTM 在同样的下游任务中通常有不同的效果，因为其基于不同的预训练任务、模型结构和语料进行训练。</p>
+<p><strong>预训练任务</strong>。目前，语言模型（包括其变式）是最流行的预训练任务，可以有效地解决很多 NLP 问题。然而，不同的预训练任务存在特定的偏差，对不同的任务具有不同的效果。例如，NSP 任务可以让 PTM 理解两个句子之间的关系，有利于诸如 QA 和 NLI 这样的下游任务。</p>
+<p><strong>模型结构</strong>。PTM 的结构同样对下游任务很重要。例如，BERT 虽然提升了很多自然语言理解任务的表现，但是却很难用于语言生成任务。</p>
+<p><strong>语料</strong>。下游任务的数据分布应该接近训练 PTM。目前有很多现成的 PTM，可以直接用于各种领域特定或语言特定的下游任务。</p>
+<h3 id="选择合适的-layers">选择合适的 layers</h3>
+<p>给定一个预训练的深度模型，不同的 layer 可以捕捉到不同类型的信息。对于<strong>基于 RNN</strong> 的模型，Belinkov 等人发现从一个多层 LSTM 编码器的不同 layer 中学习到的表示有利于不同的任务；对于<strong>基于 transformer</strong> 的模型，Tenney 等人发现 BERT 表示了传统 NLP pipeline：较低的 layers 捕捉基本的句法信息，而更高的 layers 则捕获高层次的语义信息。</p>
+<p>令 <span class="math inline">\(\mathbf{H}^{(l)}(1 \leqslant l \leqslant L)\)</span> 表示包含 <span class="math inline">\(L\)</span> 层的预训练模型中第 <span class="math inline">\(l\)</span> 层的表示，<span class="math inline">\(g(\cdot)\)</span> 表示面向目标任务的特定模型。我们可以通过如下三种方式来选择表示：</p>
+<p><strong>只用 embedding</strong>。只选择静态的预训练嵌入，对于一个新的目标任务，模型的其他部分需要从零开始训练，例如 <strong>Word2vec</strong> 和 <strong>Glove</strong>。这种方式难以捕捉到高层次的信息。</p>
+<p><strong>使用顶层的表示</strong>。一种最简单有效的方式就是将顶层的表示输入到任务特定模型中 <span class="math inline">\(g(\mathbf{H}^{(L)})\)</span>，例如 <strong>BERT</strong>。</p>
+<p><strong>从所有层选择</strong>。一种更加灵活的方式从所有层中自动选择（提取）最佳表示，例如 <strong>ELMo</strong>，其输出的表示为： <span class="math display">\[
+\mathbf{r}_{t}=\gamma \sum_{l=1}^{L} \alpha_{l} \mathbf{h}_{t}^{(l)} \tag{6}
+\]</span> 其中 <span class="math inline">\(\alpha_{l}\)</span> 是层 <span class="math inline">\(l\)</span> 的 softmax 归一化权重，<span class="math inline">\(\gamma\)</span> 是一个用于缩放的标量。加权得到的混合表示会被输入任务特定模型中 <span class="math inline">\(g\left(\mathbf{r}_{t}\right)\)</span>。注意 ELMo 的下游模型也需要从零开始训练（参见下一节）。</p>
+<h3 id="是否进行微调">是否进行微调</h3>
+<p>目前，模型迁移的方式可以分为两种：<strong>特征提取</strong>（预训练参数被冻结）和<strong>微调</strong>（预训练参数不被冻结，进行微调）。在特征提取的方式中，预训练模型被视作现成的特征提取器。</p>
+<p>虽然两种方式都具有不错的效果，但是特征提取的方式需要更复杂的任务特定结构，且不利于迁移预训练模型中能够包含众多可迁移表示的中间层信息。因此，在很多下游任务中，更加倾向于使用微调的方式。下表根据上述分类对一些常见的 PTM 的迁移进行了总结：</p>
+<p><img src="http://media.zjubiomedit.com/2020-05-20-071135.png" width=50%></p>
+<h2 id="微调策略">微调策略</h2>
+<p>自从 ULMFit 和 BERT 开始，<strong>微调</strong>成为了 PTM 迁移的主要方法。然而，微调的过程并不是十分稳定的，即使超参数相同，部分随机值的差异也可能导致结果的截然不同。除了标准的微调，还有一些有用的微调策略：</p>
+<p><strong>两阶段微调</strong>。其在预训练和微调之间引入一个中间阶段。在第一阶段，通过中间任务或语料来微调预训练模型；在第二阶段，将第一阶段得到的迁移模型在目标任务上进行微调。</p>
+<p><strong>多任务微调</strong>。Liu 等人在多任务学习框架下对 BERT 进行了微调，结果显示多任务学习和预训练是互补的方法。</p>
+<p><strong>使用额外模块的微调</strong>。标准微调的一大缺点是参数的低效性：每个下游任务都有各自的微调参数。因此，一种解决方法是向 PTM 中注入一些可微调的适配模块，保持其他原始参数的固定。</p>
+<p><strong>其他</strong>。<em>gradual unfreezing</em> 从顶层开始逐层解冻 PTM 进行微调；<em>sequential unfreezing</em> 则先微调随机初始化的任务特定层，然后解冻所有隐藏层，最后解冻 embedding 层。此外还有启发自集成模型的 <em>self-ensemble</em> 和 <em>self-distillation</em>。</p>
+<p>上述的工作证明，借助于更好的微调策略，PTM 可以发挥出更大的效果。</p>
+<h1 id="ptm-资源">PTM 资源</h1>
+<p>网络上有很多公开的 PTM 资源，下表给出了一些知名的库，包括第三方实现、论文列表、可视化工具等。</p>
+<p><img src="http://media.zjubiomedit.com/2020-05-20-073727.png" width=70%></p>
+<h1 id="应用">应用</h1>
+<p>本节将总结 PTM 在一些经典 NLP 任务中的应用，本节列举了大量的研究，涉及很多技术细节，这里不作具体介绍，感兴趣的同学可以自行阅读原论文。</p>
+<h2 id="通用评估标准">通用评估标准</h2>
+<p>对 PTM 来说，如何以一种可比较的度量进行评估十分重要，我们需要一个大规模的评估标准。<strong>GLUE</strong>（The General Language Understanding Evaluation）标准是一个集合了 9 个自然语言理解任务的标准，其中包括：<strong>单句分类</strong>任务（CoLA 和 SST-2）、<strong>文本对分类</strong>任务（MNLI, RTE, WNLI, QQP, MRPC）、<strong>文本相似度</strong>任务（STSB）、<strong>相关性排行</strong>任务（QNLI）。GLUE 标准能够很好地评估模型的鲁棒性和通用性。然而，GLUE 并没有提供测试集的标签而是设置了一个评估服务器。</p>
+<p>而近年来 NLP 的快速发展开始触及 GLUE 的上限，这促进了新的标准 SuperGLUE 的提出。与 GLUE 相比，SuperGLUE 的任务形式更加丰富且更具有挑战性，如指代消解和 QA。对应基准的 SOTA 模型可以参考以下链接：</p>
+<ul>
+<li>GLUE：<em>https://gluebenchmark.com/</em></li>
+<li>SuperGLUE：<em>https://super.gluebenchmark.com/</em></li>
+</ul>
+<h2 id="问答">问答</h2>
+<p>问答（QA）或是狭义概念的机器阅读理解（MRC）是 NLP 中的重要应用。QA 任务从易到难可以分为三类：</p>
+<ul>
+<li><strong>单回合提取</strong> QA（SQuAD）</li>
+<li><strong>多回合生成</strong> QA（CoQA）</li>
+<li><strong>Hotpot</strong> QA（HotpotQA）</li>
+</ul>
+<p>针对单回合提取 QA，BERT 创造性地将其转换为 span 预测任务，预测答案的起始 span。Zhang 等人提出了回顾性阅读架构，通过 PTM 来初始化预测 span 的编码器；针对多回合生成 QA，Ju 等人提出了一种 “<em>PTM+Adversarial Training+Rationale Tagging+Knowledge Distillation</em>” 模型；针对Hotpot QA，Tu 等人提出了一个可解释的 “<em>Select, Answer, and Explain</em>” 系统，其中 PTM 作为选择模块的编码器。</p>
+<p>一般来说，QA 模型中编码器的参数通过 PTM 进行初始化，其它的参数则进行随机初始化。SOTA 的模型可以参考以下链接：</p>
+<ul>
+<li>SQuAD：<em>https://rajpurkar.github.io/SQuAD-explorer</em></li>
+<li>CoQA：<em>https://stanfordnlp.github.io/coqa</em></li>
+<li>HotpotQA：<em>https://hotpotqa.github.io</em></li>
+</ul>
+<h2 id="情感分析">情感分析</h2>
+<p>BERT 在 SST-2 数据集（一个用于情感分析的数据集）上进行微调后，表现超过了之前的 SOTA 模型。然而在<strong>基于方面的情感分析</strong>（ABSA）中，直接应用 BERT 的效果一般。ABSA 是一种细粒度的情感分析任务，有很多研究针对 ABSA 对 BERT进行了调整，取得了一定的效果，这里不作赘述。而在情感迁移中，基于 BERT 的模型也取得了不错的效果。</p>
+<h2 id="命名实体识别">命名实体识别</h2>
+<p><strong>命名实体识别</strong>（NER）是信息抽取中的基本任务，在很多 NLP 下游任务中扮演着重要角色。在深度学习时代，大部分的 NER 方法都基于序列标注框架实现，即句子中的实体信息会被转换为标签序列，每个标签对应着一个词语，模型需要预测每个词语的标签。得益于 ELMo 和 BERT 在 NLP 领域的巨大贡献，涌现出了大量关于 NER 的预训练模型的研究，这里同样不作赘述。</p>
+<h2 id="机器翻译">机器翻译</h2>
+<p><strong>机器翻译</strong>（MT）同样是 NLP 领域的重要任务。几乎所有的神经机器翻译（NMT）模型都使用<strong>编码器-解码器</strong>框架，首先将输入通过编码器编码，再通过解码器生成对应语言的输出。这里的研究大致可以分为两类：一类是仅对编码器进行预训练，这类研究主要围绕 BERT 展开，具体细节五花八门；一类是基于 Seq2Seq 的预训练任务对编码器和解码器同时进行预训练，代表研究有 <strong>MASS</strong> 和 <strong>mBART</strong>。</p>
+<h2 id="摘要">摘要</h2>
+<p><strong>摘要</strong>旨在生成一段可以概括长文本主旨的短文本。随着 PTM 的出现，摘要任务的表现也得到了大幅的提升。其中代表性的研究是 BERTSUM，其在 BERT 中插入多个 <code>[CLS]</code> 标签以学习句子表示，并针对抽取式摘要和抽象式摘要（需要改写原文）提出了不同的策略。</p>
+<h2 id="对抗攻击和防御">对抗攻击和防御</h2>
+<p>深度神经模型很容易受到<strong>对抗样本</strong>的攻击，对抗样本和对抗学习（GAN）截然不同，指对输入样本故意添加一些人无法察觉的细微的干扰，导致模型以高置信度给出一个错误的输出。在 CV 中，对抗性攻击和防御已经得到广泛研究。 然而，由于语言的离散性，文本领域的对抗攻击和防御仍然是一个挑战。 为文本生成对抗样本需要满足以下要求：</p>
+<ol type="1">
+<li>人类难以察觉，但会误导神经模型</li>
+<li>语法流利，并且在语义上与原始输入保持一致</li>
+</ol>
+<p>一些研究通过对抗样本成功攻击了一些现有的模型，如 GPT2 和 BERT。</p>
+<h1 id="未来方向">未来方向</h1>
+<p>虽然 PTM 已经证明了在各种 NLP 任务中的价值，但由于语言的复杂性，挑战依然存在。本节将介绍 PTM 的五个未来的发展方向。</p>
+<h2 id="ptm-的上界">PTM 的上界</h2>
+<p>目前 PTM 还未到达其上界，大部分的 PTM 可以通过更多的训练步数、更大的语料库和更深的模型结构进行提升。然而，这会带来更高额的成本，同时训练复杂模型也是一个巨大的挑战，需要更加复杂高效的训练技术。因此，一个更实际的方向是在现有的软硬件条件下，设计更有效的模型结构、自监督的预训练任务、优化器以及训练技巧，来达到提升 PTM 的效果。<strong>ELECTRA</strong> 就是这个方向上的一个很好的尝试。</p>
+<h2 id="ptm-的结构">PTM 的结构</h2>
+<p><strong>Transformer</strong> 被证明是预训练的一个有效结构。然而，其主要缺点在于计算复杂性，复杂度达到了输入长度的平方级别。由于 GPU 显存大小的限制，目前大部分的 PTM 一次只能处理长度不超过 512 个 token 的序列。为了解决这一缺点，我们需要改进 Transformer 的结构，例如 <strong>Transformer-XL</strong>。因此，搜索更加高效的模型结构对于解决更长范围的上下文信息至关重要。关于深层结构的设计，借助一些自动化方法（例如 NAS）可能会有所帮助。</p>
+<h2 id="面向任务的预训练和模型压缩">面向任务的预训练和模型压缩</h2>
+<p>在实践中，不同的下游任务需要 PTM 的不同能力。PTM 和下游任务之间的差异性主要体现在两个方面：<strong>模型结构</strong>和<strong>数据分布</strong>。较大的差异可能会导致 PTM 的优势难以体现。例如，文本生成通常 需要一个特定的任务来预训练编码器和解码器；而文本匹配则需要为句对设计的预训练任务。</p>
+<p>此外，虽然更大的 PTM 通常会有更好的性能，但是一个实际的问题是如何将大型的 PTM 应用于特殊的场景，如低容量设备和低时延应用上。因此，我们需要仔细地设计特定的模型结构和适合下游任务的预训练任务，或者从已有的 PTM 中抽取部分任务特定的知识。我们可以使用一些技术（如<strong>模型压缩</strong>）从现有的通用 PTM 中训练任务特定的 PTM，虽然模型压缩在 CV 领域已经得到了广泛应用，但在 NLP 领域仍然处于起步阶段。Transformer 的全连接结构使得模型压缩更加具有挑战性。</p>
+<h2 id="微调之上的知识迁移">微调之上的知识迁移</h2>
+<p>目前，<strong>微调</strong>是将 PTM 知识迁移至下游任务的最主要方法，但是其缺点是参数的低效性：每个下游任务都有各自的微调参数。一种解决方案是固定 PTM 的原始参数，针对特定任务添加一个小的可调适配模块。实际上，从 PTM 中挖掘知识并不仅限于微调，还有更多的方式，如特征抽取、知识蒸馏、数据增加，将 PTM 作为外部知识等。我们期待看到更多高效的方法。</p>
+<h2 id="ptm-的可解释性和可靠性">PTM 的可解释性和可靠性</h2>
+<p>虽然 PTM 的表现优异，但是其深层非线性的结构使得决策支持的过程变得高度不透明。近年来，可解释人工智能变成了 AI 领域的热点。和 CNN 相比，由于类 Transformer 和语言的复杂性，PTM 的理解要更加困难。一些研究分析了 PTM 中的语言和世界知识（参考 <em>3.3</em> 节），帮助我们一定程度上理解 PTM。然而这些分析所依赖的 attention 存在着一定的争议，被认为无法提供可解释性。</p>
+<p>另一方面，PTM 面对对抗攻击时十分脆弱（参考 <em>7.7</em> 节），随着 PTM 在生产系统中的大范围应用，其可靠性成为了一个重要问题。关于 PTM 的对抗攻击的研究可以帮助我们理解其能力，同时推进 PTM 的对抗防御，有助于提升 PTM 的鲁棒性。</p>
+<h1 id="知识导图">知识导图</h1>
+<p><img src="http://media.zjubiomedit.com/2020-05-22-025627.png" width=80%></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+
+
+
+<div class="license">
+  <div class="license-title">自然语言处理中的预训练模型</div>
+  <div class="license-link">
+    <a href="https://xxwywzy.github.io/2020/08/05/ptm/">https://xxwywzy.github.io/2020/08/05/ptm/</a>
+  </div>
+  <div class="license-meta">
+    <div class="license-meta-item">
+      <div class="license-meta-title">本文作者</div>
+      <div class="license-meta-text">
+          Zheyu Wang
+      </div>
+    </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">发布于</div>
+        <div class="license-meta-text">
+          2020-08-05
+        </div>
+      </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">更新于</div>
+        <div class="license-meta-text">
+          2023-08-05
+        </div>
+      </div>
+    <div class="license-meta-item">
+      <div class="license-meta-title">许可协议</div>
+      <div class="license-meta-text">
+          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank">CC BY-NC-SA 4.0</a>
+      </div>
+    </div>
+  </div>
+  <div class="license-statement">
+      转载或引用本文时，请遵守上述许可协议，注明出处、不得用于商业用途！
+  </div>
+</div>
+          <div class="post-tags">
+              <a href="/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/" rel="tag"># 自然语言处理</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/08/05/cs229-17/" rel="prev" title="CS229 学习笔记之十七：策略梯度">
+                  <i class="fa fa-angle-left"></i> CS229 学习笔记之十七：策略梯度
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/08/05/checklist/" rel="next" title="基于 CheckList 的 NLP 模型行为测试">
+                  基于 CheckList 的 NLP 模型行为测试 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81ODgyNi8zNTI4OA=="></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">332k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">18:26</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+
+
+  <style>
+    #taboola-livere { display: none;}
+  </style>
+
+
+
+<script type="text/javascript">
+var linkLists = document.querySelectorAll(".link-list");
+
+linkLists.forEach(function(linkList) {
+  var listPath = linkList.getAttribute('json-src');
+  var iconPath = linkList.getAttribute('icon-src');
+  
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', listPath, true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      var data = JSON.parse(xhr.responseText);
+      
+      var li = "";
+      linkList.innerHTML = '';
+
+      for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+        var info = data[infoIndex];
+        var labelWarn = info['warn'] ? '<span class="label warn">' + info['warn'] + '</span>' : '';
+        var labelInfo = info['info'] ? '<span class="label info">' + info['info'] + '</span>' : '';
+
+        li += '<div class="link-list-container">';
+        li += '<img class="link-list-image" src="' + iconPath + info['logo'] + '">';
+        li += '<p>' + info['title'] + labelInfo + labelWarn + '</p>';
+        li += '<p>' + info['intro'] + '</p>';
+        li += '<a href="' + info['url'] + '" rel="noopener" target="_blank" data-pjax-state=""></a>';
+        li += '</div>';
+      }
+      
+      linkList.innerHTML = li;
+    }
+  };
+  xhr.send();
+});
+</script>
+
+
+<script type="text/javascript">
+var cultureList = document.querySelectorAll(".culture-list");
+if (cultureList.length !== 0) {
+  var j = -1;
+  for (var i = 0; i < cultureList.length; i++) {
+    const listPath = cultureList[i].getAttribute('json-src');
+    const coverPath = cultureList[i].getAttribute('cover-src');
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', listPath, true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        j++;
+        var data = JSON.parse(xhr.responseText);
+        var li = "";
+        
+        cultureList[j].innerHTML = '';
+
+        for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+          var info = data[infoIndex];
+          
+          var title = info['title'];
+          if (info['link']) {
+            title = '<a href="' + info['link'] + '">' + info['title'] + '</a>';
+          }
+
+          var author = info['author'] ? '<span class="author">' + info['author'] + '</span>' : '';
+
+          var intro = info['intro'] ? info['intro'] : '';
+
+          var star = '';
+          if (info['score'] == null) {
+            star = '';
+          } else {
+            var colorStar = '';
+            var greyStar = '';
+            var int = Math.floor(info['score']); //整数部分
+            var fract = 0;
+            if (info['score'] % 1 !== 0) {
+              fract = 1;
+            }
+            for (var m = 0; m < int; m++) {
+              colorStar += '★';
+            }
+            if (fract !== 0) {
+              colorStar += '☆';
+            }
+            for (var m = 0; m < (5 - fract - int); m++) {
+              greyStar += '☆';
+            }
+            if (info['score'] !== 5) {
+              star = '<span class="star-score">' + colorStar + '<span class="grey-star">' + greyStar + '</span></span>';
+            } else {
+              star = '<span class="star-score">' + colorStar + '</span>';
+            }
+          }
+
+          li += '<div class="media">';
+          li += '<div class="media-cover" style="background-image:url(' + coverPath + info['cover'] + ')"></div>';
+          li += '<div class="media-meta">';
+          li += '<div class="media-meta-item title">' + title + '</div>';
+          li += '<div class="media-meta-item">' + author + star + '</div>';
+          li += '<div class="media-meta-item intro">' + intro + '</div>';
+          li += '</div></div>';
+        }
+        
+        cultureList[j].innerHTML = li;
+      }
+    };
+    xhr.send();
+  }
+}
+</script>
+
+
+
+
+<script src="/resources/minigrid.min.js"></script>
+<script type="text/javascript">
+var album = document.querySelector(".album");
+if (album) {
+  // 相册列表 JSON 数据
+  var imgDataPath = album.getAttribute('json-src');
+  // 照片存储路径
+  var imgPath = album.getAttribute('photo-src');
+  // 最多显示数量
+  var imgMaxNum = 50;
+  // 获取窗口大小以决定图片宽度
+  var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  var imageWidth;
+
+  if (windowWidth < 768) {
+    imageWidth = 145; // 移动端图片宽度
+  } else {
+    imageWidth = 235;
+  }
+
+  // 腾讯云自定义样式 (数据万象外网流量需要付费)
+  //var imgStyle = '!' + imageWidth + 'x';
+  //var imgStyle = '!300x';
+
+  // 生成相册
+  var linkDataPath = imgDataPath;
+  var photo = {
+    page: 1,
+    offset: imgMaxNum,
+    init: function () {
+      var that = this;
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", linkDataPath, true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var data = JSON.parse(xhr.responseText);
+          that.render(that.page, data);
+        }
+      };
+      xhr.send();
+    },
+    render: function (page, data) {
+      var begin = (page - 1) * this.offset;
+      var end = page * this.offset;
+      if (begin >= data.length) return;
+      var imgNameWithPattern, imgName, imageSize, imageX, imageY, li = "";
+      for (var i = begin; i < end && i < data.length; i++) {
+        imgNameWithPattern = data[i].split(' ')[1];
+        imgName = imgNameWithPattern.split('.')[0];
+        imageSize = data[i].split(' ')[0];
+        imageX = imageSize.split('.')[0];
+        imageY = imageSize.split('.')[1];
+        li += '<div class="card" style="width:' + imageWidth + 'px" >';
+        li += '<div class="album-photo" style="height:'+ imageWidth * imageY / imageX + 'px">';
+        li += '<a class="fancybox fancybox.image" href="' + imgPath + imgNameWithPattern + '" itemscope="" itemtype="http://schema.org/ImageObject" itemprop="url" data-fancybox="group" rel="group" data-caption="' + imgName + '" title="' +  imgName + '">';
+        li += '<img data-src="' + imgPath + imgNameWithPattern + '" src="' + imgPath + imgNameWithPattern + '" alt="' +  imgName + '" data-loaded="true">';
+        li += '</a>';
+        li += '</div>';
+        li += '</div>';
+      }
+      album.insertAdjacentHTML('beforeend', li);
+      this.minigrid();
+    },
+    minigrid: function () {
+      var grid = new Minigrid({
+        container: '.album',
+        item: '.card',
+        gutter: 12
+      });
+      grid.mount();
+      window.addEventListener('resize', function () {
+        grid.mount();
+      });
+    }
+  };
+  photo.init();
+}
+</script>
+</body>
+</html>

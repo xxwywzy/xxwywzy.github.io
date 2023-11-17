@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/resources/favicon/favicon.png">
+  <link rel="mask-icon" href="/resources/favicon/favicon.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"xxwywzy.github.io","root":"/","images":"/resources/img/","scheme":"Gemini","darkmode":true,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"livere","storage":true,"lazyload":false,"nav":null,"activeClass":"livere"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本篇博客是《数据密集型应用系统设计》一书的学习笔记（第一章）。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《数据密集型应用系统设计》读书笔记（一）">
+<meta property="og:url" content="https://xxwywzy.github.io/2021/05/24/dda-1/">
+<meta property="og:site_name" content="口仆">
+<meta property="og:description" content="本篇博客是《数据密集型应用系统设计》一书的学习笔记（第一章）。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/2022-12-16-084504.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-11-16-133914.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2022-12-16-084458.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2022-12-16-084454.png">
+<meta property="article:published_time" content="2021-05-24T11:07:06.000Z">
+<meta property="article:modified_time" content="2023-08-07T08:19:03.000Z">
+<meta property="article:author" content="Zheyu Wang">
+<meta property="article:tag" content="大数据">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2022-12-16-084504.png">
+
+
+<link rel="canonical" href="https://xxwywzy.github.io/2021/05/24/dda-1/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://xxwywzy.github.io/2021/05/24/dda-1/","path":"2021/05/24/dda-1/","title":"《数据密集型应用系统设计》读书笔记（一）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>《数据密集型应用系统设计》读书笔记（一） | 口仆</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/resources/fonts/longcang/longcang-regular.css" >
+<link rel="stylesheet" href="/resources/fonts/lxgw/lxgwwenkailite-regular.css" >
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">口仆</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Long may the sunshine</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-culture"><a href="/culture/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>MEME</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%AF%E9%9D%A0%E6%80%A7"><span class="nav-number">1.</span> <span class="nav-text">可靠性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A1%AC%E4%BB%B6%E6%95%85%E9%9A%9C"><span class="nav-number">1.1.</span> <span class="nav-text">硬件故障</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BD%AF%E4%BB%B6%E9%94%99%E8%AF%AF"><span class="nav-number">1.2.</span> <span class="nav-text">软件错误</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%BA%E4%B8%BA%E5%A4%B1%E8%AF%AF"><span class="nav-number">1.3.</span> <span class="nav-text">人为失误</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%AF%E6%89%A9%E5%B1%95%E6%80%A7"><span class="nav-number">2.</span> <span class="nav-text">可扩展性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%8F%E8%BF%B0%E8%B4%9F%E8%BD%BD"><span class="nav-number">2.1.</span> <span class="nav-text">描述负载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%8F%E8%BF%B0%E6%80%A7%E8%83%BD"><span class="nav-number">2.2.</span> <span class="nav-text">描述性能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E5%AF%B9%E8%B4%9F%E8%BD%BD%E5%A2%9E%E5%8A%A0%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">2.3.</span> <span class="nav-text">应对负载增加的方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%AF%E7%BB%B4%E6%8A%A4%E6%80%A7"><span class="nav-number">3.</span> <span class="nav-text">可维护性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E6%93%8D%E4%BD%9C%E6%80%A7"><span class="nav-number">3.1.</span> <span class="nav-text">可操作性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E6%80%A7"><span class="nav-number">3.2.</span> <span class="nav-text">简单性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E6%BC%94%E5%8C%96%E6%80%A7"><span class="nav-number">3.3.</span> <span class="nav-text">可演化性</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE"><span class="nav-number">4.</span> <span class="nav-text">思维导图</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zheyu Wang"
+      src="/resources/favicon/avatar.png">
+  <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+  <div class="site-description" itemprop="description">相信过程</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">85</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xxwywzy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/xxwywzy" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/xxwywzy" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/xxwywzy" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2021/05/24/dda-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resources/favicon/avatar.png">
+      <meta itemprop="name" content="Zheyu Wang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="口仆">
+      <meta itemprop="description" content="相信过程">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="《数据密集型应用系统设计》读书笔记（一） | 口仆">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          《数据密集型应用系统设计》读书笔记（一）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-05-24 19:07:06" itemprop="dateCreated datePublished" datetime="2021-05-24T19:07:06+08:00">2021-05-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">编程与算法</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B%E4%B8%8E%E7%AE%97%E6%B3%95/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">读书笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3.9k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>13 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><div class="note danger"><p>本篇博客是《数据密集型应用系统设计》一书的学习笔记（第一章）。</p>
+</div>
+<span id="more"></span>
+<p>本篇笔记对应原书第一章：<strong>可靠、可扩展与可维护的应用系统</strong>。</p>
+<p>目前许多的新型应用都属于<strong>数据密集型</strong>（data-intensive），而不是计算密集型（compute-intensive），对于这些应用，CPU 的处理能力并不是第一限制性因素，关键在于数据量、数据的复杂度及数据的快速多变性。</p>
+<p>近年来出现了许多用于数据存储和处理的新工具，它们可以针对各种不同的应用场景进行优化，不适合再归为数据库、队列、高速缓存等不同类型，因此我们将其统称为<strong>数据系统</strong>（data system）。此外，越来越多的应用系统需求广泛，单个组件无法满足所有数据处理与存储需求。因此需要将任务分解，每个组件负责高效完成其中一部分，多个组件依靠应用代码有机衔接起来。例如，许多应用系统包括以下模块：</p>
+<ul>
+<li>数据库：用来存储数据，以方便应用再次访问</li>
+<li>高速缓存：缓存那些复杂或操作代价昂贵的结果，以加快下一次访问</li>
+<li>索引：允许用户按关键字搜索数据并进行各种过滤</li>
+<li>流式处理：持续发送消息到另一个进程，并采用异步方式处理</li>
+<li>批处理：定期处理大量的累积数据</li>
+</ul>
+<p>下图给出了一个包含多个不同组件的数据系统架构的示例。其组合使用了多个组件来提供服务，而对外提供服务的界面或 API 会隐藏很多内部实现细节。这样基本上我们基于一个个较小的、通用的组件，构建了一个全新的、专用的数据系统。</p>
+<p><img src="http://media.zjubiomedit.com/2022-12-16-084504.png" width=60%></p>
+<p>影响数据系统设计的因素有很多，本章将专注于对大多数系统都极为重要的三个问题：</p>
+<ul>
+<li><strong>可靠性</strong>（Reliability）。当出现意外情况如硬件、软件故障、人为失误等，系统应可以继续正常运转（虽然性能可能有所降低，但确保功能正确）</li>
+<li><strong>可扩展性</strong>（Scalability）。随着规模的增长（如数据量、流量或复杂性），系统应以合理的方式来匹配这种增长</li>
+<li><strong>可维护性</strong>（Maintainability）。随着时间的推移，许多新的人员参与到系统开发和运维，以维护现有功能或适配新场景等，系统都应高效运转。</li>
+</ul>
+<h1 id="可靠性">可靠性</h1>
+<p>系统的可靠性意味着即使发生了某些错误，系统仍可以继续正常工作。此处定义可能出错的事情为<strong>故障</strong>（faults），而系统可应对的错误称为<strong>容错</strong>（fault-tolerant），注意系统不可能容忍所有的故障，因此容错总是指容忍<strong>特定类型</strong>的故障。</p>
+<p>我们还需要注意区分<strong>故障</strong>与<strong>失效</strong>（failure）这两个概念。故障通常定义为组件偏离其正常规格，而失效则意味着系统作为一个整体停止，无法向用户提供所需的服务。失效要比故障更加严重，我们希望通过设计容错机制来避免从故障引发系统失效。下面将介绍三种主要的故障类型：硬件故障、软件错误与人为失误。这些故障的共同点是其产生的影响可以被消除（因此我们倾向于容忍而不是预防，与安全问题不同）。</p>
+<h2 id="硬件故障">硬件故障</h2>
+<p>常见的硬件故障包括硬盘崩溃、内存故障、电网停电等。通常减少这种故障的方法是为硬件添加<strong>冗余</strong>，例如对磁盘配置 RAID、服务器配置双电源等。当一个组件发生故障，冗余组件可以快速接管，之后再更换失效的组件。</p>
+<p>硬件冗余方案可以使得单台机器完全失效的概率降为非常低的水平，而近年来随着数据量和应用计算需求的增加，更多的应用可以运行在大规模机器之上，随之而来的硬件故障率呈线性增长。此时系统强调的是总体的灵活性与弹性而非单台机器的可靠性，因此通过<strong>软件容错</strong>的方式来容忍多机失效逐渐成为新的手段。</p>
+<h2 id="软件错误">软件错误</h2>
+<p>硬件故障大多是相互独立的，而发生在系统内的软件错误往往是相互关联的，例如系统内核 bug、应用进程失控、级联故障等。软件错误通常会长时间处于引而不发的状态，直到碰到特定的触发条件。这意味着软件其实对使用环境存在某种假设，这种假设通常为真，由于某些原因可能会不再成立。</p>
+<p>软件的系统问题通常没有快速的解决办法，只能仔细考虑更多细节，包括认真检查系统中的假设与交互、进行全面的测试、进程隔离、允许进程崩溃并自动重启、评估监测并分析生产环节的行为表现等。</p>
+<h2 id="人为失误">人为失误</h2>
+<p>除了上述两种错误，人为的失误（包括软件开发、运维等环节）也常常会引发系统故障，下面列举一些可以提升系统可靠性，减少人为失误影响的方法：</p>
+<ul>
+<li>以最小出错的方式来设计系统，如精心设计的抽象层、API 和管理界面</li>
+<li>想办法分离最容易出错的地方、容易引发故障的接口</li>
+<li>充分的测试，从各单元测试到全系统集成测试以及手动测试</li>
+<li>出现人为失误时，提供快速的恢复机制以尽量减少故障影响</li>
+<li>设置详细而清晰的监控子系统，包括性能指标和错误率</li>
+</ul>
+<h1 id="可扩展性">可扩展性</h1>
+<p>可扩展性是用来描述系统应对负载增加能力的术语。我们首先会介绍定量描述负载与性能的方法，然后给出应对负载增加的可能方法。</p>
+<h2 id="描述负载">描述负载</h2>
+<p>负载可以用称为<strong>负载参数</strong>（load parmeters）的若干数字来描述。参数的最佳选择取决于系统的体系结构，常见的选择有：</p>
+<ul>
+<li>Web 服务器的每秒请求处理次数</li>
+<li>数据库的写入率</li>
+<li>聊天室的同时活跃用户数量</li>
+<li>缓存的命中率</li>
+</ul>
+<p>有时平均值很重要，而有时少数的峰值更加重要。原文这里给出了一个 Twitter 的例子来说明负载，Twitter 的两个典型业务操作是：</p>
+<ul>
+<li><strong>发布推特</strong>：一个用户可以发布一条新消息到其所有的关注者（平均 4.6k 请求/秒，峰值 12k 请求/秒）</li>
+<li><strong>主页时间线</strong>：一个用户可以查看其关注对象发布的推特（平均 300k 请求/秒）</li>
+</ul>
+<p>上述操作的难点在于巨大的<strong>扇出</strong>（fan-out）结构，即每个用户会关注很多人，也会被很多人圈粉。Twitter 给出了如下图所示的两种处理方案：</p>
+<p><img src="http://media.zjubiomedit.com/2020-11-16-133914.png" width=60% /></p>
+<p>方法 1 是将发送的新推特插入到全局的推特集合中，当用户查看时间线时，首先查找其所有的关注对象，列出这些人的所有推特，最后以时间为序进行合并。在关系型数据库中，可以通过如下查询语句实现：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> tweets.<span class="operator">*</span>, users.<span class="operator">*</span> <span class="keyword">FROM</span> tweets</span><br><span class="line">  <span class="keyword">JOIN</span> users <span class="keyword">ON</span> tweets.sender_id <span class="operator">=</span> users.id</span><br><span class="line">  <span class="keyword">JOIN</span> follows <span class="keyword">ON</span> follows.followee_id <span class="operator">=</span> users.id</span><br><span class="line">  <span class="keyword">WHERE</span> follows.follower_id <span class="operator">=</span> <span class="built_in">current_user</span></span><br></pre></td></tr></table></figure>
+<p>方法 2 则是对每个用户的时间线维护一个缓存，当用户发布新推特时，查询其关注者，将该推特插入到每个关注者的时间线缓存中。由于已经预先计算了时间线，所以访问时间线的性能会非常快。</p>
+<p>Twitter 在最初的版本中使用了方法 1，但随着主页时间线的读负载压力的与日俱增，开始切换为方法 2，因为时间线浏览的压力要比发布推特高的多，所以在发布时多完成一些事情可以加速读性能。然而，方法 2 也存在着一定缺陷，如图中所示，假定每名用户平均 75 个关注者，则需要每秒约 345k 次写入缓存，而由于关注者数量的偏差，对于某些超级用户来说，其发布一条推特可能会导致数千万次的写入发生，这对写性能的要求极大。目前 Twitter 正在考虑将两种方法结合起来，大部分用户发布推特时采用方法 2，以一对多写入时间线，而部分超级用户则才用类似方法 1 的方法，其推特被单独提取，当读取时才和用户的时间线合并。</p>
+<p>在本例中，每个用户关注者的分布情况时可扩展性的关键负载参数，其决定了扇出数，在不同的应用中存在着类似的关键负载参数，需要根据具体情况进行判断。</p>
+<h2 id="描述性能">描述性能</h2>
+<p>描述负载之后，我们需要进一步了解负载增加系统将会发生什么变化，此时我们就需要对系统性能进行定量描述。与负载的描述类似，在不同的系统中关心的性能指标有所不同：</p>
+<ul>
+<li>在批处理系统如 Hadoop 中，通常关心<strong>吞吐量</strong>（throughput），即每秒可处理的记录条数，或在固定大小数据集上运行作业所需的总时间</li>
+<li>在线上系统中，更看重服务的<strong>响应时间</strong>（response time），即客户端从发送请求到接收响应之间的间隔。</li>
+</ul>
+<p>对于响应时间来说，其包括处理请求时间、以及各种延迟（网络延迟、排队延迟）。即使反复发送、处理相同的请求，每次都可能会产生略微不同的响应时间。因此我们最好将响应时间视为一种可度量的数据分布。</p>
+<p>如下图所示，每个灰色条代表一个服务请求，高度表示该请求的响应时间。我们可以考察服务请求的<strong>平均响应时间</strong>（一般为算术平均值），但其有时会掩盖一些信息；因此更好的选择是使用<strong>百分位数</strong>，包括中位数、95百分位数、99百分位数等。百分位数常用于描述、定义服务质量指标和服务质量协议，较高的响应时间百分位数会直接影响用户的总体服务体验（请求最慢的客户往往购买了更多的商品）。</p>
+<p><img src="http://media.zjubiomedit.com/2022-12-16-084458.png" width=80%/></p>
+<h2 id="应对负载增加的方法">应对负载增加的方法</h2>
+<p>在描述完负载与性能的相关参数后，我们关心的问题是：当负载参数增加时，应如何保持良好性能？这里原书给出了一系列的 tips，现归纳如下：</p>
+<ul>
+<li>针对特定级别负载而设计的架构不太可能应付超出预设目标 10 倍的实际负载</li>
+<li>扩展一般分为<strong>垂直扩展</strong>（升级到更强大的机器）与<strong>水平扩展</strong>（将负载分布到多个更小的机器）
+<ul>
+<li>水平扩展不可避免，不过单机性能同样不能忽视</li>
+</ul></li>
+<li>如果负载高度不可预测，自动<strong>弹性</strong>系统会更加高效，其可以自动检测负载增减，然后自动添加更多计算资源</li>
+<li>将无状态服务扩展的至多机器相对容易，而将有状态服务从单个节点扩展到分布式多机环境的复杂性会大大增加
+<ul>
+<li>随着分布式系统的发展，未来分布式数据系统将成为标配</li>
+</ul></li>
+<li>超大规模的系统往往针对特定应用而高度定制，很难有一种通用的架构</li>
+</ul>
+<h1 id="可维护性">可维护性</h1>
+<p>软件的大部分成本在于开发完成后的持续维护，包括 bug 修复、保证系统正常运行、故障排查、新平台适配、增加新功能等。本节将关注软件系统中保持高可维护性的三个设计原则：</p>
+<ul>
+<li><strong>可操作性</strong>（Operability）：方便运维团队来保持系统平稳运行</li>
+<li><strong>简单性</strong>（Simplicity）：简化系统复杂性，使新工程师能够轻松理解系统（注意与用户界面的简单性区分）</li>
+<li><strong>可演化性</strong>（Evolvability）：使工程师能够轻松地对系统进行更改，根据需求变化将其适配到非典型场景（也称为可延伸性、易修改性或可塑性）</li>
+</ul>
+<h2 id="可操作性">可操作性</h2>
+<p>良好的操作性可以使得日常的工作变得简单，使运维团队能够专注于高附加值的任务。数据系统设计可以在这方面做很多事情，例如：</p>
+<ul>
+<li>提供对系统运行时行为和内部的可观测性，方便监控</li>
+<li>提供良好的自动化支持与标准工具集成</li>
+<li>避免依赖特定的机器（允许机器停机维护而系统不间断运行）</li>
+<li>提供良好的文档和易于理解的操作模式</li>
+<li>提供良好的默认配置，允许管理员方便地修改默认值</li>
+</ul>
+<h2 id="简单性">简单性</h2>
+<p>系统的复杂性有各种各样的表现方式：状态空间的膨胀、模块的紧耦合、不一致的命名和术语、特殊处理等。复杂性会使得维护变得越来越困难，降低复杂性可以大大提高软件的可维护性。</p>
+<p>简化系统设计并不意味着减少系统功能，而主要意味着消除<strong>意外</strong>（accidental）方面的复杂性，其并非软件固有，而是实现本身所衍生出来的问题。</p>
+<p>消除意外复杂性的最好方法之一就是<strong>抽象</strong>（abstraction）。一个好的设计抽象可以隐藏大量的实现细节，并对外提供干净、易懂的接口；一个好的抽象也可以用于不同的应用程序，提升开发效率与软件质量。</p>
+<h2 id="可演化性">可演化性</h2>
+<p>一成不变的系统需求几乎不存在，我们使用可演化性来指代<strong>数据系统层面的敏捷性</strong>。可演化性的目标在于可以轻松地修改数据系统，使其适应不断变化的需求。这一目标与简单性密切相关：简单易懂的系统通常比复杂的系统更容易修改。</p>
+<p>在组织流程方面，<strong>敏捷</strong>（Agile）开发模式为适应变化提供了很好的参考。不过当前大部分的敏捷开发技术还只是针对小规模、本地模式环境。在更大的数据系统层面上提高敏捷性的方法还有待探索。</p>
+<h1 id="思维导图">思维导图</h1>
+<p><img src="http://media.zjubiomedit.com/2022-12-16-084454.png" width=60%/></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+
+
+
+<div class="license">
+  <div class="license-title">《数据密集型应用系统设计》读书笔记（一）</div>
+  <div class="license-link">
+    <a href="https://xxwywzy.github.io/2021/05/24/dda-1/">https://xxwywzy.github.io/2021/05/24/dda-1/</a>
+  </div>
+  <div class="license-meta">
+    <div class="license-meta-item">
+      <div class="license-meta-title">本文作者</div>
+      <div class="license-meta-text">
+          Zheyu Wang
+      </div>
+    </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">发布于</div>
+        <div class="license-meta-text">
+          2021-05-24
+        </div>
+      </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">更新于</div>
+        <div class="license-meta-text">
+          2023-08-07
+        </div>
+      </div>
+    <div class="license-meta-item">
+      <div class="license-meta-title">许可协议</div>
+      <div class="license-meta-text">
+          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank">CC BY-NC-SA 4.0</a>
+      </div>
+    </div>
+  </div>
+  <div class="license-statement">
+      转载或引用本文时，请遵守上述许可协议，注明出处、不得用于商业用途！
+  </div>
+</div>
+          <div class="post-tags">
+              <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag"># 大数据</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/08/05/checklist/" rel="prev" title="基于 CheckList 的 NLP 模型行为测试">
+                  <i class="fa fa-angle-left"></i> 基于 CheckList 的 NLP 模型行为测试
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/08/05/cs229-18/" rel="next" title="CS229 学习笔记之十八：机器学习的实用建议">
+                  CS229 学习笔记之十八：机器学习的实用建议 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81ODgyNi8zNTI4OA=="></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">332k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">18:26</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+
+
+  <style>
+    #taboola-livere { display: none;}
+  </style>
+
+
+
+<script type="text/javascript">
+var linkLists = document.querySelectorAll(".link-list");
+
+linkLists.forEach(function(linkList) {
+  var listPath = linkList.getAttribute('json-src');
+  var iconPath = linkList.getAttribute('icon-src');
+  
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', listPath, true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      var data = JSON.parse(xhr.responseText);
+      
+      var li = "";
+      linkList.innerHTML = '';
+
+      for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+        var info = data[infoIndex];
+        var labelWarn = info['warn'] ? '<span class="label warn">' + info['warn'] + '</span>' : '';
+        var labelInfo = info['info'] ? '<span class="label info">' + info['info'] + '</span>' : '';
+
+        li += '<div class="link-list-container">';
+        li += '<img class="link-list-image" src="' + iconPath + info['logo'] + '">';
+        li += '<p>' + info['title'] + labelInfo + labelWarn + '</p>';
+        li += '<p>' + info['intro'] + '</p>';
+        li += '<a href="' + info['url'] + '" rel="noopener" target="_blank" data-pjax-state=""></a>';
+        li += '</div>';
+      }
+      
+      linkList.innerHTML = li;
+    }
+  };
+  xhr.send();
+});
+</script>
+
+
+<script type="text/javascript">
+var cultureList = document.querySelectorAll(".culture-list");
+if (cultureList.length !== 0) {
+  var j = -1;
+  for (var i = 0; i < cultureList.length; i++) {
+    const listPath = cultureList[i].getAttribute('json-src');
+    const coverPath = cultureList[i].getAttribute('cover-src');
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', listPath, true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        j++;
+        var data = JSON.parse(xhr.responseText);
+        var li = "";
+        
+        cultureList[j].innerHTML = '';
+
+        for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+          var info = data[infoIndex];
+          
+          var title = info['title'];
+          if (info['link']) {
+            title = '<a href="' + info['link'] + '">' + info['title'] + '</a>';
+          }
+
+          var author = info['author'] ? '<span class="author">' + info['author'] + '</span>' : '';
+
+          var intro = info['intro'] ? info['intro'] : '';
+
+          var star = '';
+          if (info['score'] == null) {
+            star = '';
+          } else {
+            var colorStar = '';
+            var greyStar = '';
+            var int = Math.floor(info['score']); //整数部分
+            var fract = 0;
+            if (info['score'] % 1 !== 0) {
+              fract = 1;
+            }
+            for (var m = 0; m < int; m++) {
+              colorStar += '★';
+            }
+            if (fract !== 0) {
+              colorStar += '☆';
+            }
+            for (var m = 0; m < (5 - fract - int); m++) {
+              greyStar += '☆';
+            }
+            if (info['score'] !== 5) {
+              star = '<span class="star-score">' + colorStar + '<span class="grey-star">' + greyStar + '</span></span>';
+            } else {
+              star = '<span class="star-score">' + colorStar + '</span>';
+            }
+          }
+
+          li += '<div class="media">';
+          li += '<div class="media-cover" style="background-image:url(' + coverPath + info['cover'] + ')"></div>';
+          li += '<div class="media-meta">';
+          li += '<div class="media-meta-item title">' + title + '</div>';
+          li += '<div class="media-meta-item">' + author + star + '</div>';
+          li += '<div class="media-meta-item intro">' + intro + '</div>';
+          li += '</div></div>';
+        }
+        
+        cultureList[j].innerHTML = li;
+      }
+    };
+    xhr.send();
+  }
+}
+</script>
+
+
+
+
+<script src="/resources/minigrid.min.js"></script>
+<script type="text/javascript">
+var album = document.querySelector(".album");
+if (album) {
+  // 相册列表 JSON 数据
+  var imgDataPath = album.getAttribute('json-src');
+  // 照片存储路径
+  var imgPath = album.getAttribute('photo-src');
+  // 最多显示数量
+  var imgMaxNum = 50;
+  // 获取窗口大小以决定图片宽度
+  var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  var imageWidth;
+
+  if (windowWidth < 768) {
+    imageWidth = 145; // 移动端图片宽度
+  } else {
+    imageWidth = 235;
+  }
+
+  // 腾讯云自定义样式 (数据万象外网流量需要付费)
+  //var imgStyle = '!' + imageWidth + 'x';
+  //var imgStyle = '!300x';
+
+  // 生成相册
+  var linkDataPath = imgDataPath;
+  var photo = {
+    page: 1,
+    offset: imgMaxNum,
+    init: function () {
+      var that = this;
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", linkDataPath, true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var data = JSON.parse(xhr.responseText);
+          that.render(that.page, data);
+        }
+      };
+      xhr.send();
+    },
+    render: function (page, data) {
+      var begin = (page - 1) * this.offset;
+      var end = page * this.offset;
+      if (begin >= data.length) return;
+      var imgNameWithPattern, imgName, imageSize, imageX, imageY, li = "";
+      for (var i = begin; i < end && i < data.length; i++) {
+        imgNameWithPattern = data[i].split(' ')[1];
+        imgName = imgNameWithPattern.split('.')[0];
+        imageSize = data[i].split(' ')[0];
+        imageX = imageSize.split('.')[0];
+        imageY = imageSize.split('.')[1];
+        li += '<div class="card" style="width:' + imageWidth + 'px" >';
+        li += '<div class="album-photo" style="height:'+ imageWidth * imageY / imageX + 'px">';
+        li += '<a class="fancybox fancybox.image" href="' + imgPath + imgNameWithPattern + '" itemscope="" itemtype="http://schema.org/ImageObject" itemprop="url" data-fancybox="group" rel="group" data-caption="' + imgName + '" title="' +  imgName + '">';
+        li += '<img data-src="' + imgPath + imgNameWithPattern + '" src="' + imgPath + imgNameWithPattern + '" alt="' +  imgName + '" data-loaded="true">';
+        li += '</a>';
+        li += '</div>';
+        li += '</div>';
+      }
+      album.insertAdjacentHTML('beforeend', li);
+      this.minigrid();
+    },
+    minigrid: function () {
+      var grid = new Minigrid({
+        container: '.album',
+        item: '.card',
+        gutter: 12
+      });
+      grid.mount();
+      window.addEventListener('resize', function () {
+        grid.mount();
+      });
+    }
+  };
+  photo.init();
+}
+</script>
+</body>
+</html>

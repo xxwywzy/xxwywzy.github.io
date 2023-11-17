@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/resources/favicon/favicon.png">
+  <link rel="mask-icon" href="/resources/favicon/favicon.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"xxwywzy.github.io","root":"/","images":"/resources/img/","scheme":"Gemini","darkmode":true,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"livere","storage":true,"lazyload":false,"nav":null,"activeClass":"livere"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本篇博客为《百面机器学习》一书的学习笔记，对原书的内容进行了精炼与总结。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《百面机器学习》精华总结">
+<meta property="og:url" content="https://xxwywzy.github.io/2023/10/02/ml-summary/">
+<meta property="og:site_name" content="口仆">
+<meta property="og:description" content="本篇博客为《百面机器学习》一书的学习笔记，对原书的内容进行了精炼与总结。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-06-30-024639.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-08-10-085534.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-08-10-095951.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-08-10-084614.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-08-12-062439.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-08-12-064015.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-08-14-080404.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2018-05-28-133612.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-07-01-090417.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-07-02-015214.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2023-10-25-071756.png">
+<meta property="article:published_time" content="2023-10-02T05:41:45.000Z">
+<meta property="article:modified_time" content="2023-10-25T07:45:01.000Z">
+<meta property="article:author" content="Zheyu Wang">
+<meta property="article:tag" content="机器学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2020-06-30-024639.png">
+
+
+<link rel="canonical" href="https://xxwywzy.github.io/2023/10/02/ml-summary/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://xxwywzy.github.io/2023/10/02/ml-summary/","path":"2023/10/02/ml-summary/","title":"《百面机器学习》精华总结"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>《百面机器学习》精华总结 | 口仆</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/resources/fonts/longcang/longcang-regular.css" >
+<link rel="stylesheet" href="/resources/fonts/lxgw/lxgwwenkailite-regular.css" >
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">口仆</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Long may the sunshine</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-culture"><a href="/culture/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>MEME</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC-1-%E7%AB%A0-%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">第 1 章-特征工程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E5%BD%92%E4%B8%80%E5%8C%96"><span class="nav-number">1.1.</span> <span class="nav-text">特征归一化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%88%AB%E5%9E%8B%E7%89%B9%E5%BE%81"><span class="nav-number">1.2.</span> <span class="nav-text">类别型特征</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E7%BB%B4%E7%BB%84%E5%90%88%E7%89%B9%E5%BE%81%E7%9A%84%E5%A4%84%E7%90%86"><span class="nav-number">1.3.</span> <span class="nav-text">高维组合特征的处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%84%E5%90%88%E7%89%B9%E5%BE%81"><span class="nav-number">1.4.</span> <span class="nav-text">组合特征</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E6%9C%AC%E8%A1%A8%E7%A4%BA%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.5.</span> <span class="nav-text">文本表示模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#word2vec"><span class="nav-number">1.6.</span> <span class="nav-text">Word2Vec</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E5%83%8F%E6%95%B0%E6%8D%AE%E4%B8%8D%E8%B6%B3%E6%97%B6%E7%9A%84%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95"><span class="nav-number">1.7.</span> <span class="nav-text">图像数据不足时的处理方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC-2-%E7%AB%A0-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0"><span class="nav-number">2.</span> <span class="nav-text">第 2 章-模型评估</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%84%E4%BC%B0%E6%8C%87%E6%A0%87%E7%9A%84%E5%B1%80%E9%99%90%E6%80%A7"><span class="nav-number">2.1.</span> <span class="nav-text">评估指标的局限性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#roc-%E6%9B%B2%E7%BA%BF"><span class="nav-number">2.2.</span> <span class="nav-text">ROC 曲线</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%99%E5%BC%A6%E8%B7%9D%E7%A6%BB%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-number">2.3.</span> <span class="nav-text">余弦距离的应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ab-%E6%B5%8B%E8%AF%95%E7%9A%84%E9%99%B7%E9%98%B1"><span class="nav-number">2.4.</span> <span class="nav-text">A&#x2F;B 测试的陷阱</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">2.5.</span> <span class="nav-text">模型评估的方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B6%85%E5%8F%82%E6%95%B0%E8%B0%83%E4%BC%98"><span class="nav-number">2.6.</span> <span class="nav-text">超参数调优</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%87%E6%8B%9F%E5%90%88%E4%B8%8E%E6%AC%A0%E6%8B%9F%E5%90%88"><span class="nav-number">2.7.</span> <span class="nav-text">过拟合与欠拟合</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC-3-%E7%AB%A0-%E7%BB%8F%E5%85%B8%E7%AE%97%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">第 3 章-经典算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA"><span class="nav-number">3.1.</span> <span class="nav-text">支持向量机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92"><span class="nav-number">3.2.</span> <span class="nav-text">逻辑回归</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%B3%E7%AD%96%E6%A0%91"><span class="nav-number">3.3.</span> <span class="nav-text">决策树</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC-4-%E7%AB%A0-%E9%99%8D%E7%BB%B4"><span class="nav-number">4.</span> <span class="nav-text">第 4 章-降维</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#pca-%E6%9C%80%E5%A4%A7%E6%96%B9%E5%B7%AE%E7%90%86%E8%AE%BA"><span class="nav-number">4.1.</span> <span class="nav-text">PCA 最大方差理论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pca-%E6%9C%80%E5%B0%8F%E5%B9%B3%E6%96%B9%E8%AF%AF%E5%B7%AE%E7%90%86%E8%AE%BA"><span class="nav-number">4.2.</span> <span class="nav-text">PCA 最小平方误差理论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E5%88%A4%E5%88%AB%E5%88%86%E6%9E%90"><span class="nav-number">4.3.</span> <span class="nav-text">线性判别分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E5%88%A4%E5%88%AB%E5%88%86%E6%9E%90%E4%B8%8E%E4%B8%BB%E6%88%90%E5%88%86%E5%88%86%E6%9E%90"><span class="nav-number">4.4.</span> <span class="nav-text">线性判别分析与主成分分析</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC-5-%E7%AB%A0-%E9%9D%9E%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0"><span class="nav-number">5.</span> <span class="nav-text">第 5 章-非监督学习</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#k-%E5%9D%87%E5%80%BC%E8%81%9A%E7%B1%BB"><span class="nav-number">5.1.</span> <span class="nav-text">K 均值聚类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E6%96%AF%E6%B7%B7%E5%90%88%E6%A8%A1%E5%9E%8B"><span class="nav-number">5.2.</span> <span class="nav-text">高斯混合模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E7%BB%84%E7%BB%87%E6%98%A0%E5%B0%84%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="nav-number">5.3.</span> <span class="nav-text">自组织映射神经网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%81%9A%E7%B1%BB%E7%AE%97%E6%B3%95%E7%9A%84%E8%AF%84%E4%BC%B0"><span class="nav-number">5.4.</span> <span class="nav-text">聚类算法的评估</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC-6-%E7%AB%A0-%E6%A6%82%E7%8E%87%E5%9B%BE%E6%A8%A1%E5%9E%8B"><span class="nav-number">6.</span> <span class="nav-text">第 6 章-概率图模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E7%8E%87%E5%9B%BE%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%81%94%E5%90%88%E6%A6%82%E7%8E%87%E5%88%86%E5%B8%83"><span class="nav-number">6.1.</span> <span class="nav-text">概率图模型的联合概率分布</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E7%8E%87%E5%9B%BE%E8%A1%A8%E7%A4%BA"><span class="nav-number">6.2.</span> <span class="nav-text">概率图表示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B%E4%B8%8E%E5%88%A4%E5%88%AB%E5%BC%8F%E6%A8%A1%E5%9E%8B"><span class="nav-number">6.3.</span> <span class="nav-text">生成式模型与判别式模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E6%A8%A1%E5%9E%8B"><span class="nav-number">6.4.</span> <span class="nav-text">马尔可夫模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BB%E9%A2%98%E6%A8%A1%E5%9E%8B"><span class="nav-number">6.5.</span> <span class="nav-text">主题模型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC-10-%E7%AB%A0-%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="nav-number">7.</span> <span class="nav-text">第 10 章-循环神经网络</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%92%8C%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="nav-number">7.1.</span> <span class="nav-text">循环神经网络和卷积神经网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%B8%AD%E7%9A%84%E6%A2%AF%E5%BA%A6%E9%97%AE%E9%A2%98"><span class="nav-number">7.2.</span> <span class="nav-text">循环神经网络中的梯度问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%B8%AD%E7%9A%84%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0"><span class="nav-number">7.3.</span> <span class="nav-text">循环神经网络中的激活函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%95%BF%E7%9F%AD%E6%9C%9F%E8%AE%B0%E5%BF%86%E7%BD%91%E7%BB%9C"><span class="nav-number">7.4.</span> <span class="nav-text">长短期记忆网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#seq2seq-%E6%A8%A1%E5%9E%8B"><span class="nav-number">7.5.</span> <span class="nav-text">Seq2Seq 模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6"><span class="nav-number">7.6.</span> <span class="nav-text">注意力机制</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE"><span class="nav-number">8.</span> <span class="nav-text">思维导图</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0"><span class="nav-number">8.1.</span> <span class="nav-text">特征工程 &amp; 模型评估</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zheyu Wang"
+      src="/resources/favicon/avatar.png">
+  <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+  <div class="site-description" itemprop="description">相信过程</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">85</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xxwywzy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/xxwywzy" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/xxwywzy" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/xxwywzy" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2023/10/02/ml-summary/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resources/favicon/avatar.png">
+      <meta itemprop="name" content="Zheyu Wang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="口仆">
+      <meta itemprop="description" content="相信过程">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="《百面机器学习》精华总结 | 口仆">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          《百面机器学习》精华总结
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-10-02 13:41:45" itemprop="dateCreated datePublished" datetime="2023-10-02T13:41:45+08:00">2023-10-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">读书笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>14k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>48 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><div class="note info"><p>本篇博客为《百面机器学习》一书的学习笔记，对原书的内容进行了精炼与总结。</p>
+</div>
+<span id="more"></span>
+<h1 id="第-1-章-特征工程">第 1 章-特征工程</h1>
+<h2 id="特征归一化">特征归一化</h2>
+<blockquote>
+<p>问题：为什么需要对数值类型的特征做归一化？</p>
+</blockquote>
+<p>对数值类型的特征做归一化可以将所有的特征都统一到一个大致相同的数值区间内。这样做的目的是消除数据特征之间的量纲影响，使得不同的指标之间具有可比性，帮助在进行迭代优化（如梯度下降）时<strong>更快</strong>地收敛至最优解。最常用的归一化方法有以下两种：</p>
+<ul>
+<li>线性函数归一化：对原始数据进行线性变换，将结果映射到 [0, 1] 的范围</li>
+</ul>
+<p><span class="math display">\[
+X_{\mathrm{norm}}=\frac{X-X_{\min }}{X_{\max }-X_{\min }}
+\]</span></p>
+<ul>
+<li>零均值归一化：将原始数据映射到均值为 0，标准差为 1 的分布上</li>
+</ul>
+<p><span class="math display">\[
+z=\frac{x-\mu}{\sigma}
+\]</span></p>
+<p>在实际应用中，通过梯度下降法求解的模型通常是需要归一化的，包括线性回归、逻辑回归、支持向量机、神经网络等模型。但是对于决策树、随机森林、朴素贝叶斯等优化时不依赖原始数据值的算法，不需要进行特征归一化。</p>
+<h2 id="类别型特征">类别型特征</h2>
+<blockquote>
+<p>问题：在对数据进行预处理时，应该怎样处理类别型特征？</p>
+</blockquote>
+<p>类别型特征主要指只在有限选项内取值的特征，其原始输入通常是字符串形式，除了决策树等少数模型能直接处理字符串形式的输入，对于逻辑回归、支持向量机等模型来说，类别型特征必须经过处理转换为数值型特征才能正确工作。</p>
+<p>关于类别型特征的处理，主要有如下三种方式：</p>
+<ul>
+<li>序号编码：处理类别间具有大小关系的数据</li>
+<li>独热编码：处理类别间不具有大小关系的特征，当类别值较多时需要注意稀疏性和特征选择问题</li>
+<li>二进制编码：先用序号编码给每个类别赋予一个类别 ID，再将其对应的二进制编码作为结果（与独热编码比一般可以节省存储空间）</li>
+</ul>
+<h2 id="高维组合特征的处理">高维组合特征的处理</h2>
+<blockquote>
+<p>问题：什么是组合特征？如何处理高维组合特征？</p>
+</blockquote>
+<p>为了提高复杂关系的拟合能力，在特征工程中经常会把一阶离散特征两两组合，构成高阶组合特征。对于高维组合特征，直接组合会导致参数规模过大，这种情况下可以先将高维特征向量降维，再进行组合（在推荐系统中这等价于矩阵分解）。</p>
+<h2 id="组合特征">组合特征</h2>
+<blockquote>
+<p>问题：怎样有效地找到组合特征？</p>
+</blockquote>
+<p>上一节介绍了如何利用降维方法来减少两个高维特征组合后需要学习的参数。但是在很多实际问题中，不是所有的特征组合都是有意义的，我们需要一种有效地方法来帮助我们找到应该对哪些特征进行组合。一种可行的方法是基于<strong>决策树</strong>寻找特征组合，基于训练好的决策树的节点来选择特征组合（具体不作阐述）。</p>
+<h2 id="文本表示模型">文本表示模型</h2>
+<blockquote>
+<p>问题：有哪些文本表示模型？它们各有什么优缺点？</p>
+</blockquote>
+<p>这里介绍了三类文本表示模型，分别是：</p>
+<ul>
+<li>词袋模型和 N-gram 模型。最早出现的一种表示文本的模型，将每篇文章看成一袋子词，并忽略词语顺序，即将每篇文章表示为一个长向量，向量的每一维表示一个单词，该维对应的权重反映词语在文章中的重要程度，常用 TF-IDF 来计算。N-gram 模型指将连续出现的 n 个词组成的词组作为一个单独的特征放到向量表示中去。</li>
+<li>主题模型。用于从文本库中发现有代表性的主题，并且能够计算出每篇文章的主题分布，代表模型有 LDA。</li>
+<li>词嵌入。用于将一个词语映射到低维空间上的一个稠密向量，向量的每一维可以看作一个隐含的主题。当前词嵌入可以分为静态词嵌入和动态上下文词嵌入两种，静态的代表模型有 Word2Vec，动态的代表模型有 BERT。</li>
+</ul>
+<h2 id="word2vec">Word2Vec</h2>
+<blockquote>
+<p>问题：Word2Vec 是如何工作的？它和 LDA 有什么区别和联系？</p>
+</blockquote>
+<p>Word2Vec 实际上是一种浅层的神经网络模型，它有两种网络结构，分别是 CBOW 和 Skip-gram。CBOW 的目标是根据上下文出现的词语来预测<strong>当前词</strong>的生成概率，而 Skip-gram 则是根据当前词来预测<strong>上下文</strong>中各词的生成概率，如下图所示：</p>
+<p><img src="http://media.zjubiomedit.com/2020-06-30-024639.png" width=50%></p>
+<p>两者是由输入层、映射层和输出层组成的神经网络。其中 <span class="math inline">\(w(t)\)</span> 是当前所关注的词，这里假设上下文滑动窗口的大小为 2（一般 5 左右？）。输入层中每个词由 one-hot 编码表示，为 <span class="math inline">\(N\)</span> 维向量（<span class="math inline">\(N\)</span> 为词典长度）。在映射层中，<span class="math inline">\(K\)</span> 个隐藏单元的取值由 <span class="math inline">\(N\)</span> 维输入向量及连接输入和隐含单元的 <span class="math inline">\(N \times K\)</span> 权重矩阵计算得到。在 CBOW 中，还需要对所有输入进行求和平均。同理，输出层向量通过一个 <span class="math inline">\(K \times N\)</span> 的矩阵计算输出一个 <span class="math inline">\(N\)</span> 维向量（实际计算的时候可能都是取的转置来得到列向量），再经过 softmax 转换为概率。softmax 定义为： <span class="math display">\[
+P\left(y=w_{n}|x\right)=\frac{\mathrm{e}^{x_{n}}}{\sum_{k=1}^{N} \mathrm{e}^{x_{k}}}
+\]</span> 基于输出的概率，我们通过使得语料库中所有单词的整体<strong>概率最大化</strong>来训练权重（等价于交叉熵函数），即两个层与层之间的权重矩阵。这里通过反向传播算法实现，每次迭代将权重沿着梯度更优的方向进行一小步更新。然而由于 softmax 函数总存在归一化项，迭代时需要对词汇表中所有单词进行遍历，使得迭代过程非常缓慢，由此产生了 Negative sampling 和 Hierarchical softmax 两种<strong>改进方法</strong>，前者通过采集部分负样本减少计算量，后者通过构建二叉树减少计算量。训练完成后，我们可以选择两个权重矩阵中的任意一个来输出 <span class="math inline">\(K\)</span> 维词嵌入。</p>
+<p>关于 Word2Vec 和 LDA 的区别和联系，从具体方法来看，LDA 是利用文档中单词的共现关系来对单词按主题聚类，可以理解为对“文档-单词”矩阵进行分解，得到“文档-主题”和“主题-单词”两个概率分布；而 Word2Vec 则是对“上下文-单词”矩阵进行学习，其中上下文由目标单词周围的几个单词组成。而这只是这两种具体模型之间的区别，本质上来看，主题模型是一种基于概率图模型的生成式模型，其似然函数可以写成若干条件概率连乘的形式，其中包括需要推测的隐含变量；而词嵌入模型一般表达为神经网络的形式，似然函数基于网络的输出定义，需要通过学习网络的权重得到单词的稠密向量表示。</p>
+<h2 id="图像数据不足时的处理方法">图像数据不足时的处理方法</h2>
+<blockquote>
+<p>问题：在图像分类任务中，训练数据不足会带来什么问题？如何缓解数据量不足带来的问题？</p>
+</blockquote>
+<p>在图像分类任务上，训练数据不足带来的问题主要表现在过拟合方面，即模型在训练样本上的效果可能还不错，但是在测试集上的泛化效果不佳。处理方法大致可以分为三类，一是<strong>基于模型</strong>的方法，采用措施来降低过拟合风险，包括简化模型、添加正则项、集成学习、Dropout 超参数等；二是<strong>基于数据</strong>的方法，对原始数据进行适当变换以达到扩充数据集的效果；三是进行<strong>迁移学习</strong>，可以借用一个在大规模数据集上预训练好的通用模型，在针对目标任务的小数据集上进行微调。</p>
+<h1 id="第-2-章-模型评估">第 2 章-模型评估</h1>
+<h2 id="评估指标的局限性">评估指标的局限性</h2>
+<p>在模型评估过程中，分类问题、排序问题、回归问题往往需要使用不同的指标进行评估，而大部分的评估指标往往只能反映模型的一部分性能。下面通过几个模型评估场景介绍评估指标的局限性。</p>
+<blockquote>
+<p>问题 1：准确率的局限性。在广告定向投放场景中，一个奢侈品用户分类模型的分类准确率超过了 95%，但在实际广告投放过程中，该模型还是把大部用户识别为了非奢侈品用户，这可能是什么原因造成的？</p>
+</blockquote>
+<p><strong>准确率</strong>是指分类正确的样本占总样本个数的比例，即： <span class="math display">\[
+Accuracy=\frac{n_{\text {correct }}}{n_{\text {total }}}
+\]</span> 在本题中，线上效果不佳的主要原因可能为<strong>不同样本类别比例的不均衡</strong>。当某一样本比例明显较多时（如负样本占 99%），分类器将所有样本都预测为负样本可以获得 99% 的准确率，但是实际上并不能正确地识别正样本。</p>
+<p>在本问题中，奢侈品用户对应为比例较小的正样本。虽然模型的整体分类准确率比较高，但是不代表对奢侈品用户的分类准确率也很高。为了解决这个问题，可以使用更为有效的平均准确率（每个类别下的样本准确率的算术平均，实际上就是每个类别精准率的平均）作为模型评估的指标。</p>
+<blockquote>
+<p>问题 2：精准率和召回率的权衡。在视频模糊搜索场景中，搜索排序模型返回的 Top 5 的精确率非常高，但是实际使用过程中，用户还是经常找不到想要的视频，特别是一些比较冷门的剧集，这可能是哪个环节出了问题呢？</p>
+</blockquote>
+<p>首先明确一下精准率和召回率的概念。<strong>精准率</strong>（precision）是指分类正确的正样本个数占分类器判定为正样本的样本个数的比例；而<strong>召回率</strong>（recall）则是指分类正确的正样本个数占真正的正样本个数的比例。精准率和召回率是既矛盾又统一的两个指标，提升其中的一个往往会引起另一个的下降。下图对这两个概念进行了非常形象的说明。</p>
+<p><img src="http://media.zjubiomedit.com/2020-08-10-085534.png" width=35%></p>
+<p>在排序问题中，通常没有一个确定的阈值来把结果直接判定为正负样本，而是采用<strong>前 N 个</strong>（Top N）返回结果的精准率和召回率来衡量排序模型的性能，即认为模型返回的 Top N 的结果就是正样本，记作 Precision@N 和 Recall@N。</p>
+<p>在本问题中，模型返回的 Precision@5 的效果非常好，但是用户体验不佳，找不到想要的视频，说明模型没有把相关的视频全部找出来呈现给用户，即问题出在<strong>召回率</strong>上。对于 Top 5 的结果来说，假设相关结果有 100 个，即使 Precision@5 达到了 100%，Recall@5 也只有 5%。因此在模型评估时，我们有时需要同时关注精准率和召回率，同时选取不同的 Top N 结果进行观察。</p>
+<p>我们还可以选取一些更高阶的评估指标来更全面地反映模型在精准率和召回率量两方面的表现，即模型的 <strong>P-R 曲线</strong>（Precision-Recall）。P-R 曲线的横轴为召回率，纵轴为精准率，整条曲线是通过将阈值从高到低移动生成的，原点附近代表当阈值最大时模型的精准率和召回率。下图给出了两种模型的 P-R 曲线示意图，我们需要基于曲线的整体表现来对模型进行更为全面的评估。</p>
+<p><img src="http://media.zjubiomedit.com/2020-08-10-095951.png" width=30%></p>
+<p>此外，我们还可以通过 F1 值、ROC 曲线和平均精度（AP）来综合地评估排序模型的性能。F1 值是精准率和召回率的调和平均，其定义为： <span class="math display">\[
+\mathrm{F} 1=\frac{2 \times \text {precision} \times \text {recall}}{\text {precision}+\text {recall}}
+\]</span> ROC 曲线将在下一节中进行详细介绍。而 AP 常用于信息检索和目标检测领域，其计算公式如下： <span class="math display">\[
+\mathrm{AveP}=\frac{\sum_{k=1}^{n}(P(k) \times \mathrm{rel}(k))}{\text { number of relevant documents }}
+\]</span> AP 可以理解为在同一召回率时最高的准确率的均值。如果包含多个序列，则将每个序列的 AP 再平均即可得到 MAP。下图对 AP 和 MAP 的计算方式进行了比较形象的说明：</p>
+<p><img src="http://media.zjubiomedit.com/2020-08-10-084614.png" width=45%></p>
+<blockquote>
+<p>问题 3：均方根误差的意外。在美剧流量趋势预测场景中，无论采用哪种回归模型，得到的 RMSE 指标都非常高。然而实际上，模型在 95% 的时间区间内的预测误差都小于 1%，造成 RMSE 指标居高不下的最可能原因是什么？</p>
+</blockquote>
+<p><strong>RMSE</strong>（均方根误差）经常被用来衡量回归模型的好坏，其计算公式为： <span class="math display">\[
+R M S E=\sqrt{\frac{\sum_{i=1}^{n}\left(y_{i}-\hat{y}_{i}\right)^{2}}{n}}
+\]</span> 在本问题中，RMSE 指标居高不下的最可能原因是存在个别偏离程度非常大的<strong>离群点</strong>（Outlier），导致整体的指标变得很差。针对这个问题，可以从三个角度来提出解决方案：</p>
+<ul>
+<li>认定离群点为噪声，在数据预处理阶段将这些噪声点去除</li>
+<li>将离群点考虑到模型的预测中去（较难）</li>
+<li>找到一个更合适的指标来评估模型</li>
+</ul>
+<p>针对第三点，一个比 RMSE 鲁棒性更好的指标是 <strong>MAPE</strong>（平均绝对百分比误差），其计算公式为： <span class="math display">\[
+M A P E=\sum_{i=1}^{n}\left|\frac{y_{i}-\hat{y}_{i}}{y_{i}}\right| \times \frac{100}{n}
+\]</span> 与 RMSE 相比，MAPE 相当于把每个点的误差进行了归一化，降低了个别离群点带来的绝对误差的影响。</p>
+<h2 id="roc-曲线">ROC 曲线</h2>
+<p>ROC 曲线是评估二值分类器的重要指标之一，本节将介绍 ROC 曲线的绘制方法和特点。</p>
+<blockquote>
+<p>问题 1：什么是 ROC 曲线？</p>
+</blockquote>
+<p>ROC 曲线是 <em>Receiver Operating Characteristic Curve</em> 的简称，中文名为“受试者工作特征曲线”，其源于军事领域，而后在医学领域应用较为广泛。</p>
+<p>ROC 曲线的横坐标为<strong>假阳性率</strong>（FPR），纵坐标为<strong>真阳性率</strong>（TPR）。它们的计算公式分别为： <span class="math display">\[
+\begin{array}{l}
+F P R=\frac{F P}{N} \\
+T P R=\frac{T P}{P}
+\end{array}
+\]</span> 其中 <span class="math inline">\(P\)</span> 为真实的正样本的数量，<span class="math inline">\(N\)</span> 为真实的负样本的数量，<span class="math inline">\(TP\)</span> 为 <span class="math inline">\(P\)</span> 个正样本中被分类器预测为正样本的个数，<span class="math inline">\(FP\)</span> 为 <span class="math inline">\(N\)</span> 个负样本中被分类器预测为正样本的个数。</p>
+<blockquote>
+<p>问题 2：如何绘制 ROC 曲线？</p>
+</blockquote>
+<p>ROC 曲线绘制的标准方法为通过不断移动分类器的“截断点”来生成曲线上的关键点。具体来说，二分类中模型的输出一般为预测样本为正例的概率，我们将样本按照预测概率从高到低排序，将每个样本的输出概率设置为区分正负预测结果的阈值（截断点），并从高到低逐渐移动截断点，得到一系列的 FPR 和 TPR，将其绘制在 ROC 图中，连接所有的点就可以得到 ROC 曲线，如下图所示：</p>
+<p><img src="http://media.zjubiomedit.com/2020-08-12-062439.png" width=50%></p>
+<p>另一种 ROC 曲线的绘制方法为：根据样本真实标签统计出正负样本的数量，假设正样本数量为 <span class="math inline">\(P\)</span>，负样本数量为 <span class="math inline">\(N\)</span>；把横轴的刻度间隔设为 <span class="math inline">\(1/N\)</span>，纵轴的刻度间隔设为 <span class="math inline">\(1/P\)</span>；根据模型输出的预测概率对样本从高到低排序，依次遍历样本，从零点开始绘制 ROC 曲线，每遇到一个正样本就沿纵轴方向绘制一个刻度间隔的曲线，每遇到一个负样本就沿横轴方向绘制一个刻度间隔的曲线，直到遍历完所有样本，曲线最终停在 <span class="math inline">\((1,1)\)</span> 这个点，即绘制完成。</p>
+<blockquote>
+<p>问题 3：如何计算 AUC？</p>
+</blockquote>
+<p>AUC 指 ROC 曲线下面积的大小，能够量化地反映基于 ROC 曲线衡量出的模型性能。AUC 的计算方法为沿着 ROC 横轴对曲线积分即可。由于 ROC 曲线一般位于 <span class="math inline">\(y=x\)</span> 这条直线的上方（如果不是的话将概率反转即可得到更好的分类器），所以 AUC 的取值一般在 0.5-1 之间。AUC 越大，说明分类器越可能把真正的正样本排在前面，分类性能越好。假定已知曲线中的所有坐标，则 AUC 计算代码如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">get_AUC</span>(<span class="params">xy_arr</span>):</span><br><span class="line">    <span class="comment">#计算曲线下面积</span></span><br><span class="line">    auc = <span class="number">0.</span></span><br><span class="line">    prev_x = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> x,y <span class="keyword">in</span> xy_arr:</span><br><span class="line">        <span class="keyword">if</span> x != prev_x:</span><br><span class="line">            auc += (x - prev_x) * y</span><br><span class="line">            prev_x = x</span><br><span class="line">    <span class="keyword">return</span> auc</span><br></pre></td></tr></table></figure>
+<p>AUC 还有另外一种计算方法：定义正样本 M 个，负样本 Ｎ 个，以及每个样本的预测概率。那么 AUC 的含义就是穷举所有的正负样本对，如果正样本的预测概率大于负样本的预测概率，那么就 +1；如果如果正样本的预测概率等于负样本的预测概率，那么就 +0.5；如果正样本的预测概率小于负样本的预测概率，那么就 +0，最后把结果除以 Ｍ*N 就可以得到 AUC：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">get_AUC</span>(<span class="params">label, pre</span>):</span><br><span class="line">　　<span class="comment">#计算正样本和负样本的索引，以便索引出之后的概率值</span></span><br><span class="line">    pos = [i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(label)) <span class="keyword">if</span> label[i] == <span class="number">1</span>]</span><br><span class="line">    neg = [i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(label)) <span class="keyword">if</span> label[i] == <span class="number">0</span>]</span><br><span class="line"> </span><br><span class="line">    auc = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> pos:</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> neg:</span><br><span class="line">            <span class="keyword">if</span> pre[i] &gt; pre[j]:</span><br><span class="line">                auc += <span class="number">1</span></span><br><span class="line">            <span class="keyword">elif</span> pre[i] == pre[j]:</span><br><span class="line">                auc += <span class="number">0.5</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>问题 4：ROC 曲线相比 P-R 曲线有什么特点？</p>
+</blockquote>
+<p>ROC 曲线和 P-R 曲线的绘制方式均为动态移动阈值生成不同的点，区别在于 ROC 曲线的横纵坐标分别为假阳性率和真阳性率，而 P-R 曲线则为召回率和精准率。相比 P-R 曲线，ROC 曲线的特点为对于同一个模型，当测试集中正负样本的分布发生变化时，ROC 曲线的形状能够基本<strong>保持不变</strong>，而 P-R 曲线的形状一般会发生比较剧烈的变化，如下图所示：</p>
+<p><img src="http://media.zjubiomedit.com/2020-08-12-064015.png" width=50%></p>
+<p>基于这个特点，ROC 曲线能够尽量降低不同测试集带来的干扰，更加客观地衡量模型本身的性能。而 P-R 曲线则能更直观地反映模型在特定数据集上的表现。</p>
+<h2 id="余弦距离的应用">余弦距离的应用</h2>
+<p>在模型训练的过程中，有时我们需要评估样本之间的距离（相似度）。在机器学习问题中，通常将特征表示为向量的形式，最常用的两种度量相似性的方法为<strong>欧式距离</strong>和<strong>余弦相似度</strong>（距离），欧式距离（即 L2 范数）的计算公式为（以二维为例）： <span class="math display">\[
+\|A - B\|_2=\sqrt{\left(x_{2}-x_{1}\right)^{2}+\left(y_{2}-y_{1}\right)^{2}}
+\]</span> 余弦相似度的定义为： <span class="math display">\[
+\cos (A, B)=\frac{A \cdot B}{\|A\|_{2}\|B\|_{2}}
+\]</span> 其取值范围为 <span class="math inline">\([-1, 1]\)</span>，将 1 减去余弦相似度即为余弦距离，其取值范围为 <span class="math inline">\([0,2]\)</span>。</p>
+<blockquote>
+<p>问题 1：欧式距离和余弦距离的主要区别是什么？</p>
+</blockquote>
+<p>欧式距离关注<strong>数值</strong>上的绝对差异，而余弦距离则<strong>关注</strong>方向上的相对差异。在高维情况下，余弦相似度可以保持“相同时为1，正交时为0，相反时为−1”的性质，而欧氏距离则范围不固定，且含义较模糊。而在某些场景（例如 Word2Vec 中，其向量模长是经过归一化的，此时欧式距离和余弦距离有着单调的关系： <span class="math display">\[
+\|A-B\|_{2}=\sqrt{2(1-\cos (A, B))}
+\]</span> 余弦相似度的一个缺陷在于其无法衡量不同维度上的数值的差异，在某些场景（如推荐系统）下我们需要将这种差异考虑进来。<strong>调整余弦相似度</strong>通过将每个维度上的数值减去其所有维度上的均值，达到消除维度间差异的目的： <span class="math display">\[
+\operatorname{sim}(i, j)=\frac{\sum_{u \in U}\left(R_{u, i}-\bar{R_{u}}\right)\left(R_{u, j}-\bar{R_{u}}\right)}{\sqrt{\sum_{u \in U}\left(R_{u, i}-\bar{R_{u}}\right)^{2}} \sqrt{\sum_{u \in U}\left(R_{u, j}-\bar{R_{u}}\right)^{2}}}
+\]</span> 在推荐领域另一个常用的度量指标为<strong>皮尔逊相关系数</strong>，其与调整余弦相似度非常接近，区别在于调整余弦相似度减去的均值基于物品的评分，而非每个用户各自评分的均值。</p>
+<blockquote>
+<p>问题 2：余弦距离是否是一个严格定义的距离？</p>
+</blockquote>
+<p>距离的定义为：在一个集合中，如果每一对元素均可唯一确定一个实数，使得三条距离公理（正定性、对称性、三角不等式）成立，则该实数可以称为这对元素之间的距离。余弦距离满足正定性和对称性，但是不满足三角不等式，因此并不是严格定义的距离。关于三条公理的证明如下：</p>
+<p><strong>正定性</strong>。根据余弦距离的定义，有： <span class="math display">\[
+\operatorname{dist}(A, B)=1-\cos \theta=\frac{\|A\|_{2}\|B\|_{2}-A B}{\|A\|_{2}\|B\|_{2}}
+\]</span> 由于 <span class="math inline">\(\| A\|_{2}\|B\|_{2}-A B \geqslant 0\)</span>，因此 <span class="math inline">\(\operatorname{dist}(A, B) \geqslant 0\)</span> 恒成立，当且仅当 <span class="math inline">\(A=B\)</span> （方向相同）时等号成立。</p>
+<p><strong>对称性</strong>。根据余弦距离的定义，有： <span class="math display">\[
+\begin{aligned}
+\operatorname{dist}(A, B) &amp;=\frac{\|A\|_{2}\|B\|_{2}-A B}{\|A\|_{2}\|B\|_{2}}=\frac{\|B\|_{2}\|A\|_{2}-A B}{\|B\|_{2}\|A\|_{2}} \\
+&amp;=\operatorname{dist}(B, A)
+\end{aligned}
+\]</span> 因此余弦距离满足对称性</p>
+<p><strong>三角不等式</strong>。在上一个问题中，我们知道单位圆上欧式距离和余弦距离满足： <span class="math display">\[
+\|A-B\|_2=\sqrt{2(1-\cos (A, B))}=\sqrt{2 \operatorname{dist}(A, B)}
+\]</span> 即： <span class="math display">\[
+\operatorname{dist}(A, B)=\frac{1}{2}\|A-B\|^{2}
+\]</span> 由于欧式距离为合法距离，而余弦距离与欧式距离有二次关系，自然不满足三角不等式。我们可以假设单位圆上有三个非常接近的点，其中 A 与 B，B 与 C 的欧式距离为极小量 <span class="math inline">\(u\)</span>，对应的余弦距离为 <span class="math inline">\(u^2/2\)</span>；由于三点之间近似为一条直线，所以 A 与 C 的欧式距离接近于 <span class="math inline">\(2u\)</span>，而对应的余弦距离为 <span class="math inline">\(2u^2\)</span>，大于 A 与 B、B 与 C 的余弦距离之和。</p>
+<p>在机器学习领域，被俗称为距离却不满足三条距离公理的不仅有余弦距离，还有 <strong>KL 距离</strong>，也称为相对熵，其常用于计算两个分布之间的差异，但不满足对称性和三角不等式。</p>
+<h2 id="ab-测试的陷阱">A/B 测试的陷阱</h2>
+<p>在机器学习领域，A/B 测试是验证模型最终效果的主要手段。</p>
+<blockquote>
+<p>问题 1：在对模型进行过充分的离线评估后，为什么还要进行在线 A/B 测试？</p>
+</blockquote>
+<p>需要进行在线 A/B 测试的原因如下：</p>
+<ol type="1">
+<li>离线评估无法完全消除模型过拟合的影响，不能完全替代线上评估结果</li>
+<li>离线评估无法完全还原线上的工作环境</li>
+<li>线上系统的某些商业指标在离线评估中无法计算，如用户点击率、留存时长等</li>
+</ol>
+<blockquote>
+<p>问题 2：如何进行线上 A/B 测试？</p>
+</blockquote>
+<p>进行 A/B 测试的主要手段是进行<strong>用户分桶</strong>，即将用户分成实验组和对照组，对实验组的用户施以新模型，对对照组的用户施以旧模型。在分桶的过程中，要注意样本的<strong>独立性</strong>和采样方式的<strong>无偏性</strong>，确保同一个用户每次只能分到同一个桶中，且 user_id 的选取应该是随机的（还要注意总体的选择）。</p>
+<h2 id="模型评估的方法">模型评估的方法</h2>
+<p>在样本划分和验证的过程中，存在着不同的抽样方法和验证方法。注意这里只考虑训练集和验证集，不考虑额外的测试集。</p>
+<blockquote>
+<p>问题 1：在模型评估过程中，有哪些主要的验证方法，其优缺点是什么？</p>
+</blockquote>
+<p>这里介绍三种常用的验证方法：Holdout 检验，交叉检验和自助法。</p>
+<p><strong>Holdout 检验</strong>。Holdout 检验是最简单也最直接的验证方法，即将原始的样本集合<strong>随机划分</strong>成训练集和验证集两部分。划分的比例视数据集大小而定，传统机器学习领域常用的划分比例是 70% 的样本用于模型训练，30% 的样本用于模型验证；在深度学习领域则训练集的比例会更大（因为数据总量更大，没有必要用 30% 的样本作为验证集）。Holdout 检验的主要缺点是：在验证集上计算出来评估指标与原始分组有很大关系，为了消除随机性，研究者们引入了”交叉检验“的思想。</p>
+<p><strong>交叉检验</strong>。将全部样本划分成 k 个大小相等的样本子集；依次遍历这 k 个子集，每次把当前子集作为验证集，其余所有子集作为训练集，进行模型的训练和评估；最后把 k 次评估指标的平均值作为最终的评估指标。在实际实验中，k 经常取 10。这种方法也称为 <strong>k-fold 交叉验证</strong>。</p>
+<p>当每个子集仅包含 1 个样本时，即每次留下 1 个样本作为验证集，其余所有样本作为训练集。假设样本总数为 n，依次对 n 个样本进行遍历，进行 n 次验证，再将评估指标求平均值得到最终的评估指标。这种方法称为<strong>留一验证</strong>，一般适用于样本总数较少的情况（否则时间开销极大）。如果每次留下 p 个样本作为验证集，则为<strong>留 p 验证</strong>，由于从 n 个元素中选择 p 个元素有 <span class="math inline">\(C_n^p\)</span> 种可能，因此其时间开销更是远远高于留一验证，在实际工程中很少使用。留一验证既可以看做 k-fold 交叉验证的特例，也可以理解为留 p 验证的特例。</p>
+<p><strong>自助法</strong>。上述两类方法都是基于划分训练集和验证集进行模型评估的，当样本规模较小时，将样本集进行划分会进一步减小训练集，可能影响模型的训练效果。自助法是一种可以维持训练集样本规模的验证方法，其基于<strong>自助采样</strong>法。对于总数为 n 的样本集合，进行 n 次<strong>有放回</strong>的随机抽样，得到大小为 n 的训练集。n 次采样的过程中，有的样本会被重复采样，有的样本没有被抽出过，将这些没有被抽出的样本作为验证集，进行模型验证（通过多次自助采样生成多个训练集和验证集）。</p>
+<blockquote>
+<p>问题 2：在自助法的采样过程中，对 n 个样本进行 n 次自助采样，当 n 趋向于无穷大时，最终有多少数从未被选择过？</p>
+</blockquote>
+<p>一个样本在一次抽样过程中未被抽中的概率为 <span class="math inline">\(\left(1-\frac{1}{n}\right)\)</span>，<span class="math inline">\(n\)</span> 次抽样均未抽中的概率为 <span class="math inline">\(\left(1-\frac{1}{n}\right)^{n}\)</span>，当 <span class="math inline">\(n\)</span> 趋于无穷大时，概率为 <span class="math inline">\(\lim _{n \rightarrow \infty}\left(1-\frac{1}{n}\right)^{n}\)</span>。根据重要极限 <span class="math inline">\(\lim _{n \rightarrow \infty}\left(1+\frac{1}{n}\right)^{n}=\mathrm{e}\)</span>，我们有： <span class="math display">\[
+\begin{aligned}
+\lim _{n \rightarrow \infty}\left(1-\frac{1}{n}\right)^{n} &amp;=\lim _{n \rightarrow \infty} \frac{1}{\left(1+\frac{1}{n-1}\right)^{n}} \\
+&amp;=\frac{1}{\lim _{n \rightarrow \infty}\left(1+\frac{1}{n-1}\right)^{n-1}} \cdot \frac{1}{\lim _{n \rightarrow \infty}\left(1+\frac{1}{n-1}\right)} \\
+&amp; =\frac{1}{\mathrm{e}} \approx 0.368
+\end{aligned}
+\]</span> 因此，当样本数很大时，大约有 <strong>36.8%</strong> 的样本从未被选择过，可作为验证集。</p>
+<h2 id="超参数调优">超参数调优</h2>
+<blockquote>
+<p>问题：超参数有哪些调优方法？</p>
+</blockquote>
+<p>超参数搜索算法一般包括如下几个要素：</p>
+<ul>
+<li>目标函数：算法需要最大化/最小化的目标（注意该函数是超参数的函数，并不是损失函数）</li>
+<li>搜索范围：一般通过上限和下限来确定</li>
+<li>其他参数：如搜索步长</li>
+</ul>
+<p>本节介绍三种常用的超参数调优方法：网格搜索、随机搜索和贝叶斯优化。</p>
+<p><strong>网格搜索</strong>。通过查找搜索范围内<strong>所有的点</strong>来确定最优值。如果采用较大的搜索范围以及较小的步长，网格搜索有较大概率找到全局最优值，但这种方法比较消耗计算资源和时间。在实际应用中，一种改进方法是先使用较广的搜索范围和较大的步长，寻找全局最优可能的位置；然后逐渐缩小搜索范围和步长，来寻找更精确的最优值。这种方法可以降低计算时间和计算量，但是由于目标函数一般非凸（存在局部最优），可能会错过全局最优值。</p>
+<p><strong>随机搜索</strong>。随机搜索和网格搜索类似，只是不再测试上界和下界间的所有值，而是在搜索范围内<strong>随机选取</strong>样本点（超参数）。如果样本点集足够大，那么通过随机采样也能大概率找到全局最优值或其近似值。随机搜索一般会比网格搜索更快，但与网格搜索的改进版一样，最终的结果也是无法保证最优。</p>
+<p><strong>贝叶斯优化</strong>。贝叶斯方法的调优方式和前面两种完全不同，其充分利用了之前测试的信息。贝叶斯优化算法通过对目标函数形状进行学习，找到使目标函数向全局最优值提升的参数。具体来说，其学习目标函数形状的方法是：</p>
+<ul>
+<li>根据先验分布，假设一个搜集函数</li>
+<li>每次使用新的采样点来测试目标函数时，利用当前信息来更新目标函数的先验分布</li>
+<li>测试由<strong>后验分布</strong>给出的全局最优值最可能出现的位置的点（超参数）</li>
+</ul>
+<p>为了防止陷入局部最优，该方法会在探索和利用之间找到一个平衡点：探索指在还未取样的区域内获取采样点，利用则是根据后验分布最可能出现全局最值的区域进行采样。</p>
+<h2 id="过拟合与欠拟合">过拟合与欠拟合</h2>
+<blockquote>
+<p>问题 1：在模型评估过程中，过拟合和欠拟合具体是指什么现象？</p>
+</blockquote>
+<p>过拟合是指模型对于训练数据拟合呈现过当的情况，反映到评估指标上，即模型在训练集上的表现很好，但在新数据上的表现较差。欠拟合则是模型在训练和预测时表现都不好的情况。下图展示了二维数据下过拟合和欠拟合的直观表现：</p>
+<p><img src="http://media.zjubiomedit.com/2020-08-14-080404.png" width=60%></p>
+<blockquote>
+<p>问题 2：请说出几种降低过拟合和欠拟合风险的方法？</p>
+</blockquote>
+<p><strong>降低过拟合风险的方法</strong>：</p>
+<ol type="1">
+<li>使用<strong>更多</strong>的训练数据。更多的样本能够让模型学习到更多更有效的特征，减小噪声的影响。如果直接增加数据很困难，可以通过该一定的规则来扩充训练数据（参考第一章 07-图像数据不足的处理方法）。</li>
+<li><strong>降低</strong>模型复杂度。当数据较少时，模型过于复杂是产生过拟合的主要因素，适当降低模型复杂度可以避免模型拟合过多的采样噪声。如在神经网络中减少网络层数、在决策树中降低树的深度等。</li>
+<li><strong>正则化</strong>方法。给模型的参数加上一定的正则约束（贝叶斯角度理解即为后验概率最大化），常用的有 L1 和 L2 正则化。</li>
+<li><strong>集成学习</strong>方法。集成学习中的 Bagging 方法可以降低单一模型的过拟合风险。</li>
+</ol>
+<p><strong>降低欠拟合风险的方法</strong>：</p>
+<ol type="1">
+<li><strong>添加新特征</strong>。当特征不足或现有特征与样本标签的相关性不强时，模型容易出现欠拟合（对部分不需要构建特征的深度学习领域不适用，如 CV）。可以通过特征工程发现添加新的特征，当前一些新兴模型可以帮助完成特征工程，如因子分解机（FM）、梯度提升决策树（GBDT）、Deep-crossing 等。</li>
+<li><strong>增加</strong>模型复杂度。简单模型的学习能力较差，通过增加模型复杂度可以使模型拥有更强的拟合能力。</li>
+<li><strong>减小</strong>正则化系数。当模型出现欠拟合时，可能是正则化系数设置过大，需要有针对性地减小系数。</li>
+</ol>
+<h1 id="第-3-章-经典算法">第 3 章-经典算法</h1>
+<h2 id="支持向量机">支持向量机</h2>
+<blockquote>
+<p>问题 1：详细说说支持向量机的原理。</p>
+</blockquote>
+<p>支持向量机（SVM）是一种经典的监督学习方法，主要用于<strong>二分类</strong>问题，其衍生算法支持向量回归（SVR）则用于回归问题，两者的区别在于SVM 旨在使得到超平面最近的样本点的距离<strong>最大</strong>；而 SVR 旨在使得到超平面最远的样本点的距离<strong>最小</strong>。</p>
+<p>下面对 SVM 的整体流程进行概述。如之前所述，SVM 希望找到一个超平面来作为决策边界，使得到该平面最近的样本点的距离<strong>最大</strong>，即所有样本都远离决策边界，这样对样本预测的置信度更高。</p>
+<p>为了计算样本到超平面的距离，我们给出了两种距离的计算方法：函数间隔和几何间隔。函数间隔存在一个问题，即我们可以通过成比例地增加 <span class="math inline">\(w,b\)</span>，使得函数间隔任意大，这样对距离的估计就失去了意义。为了解决这个问题，将函数间隔进行归一化，即得到了<strong>几何间隔</strong>。实际上几何间隔就是点到超平面的距离。对于一个训练集，其到某个超平面的几何间隔即为所有训练样本<strong>几何间隔</strong>的最小值。</p>
+<p>确定了距离的计算方式后，可以给出最大化几何间隔的优化问题。然而该问题不是标准的优化问题，难以求解。通过将几何间隔转化为函数间隔，再基于函数间隔的缩放性质使得 <span class="math inline">\(\hat{\gamma} = 1\)</span>，可以得到下面的优化问题： <span class="math display">\[
+\begin{align*} 
+\min_{\gamma,w,b} &amp;\quad \frac{1}{2}\Vert w \Vert^2 \\ \text{s.t.} &amp;\quad y^{(i)}(w^Tx^{(i)}+ b)\ge 1, \; i=1,2,…,m
+\end{align*}
+\]</span> 这是一个标准的凸二次规划问题。通过解这个优化问题得到最优解 <span class="math inline">\(w^{\star}, b^{\star}\)</span>，即可得到分离超平面，进而根据其符号进行决策（对于线性 SVM 而言）。</p>
+<p>对于上述优化问题，我们通常通过其对偶问题来进行求解。原始优化问题对应的广义拉格朗日方程可以表示为一个<strong>极小极大</strong>问题，而其对偶形式为一个<strong>极大极小</strong>问题，当满足某些条件时（原函数和不等式约束为凸函数、等式约束为放射函数、不等式约束严格可执行），则对偶问题与原始问题等价，且解满足 KKT 条件（充要）。对偶问题的形式为： <span class="math display">\[
+\begin{align*} 
+\max_{\alpha} &amp;= \sum_{i=1}^m\alpha_i  - \frac12\sum_{i,j=1}^my^{(i)}y^{(j)}\alpha_i\alpha_j\langle x^{(i)},x^{(j)} \rangle \\ \text{s.t.} &amp;\quad \alpha \ge 0, \; i=1,2,…,m， \\
+&amp; \quad \sum_{i=1}^m\alpha_iy^{(i)}=0
+\end{align*}
+\]</span> 基于 KKT 条件，我们可以知道仅对于位于间隔边界上的点，对偶问题的解 <span class="math inline">\(\alpha^{\star}\)</span>（不等式约束的拉格朗日乘子，针对每一个样本都有一个值）才大于 0，这些点也被称为<strong>支持向量</strong>。最终进行决策时的计算只取决于支持向量和输入的内积： <span class="math display">\[
+\begin{align*} 
+(w^{\star})^Tx+b^{\star} &amp; = {\left(\sum_{i=1}^m\alpha_i^{\star}y^{(i)}x^{(i)}\right)}^Tx+b^{\star} \\ &amp; = \sum_i^m\alpha_i^{\star}y^{(i)}\langle x^{(i)},x \rangle +b^{\star}
+\end{align*}
+\]</span> 上述的 SVM 针对线性可分情况，称为<strong>线性可分 SVM</strong>；对于近似线性可分的数据，使用<strong>线性 SVM</strong>，其添加了一个正则项： <span class="math display">\[
+\begin{align*} 
+\min_{\gamma,w,b} &amp;\quad \frac{1}{2}\Vert w \Vert^2 + C\sum_{i=1}^m \xi_i\\ \text{s.t.} &amp;\quad y^{(i)}(w^Tx^{(i)}+ b)\ge 1 - \xi_i, \; i=1,2,…,m \\
+&amp;\quad \xi_i \ge 0, \; i=1,2,…,m
+\end{align*}
+\]</span> 该优化问题同样通过对偶问题求解（约束条件有所变化），得到分离超平面和分离决策函数。注意与线性可分 SVM 的区别在于，线性 SVM 的解 <span class="math inline">\(w^{\star}\)</span> 唯一但是 <span class="math inline">\(b^{\star}\)</span> 不一定唯一（线性可分 SVM 均唯一），且支持向量可以位于间隔边界与分离超平面之间或分离超平面误分一侧。</p>
+<p>对于<strong>非线性</strong>分类问题，可以通过非线性变换将其转化为某个高维特征空间中的线性可分问题。由于在线性 SVM 的求解中，对偶问题涉及的目标函数和分类决策函数都只依赖于内积，因此可以通过<strong>核函数</strong>来替换内积。核函数即通过一个非线性变换后的两个实例间的内积，其计算代价往往比拆分为内积计算要低： <span class="math display">\[
+K(x,z) = \phi(x)^T\phi(z)
+\]</span> 一个函数 <span class="math inline">\(K\)</span> 为合法核的充要条件为，对于任意的有限数据集，其对应的核矩阵为<strong>对称半正定</strong>矩阵。基于核函数的非线性支持向量机的决策函数为： <span class="math display">\[
+f(x) = \text{sign}\left(\sum_i^m\alpha_i^{\star}y^{(i)}K(x, x^{(i)}) +b^{\star}\right)
+\]</span> <strong>SMO 算法</strong>是支持向量机的一种高效解法，通过将原二次规划问题分解为只有两个变量的二次规划问题，并对子问题进行解析求解。直到所有变量满足 KKT 条件为止。</p>
+<p>简要思路：<strong>间隔最大化</strong> → <strong>函数距离和几何距离</strong> → <strong>最优间隔分类器</strong>（优化问题的转化）→ <strong>对偶问题的提出</strong>（广义拉格朗日方程与 KKT 条件）→ <strong>仅依赖于支持向量的求解</strong> → <strong>近似线性可分或非线性分类</strong>（正则化或核函数）→ <strong>SMO 算法</strong>（高效求解对偶问题）</p>
+<blockquote>
+<p>问题 2：在空间上线性可分的两类点，分别向 SVM 分类的超平面上做投影，这些点在超平面上的投影仍然是线性可分的吗？</p>
+</blockquote>
+<p>对于任意线性可分的两组点，它们在 SVM 分类的超平面上的投影都是<strong>线性不可分</strong>的。我们可以从 SVM 直观推导和凸优化理论两个角度对这个结论进行证明。</p>
+<blockquote>
+<p>问题 3：是否存在一组参数，使得 SVM 训练误差为 0？</p>
+</blockquote>
+<p>存在。</p>
+<blockquote>
+<p>问题 4：训练误差为 0 的 SVM 分类器一定存在吗？</p>
+</blockquote>
+<p>存在。</p>
+<blockquote>
+<p>问题 5：加入松弛变量的 SVM 的训练误差可以为 0 吗？</p>
+</blockquote>
+<p>不一定。</p>
+<h2 id="逻辑回归">逻辑回归</h2>
+<blockquote>
+<p>问题 1：介绍一下逻辑回归的原理。</p>
+</blockquote>
+<p>逻辑回归本质上就是线性回归的离散化。以二分类问题为例，如果直接应用于分类问题，我们无法将输出与类别（0 或 1）关联起来。我们通过引入一个非线性的 sigmoid 函数，将其套在线性回归的输出之上，即得到了逻辑回归的假设函数： <span class="math display">\[
+h_{\theta}(x) = g(\theta^Tx) = \frac 1 {1+e^{-\theta^Tx}}
+\]</span> sigmoid 函数的特点是其值域为 0-1，任意位置均可导，且其导数可以表示为自身 <span class="math inline">\(g(z)(1-g(z))\)</span>。至于为什么要选择 sigmoid 函数，可以从<strong>广义线性模型</strong>的角度来解释。</p>
+<p>实际上，线性回归、逻辑回归、以及逻辑回归的扩展 softmax 回归，都是广义线性模型的一种特例，其要求 y 关于 x 的条件分布是指数族分布（以 <span class="math inline">\(\eta\)</span> 为参数），模型的目标是预测 y 的理想值，且参数 <span class="math inline">\(\eta\)</span> 与输入满足线性关系 <span class="math inline">\(\eta=\theta^T x\)</span>。具体到逻辑回归，其条件分布为<strong>伯努利分布</strong>，可以证明该分布是一种指数族分布，根据广义线性模型的预测目标，假设函数应当设置为 y 的期望，通过推导我们可以得出该假设函数即为 sigmoid 函数。</p>
+<p>关于逻辑回归模型的求解，可以通过<strong>最大似然法</strong>来完成。我们可以将假设函数表示为概率分布的形式： <span class="math display">\[
+P(y \mid x ; \theta) = (h_{\theta}(x))^y(1-h_{\theta}(x))^{1-y}
+\]</span> 然后使用对数似然函数进行最大化分析即可。具体来说可以使用一阶的<strong>梯度上升</strong>或是二阶的<strong>牛顿方法</strong>，前者在梯度方向上下降一小步（可通过柯西不等式证明其为最优方向），后者则是一直下降到导数和 <span class="math inline">\(\theta\)</span> 的交界处。</p>
+<blockquote>
+<p>问题 2：逻辑回归为什么要对特征进行离散化？</p>
+</blockquote>
+<p>对于逻辑回归模型来说，对特征进行离散化具有如下优点：</p>
+<ul>
+<li><strong>提高计算效率</strong>。离散化后的稀疏向量乘法运算速度更快，结果方便存储且易扩展</li>
+<li><strong>引入非线性</strong>。逻辑回归属于广义线性模型的一种，本质上还是线性模型，表达能力有限；将特征离散化后，相当于为模型引入了非线性，能够提升模型的表达能力</li>
+<li><strong>提升模型的稳定性和鲁棒性</strong>。离散化后的特征不再关注具体的值，而是关注值所处的区间，会更加稳定；同时对于异常数据具有较好的鲁棒性（异常点被转化为了合法的类别）</li>
+<li><strong>简化模型</strong>。特征离散化之后，起到了简化逻辑回归模型的作用，降低了过拟合风险</li>
+<li><strong>方便进行特征的交叉组合</strong>。特征离散化之后，我们可以对其进行组合构建新的特征，进一步增加模型的非线性</li>
+</ul>
+<blockquote>
+<p>问题 3：简单介绍一下 sigmoid 函数</p>
+</blockquote>
+<p>sigmoid 函数的形式为： <span class="math display">\[
+g(z) = \frac 1 {1+e^{-z}}
+\]</span> 其图像如下：</p>
+<p><img src="http://media.zjubiomedit.com/2018-05-28-133612.png" width="45%" height="45%"></p>
+<p>该函数具有以下几点特征：</p>
+<ul>
+<li>值域为 [0,1]，无限可导（导数可通过自身表示）</li>
+<li>逻辑回归的激活函数，在神经网络中也经常使用</li>
+<li>逻辑回归选用其的原因是基于广义线性模型推导而来的（逻辑回归对应的伯努利分布属于指数族分布）</li>
+</ul>
+<blockquote>
+<p>问题 4：逻辑回归相比于线性回归，有何异同？</p>
+</blockquote>
+<p>两者的异同概括如下：</p>
+<ul>
+<li>不同点：分类和回归、因变量离散和连续</li>
+<li>相同点：广义线性模型、极大似然、梯度下降</li>
+</ul>
+<blockquote>
+<p>问题 5：当使用逻辑回归处理多标签的分类问题时，有哪些常见做法，分别应用于哪些场景，它们之间又有怎样的关系？</p>
+</blockquote>
+<p>如果一个样本对应一个标签，使用 softmax 回归（因变量满足多项分布，逻辑回归的扩展），激活函数为 softmax 函数。如果一个样本对应多个标签，可以拆分为多个二分类问题求解（第 i 类标签 vs 非第 i 类标签）。</p>
+<h2 id="决策树">决策树</h2>
+<p>树模型和逻辑回归的比较：</p>
+<ul>
+<li>逻辑回归线性，树模型非线性</li>
+<li>逻辑回归形式较简单（线性回归 + sigmoid），树模型形式更复杂</li>
+<li>树模型可解释性更强（逻辑回归也不弱）</li>
+<li>树模型常与集成模型结合进行强化</li>
+<li>树模型可做回归，可直接处理类别变量</li>
+</ul>
+<h1 id="第-4-章-降维">第 4 章-降维</h1>
+<h2 id="pca-最大方差理论">PCA 最大方差理论</h2>
+<p>PCA 是一种线性、非监督、全局的降维算法。我们可以通过协方差矩阵的特征值分解和数据矩阵的奇异值分解这两组方法来求解。</p>
+<p>奇异值分解是一种矩阵因子分解方法，可以将任意一个 <span class="math inline">\(m \times m\)</span> 矩阵表示为三个矩阵的乘积（因子分解）的形式，分别是 <span class="math inline">\(m\)</span> 阶正交矩阵，由降序排列的非负的对角线元素组成的 <span class="math inline">\(m \times n\)</span> 矩形对角矩阵和 <span class="math inline">\(n\)</span> 阶正交矩阵（转置为其逆）。奇异值分解一定存在但不唯一。</p>
+<h2 id="pca-最小平方误差理论">PCA 最小平方误差理论</h2>
+<h2 id="线性判别分析">线性判别分析</h2>
+<h2 id="线性判别分析与主成分分析">线性判别分析与主成分分析</h2>
+<h1 id="第-5-章-非监督学习">第 5 章-非监督学习</h1>
+<h2 id="k-均值聚类">K 均值聚类</h2>
+<h2 id="高斯混合模型">高斯混合模型</h2>
+<h2 id="自组织映射神经网络">自组织映射神经网络</h2>
+<h2 id="聚类算法的评估">聚类算法的评估</h2>
+<h1 id="第-6-章-概率图模型">第 6 章-概率图模型</h1>
+<h2 id="概率图模型的联合概率分布">概率图模型的联合概率分布</h2>
+<h2 id="概率图表示">概率图表示</h2>
+<h2 id="生成式模型与判别式模型">生成式模型与判别式模型</h2>
+<h2 id="马尔可夫模型">马尔可夫模型</h2>
+<h2 id="主题模型">主题模型</h2>
+<blockquote>
+<p>问题 1：常见的主题模型有哪些？试介绍其原理。</p>
+</blockquote>
+<p><strong>pLSA</strong>：pLSA 是一个用生成模型来建模文章的生成过程。假设有</p>
+<h1 id="第-10-章-循环神经网络">第 10 章-循环神经网络</h1>
+<h2 id="循环神经网络和卷积神经网络">循环神经网络和卷积神经网络</h2>
+<blockquote>
+<p>问题：处理文本数据时，循环神经网络与前馈神经网络相比有什么特点？</p>
+</blockquote>
+<p>一般的前馈神经网络（如 CNN），通常接受一个定长的向量作为输入，在处理文本时一般将 TF-IDF 向量（词典长度）作为输入，这样做会丢失文本序列中词语的顺序信息。而通过滑动窗口加池化（本质是采样）的方式，可以实现在 CNN 中输入变长的字符串，捕捉到原文本中的一些局部特征，但是单词间的顺序依赖还是难以学习到。</p>
+<p>循环神经网络可以很好地处理文本数据变长且有序的输入序列，其一种典型结构如下：</p>
+<p><img src="http://media.zjubiomedit.com/2020-07-01-090417.png" width=60%></p>
+<p>图中给出了一个长度为 <span class="math inline">\(T\)</span> 的序列用 RNN 建模，展开之后可以看作一个 <span class="math inline">\(T\)</span> 层的前馈神经网络。其中第 <span class="math inline">\(t\)</span> 层的隐含状态 <span class="math inline">\(h_t\)</span> 编码了序列中前 <span class="math inline">\(t\)</span> 个输入的信息，可以通过当前的输入 <span class="math inline">\(x_t\)</span> 和上一层神经网络的状态 <span class="math inline">\(h_{t-1}\)</span> 计算得到；最后一层的状态 <span class="math inline">\(h_T\)</span> 编码了整个序列的信息，因此可以作为整篇文档的压缩表示。图中给出的是一种多对一结构，可以用于文本分类等任务，在 <span class="math inline">\(h_T\)</span> 后直接接一个 softmax 层，输出文本所属类别的预测概率 <span class="math inline">\(y\)</span>，即可实现文本分类。具体计算公式如下： <span class="math display">\[
+\begin{aligned}
+\text {net}_{t}&amp;=U x_{t}+W h_{t-1} \\
+h_{t}&amp;=f(\text{net}_{t}) \\
+y &amp;= g(Vh_t)
+\end{aligned}
+\]</span> 其中 <span class="math inline">\(U\)</span> 为输入层到隐含层的权重矩阵，<span class="math inline">\(W\)</span> 为隐含层从上一时刻到下一时刻状态转移的权重矩阵，<span class="math inline">\(V\)</span> 为从隐含层到输出层的权重矩阵。注意 RNN 的每一时刻共享参数，即参数矩阵实际上只有三个。<span class="math inline">\(f\)</span> 和 <span class="math inline">\(g\)</span> 为非线性激活函数（线性的话隐含层就没有了意义），在文本分类任务中，<span class="math inline">\(f\)</span> 可以选 tanh （<span class="math inline">\(\frac {e^z - e^{-z}} {e^z + e^{-z}}\)</span>）或 ReLU 函数，<span class="math inline">\(g\)</span> 可以选 softmax 函数。</p>
+<p>通过最小化损失函数（单次多项分布下的最大似然），我们可以不断训练网络，达到分类目的。与 CNN 的前馈神经网络相比，RNN 具备对序列顺序信息的刻画能力，同时学习的参数不会过多，可以得到更准确的结果。</p>
+<h2 id="循环神经网络中的梯度问题">循环神经网络中的梯度问题</h2>
+<blockquote>
+<p>问题：循环神经网络为什么会出现梯度消失或梯度爆炸？有哪些改进方案？</p>
+</blockquote>
+<p>RNN 的求解可以采用 BPTT（基于时间的反向传播）算法实现，其实际上就是反向传播算法的简单变种。如果将 RNN 按时间展开成 <span class="math inline">\(T\)</span> 层的前馈神经网络来理解，就和普通的 BP 算法没有什么区别了（除了各层参数共享）。RNN 设计的初衷就是捕获长距离输入之间的依赖，但是实践中发现，使用 BPTT 算法学习的 RNN 并不能成功捕捉到长距离的依赖关系，这一现象主要源于深度神经网络中的<strong>梯度消失</strong>问题。传统的 RNN 梯度可以表示为连乘的形式： <span class="math display">\[
+\frac{\partial n e t_{t}}{\partial n e t_{1}}=\frac{\partial n e t_{t}}{\partial n e t_{t-1}} \cdot \frac{\partial n e t_{t-1}}{\partial n e t_{t-2}} \ldots \frac{\partial n e t_{2}}{\partial n e t_{1}}
+\]</span> 其中： <span class="math display">\[
+\begin{aligned}
+\text {net}_{t}&amp;=U x_{t}+W h_{t-1} \\
+h_{t}&amp;=f(\text{net}_{t}) \\
+\frac{\partial n e t_{t}}{\partial n e t_{t-1}}=\frac{\partial n e t_{t}}{\partial h_{t-1}} \frac{\partial h_{t-1}}{\partial n e t_{t-1}}&amp;=W \cdot \operatorname{diag}\left[f^{\prime}\left(n e t_{t-1}\right)\right] \\&amp;= \left(\begin{array}{ccc}\mathrm{w}_{11} f^{\prime}\left(n e t_{t-1}^{1}\right) &amp; \cdots &amp; \mathrm{w}_{1 n} f^{\prime}\left(n e t_{t-1}^{n}\right) \\ \vdots &amp; \ddots &amp; \vdots \\ \mathrm{w}_{n 1} f^{\prime}\left(n e t_{t-1}^{1}\right) &amp; \cdots &amp; \mathrm{w}_{n n} f^{\prime}\left(n e t_{t-1}^{n}\right)\end{array}\right)
+\end{aligned}
+\]</span> 其中 <span class="math inline">\(n\)</span> 为隐藏层的维度，<span class="math display">\[\frac{\partial n e t_{t}}{\partial n e t_{t-1}}\]</span> 对应的矩阵被称为雅可比矩阵（函数的一阶偏导数以一定方式排列成的矩阵）。由于梯度是沿着网络的每一层（时间步）反向传播的，因此当雅可比矩阵的最大特征值（可以理解为线性变换后在特征向量方向上变换的幅度）大于 1 时，随着离输出越来越远，每层的梯度大小会呈指数增长，导致<strong>梯度爆炸</strong>；反之如果最大特征值小于 1，则梯度的大小会呈指数缩小，产生<strong>梯度消失</strong>。对于 RNN 来说，梯度爆炸可能会导致部分参数异常（超出上限），而梯度消失则会导致模型很难学习到输入序列中的长距离依赖关系。</p>
+<p>对于梯度爆炸问题，可以采用<strong>梯度裁剪</strong>来缓解，即当梯度的范式大于某个阈值时，对梯度进行等比收缩；对于梯度消失问题，则相对比较棘手，需要对模型本身进行改进，深度残差网络是对前馈神经网络的改进，通过残差学习的方式缓解梯度消失的现象；而对 RNN 来说，<strong>长短时记忆模型</strong>（LSTM）和其变种<strong>门控循环单元</strong>（GRU）等模型加入门控机制，很大程度上弥补了梯度消失所带来的损失。</p>
+<h2 id="循环神经网络中的激活函数">循环神经网络中的激活函数</h2>
+<blockquote>
+<p>问题：在循环神经网络中能否使用 ReLU 作为激活函数？</p>
+</blockquote>
+<p>可以。但是由于 RNN 每一层共享权重矩阵，因此需要对矩阵的初值做一定的限制，否则很容易引发数值问题。当采用 ReLU 作为 RNN 中隐藏层的激活函数时，只有当 <span class="math inline">\(W\)</span> 的取值在单位矩阵附近时才能取得比较好的效果，因此需要将 <span class="math inline">\(W\)</span> 初始化为<strong>单位矩阵</strong>。实验证明，初始化 <span class="math inline">\(W\)</span> 为单位矩阵并使用 ReLU 激活函数在一些应用中取得了与 LSTM 相似的结果，并且学习速度比 LSTM 更快。</p>
+<h2 id="长短期记忆网络">长短期记忆网络</h2>
+<blockquote>
+<p>问题 1：LSTM 是如何实现长短期记忆功能的？</p>
+</blockquote>
+<p>LSTM 的结构如下图所示：</p>
+<p><img src="http://media.zjubiomedit.com/2020-07-02-015214.png" width=60%></p>
+<p>与传统的 RNN 相比，LSTM 仍然是基于 <span class="math inline">\(x_t\)</span> 和 <span class="math inline">\(h_{t-1}\)</span> 来计算 <span class="math inline">\(h_t\)</span>，只不过对内部的结构进行了更加精心的设计，加入了<strong>输入门</strong> <span class="math inline">\(i_t\)</span>，<strong>遗忘门</strong> <span class="math inline">\(f_t\)</span> 以及<strong>输出门</strong> <span class="math inline">\(o_t\)</span> 三个门和一个<strong>内部记忆单元</strong> <span class="math inline">\(c_t\)</span>。输入门控制当前计算的新状态以多大程度更新到记忆单元中；遗忘门控制前一步记忆单元中的信息有多大程度被遗忘掉；输出门控制当前的输出有多大程度取决于当前的记忆单元。经典 LSTM 中第 <span class="math inline">\(t\)</span> 步的更新计算公式如下： <span class="math display">\[
+\begin{aligned}
+i_{t}&amp;=\sigma\left(W_{i} x_{t}+U_{i} h_{t-1}+b_{i}\right) \\
+f_{t}&amp;=\sigma\left(W_{f} x_{t}+U_f h_{t-1}+b_{f}\right) \\
+o_{t}&amp;=\sigma\left(W_{o} x_{t}+U_{o} h_{t-1}+b_{o}\right) \\
+\tilde{c}_{t}&amp;=\tanh \left(W_{c} x_{t}+U_{c} h_{t-1}\right) \\
+c_{t}&amp;=f_{t} \odot c_{t-1}+i_{t} \odot \tilde{c}_{t} \\
+h_{t}&amp;=o_{t} \odot \tanh \left(c_{t}\right)
+\end{aligned}
+\]</span> 注意门向量和记忆单元的维数要对应（并不是单值），输出单元和记忆单元的 <span class="math inline">\(\odot\)</span> 操作为<strong>对应元素相乘</strong>（Hadamard product）。</p>
+<p>在一个训练好的网络中，当输入的序列中没有重要信息时，LSTM 的遗忘门的值接近于 1，输入门的值接近于 0，此时过去的记忆会被保存，从而实现了长期记忆功能；当输入的序列中出现了重要信息，且该信息意味着之前的记忆不再重要时，输入门的值接近于 1， 而遗忘门的值接近于 0，这样旧的记忆被遗忘，新的重要信息被记忆。经过这样的设计，整个网络更容易学习到序列之间的长期依赖。</p>
+<blockquote>
+<p>问题 2：LSTM 里各模块分别使用什么激活函数，可以使用别的激活函数吗？</p>
+</blockquote>
+<p>在 LSTM 中，遗忘门、输入门和输出门使用 sigmoid 函数作为激活函数；在生成候选记忆时，使用 tanh 作为激活函数。这两个激活函数都是饱和的，即在输入达到一定值的情况下，输出就不会发生变化了。如果使用非饱和的激活函数如 ReLU，那么将难以实现门控的效果。Sigmoid 函数的输出在 0-1 之间，符合门控的物理定义，且当输入较大或较小时，其输出会非常接近 1 或 0，从而保证该门开或关。在生成候选记忆时，使用 tanh 函数，是因为其输出在 -1~1 之间，与大多数场景下特征分布是 0 中心的特征吻合。此外，tanh 函数在输入为 0 附近相比 sigmoid 函数有更大的梯度，通常使模型收敛更快。</p>
+<p>实际上，激活函数的选择并不是一成不变的，原始的 LSTM 中使用的激活函数均为 sigmoid 的变种，且没有引入遗忘门，后来经过大量的实验，发现加入遗忘门以及使用 tanh 函数的效果要更好。而对于一些计算能力有限制的设备，由于 sigmoid 函数求指数需要一定的计算量，此时会使用 0/1 门来让门控输出 0 或 1 的离散值。此外，常用的 LSTM 变种中加入了窥视孔机制，让记忆 <span class="math inline">\(c_{t-1}\)</span> 也参与到门控的计算之中： <span class="math display">\[
+i_{t}=\sigma\left(W_{i} x_{t}+U_{i} h_{t-1}+V_{i} c_{t-1}+b_{i}\right)
+\]</span></p>
+<h2 id="seq2seq-模型">Seq2Seq 模型</h2>
+<h2 id="注意力机制">注意力机制</h2>
+<h1 id="思维导图">思维导图</h1>
+<h2 id="特征工程-模型评估">特征工程 &amp; 模型评估</h2>
+<p><img src="http://media.zjubiomedit.com/2023-10-25-071756.png" width=60%></p>
+<p>未完待续</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+
+
+
+<div class="license">
+  <div class="license-title">《百面机器学习》精华总结</div>
+  <div class="license-link">
+    <a href="https://xxwywzy.github.io/2023/10/02/ml-summary/">https://xxwywzy.github.io/2023/10/02/ml-summary/</a>
+  </div>
+  <div class="license-meta">
+    <div class="license-meta-item">
+      <div class="license-meta-title">本文作者</div>
+      <div class="license-meta-text">
+          Zheyu Wang
+      </div>
+    </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">发布于</div>
+        <div class="license-meta-text">
+          2023-10-02
+        </div>
+      </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">更新于</div>
+        <div class="license-meta-text">
+          2023-10-25
+        </div>
+      </div>
+    <div class="license-meta-item">
+      <div class="license-meta-title">许可协议</div>
+      <div class="license-meta-text">
+          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank">CC BY-NC-SA 4.0</a>
+      </div>
+    </div>
+  </div>
+  <div class="license-statement">
+      转载或引用本文时，请遵守上述许可协议，注明出处、不得用于商业用途！
+  </div>
+</div>
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/10/01/dqn/" rel="prev" title="DQN 原理解析">
+                  <i class="fa fa-angle-left"></i> DQN 原理解析
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/10/03/dl-book-summary/" rel="next" title="深度学习中的网络优化与正则化">
+                  深度学习中的网络优化与正则化 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81ODgyNi8zNTI4OA=="></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">332k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">18:26</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+
+
+  <style>
+    #taboola-livere { display: none;}
+  </style>
+
+
+
+<script type="text/javascript">
+var linkLists = document.querySelectorAll(".link-list");
+
+linkLists.forEach(function(linkList) {
+  var listPath = linkList.getAttribute('json-src');
+  var iconPath = linkList.getAttribute('icon-src');
+  
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', listPath, true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      var data = JSON.parse(xhr.responseText);
+      
+      var li = "";
+      linkList.innerHTML = '';
+
+      for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+        var info = data[infoIndex];
+        var labelWarn = info['warn'] ? '<span class="label warn">' + info['warn'] + '</span>' : '';
+        var labelInfo = info['info'] ? '<span class="label info">' + info['info'] + '</span>' : '';
+
+        li += '<div class="link-list-container">';
+        li += '<img class="link-list-image" src="' + iconPath + info['logo'] + '">';
+        li += '<p>' + info['title'] + labelInfo + labelWarn + '</p>';
+        li += '<p>' + info['intro'] + '</p>';
+        li += '<a href="' + info['url'] + '" rel="noopener" target="_blank" data-pjax-state=""></a>';
+        li += '</div>';
+      }
+      
+      linkList.innerHTML = li;
+    }
+  };
+  xhr.send();
+});
+</script>
+
+
+<script type="text/javascript">
+var cultureList = document.querySelectorAll(".culture-list");
+if (cultureList.length !== 0) {
+  var j = -1;
+  for (var i = 0; i < cultureList.length; i++) {
+    const listPath = cultureList[i].getAttribute('json-src');
+    const coverPath = cultureList[i].getAttribute('cover-src');
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', listPath, true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        j++;
+        var data = JSON.parse(xhr.responseText);
+        var li = "";
+        
+        cultureList[j].innerHTML = '';
+
+        for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+          var info = data[infoIndex];
+          
+          var title = info['title'];
+          if (info['link']) {
+            title = '<a href="' + info['link'] + '">' + info['title'] + '</a>';
+          }
+
+          var author = info['author'] ? '<span class="author">' + info['author'] + '</span>' : '';
+
+          var intro = info['intro'] ? info['intro'] : '';
+
+          var star = '';
+          if (info['score'] == null) {
+            star = '';
+          } else {
+            var colorStar = '';
+            var greyStar = '';
+            var int = Math.floor(info['score']); //整数部分
+            var fract = 0;
+            if (info['score'] % 1 !== 0) {
+              fract = 1;
+            }
+            for (var m = 0; m < int; m++) {
+              colorStar += '★';
+            }
+            if (fract !== 0) {
+              colorStar += '☆';
+            }
+            for (var m = 0; m < (5 - fract - int); m++) {
+              greyStar += '☆';
+            }
+            if (info['score'] !== 5) {
+              star = '<span class="star-score">' + colorStar + '<span class="grey-star">' + greyStar + '</span></span>';
+            } else {
+              star = '<span class="star-score">' + colorStar + '</span>';
+            }
+          }
+
+          li += '<div class="media">';
+          li += '<div class="media-cover" style="background-image:url(' + coverPath + info['cover'] + ')"></div>';
+          li += '<div class="media-meta">';
+          li += '<div class="media-meta-item title">' + title + '</div>';
+          li += '<div class="media-meta-item">' + author + star + '</div>';
+          li += '<div class="media-meta-item intro">' + intro + '</div>';
+          li += '</div></div>';
+        }
+        
+        cultureList[j].innerHTML = li;
+      }
+    };
+    xhr.send();
+  }
+}
+</script>
+
+
+
+
+<script src="/resources/minigrid.min.js"></script>
+<script type="text/javascript">
+var album = document.querySelector(".album");
+if (album) {
+  // 相册列表 JSON 数据
+  var imgDataPath = album.getAttribute('json-src');
+  // 照片存储路径
+  var imgPath = album.getAttribute('photo-src');
+  // 最多显示数量
+  var imgMaxNum = 50;
+  // 获取窗口大小以决定图片宽度
+  var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  var imageWidth;
+
+  if (windowWidth < 768) {
+    imageWidth = 145; // 移动端图片宽度
+  } else {
+    imageWidth = 235;
+  }
+
+  // 腾讯云自定义样式 (数据万象外网流量需要付费)
+  //var imgStyle = '!' + imageWidth + 'x';
+  //var imgStyle = '!300x';
+
+  // 生成相册
+  var linkDataPath = imgDataPath;
+  var photo = {
+    page: 1,
+    offset: imgMaxNum,
+    init: function () {
+      var that = this;
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", linkDataPath, true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var data = JSON.parse(xhr.responseText);
+          that.render(that.page, data);
+        }
+      };
+      xhr.send();
+    },
+    render: function (page, data) {
+      var begin = (page - 1) * this.offset;
+      var end = page * this.offset;
+      if (begin >= data.length) return;
+      var imgNameWithPattern, imgName, imageSize, imageX, imageY, li = "";
+      for (var i = begin; i < end && i < data.length; i++) {
+        imgNameWithPattern = data[i].split(' ')[1];
+        imgName = imgNameWithPattern.split('.')[0];
+        imageSize = data[i].split(' ')[0];
+        imageX = imageSize.split('.')[0];
+        imageY = imageSize.split('.')[1];
+        li += '<div class="card" style="width:' + imageWidth + 'px" >';
+        li += '<div class="album-photo" style="height:'+ imageWidth * imageY / imageX + 'px">';
+        li += '<a class="fancybox fancybox.image" href="' + imgPath + imgNameWithPattern + '" itemscope="" itemtype="http://schema.org/ImageObject" itemprop="url" data-fancybox="group" rel="group" data-caption="' + imgName + '" title="' +  imgName + '">';
+        li += '<img data-src="' + imgPath + imgNameWithPattern + '" src="' + imgPath + imgNameWithPattern + '" alt="' +  imgName + '" data-loaded="true">';
+        li += '</a>';
+        li += '</div>';
+        li += '</div>';
+      }
+      album.insertAdjacentHTML('beforeend', li);
+      this.minigrid();
+    },
+    minigrid: function () {
+      var grid = new Minigrid({
+        container: '.album',
+        item: '.card',
+        gutter: 12
+      });
+      grid.mount();
+      window.addEventListener('resize', function () {
+        grid.mount();
+      });
+    }
+  };
+  photo.init();
+}
+</script>
+</body>
+</html>

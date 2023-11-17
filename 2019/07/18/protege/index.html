@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/resources/favicon/favicon.png">
+  <link rel="mask-icon" href="/resources/favicon/favicon.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"xxwywzy.github.io","root":"/","images":"/resources/img/","scheme":"Gemini","darkmode":true,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"livere","storage":true,"lazyload":false,"nav":null,"activeClass":"livere"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本篇博客介绍如何通过 Protege 构建 OWL 本体。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="本体入门之二：OWL 本体构建指南">
+<meta property="og:url" content="https://xxwywzy.github.io/2019/07/18/protege/">
+<meta property="og:site_name" content="口仆">
+<meta property="og:description" content="本篇博客介绍如何通过 Protege 构建 OWL 本体。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-06-11-065357.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-06-11-070121.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-06-11-083203.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-06-18-012711.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-06-18-012936.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-06-18-013100.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-06-18-013353.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-06-18-014344.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-06-19-111357.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-06-18-020547.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-06-18-023825.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-06-18-024217.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-06-19-110658.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-06-19-111833.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-06-19-113836.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-06-19-114138.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-06-19-114653.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-06-19-115252.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-06-19-115806.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-06-19-120406.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-06-19-122347.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-06-19-122653.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-06-19-122902.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-06-19-121136.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-06-25-115947.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-06-25-120828.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-15-030214.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-15-030552.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-15-071605.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-15-085926.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-15-090122.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-16-014444.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-16-023806.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-16-023858.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-16-063514.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-16-063827.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-16-070537.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-16-071044.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-16-111739.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-16-112238.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-16-113928.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-16-114947.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-16-121255.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-16-122214.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-17-073729.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-17-073917.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-04-04-022119.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-17-082047.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-17-082225.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-17-082334.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-17-084827.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-17-084955.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-17-090336.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-17-090501.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-17-092054.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-17-092210.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-04-03-091958.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-18-075224.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-18-095208.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-18-095529.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-18-100640.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-18-111649.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-18-111652.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-18-112348.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-18-112208.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-11-05-013157.png">
+<meta property="article:published_time" content="2019-07-18T11:24:23.000Z">
+<meta property="article:modified_time" content="2023-08-06T09:35:59.000Z">
+<meta property="article:author" content="Zheyu Wang">
+<meta property="article:tag" content="本体">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2019-06-11-065357.png">
+
+
+<link rel="canonical" href="https://xxwywzy.github.io/2019/07/18/protege/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://xxwywzy.github.io/2019/07/18/protege/","path":"2019/07/18/protege/","title":"本体入门之二：OWL 本体构建指南"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>本体入门之二：OWL 本体构建指南 | 口仆</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/resources/fonts/longcang/longcang-regular.css" >
+<link rel="stylesheet" href="/resources/fonts/lxgw/lxgwwenkailite-regular.css" >
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">口仆</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Long may the sunshine</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-culture"><a href="/culture/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>MEME</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#owl-%E6%9C%AC%E4%BD%93%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">OWL 本体简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#individuals%E4%B8%AA%E4%BD%93"><span class="nav-number">1.1.</span> <span class="nav-text">Individuals（个体）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#properties%E5%B1%9E%E6%80%A7"><span class="nav-number">1.2.</span> <span class="nav-text">Properties（属性）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#classes%E7%B1%BB"><span class="nav-number">1.3.</span> <span class="nav-text">Classes（类）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E4%B8%80%E4%B8%AA-owl-%E6%9C%AC%E4%BD%93"><span class="nav-number">2.</span> <span class="nav-text">构建一个 OWL 本体</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%9C%AC%E4%BD%93"><span class="nav-number">2.1.</span> <span class="nav-text">创建本体</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E7%B1%BB"><span class="nav-number">2.2.</span> <span class="nav-text">创建类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-create-class-hierarchy-%E6%9D%A5%E5%88%9B%E5%BB%BA%E7%B1%BB"><span class="nav-number">2.2.1.</span> <span class="nav-text">使用 Create Class Hierarchy 来创建类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#owl-%E5%B1%9E%E6%80%A7"><span class="nav-number">2.3.</span> <span class="nav-text">OWL 属性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AC%E7%BD%AE%E5%B1%9E%E6%80%A7"><span class="nav-number">2.3.1.</span> <span class="nav-text">转置属性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E5%B1%9E%E6%80%A7%E7%89%B9%E5%BE%81"><span class="nav-number">2.4.</span> <span class="nav-text">对象属性特征</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%9F%E8%83%BDfunctional%E5%B1%9E%E6%80%A7"><span class="nav-number">2.4.1.</span> <span class="nav-text">功能（Functional）属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AC%E7%BD%AE%E5%8A%9F%E8%83%BDinverse-functional%E5%B1%9E%E6%80%A7"><span class="nav-number">2.4.2.</span> <span class="nav-text">转置功能（Inverse functional）属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%A0%E9%80%92transitive%E5%B1%9E%E6%80%A7"><span class="nav-number">2.4.3.</span> <span class="nav-text">传递（Transitive）属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E7%A7%B0symmetric%E5%B1%9E%E6%80%A7"><span class="nav-number">2.4.4.</span> <span class="nav-text">对称（Symmetric）属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E5%AF%B9%E7%A7%B0asymmetric%E5%B1%9E%E6%80%A7"><span class="nav-number">2.4.5.</span> <span class="nav-text">非对称（Asymmetric）属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8D%E8%BA%ABreflexive%E5%B1%9E%E6%80%A7"><span class="nav-number">2.4.6.</span> <span class="nav-text">反身（Reflexive）属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E5%8F%8D%E8%BA%ABirreflexive%E5%B1%9E%E6%80%A7"><span class="nav-number">2.4.7.</span> <span class="nav-text">非反身（Irreflexive）属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E8%B7%B5"><span class="nav-number">2.4.8.</span> <span class="nav-text">实践</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B1%9E%E6%80%A7%E7%9A%84%E5%9F%9F%E5%92%8C%E8%8C%83%E5%9B%B4"><span class="nav-number">2.5.</span> <span class="nav-text">属性的域和范围</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%8F%E8%BF%B0%E5%92%8C%E5%AE%9A%E4%B9%89%E7%B1%BB"><span class="nav-number">2.6.</span> <span class="nav-text">描述和定义类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%8E%A8%E7%90%86%E6%9C%BA"><span class="nav-number">2.7.</span> <span class="nav-text">使用推理机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%85%E8%A6%81%E6%9D%A1%E4%BB%B6%E5%8E%9F%E5%A7%8B%E7%B1%BB%E4%B8%8E%E5%AE%9A%E4%B9%89%E7%B1%BB"><span class="nav-number">2.8.</span> <span class="nav-text">充要条件（原始类与定义类）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E5%8C%96%E5%88%86%E7%B1%BB"><span class="nav-number">2.9.</span> <span class="nav-text">自动化分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%99%AE%E9%81%8D%E6%80%A7%E9%99%90%E5%88%B6"><span class="nav-number">2.10.</span> <span class="nav-text">普遍性限制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E5%8C%96%E5%88%86%E7%B1%BB%E4%B8%8E%E5%BC%80%E6%94%BE%E4%B8%96%E7%95%8C%E6%8E%A8%E7%90%86"><span class="nav-number">2.11.</span> <span class="nav-text">自动化分类与开放世界推理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%80%BC%E5%88%86%E5%89%B2"><span class="nav-number">2.12.</span> <span class="nav-text">值分割</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%95%B0%E9%99%90%E5%88%B6"><span class="nav-number">2.13.</span> <span class="nav-text">基数限制</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%B1%9E%E6%80%A7"><span class="nav-number">3.</span> <span class="nav-text">数据类型属性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%80%E6%94%BE%E4%B8%96%E7%95%8C%E6%8E%A8%E7%90%86"><span class="nav-number">4.</span> <span class="nav-text">开放世界推理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E5%85%B6%E4%BB%96%E7%9A%84-owl-%E9%83%A8%E4%BB%B6"><span class="nav-number">5.</span> <span class="nav-text">创建其他的 OWL 部件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%AA%E4%BD%93"><span class="nav-number">5.1.</span> <span class="nav-text">创建个体</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hasvalue-%E9%99%90%E5%88%B6"><span class="nav-number">5.2.</span> <span class="nav-text">hasValue 限制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%9A%E4%B8%BE%E7%B1%BB"><span class="nav-number">5.3.</span> <span class="nav-text">枚举类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E9%87%8A%E5%B1%9E%E6%80%A7"><span class="nav-number">5.4.</span> <span class="nav-text">注释属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E4%B8%AA%E5%85%85%E8%A6%81%E6%9D%A1%E4%BB%B6"><span class="nav-number">5.5.</span> <span class="nav-text">多个充要条件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#swrl-%E8%AF%AD%E8%A8%80"><span class="nav-number">6.</span> <span class="nav-text">SWRL 语言</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#swrl-%E8%A7%84%E5%88%99%E6%A0%B7%E5%BC%8F"><span class="nav-number">6.1.</span> <span class="nav-text">SWRL 规则样式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#atom-%E7%B1%BB%E5%9E%8B"><span class="nav-number">6.2.</span> <span class="nav-text">Atom 类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#class-atom"><span class="nav-number">6.2.1.</span> <span class="nav-text">Class Atom</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#individual-property-atom"><span class="nav-number">6.2.2.</span> <span class="nav-text">Individual Property Atom</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#data-valued-property-atom"><span class="nav-number">6.2.3.</span> <span class="nav-text">Data Valued Property Atom</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#different-individuals-atom"><span class="nav-number">6.2.4.</span> <span class="nav-text">Different Individuals Atom</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#same-individual-atom"><span class="nav-number">6.2.5.</span> <span class="nav-text">Same Individual Atom</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#data-range-atom"><span class="nav-number">6.2.6.</span> <span class="nav-text">Data Range Atom</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#built-in-atom"><span class="nav-number">6.2.7.</span> <span class="nav-text">Built-In Atom</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="nav-number">6.3.</span> <span class="nav-text">常见问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95-a%E9%99%90%E5%88%B6%E7%B1%BB%E5%9E%8B"><span class="nav-number">7.</span> <span class="nav-text">附录 A：限制类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#quantifier-%E9%99%90%E5%88%B6"><span class="nav-number">7.1.</span> <span class="nav-text">Quantifier 限制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hasvalue-%E9%99%90%E5%88%B6-1"><span class="nav-number">7.2.</span> <span class="nav-text">hasValue 限制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cardinality-%E9%99%90%E5%88%B6"><span class="nav-number">7.3.</span> <span class="nav-text">Cardinality 限制</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95-b%E5%A4%8D%E6%9D%82%E7%B1%BB%E6%8F%8F%E8%BF%B0"><span class="nav-number">8.</span> <span class="nav-text">附录 B：复杂类描述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95-c%E6%8F%92%E4%BB%B6"><span class="nav-number">9.</span> <span class="nav-text">附录 C：插件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE"><span class="nav-number">10.</span> <span class="nav-text">思维导图</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zheyu Wang"
+      src="/resources/favicon/avatar.png">
+  <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+  <div class="site-description" itemprop="description">相信过程</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">85</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xxwywzy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/xxwywzy" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/xxwywzy" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/xxwywzy" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2019/07/18/protege/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resources/favicon/avatar.png">
+      <meta itemprop="name" content="Zheyu Wang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="口仆">
+      <meta itemprop="description" content="相信过程">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="本体入门之二：OWL 本体构建指南 | 口仆">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          本体入门之二：OWL 本体构建指南
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-07-18 19:24:23" itemprop="dateCreated datePublished" datetime="2019-07-18T19:24:23+08:00">2019-07-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%A7%91%E7%A0%94%E4%B8%8E%E5%86%99%E4%BD%9C/" itemprop="url" rel="index"><span itemprop="name">科研与写作</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%A7%91%E7%A0%94%E4%B8%8E%E5%86%99%E4%BD%9C/%E7%A7%91%E7%A0%94%E5%BF%83%E5%BE%97/" itemprop="url" rel="index"><span itemprop="name">科研心得</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>6.5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>22 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><div class="note warning"><p>本篇博客介绍如何通过 Protege 构建 OWL 本体。</p>
+</div>
+<span id="more"></span>
+<p>本文将介绍如何通过 Protege 构建 OWL 本体，文中使用的软件版本为 mac 上的 protege 5.5.0 桌面版。</p>
+<h1 id="owl-本体简介">OWL 本体简介</h1>
+<p>OWL 是由 W3C 开发的一种本体描述语言，按照表达性可以被分为三类：</p>
+<ul>
+<li>OWL-Lite：可表达性最低</li>
+<li>OWL-DL：可表达性中等（<strong>本指南使用</strong>）</li>
+<li>OWL-Full：可表达性最高</li>
+</ul>
+<p>本指南中将使用 <strong>OWL-DL</strong>（下文简称为 OWL），其基于描述性逻辑（Description Logics），表达性适中且支持自动化推理。关于 OWL 版本的选择，可以参考如下准则：OWL-Lite 和 OWL-DL 间的选择主要取决于OWL-Lite 的简单结构是否足够；OWL-DL 和 OWL-Full 间的选择则取决于是否需要支持自动推理或是否需要使用复杂的表达或建模工具。</p>
+<p>OWL 本体的组件与 Protege 框架下的本体组件相对应，包括：</p>
+<ul>
+<li><strong>Individuals</strong>：对应 Instances</li>
+<li><strong>Properties</strong>：对应 Slots</li>
+<li><strong>Classes</strong>：对应 Classes</li>
+</ul>
+<h2 id="individuals个体">Individuals（个体）</h2>
+<p>个体表示我们感兴趣的领域中的对象。与其他基于 Protege 的本体的重要区别在于，原始的 OWL 不遵循<strong>唯一命名假设</strong>（UNA），即两个不同名称的个体可能表示同一个个体，在 OWL 中，必须要明确指出个体之间是等同的还是不同的，否则其可能相同也可能不同。</p>
+<p>下图给出了对某个领域中某些个体的表示：</p>
+<p><img src="http://media.zjubiomedit.com/2019-06-11-065357.png" width=40%></p>
+<h2 id="properties属性">Properties（属性）</h2>
+<p>属性是个体间的二元关系，即属性将两个个体连接在一起。</p>
+<p>属性拥有多种特征，如：</p>
+<ul>
+<li>可以转置</li>
+<li>可以被限制为单值</li>
+<li>可以传递或具有对称性</li>
+</ul>
+<p>下图展示了将某些个体连接起来的某些属性：</p>
+<p><img src="http://media.zjubiomedit.com/2019-06-11-070121.png" width=40%></p>
+<h2 id="classes类">Classes（类）</h2>
+<p>类可以理解为包含个体的集合。类通常使用正式的描述来精确表明其需求，如类 Cat 会包含领域中所有的猫的个体。类可以被组织为<strong>超类-子类</strong>的层级关系，即分类学（taxonomy）。OWL 的一个重要特征是超类-子类关系可以由<strong>推理机</strong>自动计算得出。</p>
+<p>下图给出了包含个体的某些类：</p>
+<p><img src="http://media.zjubiomedit.com/2019-06-11-083203.png" width=40%></p>
+<h1 id="构建一个-owl-本体">构建一个 OWL 本体</h1>
+<p>本章节以创建一个披萨本体为例，介绍如何通过 protoge 构建一个 OWL 本体。</p>
+<h2 id="创建本体">创建本体</h2>
+<p>File -&gt; New 新建一个本体，修改其 IRI（每个本体唯一）：</p>
+<p><img src="http://media.zjubiomedit.com/2019-06-18-012711.png" width=80%></p>
+<p>以 OWL 形式保存为 "<strong>pizza.owl</strong>"：</p>
+<p><img src="http://media.zjubiomedit.com/2019-06-18-012936.png" width=50%></p>
+<p>在 Annotation 中可以添加评论：</p>
+<p><img src="http://media.zjubiomedit.com/2019-06-18-013100.png" width=60%></p>
+<p>当前状态如下：</p>
+<p><img src="http://media.zjubiomedit.com/2019-06-18-013353.png" width=80%></p>
+<h2 id="创建类">创建类</h2>
+<p>首先，在 Classes Tab 下（可能需要手动打开），新建 Thing 的子类。Thing 表示所有个体的集合。选中 Thing 后新建子类，新建一个子类后可以选择新建兄弟类：</p>
+<p><img src="http://media.zjubiomedit.com/2019-06-18-014344.png" width=40%></p>
+<p>注意类的命名规则应该统一，建议使用驼峰命名。然后为这些子类设置 disjoint。disjoint 即一个类的实例无法归属于另一个类：</p>
+<p><img src="http://media.zjubiomedit.com/2019-06-19-111357.png" width=60%></p>
+<h3 id="使用-create-class-hierarchy-来创建类">使用 Create Class Hierarchy 来创建类</h3>
+<p>下面介绍一种同时创建多个子类的方法。选中 PizzaBase，点击 Tools -&gt; Create class hierarchy，在弹出窗口中逐一输入类名即可。注意：类名不可重复，可批量添加前缀和后缀，默认类之间 disjoint：</p>
+<p><img src="http://media.zjubiomedit.com/2019-06-18-020547.png" width=60%></p>
+<p>同理，创建 PIzzaTopping 的子类，可以在创建时使用 tab 来进一步划分子类。最终的类层级结构如下：</p>
+<p><img src="http://media.zjubiomedit.com/2019-06-18-023825.png" width=40%></p>
+<p>在 OWL 本体中，子类意味着其实例均为父类的实例：</p>
+<p><img src="http://media.zjubiomedit.com/2019-06-18-024217.png" width=40%></p>
+<h2 id="owl-属性">OWL 属性</h2>
+<p>OWL 属性主要分为两种：<strong>Object 属性</strong>和 <strong>Datatype 属性</strong>。还有一种属性是 <strong>Annotation 属性</strong>，用于补充信息。下图给出了各个属性的说明：</p>
+<p><img src="http://media.zjubiomedit.com/2019-06-19-110658.png" width=50%></p>
+<p>在 Object Properties Tab 中（需要手动打开）新建如下属性：</p>
+<p><img src="http://media.zjubiomedit.com/2019-06-19-111833.png" width=50%></p>
+<p>关于属性建议采用小驼峰命名，并使用 has 等前缀提升可读性。属性可以拥有子属性，但要注意属性类型必须相同，如数据属性不能是对象属性的子属性。</p>
+<h3 id="转置属性">转置属性</h3>
+<p>每个对象属性都可以拥有一个转置属性：</p>
+<p><img src="http://media.zjubiomedit.com/2019-06-19-113836.png" width=40%></p>
+<p>我们可以新建如下转置属性，并通过 Inverse of 将其关联起来：</p>
+<p><img src="http://media.zjubiomedit.com/2019-06-19-114138.png" width=50%></p>
+<h2 id="对象属性特征">对象属性特征</h2>
+<p>OWL 通过属性特征来使得属性的意义更加丰富，可选的特征如下：</p>
+<h3 id="功能functional属性">功能（Functional）属性</h3>
+<p>功能属性的对应个体至多为一个，有时也被称为单值属性。如果一个个体通过功能属性连接两个名称不同的个体，则那两个个体必须声明为同一个，否则系统会推理出矛盾。</p>
+<p><img src="http://media.zjubiomedit.com/2019-06-19-114653.png" width=50%></p>
+<h3 id="转置功能inverse-functional属性">转置功能（Inverse functional）属性</h3>
+<p>转置功能属性指该属性的转置属性为功能属性。</p>
+<p><img src="http://media.zjubiomedit.com/2019-06-19-115252.png" width=50%></p>
+<h3 id="传递transitive属性">传递（Transitive）属性</h3>
+<p>传递属性可以将属性关系在个体间传递，一个传递属性的转置属性也是传递属性。传递属性不能是功能属性</p>
+<p><img src="http://media.zjubiomedit.com/2019-06-19-115806.png" width=45%></p>
+<h3 id="对称symmetric属性">对称（Symmetric）属性</h3>
+<p>对称属性的本身即为其转置属性。</p>
+<p><img src="http://media.zjubiomedit.com/2019-06-19-120406.png" width=45%></p>
+<h3 id="非对称asymmetric属性">非对称（Asymmetric）属性</h3>
+<p>即其转置不为自己的属性。</p>
+<p><img src="http://media.zjubiomedit.com/2019-06-19-122347.png" width=45%></p>
+<h3 id="反身reflexive属性">反身（Reflexive）属性</h3>
+<p>反身属性一定要关联个体自身，也可以关联其他个体。</p>
+<p><img src="http://media.zjubiomedit.com/2019-06-19-122653.png" width=45%></p>
+<h3 id="非反身irreflexive属性">非反身（Irreflexive）属性</h3>
+<p>非反身属性即属性不能关联个体自身。</p>
+<p><img src="http://media.zjubiomedit.com/2019-06-19-122902.png" width=45%></p>
+<h3 id="实践">实践</h3>
+<p>设置 hasIngredient 及其转置属性为传递属性。</p>
+<p><img src="http://media.zjubiomedit.com/2019-06-19-121136.png" width=20%></p>
+<p>同理，设置 hasBase 为功能属性，其转置为转置功能属性。</p>
+<h2 id="属性的域和范围">属性的域和范围</h2>
+<p>属性可以指定<strong>域</strong>和<strong>范围</strong>，将来自域的个体连接到来自范围的个体。</p>
+<ul>
+<li>域是指属性左侧的个体所属的类</li>
+<li>范围是指属性右侧的个体所属的类</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-06-25-115947.png" width=60%></p>
+<p>属性的域或范围可以有多个类，取其<strong>交集</strong>。一般来说，一个属性的域是其转置属性的范围，反之亦然。</p>
+<p>需要注意的是，域和范围并不是一个限制，而是会作为推理的公理，比如设置一个 IceCream 个体的 hasTopping 属性，并不会报错，而是会将其推理为 Pizza 的子类。因此，实际上并不建议设置域和范围，容易在比较大的本体中引起 bug。</p>
+<p><strong>实践</strong>：设置 hasTopping 和 hasBase 属性的域和范围（及其转置属性）</p>
+<p><img src="http://media.zjubiomedit.com/2019-06-25-120828.png" width=60%></p>
+<h2 id="描述和定义类">描述和定义类</h2>
+<p>创建了这么多属性后，现在我们将使用这些属性来描述与定义类。我们可以将所有含有相同属性的个体归到一个<strong>匿名类</strong>中，这种匿名类称为<strong>限制</strong>（Restrictions）。</p>
+<p>OWL 的限制分为三类：<strong>量词</strong>（Quantifier）限制、<strong>基数</strong>（Cardinality）限制和<strong>个体</strong>（hasValue）限制。本节我们将介绍 Quantifier 限制，其又可以分为两类：</p>
+<ul>
+<li><strong>存在性</strong>（Existential）限制：描述类中的个体<strong>至少包含一个</strong>指定的属性，连接至指定的类中的个体，其使用 some 关键字</li>
+<li><strong>普遍性</strong>（Universal）限制：描述类中的个体的特定的属性只连接至指定的类中的个体，其使用 only 关键字</li>
+</ul>
+<p>存在性限制是最常用的一种限制，可以将其理解为一种<strong>必要性</strong>。例如，要想成为一个 pizza，其需要有一个（至少一个）pizza 基底：</p>
+<p><img src="http://media.zjubiomedit.com/2019-07-15-030214.png" width=50%></p>
+<p>下面我们使用 Class 中的 subclass of 来创建一些不同种类的 pizza，并为其设置存在性限制，注意右键设置 make primitive siblings disjoint：</p>
+<p><img src="http://media.zjubiomedit.com/2019-07-15-030552.png" width=80%></p>
+<h2 id="使用推理机">使用推理机</h2>
+<p>使用 OWL-DL 描述的本体的一大特点是其可以通过<strong>推理机</strong>进行处理。推理机的功能主要有两个：</p>
+<ol type="1">
+<li>推理类的层级结构（一个类是否为另一个类的子类）</li>
+<li>测试一个类的稳定性（是否可能存在实例）</li>
+</ol>
+<p>在 protege 中的菜单中选择推理机，执行推理。可选的推理机有很多，这里选择 <strong>pellet</strong>。推理机会给出推理的层级结构，并标红不稳定的类：</p>
+<p><img src="http://media.zjubiomedit.com/2019-07-15-071605.png" width=50%></p>
+<p>上面的类不稳定的原因是其同时属于两个不相交的父类，因此对于兄弟类，正确地设置其相关性十分重要。</p>
+<h2 id="充要条件原始类与定义类">充要条件（原始类与定义类）</h2>
+<p>到目前为止，我们只使用了必要条件来描述类，只包含必要条件的类称为<strong>原始类</strong>（Primitive Class）。我们可以添加充要条件来定义类。</p>
+<p>包含至少一个充要条件的类称为<strong>定义类</strong>（Defined Class）</p>
+<p><img src="http://media.zjubiomedit.com/2019-07-15-085926.png" width=60%></p>
+<p>在 protege 中，右键可以自动将原始类转换为定义类（也可以自己设置充要条件）：</p>
+<p><img src="http://media.zjubiomedit.com/2019-07-15-090122.png" width=80%></p>
+<p>充要条件的主要作用是帮助推理机推理类的层级结构，推理机<strong>只会</strong>自动推理定义类下的类。</p>
+<h2 id="自动化分类">自动化分类</h2>
+<p>在较复杂的本体中，使用推理机来推理类的层级结构十分重要。</p>
+<p>通常手工构建的层级结构（asserted hierarchy）建议以<strong>简单树</strong>结构组织，即每个子类只有一个父类。这样做便于维护且不易出错。复杂树结构由推理机自动推理完成，下面给出一个例子（注意不能设置 NamedPizza 与 CheesyPizza 的 disjoint）：</p>
+<p><img src="http://media.zjubiomedit.com/2019-07-16-014444.png" width=60%></p>
+<p>由 OWLViz 给出的层状结构如下：</p>
+<p><strong>asserted hierarchy</strong>：</p>
+<p><img src="http://media.zjubiomedit.com/2019-07-16-023806.png" width=60%></p>
+<p><strong>inferred hierarchy</strong>：</p>
+<p><img src="http://media.zjubiomedit.com/2019-07-16-023858.png" width=60%></p>
+<h2 id="普遍性限制">普遍性限制</h2>
+<p>之前我们所说的都是存在性限制，其描述类中的个体<strong>至少包含一个</strong>指定的属性，连接至指定的类中的个体。</p>
+<p>现在我们将介绍普遍性限制，其表示类中的个体对于给定属性，<strong>只能连接至指定的类中的个体</strong>，不能为其他，因此也被称为 AllValuesFrom 限制。</p>
+<p>需要注意的是，如果一个个体没有给定的属性，它也满足普遍性限制。普遍性限制给出的是一种 <strong>if 关系</strong>：如果存在给定属性，则其必须指向指定的类。</p>
+<p>下面我们来创建一个 VegetarianPizza 类，并添加普遍性限制。注意要使用 or 而不是 and，否则该条件是无法满足的（因为两个 Topping disjoint）。该限制表示此类如果有 Topping，只能是 Cheese 或 Vegetable，如果此类没有 Topping，也满足条件：</p>
+<p><img src="http://media.zjubiomedit.com/2019-07-16-063514.png" width=50%></p>
+<p>上述条件是必要条件，下面将其转化为充要条件：</p>
+<p><img src="http://media.zjubiomedit.com/2019-07-16-063827.png" width=50%></p>
+<h2 id="自动化分类与开放世界推理">自动化分类与开放世界推理</h2>
+<p>根据上面的定义，似乎 MargheritaPizza 和 SohoPizza 都应该属于 VegetarianPizza。但实际上推理机并不会给出上述推理。这是因为推理机的推理是基于<strong>开放世界假设</strong>的：</p>
+<blockquote>
+<p>如果一个东西没有被声明是真的，它并不能假定为假。</p>
+</blockquote>
+<p>即该知识只是没有添加进知识库，并不代表其不存在。在上面的例子中，我们并不能保证 MargheritaPizza 和 SohoPizza 没有其他的 Topping。因此我们需要对 hasTopping 属性设置一个<strong>闭包公理</strong>（closure axiom）。</p>
+<p>一个闭包公理就是对指定属性的一个普遍性限制，可以在存在性限制上右键自动添加。注意：单独的普遍性限制并不足够，因为可能包含没有 Topping 的 Pizza，虽然从实际生活的角度来说不合理，但是在推理上没有问题。</p>
+<p><img src="http://media.zjubiomedit.com/2019-07-16-070537.png" width=50%></p>
+<p>断言本体（手工创建）和推理本体如下图所示：</p>
+<p><img src="http://media.zjubiomedit.com/2019-07-16-071044.png" width=70%></p>
+<h2 id="值分割">值分割</h2>
+<p>本章节我们将介绍<strong>值分割</strong>（Value Partitions），它并不是 OWL 的特性，而是一种本体构建中的<strong>设计模式</strong>。</p>
+<p>值分割用于补充我们对类的描述，下面给出在 OWL 中创建一个值分割的例子：</p>
+<ol type="1">
+<li>创建一个类 SpicinessValuePartition</li>
+<li>创建其子类表示可能的选项：Hot、Medium 和 Mild</li>
+<li>使各子类 disjoint</li>
+<li>设置一个 covering 公理（实际操作为设置一个 Equivalent classes）</li>
+<li>创建一个功能性对象属性 hasSpiciness</li>
+<li>将该属性的范围设置为 SpicinessValuePartition</li>
+</ol>
+<p><img src="http://media.zjubiomedit.com/2019-07-16-111739.png" width=60%></p>
+<p>covering 公理的作用是表明该类的全部组成成分，下图给出了很好的说明：</p>
+<p><img src="http://media.zjubiomedit.com/2019-07-16-112238.png" width=60%></p>
+<p>下面基于上述属性添加存在性限制给每个具体的 Topping 类，可以使用 tab 里的 class matrix 批量添加：</p>
+<p><img src="http://media.zjubiomedit.com/2019-07-16-113928.png" width=50%></p>
+<p>最后，我们创建一个 SpicyPizza 类，并使用嵌套语句进行定义：</p>
+<p><img src="http://media.zjubiomedit.com/2019-07-16-114947.png" width=40%></p>
+<h2 id="基数限制">基数限制</h2>
+<p>基数限制用于描述关系（对象属性或数据类型属性）的数量，分为：</p>
+<ul>
+<li>最少 min</li>
+<li>最多 max</li>
+<li>具体数量 exactly</li>
+</ul>
+<p>只有关系所指向的个体确定与其他个体不同，才会作为一个关系计数。</p>
+<p>下面我们设置一个新的 Pizza 类，定义其 hasTopping 关系至少为三条：</p>
+<p><img src="http://media.zjubiomedit.com/2019-07-16-121255.png" width=40%></p>
+<p>实际上，我们还可以再缩小基数限制的范围，设置 qualified 基数限制，只要在设置基数限制时添加具体的类即可，实际上 unqualified 所指定的填充类是 Thing。</p>
+<p>注意：上面的限制只表明该类需要以 hasTopping 关系连接 4 个 CheeseTopping 个体，并不代表不能连接其他 Topping 个体，我们需要通过普遍性限制（only ）加以约束：</p>
+<p><img src="http://media.zjubiomedit.com/2019-07-16-122214.png" width=40%></p>
+<h1 id="数据类型属性">数据类型属性</h1>
+<p>之前我们介绍的都是对象属性，下面介绍另一种属性：数据类型属性。</p>
+<p>数据类型属性将个体和具体数值连接起来，该数值类型一般为 xml schema datatype 或 rdf literal。我们可以通过 datatype properties tab 创建 datatype 属性。将属性设置为 functional 可以保证每个个体只能有一个该属性：</p>
+<p><img src="http://media.zjubiomedit.com/2019-07-17-073729.png" width=70%></p>
+<p>下面我们将创建两个个体，并设置其 hasCalorificContentValue 属性：</p>
+<p><img src="http://media.zjubiomedit.com/2019-07-17-073917.png" width=70%></p>
+<p>最后，定义两个新的 Pizza 类，并使用数据类型属性对其进行约束，推理机会自动将上面两个个体归到相应的类中：</p>
+<p><img src="http://media.zjubiomedit.com/2020-04-04-022119.png" width=70%></p>
+<h1 id="开放世界推理">开放世界推理</h1>
+<p>下面我们将创建一个 VegetarianPizza 类的互补类 NonVegetarianPizza，以此进一步展示开放世界推理。</p>
+<p>NonVegetarianPizza 类的定义如下，设置限制时可以使用 tab 自动补全类名：</p>
+<p><img src="http://media.zjubiomedit.com/2019-07-17-082047.png" width=35%></p>
+<p>通过自动推理可以发现，不属于 Vegetarian 的类都被归到了 NonVegetarianPizza 下</p>
+<p><img src="http://media.zjubiomedit.com/2019-07-17-082225.png" width=30%></p>
+<p>然而，如果我们创建一个不含有闭包公理的类，其将不会被归到任何一个类下。这是因为在<strong>开放世界假设</strong>下，UnclosedPizza 不能确定是否属于 Vegetarian 类，也就不能确定是否属于 NonVegetarianPizza。</p>
+<p><img src="http://media.zjubiomedit.com/2019-07-17-082334.png" width=35%></p>
+<h1 id="创建其他的-owl-部件">创建其他的 OWL 部件</h1>
+<h2 id="创建个体">创建个体</h2>
+<p>新建一个 Country 类，创建一些个体。因为 OWL 不使用唯一命名假设，所以必要时需要设置个体的独立性。</p>
+<p><img src="http://media.zjubiomedit.com/2019-07-17-084827.png" width=20%></p>
+<h2 id="hasvalue-限制">hasValue 限制</h2>
+<p>hasValue 限制用于描述个体至少有一个指向特定个体的关系：</p>
+<p><img src="http://media.zjubiomedit.com/2019-07-17-084955.png" width=40%></p>
+<h2 id="枚举类">枚举类</h2>
+<p>枚举类用于表示该类只由一些特定的个体组成。枚举类本质上是一种匿名类，可以将其与命名类通过 equivalent class 关联起来：</p>
+<p><img src="http://media.zjubiomedit.com/2019-07-17-090336.png" width=50%></p>
+<p>下面的图描述了枚举类和命名类的关系：</p>
+<p><img src="http://media.zjubiomedit.com/2019-07-17-090501.png" width=45%></p>
+<h2 id="注释属性">注释属性</h2>
+<p>OWL 允许为类、属性、个体和本体本身添加注释属性： - OWL-Full 对注释属性的使用没有限制 - OWL-DL 限制了注释属性的类型和属性公理</p>
+<p><img src="http://media.zjubiomedit.com/2019-07-17-092054.png" width=70%></p>
+<h2 id="多个充要条件">多个充要条件</h2>
+<p>之前介绍的类都只有一个充要条件，实际上我们可以通过 add 添加多个充要条件：</p>
+<p><img src="http://media.zjubiomedit.com/2019-07-17-092210.png" width=60%></p>
+<h1 id="swrl-语言">SWRL 语言</h1>
+<p>SWRL 语言是一种基于 OWL 的规则语言，用于提供更加强大的演绎推理功能。</p>
+<h2 id="swrl-规则样式">SWRL 规则样式</h2>
+<p>SWRL 规则由两部分组成，</p>
+<ul>
+<li>前半部分称为 <strong>body</strong></li>
+<li>后半部分称为 <strong>head</strong></li>
+</ul>
+<p>每个部分又由多个原子（atom）连接而成：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">atom ^ atom .... -&gt; atom ^ atom ....</span><br></pre></td></tr></table></figure>
+<p>可以理解为如果 body 中的条件均满足，则 head 中的结论为真。SWRL 不支持否定连接。</p>
+<p>一个 atom 的形式如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">p(arg1, arg2, ... argn)</span><br></pre></td></tr></table></figure>
+<p>p 是一个谓词符号，可以表示本体中的各种概念，下一节会介绍。arg 为参数，一般表示个体或数据值的变量，或直接表示某个特定的个体或值。</p>
+<h2 id="atom-类型">Atom 类型</h2>
+<p>SWRL 提供以下七种 atom：</p>
+<ul>
+<li>Class Atoms</li>
+<li>Individual Property atoms</li>
+<li>Data Valued Property atoms</li>
+<li>Different Individuals atoms</li>
+<li>Same Individual atoms</li>
+<li>Built-in atoms</li>
+<li>Data Range atoms</li>
+</ul>
+<h3 id="class-atom">Class Atom</h3>
+<p>由一个 OWL 命名类（或类表达式）以及表示 OWL 个体的单个参数构成：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Person(?p)</span><br><span class="line">Man(Fred)</span><br></pre></td></tr></table></figure>
+<p>下面的例子表示所有属于 Man 的个体也属于 Person（这一逻辑其实 OWL 本身也可以实现）：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Man(?p) -&gt; Person(?p)</span><br></pre></td></tr></table></figure>
+<h3 id="individual-property-atom">Individual Property Atom</h3>
+<p>由一个 OWL 对象属性和两个表示 OWL 个体的参数构成：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hasBrother(?x, ?y)</span><br><span class="line">hasSibling(Fred, ?y)</span><br></pre></td></tr></table></figure>
+<p>下面的规则表示有男性 sibling 的人类可以理解为有一个 brother：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Person(?p) ^ hasSibling(?p, ?s) ^ Man(?s) -&gt; hasBrother(?p,?s)</span><br></pre></td></tr></table></figure>
+<h3 id="data-valued-property-atom">Data Valued Property Atom</h3>
+<p>由一个 OWL 数据类型属性和两个参数组成，第一个参数表示个体，第二个表示数值：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hasAge(?x, ?age)</span><br><span class="line">hasHeight(Fred, ?h)</span><br><span class="line">hasAge(?x, 232)</span><br><span class="line">hasName(?x, &quot;Fred&quot;)</span><br></pre></td></tr></table></figure>
+<p>下面的规则表示有车的人是驾驶员：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Person(?p) ^ hasCar(?p, true) -&gt; Driver(?p)</span><br></pre></td></tr></table></figure>
+<p>也可以使用具体的个体：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Person(Fred) ^ hasCar(Fred, true) -&gt; Driver(Fred)</span><br></pre></td></tr></table></figure>
+<h3 id="different-individuals-atom">Different Individuals Atom</h3>
+<p>由 <code>differentFrom</code> 符号和两个表示 OWL 个体的参数组成：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">differentFrom(?x, ?y)</span><br><span class="line">differentFrom(Fred, Joe)</span><br></pre></td></tr></table></figure>
+<h3 id="same-individual-atom">Same Individual Atom</h3>
+<p>由 <code>sameAs</code> 符号和两个表示 OWL 个体的参数组成：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sameAs(?x, ?y)</span><br><span class="line">sameAs(Fred, Freddy)</span><br></pre></td></tr></table></figure>
+<h3 id="data-range-atom">Data Range Atom</h3>
+<p>由一个数据类型名（或字面量集合）和一个表示数据值的参数构成：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">xsd:int(?x)</span><br><span class="line">[3, 4, 5](?x)</span><br></pre></td></tr></table></figure>
+<h3 id="built-in-atom">Built-In Atom</h3>
+<p>事先定义好的规则，支持用户自定义：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Person(?p) ^ hasAge(?p, ?age) ^ swrlb:greaterThan(?age, 17) -&gt; Adult(?p)</span><br></pre></td></tr></table></figure>
+<p>一般只支持数据类型属性，不过 SWRLAPI 支持用户自定义对个体、类和对象属性的扩展，自定义 atom 的合法性需要由定义者指定。</p>
+<h2 id="常见问题">常见问题</h2>
+<p><strong>问</strong>：内置 atom 能否绑定参数？</p>
+<p><strong>答</strong>：可以，只要该变量没有被事先绑定值。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Rectangle(?r) ^ hasWidthInMeters(?r, ?w) ^ hasHeightInMeters(?r, ?h) ^ </span><br><span class="line">swrlb:multiply(?areaInSquareMeters, ?w, ?h) </span><br><span class="line">-&gt; hasAreaInSquareMeters(?r, ?areaInSquareMeters)</span><br></pre></td></tr></table></figure>
+<p><strong>问</strong>：类表达式可以用于 SWRL 规则吗？</p>
+<p><strong>答</strong>：可以</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(hasChild &gt;= 1)(?x) -&gt; Parent(?x)</span><br></pre></td></tr></table></figure>
+<p><strong>问</strong>：SWRL 遵循开放世界假设吗？</p>
+<p><strong>答</strong>：是的，具体体现在两点：</p>
+<ol type="1">
+<li>不同名称的个体可能相同，需要进行判断：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Publication(?p) ^ hasAuthor(?p, ?y) ^ hasAuthor(?p, ?z) ^ differentFrom(?y, ?z) </span><br><span class="line">-&gt; cooperatedWith(?y, ?z)</span><br></pre></td></tr></table></figure>
+<ol start="2" type="1">
+<li>无法明确个体或属性的具体数量（因为没有声明不代表不存在）</li>
+</ol>
+<p>比如 <code>(hasChild &gt;= 1)(?x) -&gt; Parent(?x)</code> 这条规则，可能会匹配没有明确 hasChild 属性的个体，需要在本体中额外添加约束。</p>
+<p><strong>问</strong>：SWRL 是否支持非单调的推理？</p>
+<p><strong>答</strong>：不支持，即<strong>不能修改本体中已有的信息</strong>（否则会报错）</p>
+<p><strong>问</strong>：SWRL 支持否定吗？</p>
+<p><strong>答</strong>：SWRL 不支持否定式，但是支持类的否定表达式：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(not Person)(?x) -&gt; NonHuman(?x)</span><br></pre></td></tr></table></figure>
+<p>注意：由于开放世界假设，只有明确与 Person disjoint 的类才会应用规则。</p>
+<p><strong>问</strong>：SWRL 支持 atom 的分离吗？（即或表达式）</p>
+<p><strong>答</strong>：不支持，可能引起歧义，可以通过拆分表达式来解决。但是 SWRL 支持联合类表达式：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(A or B)(?x) -&gt; C(?x)</span><br></pre></td></tr></table></figure>
+<p><strong>问</strong>：SWRL 是否支持 OWL Full？</p>
+<p><strong>答</strong>：原生不支持，不过 SWRLAPI 提供了对 OWL Full 的有限支持，但建议仅用于本体查询，不要用于推断新知识。</p>
+<p><strong>问</strong>：SWRL 是否支持 RDF 或 RDFS？</p>
+<p><strong>答</strong>：不支持，可以先将其转换为 OWL。</p>
+<p><strong>问</strong>：SWRL 的语法特点？</p>
+<p><strong>答</strong>：SWRL 提升了表达性，但牺牲了可判定性，即本体推理终止时，SWRL 的推理可能没有终止。SWRL 会采用 DL-Safe 语法来提升可判定性，即只绑定已知的个体，以下面的规则为例：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Vehicle(?v) ^ Motor(?m) ^ hasMotor(?v, ?m) -&gt; MotorizedVehicle(?v)</span><br></pre></td></tr></table></figure>
+<p>如果我们新建了一个 <code>Vehicle</code> 的子类 <code>Car</code>，并为其添加存在性限制 <code>has some Motor</code>，再新建一个该类的个体。上述规则并不会将该个体归类到 <code>MotorizedVehicle</code>，除非它真的包含一个 <code>Motor</code> 个体，而非仅仅是存在性限制。</p>
+<p>此外，如果内置 atom 绑定参数，可能会出现不可判定的情况：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Driver(?d) ^ hasAge(?d, ?age) ^ swrlb:add(?newage, ?age, 1) </span><br><span class="line">-&gt; hasAge(?d, ?newage)</span><br></pre></td></tr></table></figure>
+<p>上面的规则由于单调性，会产生一系列的 age（非 functional 的情况下），每次产生新的值都会触发规则，导致产生一个无穷大的数。</p>
+<p>PS：经测试如果右半部分赋予常数值，该规则会产生一个新的 age 值（不会无限循环），因为同样的属性值只会生成一个，属性为 functional 情况下会报错。</p>
+<p><strong>问</strong>：能否使用注释值来指向 OWL 实体？</p>
+<p><strong>答</strong>：可以，但要注意不能重复：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#x27;a Driver&#x27;(?d) ^ hasAge(?d, ?age) ...</span><br></pre></td></tr></table></figure>
+<p><strong>问</strong>：如何调试 SWRL 规则？</p>
+<p><strong>答</strong>：可以使用 SQWRL 调试：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Person(?p) ^ hasAge(?p, ?age) ^ swrlb:greaterThan(?age, 17) -&gt; Adult(?p)</span><br><span class="line">Person(?p) ^ hasAge(?p, ?age) ^ swrlb:greaterThan(?age, 17) -&gt; sqwrl:select(?p, ?age)</span><br></pre></td></tr></table></figure>
+<p><strong>问</strong>：应该什么时候使用 SWRL？</p>
+<p><strong>答</strong>：SWRL 基于 OWL-DL，可以提升本体的表达性，但是以可判定性为代价。如果可能的话，应该尽量使用 OWL ，只在需要额外的表达能力时使用 SWRL。</p>
+<p>PS：注意数据属性的推理可能需要手动打开：</p>
+<p><img src="http://media.zjubiomedit.com/2020-04-03-091958.png" width=60%></p>
+<h1 id="附录-a限制类型">附录 A：限制类型</h1>
+<p>本附录将进一步介绍 OWL 中的属性限制类型，所有类型的限制实际上都是在描述一个包含某些个体的<strong>匿名类</strong>。当我们在为一个命名类设置限制时，我们实际上是在描述该类的匿名超类：</p>
+<p><img src="http://media.zjubiomedit.com/2019-07-18-075224.png" width=60%></p>
+<h2 id="quantifier-限制">Quantifier 限制</h2>
+<p>量词限制包含三个部分：</p>
+<ul>
+<li>一个量词：存在性量词或普遍性量词</li>
+<li>一个属性：量词作用的对象</li>
+<li>一个填充器：属性作用的类</li>
+</ul>
+<p>存在性限制与普遍性限制之前已经介绍，这里不作赘述。存在性限制表明至少有一个当前关系对应到指定的类（可能还有其他）：</p>
+<p><img src="http://media.zjubiomedit.com/2019-07-18-095208.png" width=50%></p>
+<p>普遍性限制表明当前关系只对应到指定的类（也可能一个没有）：</p>
+<p><img src="http://media.zjubiomedit.com/2019-07-18-095529.png" width=50%></p>
+<p>一般将两者结合使用，构造<strong>闭包公理</strong>。</p>
+<h2 id="hasvalue-限制-1">hasValue 限制</h2>
+<p>hasValue 限制将属性连接至<strong>特定的个体</strong>，而非特定的类。其等价于存在性限制，其指向的类为包含特定个体的枚举类。</p>
+<p><img src="http://media.zjubiomedit.com/2019-07-18-100640.png" width=50%></p>
+<h2 id="cardinality-限制">Cardinality 限制</h2>
+<p>基数限制用于规定个体参与指定属性的关系的<strong>数量</strong>，可以分为： - 最大 - 最小 - 准确值：可以理解为最大与最小结合的语法糖</p>
+<p>由于 OWL 不使用独立命名假设，所以在计算关系数量时，只有明确不同的个体才会计数。如果一个个体对应的基数限制为 2，但该关系对应 3 个个体，则其中两个会被认为是相同的个体。</p>
+<h1 id="附录-b复杂类描述">附录 B：复杂类描述</h1>
+<p>除了用命名类和限制组成的匿名类来定义父类外，我们还可以使用<strong>复杂类</strong>描述定义的匿名类。复杂类描述分为两种：</p>
+<p><strong>AND</strong>：构成交叉类</p>
+<p><img src="http://media.zjubiomedit.com/2019-07-18-111649.png" width=50%></p>
+<p><strong>OR</strong>：构成联合类</p>
+<p><img src="http://media.zjubiomedit.com/2019-07-18-111652.png" width=40%></p>
+<h1 id="附录-c插件">附录 C：插件</h1>
+<p>Protege 支持许多有用的插件，5.5.0 版本下可通过 File -&gt; Check for Plugins 安装和升级插件：</p>
+<p><img src="http://media.zjubiomedit.com/2019-07-18-112348.png" width=70%></p>
+<p>通过 Preference -&gt; Plugins Tab 设置自动检查：</p>
+<p><img src="http://media.zjubiomedit.com/2019-07-18-112208.png" width=70%></p>
+<h1 id="思维导图">思维导图</h1>
+<p><img src="http://media.zjubiomedit.com/2019-11-05-013157.png" width=90%></p>
+<p>PS：<a target="_blank" rel="noopener" href="https://drive.google.com/open?id=1t4JzZPqg9Ng0jSEFTVVlBE7AomM1m1lX">点击</a>可下载文中使用的 pizza.owl</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+
+
+
+<div class="license">
+  <div class="license-title">本体入门之二：OWL 本体构建指南</div>
+  <div class="license-link">
+    <a href="https://xxwywzy.github.io/2019/07/18/protege/">https://xxwywzy.github.io/2019/07/18/protege/</a>
+  </div>
+  <div class="license-meta">
+    <div class="license-meta-item">
+      <div class="license-meta-title">本文作者</div>
+      <div class="license-meta-text">
+          Zheyu Wang
+      </div>
+    </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">发布于</div>
+        <div class="license-meta-text">
+          2019-07-18
+        </div>
+      </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">更新于</div>
+        <div class="license-meta-text">
+          2023-08-06
+        </div>
+      </div>
+    <div class="license-meta-item">
+      <div class="license-meta-title">许可协议</div>
+      <div class="license-meta-text">
+          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank">CC BY-NC-SA 4.0</a>
+      </div>
+    </div>
+  </div>
+  <div class="license-statement">
+      转载或引用本文时，请遵守上述许可协议，注明出处、不得用于商业用途！
+  </div>
+</div>
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%AC%E4%BD%93/" rel="tag"># 本体</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/07/18/nobita/" rel="prev" title="のび太の日本文学大冒険">
+                  <i class="fa fa-angle-left"></i> のび太の日本文学大冒険
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/08/26/lda-1/" rel="next" title="LDA 原理第一部分：LDA 数学八卦">
+                  LDA 原理第一部分：LDA 数学八卦 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81ODgyNi8zNTI4OA=="></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">332k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">18:26</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+
+
+  <style>
+    #taboola-livere { display: none;}
+  </style>
+
+
+
+<script type="text/javascript">
+var linkLists = document.querySelectorAll(".link-list");
+
+linkLists.forEach(function(linkList) {
+  var listPath = linkList.getAttribute('json-src');
+  var iconPath = linkList.getAttribute('icon-src');
+  
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', listPath, true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      var data = JSON.parse(xhr.responseText);
+      
+      var li = "";
+      linkList.innerHTML = '';
+
+      for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+        var info = data[infoIndex];
+        var labelWarn = info['warn'] ? '<span class="label warn">' + info['warn'] + '</span>' : '';
+        var labelInfo = info['info'] ? '<span class="label info">' + info['info'] + '</span>' : '';
+
+        li += '<div class="link-list-container">';
+        li += '<img class="link-list-image" src="' + iconPath + info['logo'] + '">';
+        li += '<p>' + info['title'] + labelInfo + labelWarn + '</p>';
+        li += '<p>' + info['intro'] + '</p>';
+        li += '<a href="' + info['url'] + '" rel="noopener" target="_blank" data-pjax-state=""></a>';
+        li += '</div>';
+      }
+      
+      linkList.innerHTML = li;
+    }
+  };
+  xhr.send();
+});
+</script>
+
+
+<script type="text/javascript">
+var cultureList = document.querySelectorAll(".culture-list");
+if (cultureList.length !== 0) {
+  var j = -1;
+  for (var i = 0; i < cultureList.length; i++) {
+    const listPath = cultureList[i].getAttribute('json-src');
+    const coverPath = cultureList[i].getAttribute('cover-src');
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', listPath, true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        j++;
+        var data = JSON.parse(xhr.responseText);
+        var li = "";
+        
+        cultureList[j].innerHTML = '';
+
+        for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+          var info = data[infoIndex];
+          
+          var title = info['title'];
+          if (info['link']) {
+            title = '<a href="' + info['link'] + '">' + info['title'] + '</a>';
+          }
+
+          var author = info['author'] ? '<span class="author">' + info['author'] + '</span>' : '';
+
+          var intro = info['intro'] ? info['intro'] : '';
+
+          var star = '';
+          if (info['score'] == null) {
+            star = '';
+          } else {
+            var colorStar = '';
+            var greyStar = '';
+            var int = Math.floor(info['score']); //整数部分
+            var fract = 0;
+            if (info['score'] % 1 !== 0) {
+              fract = 1;
+            }
+            for (var m = 0; m < int; m++) {
+              colorStar += '★';
+            }
+            if (fract !== 0) {
+              colorStar += '☆';
+            }
+            for (var m = 0; m < (5 - fract - int); m++) {
+              greyStar += '☆';
+            }
+            if (info['score'] !== 5) {
+              star = '<span class="star-score">' + colorStar + '<span class="grey-star">' + greyStar + '</span></span>';
+            } else {
+              star = '<span class="star-score">' + colorStar + '</span>';
+            }
+          }
+
+          li += '<div class="media">';
+          li += '<div class="media-cover" style="background-image:url(' + coverPath + info['cover'] + ')"></div>';
+          li += '<div class="media-meta">';
+          li += '<div class="media-meta-item title">' + title + '</div>';
+          li += '<div class="media-meta-item">' + author + star + '</div>';
+          li += '<div class="media-meta-item intro">' + intro + '</div>';
+          li += '</div></div>';
+        }
+        
+        cultureList[j].innerHTML = li;
+      }
+    };
+    xhr.send();
+  }
+}
+</script>
+
+
+
+
+<script src="/resources/minigrid.min.js"></script>
+<script type="text/javascript">
+var album = document.querySelector(".album");
+if (album) {
+  // 相册列表 JSON 数据
+  var imgDataPath = album.getAttribute('json-src');
+  // 照片存储路径
+  var imgPath = album.getAttribute('photo-src');
+  // 最多显示数量
+  var imgMaxNum = 50;
+  // 获取窗口大小以决定图片宽度
+  var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  var imageWidth;
+
+  if (windowWidth < 768) {
+    imageWidth = 145; // 移动端图片宽度
+  } else {
+    imageWidth = 235;
+  }
+
+  // 腾讯云自定义样式 (数据万象外网流量需要付费)
+  //var imgStyle = '!' + imageWidth + 'x';
+  //var imgStyle = '!300x';
+
+  // 生成相册
+  var linkDataPath = imgDataPath;
+  var photo = {
+    page: 1,
+    offset: imgMaxNum,
+    init: function () {
+      var that = this;
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", linkDataPath, true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var data = JSON.parse(xhr.responseText);
+          that.render(that.page, data);
+        }
+      };
+      xhr.send();
+    },
+    render: function (page, data) {
+      var begin = (page - 1) * this.offset;
+      var end = page * this.offset;
+      if (begin >= data.length) return;
+      var imgNameWithPattern, imgName, imageSize, imageX, imageY, li = "";
+      for (var i = begin; i < end && i < data.length; i++) {
+        imgNameWithPattern = data[i].split(' ')[1];
+        imgName = imgNameWithPattern.split('.')[0];
+        imageSize = data[i].split(' ')[0];
+        imageX = imageSize.split('.')[0];
+        imageY = imageSize.split('.')[1];
+        li += '<div class="card" style="width:' + imageWidth + 'px" >';
+        li += '<div class="album-photo" style="height:'+ imageWidth * imageY / imageX + 'px">';
+        li += '<a class="fancybox fancybox.image" href="' + imgPath + imgNameWithPattern + '" itemscope="" itemtype="http://schema.org/ImageObject" itemprop="url" data-fancybox="group" rel="group" data-caption="' + imgName + '" title="' +  imgName + '">';
+        li += '<img data-src="' + imgPath + imgNameWithPattern + '" src="' + imgPath + imgNameWithPattern + '" alt="' +  imgName + '" data-loaded="true">';
+        li += '</a>';
+        li += '</div>';
+        li += '</div>';
+      }
+      album.insertAdjacentHTML('beforeend', li);
+      this.minigrid();
+    },
+    minigrid: function () {
+      var grid = new Minigrid({
+        container: '.album',
+        item: '.card',
+        gutter: 12
+      });
+      grid.mount();
+      window.addEventListener('resize', function () {
+        grid.mount();
+      });
+    }
+  };
+  photo.init();
+}
+</script>
+</body>
+</html>

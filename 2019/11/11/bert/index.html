@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/resources/favicon/favicon.png">
+  <link rel="mask-icon" href="/resources/favicon/favicon.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"xxwywzy.github.io","root":"/","images":"/resources/img/","scheme":"Gemini","darkmode":true,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"livere","storage":true,"lazyload":false,"nav":null,"activeClass":"livere"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本篇博客为对 BERT 原始论文核心内容的解读。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BERT 原理解析">
+<meta property="og:url" content="https://xxwywzy.github.io/2019/11/11/bert/">
+<meta property="og:site_name" content="口仆">
+<meta property="og:description" content="本篇博客为对 BERT 原始论文核心内容的解读。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-10-29-112626.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-11-07-022231.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-11-07-031002.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-11-11-071544.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-11-11-065437.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-11-11-064714.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-11-11-065555.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-11-11-065822.png">
+<meta property="article:published_time" content="2019-11-11T07:17:08.000Z">
+<meta property="article:modified_time" content="2023-08-05T08:38:50.000Z">
+<meta property="article:author" content="Zheyu Wang">
+<meta property="article:tag" content="BERT">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2019-10-29-112626.png">
+
+
+<link rel="canonical" href="https://xxwywzy.github.io/2019/11/11/bert/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://xxwywzy.github.io/2019/11/11/bert/","path":"2019/11/11/bert/","title":"BERT 原理解析"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>BERT 原理解析 | 口仆</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/resources/fonts/longcang/longcang-regular.css" >
+<link rel="stylesheet" href="/resources/fonts/lxgw/lxgwwenkailite-regular.css" >
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">口仆</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Long may the sunshine</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-culture"><a href="/culture/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>MEME</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%83%8C%E6%99%AF"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.</span> <span class="nav-text">模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84"><span class="nav-number">2.1.</span> <span class="nav-text">模型结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E8%A1%A8%E7%A4%BA"><span class="nav-number">2.2.</span> <span class="nav-text">输入&#x2F;输出表示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%84%E8%AE%AD%E7%BB%83-bert"><span class="nav-number">2.3.</span> <span class="nav-text">预训练 BERT</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1%E4%B8%80masked-lm"><span class="nav-number">2.3.1.</span> <span class="nav-text">任务一：Masked LM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1%E4%BA%8Cnext-sentence-prediction-nsp"><span class="nav-number">2.3.2.</span> <span class="nav-text">任务二：Next Sentence Prediction (NSP)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%84%E8%AE%AD%E7%BB%83%E6%95%B0%E6%8D%AE"><span class="nav-number">2.3.3.</span> <span class="nav-text">预训练数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%AE%E8%B0%83-bert"><span class="nav-number">2.4.</span> <span class="nav-text">微调 BERT</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C-%E6%B6%88%E8%9E%8D%E7%A0%94%E7%A9%B6"><span class="nav-number">3.</span> <span class="nav-text">实验 &amp; 消融研究</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zheyu Wang"
+      src="/resources/favicon/avatar.png">
+  <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+  <div class="site-description" itemprop="description">相信过程</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">85</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xxwywzy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/xxwywzy" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/xxwywzy" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/xxwywzy" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2019/11/11/bert/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resources/favicon/avatar.png">
+      <meta itemprop="name" content="Zheyu Wang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="口仆">
+      <meta itemprop="description" content="相信过程">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="BERT 原理解析 | 口仆">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          BERT 原理解析
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-11-11 15:17:08" itemprop="dateCreated datePublished" datetime="2019-11-11T15:17:08+08:00">2019-11-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/%E6%96%87%E7%AB%A0%E7%B2%BE%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">文章精读</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.7k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>9 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><div class="note info"><p>本篇博客为对 BERT 原始论文核心内容的解读。</p>
+</div>
+<span id="more"></span>
+<p>BERT（<strong>B</strong>idirectional <strong>E</strong>ncoder <strong>R</strong>epresentations from <strong>T</strong>ransformers）是一种<strong>预训练模型</strong>，旨在通过考虑所有层中的<strong>双侧上下文</strong>信息来得到<strong>深度的双向表示</strong>。该表示连接上一层输出层后，仅需微调训练就可以在很多 NLP 任务中取得惊人的效果。在介绍模型之前，我们需要先简单了解 BERT 的提出背景。</p>
+<h1 id="背景">背景</h1>
+<p><strong>基于语言模型</strong>的预训练（pre-training）已经被证明可以有效提升各种 NLP 任务的表现。而将预训练得到的表示用于下游任务时有两种策略：<strong>基于特征</strong>（feature-based）和<strong>微调</strong>（fine-tuning）。基于特征的策略使用任务特定的架构，将预训练的表示作为额外的特征，其代表为 ELMo；基于微调的策略使用最少的任务特定参数，通过简单的微调预训练参数来训练下游任务，其代表 OpenAI GPT。</p>
+<p>之前的研究的局限性在于，其在预训练时使用的目标函数均基于<strong>单向语言模型</strong>，没有同时考虑到双向的上下文信息。BERT 模型旨在解决这一局限性，通过提出一种新的预训练目标：<strong>masked language model</strong>（MLM）。简单来说，MLM 随机地从输入中遮蔽一些词语，然后训练目标是基于被遮蔽词语的双侧上下文来预测该词语在词典中的 id。此外，BERT 模型还引入了一个 <strong>next sentence prediction</strong> 任务，来预训练文本对的联合表示。</p>
+<p>下图给出了 BERT、ELMo 和 OpenAI GPT 三者之间的结构比较。只有 BERT 真正同时使用了左右两侧上下文的信息。</p>
+<p><img src="http://media.zjubiomedit.com/2019-10-29-112626.png" width=95%></p>
+<h1 id="模型">模型</h1>
+<p>本节将介绍 BERT 模型的实现细节。在 BERT 中，总共包括两个步骤：<strong>预训练</strong>和<strong>微调</strong>。在预训练中，模型基于无标签数据，在不同的预训练任务上进行训练。在微调中，模型首先基于预训练得到的参数初始化，然后使用来自下游具体任务的标签数据对所有参数进行微调。每个下游任务都拥有独立的微调模型，即便其使用相同的预训练参数初始化。BERT 的特征在于对于不同的任务，其模型结构统一，预训练架构与最终的下游架构仅存在细微差别。下图以智能问答为例，给出了 BERT 的整体架构。</p>
+<p><img src="http://media.zjubiomedit.com/2019-11-07-022231.png" width=85% /></p>
+<h2 id="模型结构">模型结构</h2>
+<p>BERT 模型的结构是一个<strong>多层双向 Transformer encoder</strong>，基于原始论文（<strong><em>Attention is all you need</em></strong>）实现。Transformer encoder 的特点是其关注了双侧的上下文，而 Transformer decoder 则仅使用了左侧的上下文（通过 masked 方法）。在本研究中，定义 Transformer 堆叠层数为 <span class="math inline">\(L\)</span>，隐藏向量维数为 <span class="math inline">\(H\)</span>，自我注意力头部数量为 <span class="math inline">\(A\)</span>，全连接网络隐藏层维数为 <span class="math inline">\(4H\)</span>。本研究包括了两种大小的 BERT 模型：</p>
+<ul>
+<li><span class="math inline">\(\text{BERT}_\text{BASE}\)</span>: <span class="math inline">\(L=12, H=768, A=12\)</span>, 总参数量为 110M</li>
+<li><span class="math inline">\(\text{BERT}_\text{LARGE}\)</span>: <span class="math inline">\(L=24, H=1024, A=16\)</span>, 总参数量为 340M</li>
+</ul>
+<p>其中 BERT base 选择了与 OpenAI GPT 同样的大小，方便两者之间的比较。</p>
+<h2 id="输入输出表示">输入/输出表示</h2>
+<p>为了让 BERT 能够处理一系列的下游任务，模型的输入表示需要能够在一个序列中明确地表示单个句子以及句子对（如问题-答案）。注意在本研究中，一个”句子“并不一定是实际的句子，可以是任意范围内的连续文本；一个”序列“表示 BERT 中的输入 token 序列（即词语序列），可以是单个句子，也可以是两个句子打包在一起。</p>
+<p>本研究中使用了 <strong>WordPiece</strong> 嵌入（大小为 30000 的词典）来生成词嵌入向量。每个序列的第一个 token 为一个特殊的分类标志 <span class="math inline">\(\text{[CLS]}\)</span>，该 token 的最终隐藏状态用来聚合序列，执行分类任务。句子对被打包到单个序列中，通过两种方式进行区分：第一种是两个句子间插入一个特殊标志 <span class="math inline">\(\text{[SEP]}\)</span>，第二种是对于每个 token，添加一个可以学习的嵌入向量来表示其属于句子 A 还是 B。如图 1 所示，输入嵌入向量标记为 <span class="math inline">\(E\)</span>，特殊标志 <span class="math inline">\(\text{[CLS]}\)</span> 的最终隐藏向量标记为 <span class="math inline">\(C \in \mathbb{R}^H\)</span>，第 <span class="math inline">\(i\)</span> 个输入 token 的最终隐藏向量标记为 <span class="math inline">\(T_i \in \mathbb{R}^H\)</span>.</p>
+<p>对于一个给定的 token，其输入表示由三部分相加得到，如下图所示。第一个是词嵌入（基于 WordPiece 生成），第二个是 segment 嵌入（表示该 token 所属的句子），第三个是位置嵌入（表明该 token 在序列中的位置信息）。</p>
+<p><img src="http://media.zjubiomedit.com/2019-11-07-031002.png" width=75%></p>
+<h2 id="预训练-bert">预训练 BERT</h2>
+<p>我们使用两个无监督任务来预训练 BERT，如图 2 左侧所示。</p>
+<h3 id="任务一masked-lm">任务一：Masked LM</h3>
+<p>对于标准的条件语言模型，其只能进行单向训练，否则词语会”看到它们自己“，引起模型训练的混乱。为了同时利用双侧上下文的信息，原文提出了一种方案：<strong>将输入序列的部分 token 随机遮挡起来，然后预测这些被遮挡起来的 token</strong>。该方法被称为 ”masked LM“ (MLM)，其思想来源于著名的 Cloze task。在该任务中，被遮挡的 token 的最终隐藏向量会被转换为一个词典长度的 softmax 向量输出，用于预测词语 id。在原文的试验中，随机遮挡了每个序列中 <strong>15%</strong> 的 WordPiece 向量。</p>
+<p>MLM 任务可以允许模型利用双侧上下文的信息进行预训练，但是其存在着一个问题：预训练和微调存在着不匹配，因为 <span class="math inline">\(\text{[MASK]}\)</span> token 并不会出现在微调训练中。为了减轻这一影响，我们并不总是用 <span class="math inline">\(\text{[MASK]}\)</span> token 来替换被遮挡的词语。如之前所述，训练数据生成器随机选择 15% 的 token 位置用于预测，如果第 <span class="math inline">\(i\)</span> 个位置的 token 被选中，则其会按照如下策略进行替换：</p>
+<ol type="1">
+<li>80% 的可能使用 <span class="math inline">\(\text{[MASK]}\)</span> token</li>
+<li>10% 的可能使用随机 token</li>
+<li>10% 的可能保持 token 不变</li>
+</ol>
+<p>之后，输出 <span class="math inline">\(T_i\)</span> 会被用于预测原始的 token，使用交叉熵损失函数。</p>
+<h3 id="任务二next-sentence-prediction-nsp">任务二：Next Sentence Prediction (NSP)</h3>
+<p>很多重要的下游任务，如智能问答（QA）和自然语言推理（NLI），都是基于理解<strong>两个句子之间的联系</strong>，而标准的语言模型并不能直接捕捉这一联系。BERT 提出了一种<strong>二元 next sentence prediction 任务</strong>进行预训练，能够在任意单语言语料库上实现。具体来说，当选择每个训练样本的句子对 A 和 B 时，B 有 50% 的概率是 A 的真实的后一句（标签为 <span class="math inline">\(\text{IsNext}\)</span>）；有 50% 的概率是语料库中的随机一句（标签为 <span class="math inline">\(\text{NotNext}\)</span>）。如图 1 所示，<span class="math inline">\(C\)</span> 用来预测是否为下一个句子。虽然这种方法很简单，但是在 QA 和 NLI 上均取得了不错的效果。</p>
+<h3 id="预训练数据">预训练数据</h3>
+<p>预训练语料库采用了 BooksCorpus （800M 词语）以及 English Wikipedia（2500M 词语）。需要注意的是作者使用了文档层面的语料库而非打乱的句子层面的语料库，因为预训练需要提取序列之间的关系。</p>
+<h2 id="微调-bert">微调 BERT</h2>
+<p>得益于 Transformer 的自我注意力机制，BERT 的微调过程比较直接。对于每个任务，只需要将任务对应的<strong>输入及输出</strong>拖入 BERT结构，然后<strong>端对端微调</strong>所有参数即可。举例来说，对于输入，预训练中的句子对 A 和 B 对应于：</p>
+<ol type="1">
+<li>文本复述任务（paraphrasing）中的句子对</li>
+<li>文本蕴涵（entailment）任务中的 hypothesis-premise 对</li>
+<li>智能问答任务中的 question-passage 对</li>
+<li>文本分类或序列标注任务中的 text-∅ 对（即单个句子）</li>
+</ol>
+<p>而对于输出，<strong>token 的表示</strong>被注入到一个输出层中，用于 token-level 的任务，如序列标注或智能问答。而 <strong><span class="math inline">\(\text{[CLS]}\)</span> 表示</strong>则被注入到输出层中，用于分类任务，如文本蕴涵、情感分析等。下图给出了不同下游任务下 BERT 微调结构的不同，其中 a 和 b 对应序列层面的任务，c 和 d 对应词语层面的任务。</p>
+<p><img src="http://media.zjubiomedit.com/2019-11-11-071544.png" width=60%></p>
+<p>与预训练相比，微调部分的算力要求相对较低，如果你有一块 TPU，最多一个小时就可以复现原文中的所有结果（基于预训练模型）。</p>
+<h1 id="实验-消融研究">实验 &amp; 消融研究</h1>
+<p>文章的第 4-5 节描述了 BERT 模型在各下游任务上的表现以及针对模型本身的消融实验，这里仅作简单的介绍。</p>
+<p>原文中展示了 BERT 微调结构在 11 个 NLP 任务上的表现，包括 GLUE （包括 9 个任务）、SQuAD v1.1、SQuAD v2.0 以及 SWAG，结果都十分的牛批。下表给出了 GLUE 的测试结果。</p>
+<p><img src="http://media.zjubiomedit.com/2019-11-11-065437.png" width=70%></p>
+<p>在消融实验中，原文主要进行了三个实验：第一个实验是<strong>预训练任务</strong>的影响，结果如下表所示。可以看到同时执行 BERT 所提出的两项预训练任务的表现要优于其他模型。</p>
+<p><img src="http://media.zjubiomedit.com/2019-11-11-064714.png" width=45%/></p>
+<p>第二个实验是模型大小的影响。结果如下表所示。作者指出当针对下游任务时模型仅需要微调时（即仅使用很小一部分随机初始化的参数），模型越大取得的结果越好，即便下游任务的数据量很小。而基于特征的方法可能存在模型大小的上界，即增加到一定程度后效果并不会变好。</p>
+<p><img src="http://media.zjubiomedit.com/2019-11-11-065555.png" width=45%></p>
+<p>第三个实验探索 BERT 在基于特征的方法中的应用，结果如下表所示。可以看到 BERT 对于微调方法和基于特征的方法均可以取得较好效果。</p>
+<p><img src="http://media.zjubiomedit.com/2019-11-11-065822.png" width=45%></p>
+<p><strong>PS</strong>：以上就是对 BERT 原论文的主要内容的解读。值得一提的是，网上大多数的总结是基于 v1 版本的，而原作者在 2019 年上传了一个 v2 版本，对文章的整体结构进行了调整。关于模型的更多细节请阅读原论文。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+
+
+
+<div class="license">
+  <div class="license-title">BERT 原理解析</div>
+  <div class="license-link">
+    <a href="https://xxwywzy.github.io/2019/11/11/bert/">https://xxwywzy.github.io/2019/11/11/bert/</a>
+  </div>
+  <div class="license-meta">
+    <div class="license-meta-item">
+      <div class="license-meta-title">本文作者</div>
+      <div class="license-meta-text">
+          Zheyu Wang
+      </div>
+    </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">发布于</div>
+        <div class="license-meta-text">
+          2019-11-11
+        </div>
+      </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">更新于</div>
+        <div class="license-meta-text">
+          2023-08-05
+        </div>
+      </div>
+    <div class="license-meta-item">
+      <div class="license-meta-title">许可协议</div>
+      <div class="license-meta-text">
+          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank">CC BY-NC-SA 4.0</a>
+      </div>
+    </div>
+  </div>
+  <div class="license-statement">
+      转载或引用本文时，请遵守上述许可协议，注明出处、不得用于商业用途！
+  </div>
+</div>
+          <div class="post-tags">
+              <a href="/tags/BERT/" rel="tag"># BERT</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/11/01/transformer/" rel="prev" title="Transformer 原理解析">
+                  <i class="fa fa-angle-left"></i> Transformer 原理解析
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/08/05/cs229-17/" rel="next" title="CS229 学习笔记之十七：策略梯度">
+                  CS229 学习笔记之十七：策略梯度 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81ODgyNi8zNTI4OA=="></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">332k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">18:26</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+
+
+  <style>
+    #taboola-livere { display: none;}
+  </style>
+
+
+
+<script type="text/javascript">
+var linkLists = document.querySelectorAll(".link-list");
+
+linkLists.forEach(function(linkList) {
+  var listPath = linkList.getAttribute('json-src');
+  var iconPath = linkList.getAttribute('icon-src');
+  
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', listPath, true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      var data = JSON.parse(xhr.responseText);
+      
+      var li = "";
+      linkList.innerHTML = '';
+
+      for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+        var info = data[infoIndex];
+        var labelWarn = info['warn'] ? '<span class="label warn">' + info['warn'] + '</span>' : '';
+        var labelInfo = info['info'] ? '<span class="label info">' + info['info'] + '</span>' : '';
+
+        li += '<div class="link-list-container">';
+        li += '<img class="link-list-image" src="' + iconPath + info['logo'] + '">';
+        li += '<p>' + info['title'] + labelInfo + labelWarn + '</p>';
+        li += '<p>' + info['intro'] + '</p>';
+        li += '<a href="' + info['url'] + '" rel="noopener" target="_blank" data-pjax-state=""></a>';
+        li += '</div>';
+      }
+      
+      linkList.innerHTML = li;
+    }
+  };
+  xhr.send();
+});
+</script>
+
+
+<script type="text/javascript">
+var cultureList = document.querySelectorAll(".culture-list");
+if (cultureList.length !== 0) {
+  var j = -1;
+  for (var i = 0; i < cultureList.length; i++) {
+    const listPath = cultureList[i].getAttribute('json-src');
+    const coverPath = cultureList[i].getAttribute('cover-src');
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', listPath, true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        j++;
+        var data = JSON.parse(xhr.responseText);
+        var li = "";
+        
+        cultureList[j].innerHTML = '';
+
+        for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+          var info = data[infoIndex];
+          
+          var title = info['title'];
+          if (info['link']) {
+            title = '<a href="' + info['link'] + '">' + info['title'] + '</a>';
+          }
+
+          var author = info['author'] ? '<span class="author">' + info['author'] + '</span>' : '';
+
+          var intro = info['intro'] ? info['intro'] : '';
+
+          var star = '';
+          if (info['score'] == null) {
+            star = '';
+          } else {
+            var colorStar = '';
+            var greyStar = '';
+            var int = Math.floor(info['score']); //整数部分
+            var fract = 0;
+            if (info['score'] % 1 !== 0) {
+              fract = 1;
+            }
+            for (var m = 0; m < int; m++) {
+              colorStar += '★';
+            }
+            if (fract !== 0) {
+              colorStar += '☆';
+            }
+            for (var m = 0; m < (5 - fract - int); m++) {
+              greyStar += '☆';
+            }
+            if (info['score'] !== 5) {
+              star = '<span class="star-score">' + colorStar + '<span class="grey-star">' + greyStar + '</span></span>';
+            } else {
+              star = '<span class="star-score">' + colorStar + '</span>';
+            }
+          }
+
+          li += '<div class="media">';
+          li += '<div class="media-cover" style="background-image:url(' + coverPath + info['cover'] + ')"></div>';
+          li += '<div class="media-meta">';
+          li += '<div class="media-meta-item title">' + title + '</div>';
+          li += '<div class="media-meta-item">' + author + star + '</div>';
+          li += '<div class="media-meta-item intro">' + intro + '</div>';
+          li += '</div></div>';
+        }
+        
+        cultureList[j].innerHTML = li;
+      }
+    };
+    xhr.send();
+  }
+}
+</script>
+
+
+
+
+<script src="/resources/minigrid.min.js"></script>
+<script type="text/javascript">
+var album = document.querySelector(".album");
+if (album) {
+  // 相册列表 JSON 数据
+  var imgDataPath = album.getAttribute('json-src');
+  // 照片存储路径
+  var imgPath = album.getAttribute('photo-src');
+  // 最多显示数量
+  var imgMaxNum = 50;
+  // 获取窗口大小以决定图片宽度
+  var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  var imageWidth;
+
+  if (windowWidth < 768) {
+    imageWidth = 145; // 移动端图片宽度
+  } else {
+    imageWidth = 235;
+  }
+
+  // 腾讯云自定义样式 (数据万象外网流量需要付费)
+  //var imgStyle = '!' + imageWidth + 'x';
+  //var imgStyle = '!300x';
+
+  // 生成相册
+  var linkDataPath = imgDataPath;
+  var photo = {
+    page: 1,
+    offset: imgMaxNum,
+    init: function () {
+      var that = this;
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", linkDataPath, true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var data = JSON.parse(xhr.responseText);
+          that.render(that.page, data);
+        }
+      };
+      xhr.send();
+    },
+    render: function (page, data) {
+      var begin = (page - 1) * this.offset;
+      var end = page * this.offset;
+      if (begin >= data.length) return;
+      var imgNameWithPattern, imgName, imageSize, imageX, imageY, li = "";
+      for (var i = begin; i < end && i < data.length; i++) {
+        imgNameWithPattern = data[i].split(' ')[1];
+        imgName = imgNameWithPattern.split('.')[0];
+        imageSize = data[i].split(' ')[0];
+        imageX = imageSize.split('.')[0];
+        imageY = imageSize.split('.')[1];
+        li += '<div class="card" style="width:' + imageWidth + 'px" >';
+        li += '<div class="album-photo" style="height:'+ imageWidth * imageY / imageX + 'px">';
+        li += '<a class="fancybox fancybox.image" href="' + imgPath + imgNameWithPattern + '" itemscope="" itemtype="http://schema.org/ImageObject" itemprop="url" data-fancybox="group" rel="group" data-caption="' + imgName + '" title="' +  imgName + '">';
+        li += '<img data-src="' + imgPath + imgNameWithPattern + '" src="' + imgPath + imgNameWithPattern + '" alt="' +  imgName + '" data-loaded="true">';
+        li += '</a>';
+        li += '</div>';
+        li += '</div>';
+      }
+      album.insertAdjacentHTML('beforeend', li);
+      this.minigrid();
+    },
+    minigrid: function () {
+      var grid = new Minigrid({
+        container: '.album',
+        item: '.card',
+        gutter: 12
+      });
+      grid.mount();
+      window.addEventListener('resize', function () {
+        grid.mount();
+      });
+    }
+  };
+  photo.init();
+}
+</script>
+</body>
+</html>

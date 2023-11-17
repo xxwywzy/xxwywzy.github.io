@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/resources/favicon/favicon.png">
+  <link rel="mask-icon" href="/resources/favicon/favicon.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"xxwywzy.github.io","root":"/","images":"/resources/img/","scheme":"Gemini","darkmode":true,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"livere","storage":true,"lazyload":false,"nav":null,"activeClass":"livere"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本篇博客为 CS229 学习笔记第十三部分，主题是：决策树与集成方法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CS229 学习笔记之十三：决策树与集成方法">
+<meta property="og:url" content="https://xxwywzy.github.io/2019/04/19/cs229-13/">
+<meta property="og:site_name" content="口仆">
+<meta property="og:description" content="本篇博客为 CS229 学习笔记第十三部分，主题是：决策树与集成方法。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-14-070139.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-14-074357.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-14-082819.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-14-085228.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-15-125938.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-15-125221.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-19-072905.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-19-073940.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-19-075929.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-19-085823.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-20-043542.png">
+<meta property="article:published_time" content="2019-04-19T01:32:13.000Z">
+<meta property="article:modified_time" content="2023-08-06T11:20:53.000Z">
+<meta property="article:author" content="Zheyu Wang">
+<meta property="article:tag" content="CS229">
+<meta property="article:tag" content="决策树">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2019-04-14-070139.png">
+
+
+<link rel="canonical" href="https://xxwywzy.github.io/2019/04/19/cs229-13/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://xxwywzy.github.io/2019/04/19/cs229-13/","path":"2019/04/19/cs229-13/","title":"CS229 学习笔记之十三：决策树与集成方法"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>CS229 学习笔记之十三：决策树与集成方法 | 口仆</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/resources/fonts/longcang/longcang-regular.css" >
+<link rel="stylesheet" href="/resources/fonts/lxgw/lxgwwenkailite-regular.css" >
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">口仆</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Long may the sunshine</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-culture"><a href="/culture/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>MEME</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%B3%E7%AD%96%E6%A0%91"><span class="nav-number">1.</span> <span class="nav-text">决策树</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%9E%E7%BA%BF%E6%80%A7"><span class="nav-number">1.1.</span> <span class="nav-text">非线性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E5%8C%BA%E5%9F%9F"><span class="nav-number">1.2.</span> <span class="nav-text">选择区域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E4%B8%80%E4%B8%AA%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="nav-number">1.3.</span> <span class="nav-text">定义一个损失函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%99%E8%AF%AF%E5%88%86%E7%B1%BB%E6%8D%9F%E5%A4%B1"><span class="nav-number">1.3.1.</span> <span class="nav-text">1.3.1 错误分类损失</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%A4%E5%8F%89%E7%86%B5%E6%8D%9F%E5%A4%B1"><span class="nav-number">1.3.2.</span> <span class="nav-text">交叉熵损失</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%B3%E6%96%B9%E6%8D%9F%E5%A4%B1"><span class="nav-number">1.3.3.</span> <span class="nav-text">平方损失</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E8%80%83%E9%87%8F"><span class="nav-number">1.4.</span> <span class="nav-text">其他考量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E7%B1%BB%E5%8F%98%E9%87%8F"><span class="nav-number">1.4.1.</span> <span class="nav-text">分类变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E5%8C%96"><span class="nav-number">1.4.2.</span> <span class="nav-text">正则化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E6%97%B6%E9%97%B4"><span class="nav-number">1.4.3.</span> <span class="nav-text">运行时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A0%E6%80%A7%E7%BB%93%E6%9E%84%E7%9A%84%E7%BC%BA%E5%A4%B1"><span class="nav-number">1.4.4.</span> <span class="nav-text">加性结构的缺失</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.5.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9B%86%E6%88%90%E6%96%B9%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">集成方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A3%85%E8%A2%8B%E6%B3%95"><span class="nav-number">2.1.</span> <span class="nav-text">装袋法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%8A%A9bootstrap"><span class="nav-number">2.1.1.</span> <span class="nav-text">自助（Bootstrap）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%81%9A%E5%90%88aggregation"><span class="nav-number">2.1.2.</span> <span class="nav-text">聚合（Aggregation）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A3%85%E8%A2%8B%E6%B3%95-%E5%86%B3%E7%AD%96%E6%A0%91"><span class="nav-number">2.1.3.</span> <span class="nav-text">装袋法 + 决策树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93-1"><span class="nav-number">2.1.4.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E5%8D%87%E6%B3%95"><span class="nav-number">2.2.</span> <span class="nav-text">提升法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%B4%E8%A7%82%E7%90%86%E8%A7%A3"><span class="nav-number">2.2.1.</span> <span class="nav-text">直观理解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#adaboost"><span class="nav-number">2.2.2.</span> <span class="nav-text">Adaboost</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#forward-stagewise-additive-modeling"><span class="nav-number">2.2.3.</span> <span class="nav-text">Forward Stagewise Additive Modeling</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gradient-boosting"><span class="nav-number">2.2.4.</span> <span class="nav-text">Gradient Boosting</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93-2"><span class="nav-number">2.2.5.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE"><span class="nav-number">3.</span> <span class="nav-text">思维导图</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zheyu Wang"
+      src="/resources/favicon/avatar.png">
+  <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+  <div class="site-description" itemprop="description">相信过程</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">85</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xxwywzy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/xxwywzy" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/xxwywzy" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/xxwywzy" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2019/04/19/cs229-13/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resources/favicon/avatar.png">
+      <meta itemprop="name" content="Zheyu Wang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="口仆">
+      <meta itemprop="description" content="相信过程">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="CS229 学习笔记之十三：决策树与集成方法 | 口仆">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CS229 学习笔记之十三：决策树与集成方法
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-04-19 09:32:13" itemprop="dateCreated datePublished" datetime="2019-04-19T09:32:13+08:00">2019-04-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">课程笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>5.5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>18 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><div class="note info"><p>本篇博客为 CS229 学习笔记第十三部分，主题是：决策树与集成方法。</p>
+</div>
+<span id="more"></span>
+<h1 id="决策树">决策树</h1>
+<p>本章将介绍决策树，一种简单而灵活的算法。我们首先将给出决策树的非线性与基于区域的特征，然后对基于区域的损失函数进行定义与对比，最后给出这些方法的优缺点（进而引出集成方法）。</p>
+<h2 id="非线性">非线性</h2>
+<p>决策树是一种天生支持<strong>非线性</strong>的机器学习算法。正式来说，如果一个方法是线性的，则其输入 <span class="math inline">\(x \in \mathbb{R}^n\)</span> 会输出下面形式的假设函数： <span class="math display">\[
+h(x)=\theta^{T}x
+\]</span></p>
+<p>其中 <span class="math inline">\(\theta \in \mathbb{R}^{n}\)</span>，截距项内置（<span class="math inline">\(x_0 = 1\)</span>）。</p>
+<p>不能被化简为上述形式的假设函数即称为非线性。如果一个方法输出非线性的假设函数，则该方法也为非线性。之前我们介绍了对线性方法引入核函数，通过特征映射可以得到非线性的假设函数。</p>
+<p>与核方法相比，决策树则可以直接输出非线性的假设函数。下图给出了基于时间与地点判断该地区能否滑雪的数据：</p>
+<p><img src="http://media.zjubiomedit.com/2019-04-14-070139.png" width=70%></p>
+<p>可以看到该数据无法找出线性决策边界，但是我们可以将输入空间 <span class="math inline">\(\mathcal{X}\)</span> 划分为不同的区域 <span class="math inline">\(R_i\)</span>： <span class="math display">\[
+\begin{aligned} \mathcal{X} &amp;=\bigcup_{i=0}^{n} R_{i} \\ \text { s.t. } &amp; R_{i} \cap R_{j}=\emptyset \text { for } i \neq j \end{aligned}
+\]</span></p>
+<h2 id="选择区域">选择区域</h2>
+<p>一般来说，选择最优的区域是较困难的。决策树通过<strong>贪婪、自顶向下，递归的分割</strong>来进行区域的选择。</p>
+<p>具体来说，我们首先从原始的输入空间 <span class="math inline">\(\mathcal{X}\)</span> 开始，基于单个特征的某个阈值将其划分为两个子区域，然后再选择其中一个子区域，基于新的阈值进行划分。我们持续以这种递归的方式训练模型：选择<strong>叶子节点</strong>（区域）、<strong>特征</strong>和<strong>阈值</strong>来形成一次新的分割。</p>
+<p>形式上说，给定一个父区域 <span class="math inline">\(R_p\)</span>，一个特征索引 <span class="math inline">\(j\)</span> 和一个阈值 <span class="math inline">\(t \in \mathbb{R}\)</span>，我们可以得到如下的两个子区域 <span class="math inline">\(R_1\)</span> 和 <span class="math inline">\(R_2\)</span>： <span class="math display">\[
+\begin{aligned}
+R_{1} &amp;=\left\{X | X_{j} &lt; t, X \in R_{p}\right\} \\ R_{2} &amp;=\left\{X | X_{j} \geq t, X \in R_{p}\right\}
+\end{aligned}
+\]</span> 对于之前的滑雪数据集，决策树的执行过程如下图所示：</p>
+<p><img src="http://media.zjubiomedit.com/2019-04-14-074357.png" width=70%></p>
+<p>这一过程将持续至满足某个停止条件（之后细说），然后对每个叶子区域预测其所属类别。</p>
+<h2 id="定义一个损失函数">定义一个损失函数</h2>
+<p>对于上面的过程，一个自然的问题是如何选择<strong>分割</strong>。我们可以基于区域集来定义损失函数 <span class="math inline">\(L\)</span>。</p>
+<p>给定一个父区域 <span class="math inline">\(R_p\)</span> 和两个子区域 <span class="math inline">\(R_1\)</span> 和 <span class="math inline">\(R_2\)</span>，我们可以计算父区域的损失 <span class="math inline">\(L(R_p)\)</span> 和子区域的基数加权损失： <span class="math display">\[
+\frac{\left|R_{1}\right| L\left(R_{1}\right)+\left|R_{2}\right| L\left(R_{2}\right)}{\left|R_{1}\right|+\left|R_{2}\right|}
+\]</span> 在我们的<strong>贪婪</strong>分割框架中，我们希望选择区域、特征和阈值来使得损失减少最大化： <span class="math display">\[
+L\left(R_{p}\right)-\frac{\left|R_{1}\right| L\left(R_{1}\right)+\left|R_{2}\right| L\left(R_{2}\right)}{\left|R_{1}\right|+\left|R_{2}\right|}
+\]</span></p>
+<h3 id="错误分类损失">1.3.1 错误分类损失</h3>
+<p>对于一个分类问题，我们感兴趣的是<strong>错误分类的损失</strong> <span class="math inline">\(L_{misclass}\)</span>。对于一个区域 <span class="math inline">\(R\)</span>，令 <span class="math inline">\(\hat{p}_{c}\)</span> 为区域中类别为 c 的样本比例，则 <span class="math inline">\(R\)</span> 的错误分类损失可以写作：</p>
+<p><span class="math display">\[
+L_{misclass}(R)=1-\max _{c}\left(\hat{p}_{c}\right)
+\]</span></p>
+<p>该公式可以理解为我们将区域中样本数量最多的类作为希望该区域分割出的类别，则剩余的样本即为错误分类的样本。</p>
+<p>然而，虽然错误分类损失是分类好坏的最终体现，但其对类别的概率并不敏感。下面的二分类例子体现了这一点：</p>
+<p><img src="http://media.zjubiomedit.com/2019-04-14-082819.png" width=80%></p>
+<p>左侧的分割方式可以孤立出更多的正样本，看上去更好，但是： <span class="math display">\[
+L\left(R_{p}\right)=\frac{\left|R_{1}\right| L\left(R_{1}\right)+\left|R_{2}\right| L\left(R_{2}\right)}{\left|R_{1}\right|+\left|R_{2}\right|}=\frac{\left|R_{1}^{\prime}\right| L\left(R_{1}^{\prime}\right)+\left|R_{2}^{\prime}\right| L\left(R_{2}^{\prime}\right)}{\left|R_{1}^{\prime}\right|+\left|R_{2}^{\prime}\right|}= \frac 1 5
+\]</span></p>
+<p>可以看到，在错误分类损失函数下，两种分割方式的损失相同，而且也不能降低父区域的损失。</p>
+<h3 id="交叉熵损失">交叉熵损失</h3>
+<p>因此，我们需要定义一个更加敏感的损失函数，这里将使用<strong>交叉熵损失</strong> <span class="math inline">\(L_{cross}\)</span>： <span class="math display">\[
+L_{cross}(R)=-\sum_{c} \hat{p}_{c} \log _{2} \hat{p}_{c}
+\]</span></p>
+<p>其中 <span class="math inline">\(\hat{p} \log _{2} \hat{p} \equiv 0 \text { if } \hat{p}=0\)</span>。</p>
+<p>从信息论的角度看，交叉熵测量了在分布已知的情况下，为了特定输出所需要的比特的数量。进一步来说，从父区域到子区域的损失的减少可以看做是信息的增加。</p>
+<p>为了理解上述两种损失函数之间的敏感性的差别，我们将上面的二分类的例子的损失函数进行作图表述。对于该例，我们可以将损失函数简化为仅依赖于正样本 <span class="math inline">\(\hat{p}_i\)</span> （在区域 <span class="math inline">\(R_i\)</span> 中）</p>
+<p><span class="math display">\[
+\begin{array}{l}{L_{misclass}(R)=L_{misclass}(\hat{p})=1-\max (\hat{p}, 1-\hat{p})} \\ {L_{cross}(R)=L_{cross}(\hat{p})=-\hat{p} \log \hat{p}-(1-\hat{p}) \log (1-\hat{p})}\end{array}
+\]</span> 两个函数的图像如下：</p>
+<p><img src="http://media.zjubiomedit.com/2019-04-14-085228.png" width=80%></p>
+<p>左图对应交叉熵损失函数，右图对应错误分类损失函数，图中的点取自之前例子中左边的分割。</p>
+<p>可以看到，因为交叉熵损失严格凹，所以只要 <span class="math inline">\(\hat{p}_{1} \neq \hat{p}_{2}\)</span> 且子区域非空，则其加权损失一定比起父区域的损失要小；而对于右图，由于函数不是严格凹，因此不能保证子区域的加权损失一定小于父区域。</p>
+<p>基于这种敏感性，在决策树分类时通常使用交叉熵损失函数。</p>
+<h3 id="平方损失">平方损失</h3>
+<p>对于回归问题，则不能使用上述的损失函数。对每个数据点 <span class="math inline">\(x_i\)</span>，我们现在都会有一个对应的值 <span class="math inline">\(y_{i} \in \mathbb{R}\)</span> 希望去预测。</p>
+<p>与分类问题对比，决策树的训练过程大体相同，区别在于对于一个区域 <span class="math inline">\(R\)</span>，最终输出为其中所有值的平均： <span class="math display">\[
+\hat{y}=\frac{\sum_{i \in R} y_{i}}{|R|}
+\]</span></p>
+<p>这种情况下我们可以直接使用<strong>平方损失</strong>来选择分割： <span class="math display">\[
+L_{squared}(R)=\frac{\sum_{i \in R}\left(y_{i}-\hat{y}\right)^{2}}{|R|}
+\]</span></p>
+<h2 id="其他考量">其他考量</h2>
+<p>决策树的流行很大程度上归功于其原理的简单易懂，以及其高度的<strong>可解释性</strong>。我们可以查看生成的阈值集来了解为什么模型作出了该预测。</p>
+<p>然而，这并不是决策树的全部，下面将介绍一些关于决策树的值得注意的点。</p>
+<h3 id="分类变量">分类变量</h3>
+<p>决策树的另一个优点是其可以轻松地处理<strong>类别</strong>变量（指输入）。以之前的滑雪数据为例，将位置变量表示为类别变量（南半球、北半球或赤道） <span class="math display">\[
+\operatorname{loc} \in\{N, S, E\}
+\]</span></p>
+<p>其他算法可能需要先进行预处理（如独热编码），将类别变量转化为定量特征，而对于决策树，我们可以直接处理分类变量，如下图所示：</p>
+<p><img src="http://media.zjubiomedit.com/2019-04-15-125938.png" width=50%></p>
+<p>需要注意的是，我们要防止类别过多的情况出现。这会导致计算过于复杂，以及过拟合的出现，这时应该考虑将类别变量进行低维度的定量表达。</p>
+<h3 id="正则化">正则化</h3>
+<p>之前我们提到了需要一些停止规则来判定何时停止树的生长。最简单的停止规则即为直到每个区域只包含<strong>一个</strong>训练数据点。很明显，这种规则会引起模型的高方差与低偏差（过拟合）。</p>
+<p>我们需要一些启发性的停止规则来进行正则化，常用的规则包括：</p>
+<ul>
+<li><strong>最小化叶子规模</strong>：当区域的基数低于某个阈值时，停止分割该区域</li>
+<li><strong>最小化深度</strong>：如果某个区域进行的分割次数超过了某个阈值，则停止分割</li>
+<li><strong>最小化节点数量</strong>：当一个树拥有了超过某个阈值的叶子节点，则停止生长</li>
+</ul>
+<p>除了上述规则外，还可能想到的一个启发式规则是使得每次切分后的损失降低最小。但这种方法是存在问题的，因为决策树是基于单个特征的贪婪算法，可能导致遗失某些高阶的互动。</p>
+<p>如果基于多个特征设定阈值来获得更好的分割，则可能难以在初期的分割中获得较好的损失下降，最终导致算法过早地终止（这里不太懂笔记里的意思，我的理解是这个规则和之前最大化损失降低的原则相违背）。</p>
+<p>还有一种较好的方法是将树完全生长出来，然后基于验证集修剪那些使得错误分类或平方误差减少最小的叶子节点。</p>
+<h3 id="运行时间">运行时间</h3>
+<p>下面简单介绍决策树的<strong>运行时间</strong>。为了简化分析，这里考虑二元分类问题，其中包含 <span class="math inline">\(n\)</span> 个样本、<span class="math inline">\(f\)</span> 个特征以及一个深度为 <span class="math inline">\(d\)</span> 的树。</p>
+<p>在测试时，对于一个样本点，我们搜索树直到一个叶子节点，然后输出预测，运行时间为 <span class="math inline">\(O(d)\)</span>。如果我们的树是平衡的，则 <span class="math inline">\(d = O(\log n)\)</span>，这种情况下，测试时间一般来说是相当快的。</p>
+<p>在训练时，每个数据点最多只会在 <span class="math inline">\(O(d)\)</span> 个节点中出现，通过排序和对中间值的智能缓存，我们可以使得针对每个节点的每个数据点的每个特征，其分摊运行时间为 <span class="math inline">\(O(1)\)</span>。因此，总的运行时间为 <span class="math inline">\(O(nfd)\)</span>，对于一个维数为 <span class="math inline">\(n \times f\)</span> 的数据矩阵来说，这是一个相当快的运行时间。</p>
+<h3 id="加性结构的缺失">加性结构的缺失</h3>
+<p>决策树的一个缺点是其不能轻易地捕捉<strong>加性结构</strong>。在下面的例子中，决策树每一次分割只能考虑一个特征，而线性模型则可以直接导出右图所示的边界：</p>
+<p><img src="http://media.zjubiomedit.com/2019-04-15-125221.png" width=70%></p>
+<p>一些研究对决策树进行了改进使其能够同时考虑多个特征，但还是存在增加方差和减少可解释性的缺点。</p>
+<h2 id="总结">总结</h2>
+<p>决策树的主要优点是：</p>
+<ul>
+<li>易于理解</li>
+<li>可解释性</li>
+<li>支持分类变量</li>
+<li>速度快</li>
+</ul>
+<p>决策树的缺点包括：</p>
+<ul>
+<li>高方差</li>
+<li>对加性模型的建模支持较差</li>
+</ul>
+<p>上述缺点会导致单个决策树的整体预测准确率较低，解决这个问题的常见方法是使用<strong>集成学习</strong>。</p>
+<h1 id="集成方法">集成方法</h1>
+<p>集成方法就是将多个训练模型的输出结合起来，我们将使用<strong>偏差-方差</strong>分析以及以决策树为例来探究集成方法的利弊。</p>
+<p>首先，让我们用一个基础概率论的例子证明集成方法的优势所在。假设我们有 <span class="math inline">\(n\)</span> 个独立同分布的随机变量 <span class="math inline">\(X_i\)</span>。假定对于所有 <span class="math inline">\(X_i\)</span> 均有 <span class="math inline">\(\operatorname{Var}\left(X_{i}\right)=\sigma^{2}\)</span>.</p>
+<p>则平均值的方差为： <span class="math display">\[
+\operatorname{Var}(\bar{X})=\operatorname{Var}\left(\frac{1}{n} \sum_{i} X_{i}\right)=\frac{\sigma^{2}}{n}
+\]</span> 如果我们抛弃了独立假设，即变量仅为同分布。相对地，<span class="math inline">\(X_i\)</span> 之间的关联系数为 <span class="math inline">\(\rho\)</span>，则平均值的方差为：</p>
+<p><span class="math display">\[
+\begin{aligned} \operatorname{Var}(\bar{X}) &amp;=\operatorname{Var}\left(\frac{1}{n} \sum_{i} X_{i}\right) \\ &amp;=\frac{1}{n^{2}} \sum_{i, j} \operatorname{Cov}\left(X_{i}, X_{j}\right) \\ &amp;=\frac{n \sigma^{2}}{n^{2}}+\frac{n(n-1) \rho \sigma^{2}}{n^{2}} \\ &amp;=\rho \sigma^{2}+\frac{1-\rho}{n} \sigma^{2} \end{aligned}
+\]</span></p>
+<p>在第三步中，使用了皮尔逊相关系数的定义 <span class="math inline">\(\rho_{X, Y}=\frac{\operatorname{Cov}(X, Y)}{\sigma_{x} \sigma_{y}}\)</span> 以及 <span class="math inline">\(\operatorname{Cov}(X, X)=\operatorname{Var}(X)\)</span>。</p>
+<p>现在，如果我们将每个随机变量想象为一个给定模型的误差，则增加模型数量以及降低模型之间的相关性都可以减少集成后的模型误差的方差：</p>
+<ul>
+<li>增加模型数量减少第二项的值</li>
+<li>降低模型之间的相关性减少第一项的值，使得各变量回归独立同分布</li>
+</ul>
+<p>生成不相关的模型的方法有很多种，包括：</p>
+<ul>
+<li>使用不同的算法</li>
+<li>使用不同的训练集</li>
+<li>装袋法（Bagging）</li>
+<li>提升法（Boosting）</li>
+</ul>
+<p>实际上提升法并不会降低模型之间的相关性（此处是笔记的一个矛盾点）。虽然前两种方法很直接，但其需要较大的工作量，下面将介绍后两种方法：<strong>装袋法</strong>与<strong>提升法</strong>，以及他们在决策树中的特殊应用。</p>
+<h2 id="装袋法">装袋法</h2>
+<p>Bagging 代表 Bootstrap Aggregation，是一种<strong>减少方差</strong>的集成方法。</p>
+<h3 id="自助bootstrap">自助（Bootstrap）</h3>
+<p>自助法是一种来源于统计学的方法，其最初的目的是测量某些估计量（如均值）的不确定性。</p>
+<p>假定我们有一个总体 <span class="math inline">\(P\)</span>，希望去计算其的某个估计量，以及一个采样自 <span class="math inline">\(P\)</span> 的训练集 <span class="math inline">\(S\)</span>（<span class="math inline">\(S \sim P\)</span>）。虽然我们可以通过计算 <span class="math inline">\(S\)</span> 的估计量来近似 <span class="math inline">\(P\)</span> 的估计量，但我们无法得知其与真实值的误差。为了做到这一点我们需要采样自 <span class="math inline">\(P\)</span> 的多个独立训练集 <span class="math inline">\(S_{1}, S_{2}, \dots\)</span>。</p>
+<p>自助法的思路是假设 <span class="math inline">\(S=P\)</span>，则我们可以生成一个新的 bootstrap 集 <span class="math inline">\(Z\)</span> 采样自 <span class="math inline">\(S\)</span>（<span class="math inline">\(Z \sim S,|Z|=|S|\)</span>），进而生成多个这样的样本 <span class="math inline">\(Z_{1}, Z_{2}, \dots, Z_{M}\)</span>，然后通过这些自助集上的估计量的方差来得到对误差的估计。</p>
+<h3 id="聚合aggregation">聚合（Aggregation）</h3>
+<p>对于集成方法，我们可以用每个样本 <span class="math inline">\(Z_m\)</span> 去训练一个机器学习模型 <span class="math inline">\(G_m\)</span>，然后定义如下的聚合模型： <span class="math display">\[
+G(X)=\sum_{m} \frac{G_{m}(x)}{M}
+\]</span></p>
+<p>这一过程即称为 <strong>bagging</strong>。在之前的推导中，我们得出 <span class="math inline">\(M\)</span> 个相关模型的方差为： <span class="math display">\[
+\operatorname{Var}(\bar{X})=\rho \sigma^{2}+\frac{1-\rho}{M} \sigma^{2}
+\]</span></p>
+<p>bagging 通过在不同数据集上训练模型来减少模型之间的关联性 <span class="math inline">\(\rho\)</span> 。</p>
+<p>虽然单个模型的偏差会增加因为其没有使用全部训练集，但是方差的减少弥补了偏差增加的影响。此外，增加模型的数量并不会导致额外的过拟合，因为 <span class="math inline">\(\rho\)</span> 对 <span class="math inline">\(M\)</span> 不敏感，因此总体方差只会下降。</p>
+<p>bagging 的另外一个好处是<strong>袋外估计</strong>（out-of-bag estimation）。可以证明每个 bootstrap 样本都只包含大概 <span class="math inline">\(\frac 2 3\)</span> 的样本，因此可以用剩下的 <span class="math inline">\(\frac 1 3\)</span> 样本来进行误差估计，称为袋外误差。在极限情况下，<span class="math inline">\(M \rightarrow \infty\)</span>，袋外误差就等价于留一交叉验证。</p>
+<h3 id="装袋法-决策树">装袋法 + 决策树</h3>
+<p>完全生长的决策树具有高方差、低偏差的特点，因此 bagging 降低方差的效果可以很好的弥补上述不足。此外，bagging 还可以处理缺失特征，如果一个特征有缺失，则排除在分割中使用到该特征的树。不过当该特征是重要的预测依据时，它仍然会保留在大部分的树中。</p>
+<p>袋装决策树的一个缺点是失去了单个决策树的内在可解释性。我们可以通过一种叫<strong>变量重要性测量</strong>的方法来一定程度上恢复模型的洞察力，对于每个特征，找出在集成中使用到该特征的每一个分割，并将所有这些分割导致的损失函数的降低进行平均。注意这种方法与衡量缺少该特征会引起多少性能下降有所不同，因为这些分割中也包含了其他特征。</p>
+<p>关于袋装决策树的最后一个重要内容是<strong>随机森林</strong>方法。如果我们的数据集包含了一个非常强的预测器（特征），则我们的袋装树总会使用该特征来进行分割，导致了模型之间的关联性上升。而随机森林算法中每次分割我们只允许使用特征的一个子集，这样可以降低关联性 <span class="math inline">\(\rho\)</span>，从而导致方差的下降。这种方法同时也会导致偏差的上升，由于对特征空间的限制，但是与常规的袋装决策树一样这并不会有什么影响。最终，即便是非常有用的特征也不会出现在每个树中（假设树的数量足够且每次分割对特征有充分的限制），这种方法同时还能更优雅地处理缺失特征。</p>
+<h3 id="总结-1">总结</h3>
+<p>对于决策树，装袋法的主要优点有：</p>
+<ul>
+<li>降低方差（决策森林更加显著）</li>
+<li>更好的准确性</li>
+<li>自由的验证集</li>
+<li>支持缺失值</li>
+</ul>
+<p>其缺点包括：</p>
+<ul>
+<li>偏差的增加（决策森林更加显著）</li>
+<li>可解释性差</li>
+<li>依然缺乏加性</li>
+<li>计算成本更高</li>
+</ul>
+<h2 id="提升法">提升法</h2>
+<h3 id="直观理解">直观理解</h3>
+<p>装袋法是一种降低方差的技术，而提升法则是一种<strong>降低偏差</strong>的技术。因此，我们需要高偏差低方差的模型来使用提升法，这种模型即<strong>弱学习模型</strong>（weak learners）。</p>
+<p>对决策树来说，通过只允许每个树在预测前进行一次决策，可以将其变为弱学习模型，这种决策树也称为<strong>决策树桩</strong>（decision stumps）。</p>
+<p>我们将以下图为例介绍提升法的思想，原始数据集如最左侧的图所示：</p>
+<p><img src="http://media.zjubiomedit.com/2019-04-19-072905.png" width=80%></p>
+<p>我们先训练一个决策树桩（中间图），再找出其中分类错误的样本，提升其权重；然后训练一个新的决策树桩，更加趋向于对这些错误样本进行正确分类；持续上述过程，每一步对样本权重进行重新评估，最终输出上述弱学习模型的结合，作为一个集成分类器。</p>
+<h3 id="adaboost">Adaboost</h3>
+<p>下面介绍一种最流行的提升算法：Adaboost，其流程如下图所示：</p>
+<p><img src="http://media.zjubiomedit.com/2019-04-19-073940.png" width=70%></p>
+<p>每个样本的权重最开始均匀分配，而错误分类样本在每一步中提升权重。最终的聚合分类器是所有弱学习模型的加权求和。因为是求和后再预测，因此该集成方法能够处理加性数据，提升整个模型的能力（以及方差）。</p>
+<p>每个弱学习模型不再与之前的模型独立，因此提升模型数量 <span class="math inline">\(M\)</span> 有导致过拟合的风险。此外 Adaboost 中使用的权重公式看上去以后一些随意，但事实证明该公式是合理的。</p>
+<h3 id="forward-stagewise-additive-modeling">Forward Stagewise Additive Modeling</h3>
+<p>前向分步算法的流程如下：</p>
+<p><img src="http://media.zjubiomedit.com/2019-04-19-075929.png" width=70%></p>
+<p>可以看到该算法进行了较少的假设，仅使用了集成方法的可加性质以及在一个给定步骤后对所有之前的权重和参数的固定。对于弱分类器 <span class="math inline">\(G(x)\)</span>，每一步我们尝试去找到下一个弱分类器的参数和权重，来最大程度减小当前集成模型的剩余误差。</p>
+<p>作为该算法的一种具体实现，选择平方损失函数相当于将单个分类器拟合至残差 <span class="math inline">\(y_{i}-f_{m-1}\left(x_{i}\right)\)</span>。此外，我们可以证明 Adaboost 是前向分布算法的特例，当针对二分类及指数损失时： <span class="math display">\[
+L(y, \hat{y})=\exp (-y \hat{y})
+\]</span></p>
+<p>具体细节可参考 ESL 第 10.4 节。</p>
+<h3 id="gradient-boosting">Gradient Boosting</h3>
+<p><img src="http://media.zjubiomedit.com/2019-04-19-085823.png" width=60%></p>
+<p>一般来说，前向分布算法中的最小化问题很难求出闭合解，像 <strong>xgboost</strong> 这样的高效算法通常会采用数值优化来解决该问题。</p>
+<p>一种最常见的做法是对损失函数求导并进行梯度下降，但是，参数 <span class="math inline">\(\gamma\)</span> 被限制在模型中进行梯度下降：我们只能在参数化的弱学习模型 <span class="math inline">\(G(x, \gamma)\)</span> 中进行操作，而不是在输入空间中进行任意的移动。</p>
+<p>在梯度提升中，我们选择计算每个训练样本关于其当前预测模型的梯度： <span class="math display">\[
+g_{i}=\frac{\partial L\left(y, f\left(x_{i}\right)\right)}{\partial f\left(x_{i}\right)}
+\]</span></p>
+<p>然后训练一个新的回归预测模型来匹配这一梯度，并将其用于梯度下降。在前向分步算法中，对应的公式为： <span class="math display">\[
+\gamma_{i}=\operatorname{argmin}_{\gamma} \sum_{i=1}^{N}\left(g_{i}-G\left(x_{i} ; \gamma\right)\right)^{2}
+\]</span></p>
+<h3 id="总结-2">总结</h3>
+<p>提升法的主要优点有：</p>
+<ul>
+<li>减少偏差</li>
+<li>更好的准确性</li>
+<li>加性建模</li>
+</ul>
+<p>提升法的缺点包括：</p>
+<ul>
+<li>方差的提升</li>
+<li>容易过拟合</li>
+</ul>
+<h1 id="思维导图">思维导图</h1>
+<p><img src="http://media.zjubiomedit.com/2019-04-20-043542.png" width=100%></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+
+
+
+<div class="license">
+  <div class="license-title">CS229 学习笔记之十三：决策树与集成方法</div>
+  <div class="license-link">
+    <a href="https://xxwywzy.github.io/2019/04/19/cs229-13/">https://xxwywzy.github.io/2019/04/19/cs229-13/</a>
+  </div>
+  <div class="license-meta">
+    <div class="license-meta-item">
+      <div class="license-meta-title">本文作者</div>
+      <div class="license-meta-text">
+          Zheyu Wang
+      </div>
+    </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">发布于</div>
+        <div class="license-meta-text">
+          2019-04-19
+        </div>
+      </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">更新于</div>
+        <div class="license-meta-text">
+          2023-08-06
+        </div>
+      </div>
+    <div class="license-meta-item">
+      <div class="license-meta-title">许可协议</div>
+      <div class="license-meta-text">
+          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank">CC BY-NC-SA 4.0</a>
+      </div>
+    </div>
+  </div>
+  <div class="license-statement">
+      转载或引用本文时，请遵守上述许可协议，注明出处、不得用于商业用途！
+  </div>
+</div>
+          <div class="post-tags">
+              <a href="/tags/CS229/" rel="tag"># CS229</a>
+              <a href="/tags/%E5%86%B3%E7%AD%96%E6%A0%91/" rel="tag"># 决策树</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/03/30/cs224-2/" rel="prev" title="CS224N 学习笔记之二：词向量 2">
+                  <i class="fa fa-angle-left"></i> CS224N 学习笔记之二：词向量 2
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/04/30/kaggle-1/" rel="next" title="Coursera-Kaggle Week1 学习笔记">
+                  Coursera-Kaggle Week1 学习笔记 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81ODgyNi8zNTI4OA=="></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">332k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">18:26</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+
+
+  <style>
+    #taboola-livere { display: none;}
+  </style>
+
+
+
+<script type="text/javascript">
+var linkLists = document.querySelectorAll(".link-list");
+
+linkLists.forEach(function(linkList) {
+  var listPath = linkList.getAttribute('json-src');
+  var iconPath = linkList.getAttribute('icon-src');
+  
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', listPath, true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      var data = JSON.parse(xhr.responseText);
+      
+      var li = "";
+      linkList.innerHTML = '';
+
+      for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+        var info = data[infoIndex];
+        var labelWarn = info['warn'] ? '<span class="label warn">' + info['warn'] + '</span>' : '';
+        var labelInfo = info['info'] ? '<span class="label info">' + info['info'] + '</span>' : '';
+
+        li += '<div class="link-list-container">';
+        li += '<img class="link-list-image" src="' + iconPath + info['logo'] + '">';
+        li += '<p>' + info['title'] + labelInfo + labelWarn + '</p>';
+        li += '<p>' + info['intro'] + '</p>';
+        li += '<a href="' + info['url'] + '" rel="noopener" target="_blank" data-pjax-state=""></a>';
+        li += '</div>';
+      }
+      
+      linkList.innerHTML = li;
+    }
+  };
+  xhr.send();
+});
+</script>
+
+
+<script type="text/javascript">
+var cultureList = document.querySelectorAll(".culture-list");
+if (cultureList.length !== 0) {
+  var j = -1;
+  for (var i = 0; i < cultureList.length; i++) {
+    const listPath = cultureList[i].getAttribute('json-src');
+    const coverPath = cultureList[i].getAttribute('cover-src');
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', listPath, true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        j++;
+        var data = JSON.parse(xhr.responseText);
+        var li = "";
+        
+        cultureList[j].innerHTML = '';
+
+        for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+          var info = data[infoIndex];
+          
+          var title = info['title'];
+          if (info['link']) {
+            title = '<a href="' + info['link'] + '">' + info['title'] + '</a>';
+          }
+
+          var author = info['author'] ? '<span class="author">' + info['author'] + '</span>' : '';
+
+          var intro = info['intro'] ? info['intro'] : '';
+
+          var star = '';
+          if (info['score'] == null) {
+            star = '';
+          } else {
+            var colorStar = '';
+            var greyStar = '';
+            var int = Math.floor(info['score']); //整数部分
+            var fract = 0;
+            if (info['score'] % 1 !== 0) {
+              fract = 1;
+            }
+            for (var m = 0; m < int; m++) {
+              colorStar += '★';
+            }
+            if (fract !== 0) {
+              colorStar += '☆';
+            }
+            for (var m = 0; m < (5 - fract - int); m++) {
+              greyStar += '☆';
+            }
+            if (info['score'] !== 5) {
+              star = '<span class="star-score">' + colorStar + '<span class="grey-star">' + greyStar + '</span></span>';
+            } else {
+              star = '<span class="star-score">' + colorStar + '</span>';
+            }
+          }
+
+          li += '<div class="media">';
+          li += '<div class="media-cover" style="background-image:url(' + coverPath + info['cover'] + ')"></div>';
+          li += '<div class="media-meta">';
+          li += '<div class="media-meta-item title">' + title + '</div>';
+          li += '<div class="media-meta-item">' + author + star + '</div>';
+          li += '<div class="media-meta-item intro">' + intro + '</div>';
+          li += '</div></div>';
+        }
+        
+        cultureList[j].innerHTML = li;
+      }
+    };
+    xhr.send();
+  }
+}
+</script>
+
+
+
+
+<script src="/resources/minigrid.min.js"></script>
+<script type="text/javascript">
+var album = document.querySelector(".album");
+if (album) {
+  // 相册列表 JSON 数据
+  var imgDataPath = album.getAttribute('json-src');
+  // 照片存储路径
+  var imgPath = album.getAttribute('photo-src');
+  // 最多显示数量
+  var imgMaxNum = 50;
+  // 获取窗口大小以决定图片宽度
+  var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  var imageWidth;
+
+  if (windowWidth < 768) {
+    imageWidth = 145; // 移动端图片宽度
+  } else {
+    imageWidth = 235;
+  }
+
+  // 腾讯云自定义样式 (数据万象外网流量需要付费)
+  //var imgStyle = '!' + imageWidth + 'x';
+  //var imgStyle = '!300x';
+
+  // 生成相册
+  var linkDataPath = imgDataPath;
+  var photo = {
+    page: 1,
+    offset: imgMaxNum,
+    init: function () {
+      var that = this;
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", linkDataPath, true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var data = JSON.parse(xhr.responseText);
+          that.render(that.page, data);
+        }
+      };
+      xhr.send();
+    },
+    render: function (page, data) {
+      var begin = (page - 1) * this.offset;
+      var end = page * this.offset;
+      if (begin >= data.length) return;
+      var imgNameWithPattern, imgName, imageSize, imageX, imageY, li = "";
+      for (var i = begin; i < end && i < data.length; i++) {
+        imgNameWithPattern = data[i].split(' ')[1];
+        imgName = imgNameWithPattern.split('.')[0];
+        imageSize = data[i].split(' ')[0];
+        imageX = imageSize.split('.')[0];
+        imageY = imageSize.split('.')[1];
+        li += '<div class="card" style="width:' + imageWidth + 'px" >';
+        li += '<div class="album-photo" style="height:'+ imageWidth * imageY / imageX + 'px">';
+        li += '<a class="fancybox fancybox.image" href="' + imgPath + imgNameWithPattern + '" itemscope="" itemtype="http://schema.org/ImageObject" itemprop="url" data-fancybox="group" rel="group" data-caption="' + imgName + '" title="' +  imgName + '">';
+        li += '<img data-src="' + imgPath + imgNameWithPattern + '" src="' + imgPath + imgNameWithPattern + '" alt="' +  imgName + '" data-loaded="true">';
+        li += '</a>';
+        li += '</div>';
+        li += '</div>';
+      }
+      album.insertAdjacentHTML('beforeend', li);
+      this.minigrid();
+    },
+    minigrid: function () {
+      var grid = new Minigrid({
+        container: '.album',
+        item: '.card',
+        gutter: 12
+      });
+      grid.mount();
+      window.addEventListener('resize', function () {
+        grid.mount();
+      });
+    }
+  };
+  photo.init();
+}
+</script>
+</body>
+</html>

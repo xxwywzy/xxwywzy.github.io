@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/resources/favicon/favicon.png">
+  <link rel="mask-icon" href="/resources/favicon/favicon.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"xxwywzy.github.io","root":"/","images":"/resources/img/","scheme":"Gemini","darkmode":true,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"livere","storage":true,"lazyload":false,"nav":null,"activeClass":"livere"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本篇博客是 FLAT: Chinese NER Using Flat-Lattice Transformer 一文的学习笔记。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FLAT：基于 Flat-Lattice Transformer 的中文 NER 模型">
+<meta property="og:url" content="https://xxwywzy.github.io/2023/10/04/FLAT/">
+<meta property="og:site_name" content="口仆">
+<meta property="og:description" content="本篇博客是 FLAT: Chinese NER Using Flat-Lattice Transformer 一文的学习笔记。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/2021-12-10-081544.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2021-12-14-071946.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2021-12-10-104034.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2021-12-15-043958.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2021-12-15-043836.png">
+<meta property="article:published_time" content="2023-10-04T11:07:06.000Z">
+<meta property="article:modified_time" content="2023-10-22T15:25:19.000Z">
+<meta property="article:author" content="Zheyu Wang">
+<meta property="article:tag" content="命名实体识别">
+<meta property="article:tag" content="Transformer">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2021-12-10-081544.png">
+
+
+<link rel="canonical" href="https://xxwywzy.github.io/2023/10/04/FLAT/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://xxwywzy.github.io/2023/10/04/FLAT/","path":"2023/10/04/FLAT/","title":"FLAT：基于 Flat-Lattice Transformer 的中文 NER 模型"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>FLAT：基于 Flat-Lattice Transformer 的中文 NER 模型 | 口仆</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/resources/fonts/longcang/longcang-regular.css" >
+<link rel="stylesheet" href="/resources/fonts/lxgw/lxgwwenkailite-regular.css" >
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">口仆</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Long may the sunshine</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-culture"><a href="/culture/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>MEME</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%83%8C%E6%99%AF"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.</span> <span class="nav-text">模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#transformer-%E5%8E%9F%E7%90%86%E6%A6%82%E8%BF%B0"><span class="nav-number">2.1.</span> <span class="nav-text">Transformer 原理概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%86-lattice-%E8%BD%AC%E5%8C%96%E4%B8%BA%E5%B9%B3%E9%9D%A2%E7%BB%93%E6%9E%84"><span class="nav-number">2.2.</span> <span class="nav-text">将 Lattice 转化为平面结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%87%E6%AE%B5%E7%9A%84%E7%9B%B8%E5%AF%B9%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81"><span class="nav-number">2.3.</span> <span class="nav-text">片段的相对位置编码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C"><span class="nav-number">3.</span> <span class="nav-text">实验</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zheyu Wang"
+      src="/resources/favicon/avatar.png">
+  <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+  <div class="site-description" itemprop="description">相信过程</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">85</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xxwywzy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/xxwywzy" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/xxwywzy" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/xxwywzy" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2023/10/04/FLAT/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resources/favicon/avatar.png">
+      <meta itemprop="name" content="Zheyu Wang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="口仆">
+      <meta itemprop="description" content="相信过程">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="FLAT：基于 Flat-Lattice Transformer 的中文 NER 模型 | 口仆">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          FLAT：基于 Flat-Lattice Transformer 的中文 NER 模型
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-10-04 19:07:06" itemprop="dateCreated datePublished" datetime="2023-10-04T19:07:06+08:00">2023-10-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/%E6%96%87%E7%AB%A0%E7%B2%BE%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">文章精读</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.7k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>9 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><div class="note info"><p>本篇博客是 <strong>FLAT: Chinese NER Using Flat-Lattice Transformer</strong> 一文的学习笔记。</p>
+</div>
+<span id="more"></span>
+<blockquote>
+<p><strong>摘要</strong>：综合利用字符与词语信息的 Lattice 结构被证明对于中文的命名实体识别具有较好的效果，然而，由于 Lattice 结构较为灵活复杂，大部分现有的基于 Lattice 的模型很难完全利用 GPU 的并行计算能力，导致推理速度较慢。本论文提出了面向中文 NER 的 FLAT（<strong>F</strong>lat-<strong>LA</strong>ttice <strong>T</strong>ransformer），其将 Lattice 结构转化为一个由片段（span）构成的平面（flat）结构，每个片段对应一个字符或潜在的词语，以及其在原始 Lattice 中的位置。得益于 Transformer 的能力以及精心设计的位置编码，FLAT 能够在充分利用 Lattice 信息的同时保持极佳的并行化能力。基于四个数据集的实验表明 FLAT 在模型表现与运行效率上要优于其他基于词汇的模型。</p>
+</blockquote>
+<h1 id="背景">背景</h1>
+<p><strong>命名实体识别</strong>（Named entity recognition，NER）在很多 NLP 下游任务中扮演着重要角色，与英文 NER 相比，中文 NER 往往更加困难，因为其涉及到词语的切分（分词）。<strong>Lattice 结构</strong>被证明能够更好地利用词语信息，避免分词中的错误传播。</p>
+<p>如下图 (a) 所示，我们可以通过词表来得到一个句子中的潜在词语，形成一张有向无环图，其中每个节点表示一个字符或是一个潜在词语。Lattice 包括了一个由句子中的字符与潜在词语组成的序列，其并不完全依序排列，词语的首尾字符决定了其的位置（会与字符平行）。Lattice 中的部分词语对于 NER 来说相当重要，以下图为例，<strong>人和药店</strong>一词可以用来区分地理实体<strong>重庆</strong>与组织实体<strong>重庆人</strong>。</p>
+<p><img src="http://media.zjubiomedit.com/2021-12-10-081544.png" width=60%/></p>
+<p>目前，利用 Lattice 结构进行 NER 的模型发展方向大致可以分为两类：</p>
+<ol type="1">
+<li>设计一个与 Lattice 输入兼容的模型，例如 <strong>lattice LSTM</strong> 与 <strong>LR-CNN</strong>。其中 lattice LSTM 利用一个额外的词语单元来编码潜在词语，并使用 attention 机制来融合每个位置的变数节点，如上图 (b) 所示；LR-CNN 则利用 CNN 来通过不同的窗口大小编码潜在词语。总的来看，RNN 和 CNN 都难以对长距离的依赖进行建模（长距离依赖对于NER 的指代等关系很有用），同时由于动态 Lattice 结构的复杂性，这些方法不能完全地利用 GPU 的并行计算能力。</li>
+<li>将 Lattice 转化为图，使用图神经网络进行编码，例如 <strong>Lexicon-based Graph Network</strong>（LGN） 与 <strong>Collaborative Graph Network</strong>（CGN）。由于图结构并不能完全消除 NER 对序列结构的依赖性，这些方法需要使用 LSTM 作为底层编码器，从而增加了模型的复杂性。</li>
+</ol>
+<p>本论文针对当前相关模型的局限性，提出了面向中文 NER 的 <strong>FLAT</strong> 模型。FLAT 模型基于 Transformer 实现，能够利用全连接的 self-attention 来对序列中的长距离依赖建模。为了得到位置信息，Transformer 为序列中的每个 token 引入了位置表示（编码），类似地，在 FLAT 中针对 Lattice 结构设计了一种巧妙的位置编码，如上图 (c) 所示。具体来说，对于一个 token（字符或词语），其会包含两个位置索引：<strong>头位置</strong>与<strong>尾位置</strong>，基于这两个位置信息可以将一个 token 集合还原为 Lattice 结构，从而实现直接使用 Transformer 来建模 Lattice 输入。对于 FLAT 来说，Transformer 的自注意力机制可以使得字符直接与任意潜在词语交互，包括自包含词语，例如<strong>药</strong>的自包含词语有<strong>药店</strong>与<strong>人和药店</strong>。实验结果表明该模型在中文 NER 上的表现与推理速度要优于其他基于词汇的方法。</p>
+<h1 id="模型">模型</h1>
+<h2 id="transformer-原理概述">Transformer 原理概述</h2>
+<p>本节将对 Transformer 的架构进行简要介绍。对于 NER 任务，我们只需要用到 Transformer encoder，其由<strong>自注意力层</strong>与<strong>前馈网络</strong>（FFN）两层组成，每个子层都接了残差连接与层归一化，如下图所示，其中 FFN 是一个位置独立的多层非线性感知机。</p>
+<p><img src="http://media.zjubiomedit.com/2021-12-14-071946.png" width=40%/></p>
+<p>对于自注意力层，Transformer 通过独立计算多个头部的 attention 并将其结果按一定权重进行拼接以得到最终的输出，每个头部的计算公式如下： <span class="math display">\[
+\begin{align*}
+\operatorname{Att}(\mathbf{A}, \mathbf{V}) &amp;=\operatorname{softmax}(\mathbf{A}) \mathbf{V} \tag{1}\\ 
+\mathbf{A}_{\mathbf{i j}} &amp;=\left(\frac{\mathbf{Q}_{\mathbf{i}} \mathbf{K}_{\mathbf{j}}^{\mathrm{T}}}{\sqrt{\mathrm{d}_{\text {head }}}}\right) \tag{2}\\
+[\mathbf{Q}, \mathbf{K}, \mathbf{V}] &amp;=E_{x}\left[\mathbf{W}_{q}, \mathbf{W}_{k}, \mathbf{W}_{v}\right] \tag{3}
+\end{align*}
+\]</span> 其中 <span class="math inline">\(E\)</span> 是 token 的嵌入（第一层）或上一层的输出，<span class="math inline">\(\mathbf{W}_{\mathrm{q}}, \mathbf{W}_{\mathrm{k}}, \mathbf{W}_{\mathrm{v}} \in \mathbb{R}^{d_{\text {model }} \times d_{\text {head }}}\)</span> 为可学习的参数，且 <span class="math inline">\(d_{\text {head }}\)</span> 为每个头部的维数。此外，原始 Transformer 中通过绝对位置编码来捕获序列信息，而 FLAT 中则使用了 Lattice 的<strong>相对位置</strong>进行编码。</p>
+<h2 id="将-lattice-转化为平面结构">将 Lattice 转化为平面结构</h2>
+<p>基于词汇表从字符得到一个 Lattice 结构后，我们可以将其展成平面。Flat-lattice 可以被定义为一系列<strong>片段</strong>（span）的集合，每个片段对应一个 <strong>token</strong>、一个 <strong>head</strong> 与一个 <strong>tail</strong>，其中 token 是一个字符或词语，head 与 tail 定义该 token 的首字符与尾字符的在原始序列中的位置索引。对于字符来说，head 与 tail 是相同的。</p>
+<p>我们可以通过一个简单的算法来将 flat-lattice 恢复到原始的结构：首先选择 head 与 tail 相同的 token，恢复字符序列；然后对于其他 token 基于 head 与 tail 构建跳跃路径。由于上述转换是可恢复的，文章假定 flat-lattice 能够保持 lattice 原始结构中的所有信息。</p>
+<h2 id="片段的相对位置编码">片段的相对位置编码</h2>
+<p>Flat-lattice 结构由不同长度的片段组成，为了编码片段之间的交互，本文提出了一种编码片段相对位置的方法：对于两个片段 <span class="math inline">\(x_i\)</span> 与 <span class="math inline">\(x_j\)</span>，他们之间存在三种关系：<strong>相交</strong>、<strong>包含</strong>与<strong>分离</strong>，这取决与其头与尾的位置。我们将通过一个密集向量来建模这些关系，而不是直接对其进行编码，以包含片段间的更多的细节信息。具体来说，令<span class="math inline">\(\text { head }[i]\)</span> 与<span class="math inline">\(\text { tail }[i]\)</span> 表示片段 <span class="math inline">\(x_i\)</span> 的头位置与尾位置，我们将通过以下四种相对距离来表明 <span class="math inline">\(x_i\)</span> 与 <span class="math inline">\(x_j\)</span> 之间的关系： <span class="math display">\[
+\begin{align*}
+&amp;d_{i j}^{(h h)}=h e a d[i]-h e a d[j] \tag{4}\\
+&amp;d_{i j}^{(h t)}=h e a d[i]-\operatorname{tail}[j] \tag{5}\\
+&amp;d_{i j}^{(t h)}=\operatorname{tail}[i]-h e a d[j] \tag{6}\\
+&amp;d_{i j}^{(t t)}=\operatorname{tail}[i]-\operatorname{tail}[j] \tag{7}
+\end{align*}
+\]</span> 最终的相对位置编码通过四个距离的简单非线性变化得到： <span class="math display">\[
+R_{i j}=\operatorname{ReLU}(W_{r}(\mathbf{p}_{d_{i j}^{(h h)}} \oplus \mathbf{p}_{d_{i j}^{(t h)}} \oplus \mathbf{p}_{d_{i j}^{(h t)}} \oplus \mathbf{p}_{d_{i j}^{(t t)}})) \tag{8}
+\]</span> 其中 <span class="math inline">\(W_r\)</span> 是可学习的参数，<span class="math inline">\(\oplus\)</span> 表示连接算子（加权和），<span class="math inline">\(\mathbf{p}_{d}\)</span> 的计算方式与原始 Transformer 相同： <span class="math display">\[
+\begin{align*}
+\mathbf{p}_{d}^{(2 k)} &amp;=\sin \left(d / 10000^{2 k / d_{\text {model }}}\right) \tag{9}\\
+\mathbf{p}_{d}^{(2 k+1)} &amp;=\cos \left(d / 10000^{2 k / d_{\text {model }}}\right) \tag{10}
+\end{align*}
+\]</span> 其中 <span class="math inline">\(d\)</span> 表示四种距离中的一种，<span class="math inline">\(k\)</span> 表示位置编码的维数的索引（具体的某一维，根据奇偶决定是正弦还是余弦）。自注意力的计算方式采用了原始方法的一个变种（与 transfomer-XL 和 XLNet 相同），具体公式为：</p>
+<p><span class="math display">\[
+\begin{align*}
+\mathbf{A}_{i, j}^{*} &amp;=\mathbf{W}_{q}^{\top} \mathbf{E}_{x_{i}}^{\top} \mathbf{E}_{x_{j}} \mathbf{W}_{k, E}+\mathbf{W}_{q}^{\top} \mathbf{E}_{x_{i}}^{\top} \mathbf{R}_{i j} \mathbf{W}_{k, R} \\
+&amp;+\mathbf{u}^{\top} \mathbf{E}_{x_{j}} \mathbf{W}_{k, E}+\mathbf{v}^{\top} \mathbf{R}_{i j} \mathbf{W}_{k, R}
+\end{align*} \tag{11}
+\]</span> 其中 <span class="math inline">\(\mathbf{W}_{q}, \mathbf{W}_{k, R}, \mathbf{W}_{k, E} \in \mathbb{R}^{d_{\text {model }} \times d_{\text {head }}}\)</span> 和 <span class="math inline">\(\mathbf{u}, \mathbf{v} \in \mathbb{R}^{d_{\text {head }}}\)</span> 为可学习的参数。公式 (1) 中的 <span class="math inline">\(A\)</span> 会被 <span class="math inline">\(A^{*}\)</span> 替代，后续的计算方式与原始 Transformer 相同。</p>
+<p>经过 FLAT 之后，我们仅将得到的字符表征进行输出，连接到<strong>条件随机场</strong>中进行实体识别（这一部分的原理之后会通过其他文章详述）。FLAT 的整体结构如下图所示：</p>
+<p><img src="http://media.zjubiomedit.com/2021-12-10-104034.png" width=60%/></p>
+<h1 id="实验">实验</h1>
+<p>论文使用了四种中文 NER 数据集进行模型评估，基线模型选用 BiLSTM-CRF 与 TENER，并针对不同的对比使用了不同的词汇表。总体跑分（平均 F1 score）结果如下所示，总的来看，不被 mask 的完整 FLAT 模型在所有数据集上均取得了最佳表现。</p>
+<p>进一步地，为了检验 FLAT 的两大优势：字符与自包含词语的直接交互以及对长距离依赖的建模，论文分别对自包含词语与字符之间以及长距离词语之间的 attention 进行遮罩后进行了测试，结果表明<strong>自包含词语</strong>相较于<strong>长距离依赖</strong>带来了更大的性能下降。</p>
+<p><img src="http://media.zjubiomedit.com/2021-12-15-043958.png" width=50%></p>
+<p>在计算效能方面，不同模型在 Ontonotes 数据集上的推理速度结果比较如下图所示，由于 FLAT 的简洁性，其可以更有效的进行并行计算，大幅提升推理速度。</p>
+<p><img src="http://media.zjubiomedit.com/2021-12-15-043836.png" width=50%/></p>
+<p>此外，论文还评估了 FLAT 相比 TENER 在 NER 上的具体性能提升，以及 FLAT 与 BERT 的兼容性，具体结果可以参考原文。</p>
+<h1 id="总结">总结</h1>
+<p>本文提出了一种包含词汇信息的 Flat-lattice Transformer 模型，用于中文 NER 任务。模型的核心是将 Lattice 结构转化为一系列片段的集合，并融入可训练的相对位置编码。试验结果表明模型在预测性能与推理速度上都要优于其他基于词汇的模型。</p>
+<p>PS：在相关工作中，作者提到了一篇将 Lattice 与 Transformer 结合的类似文章：<strong>Porous Lattice Transformer</strong>，并指出 FLAT 与该模型的主要区别在于对位置信息的表示差异。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+
+
+
+<div class="license">
+  <div class="license-title">FLAT：基于 Flat-Lattice Transformer 的中文 NER 模型</div>
+  <div class="license-link">
+    <a href="https://xxwywzy.github.io/2023/10/04/FLAT/">https://xxwywzy.github.io/2023/10/04/FLAT/</a>
+  </div>
+  <div class="license-meta">
+    <div class="license-meta-item">
+      <div class="license-meta-title">本文作者</div>
+      <div class="license-meta-text">
+          Zheyu Wang
+      </div>
+    </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">发布于</div>
+        <div class="license-meta-text">
+          2023-10-04
+        </div>
+      </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">更新于</div>
+        <div class="license-meta-text">
+          2023-10-22
+        </div>
+      </div>
+    <div class="license-meta-item">
+      <div class="license-meta-title">许可协议</div>
+      <div class="license-meta-text">
+          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank">CC BY-NC-SA 4.0</a>
+      </div>
+    </div>
+  </div>
+  <div class="license-statement">
+      转载或引用本文时，请遵守上述许可协议，注明出处、不得用于商业用途！
+  </div>
+</div>
+          <div class="post-tags">
+              <a href="/tags/%E5%91%BD%E5%90%8D%E5%AE%9E%E4%BD%93%E8%AF%86%E5%88%AB/" rel="tag"># 命名实体识别</a>
+              <a href="/tags/Transformer/" rel="tag"># Transformer</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/10/04/missing-1/" rel="prev" title="The Missing Semester 01：Shell">
+                  <i class="fa fa-angle-left"></i> The Missing Semester 01：Shell
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/10/05/open-ai-gym/" rel="next" title="OpenAI Gym 入门">
+                  OpenAI Gym 入门 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81ODgyNi8zNTI4OA=="></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">332k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">18:26</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+
+
+  <style>
+    #taboola-livere { display: none;}
+  </style>
+
+
+
+<script type="text/javascript">
+var linkLists = document.querySelectorAll(".link-list");
+
+linkLists.forEach(function(linkList) {
+  var listPath = linkList.getAttribute('json-src');
+  var iconPath = linkList.getAttribute('icon-src');
+  
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', listPath, true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      var data = JSON.parse(xhr.responseText);
+      
+      var li = "";
+      linkList.innerHTML = '';
+
+      for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+        var info = data[infoIndex];
+        var labelWarn = info['warn'] ? '<span class="label warn">' + info['warn'] + '</span>' : '';
+        var labelInfo = info['info'] ? '<span class="label info">' + info['info'] + '</span>' : '';
+
+        li += '<div class="link-list-container">';
+        li += '<img class="link-list-image" src="' + iconPath + info['logo'] + '">';
+        li += '<p>' + info['title'] + labelInfo + labelWarn + '</p>';
+        li += '<p>' + info['intro'] + '</p>';
+        li += '<a href="' + info['url'] + '" rel="noopener" target="_blank" data-pjax-state=""></a>';
+        li += '</div>';
+      }
+      
+      linkList.innerHTML = li;
+    }
+  };
+  xhr.send();
+});
+</script>
+
+
+<script type="text/javascript">
+var cultureList = document.querySelectorAll(".culture-list");
+if (cultureList.length !== 0) {
+  var j = -1;
+  for (var i = 0; i < cultureList.length; i++) {
+    const listPath = cultureList[i].getAttribute('json-src');
+    const coverPath = cultureList[i].getAttribute('cover-src');
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', listPath, true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        j++;
+        var data = JSON.parse(xhr.responseText);
+        var li = "";
+        
+        cultureList[j].innerHTML = '';
+
+        for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+          var info = data[infoIndex];
+          
+          var title = info['title'];
+          if (info['link']) {
+            title = '<a href="' + info['link'] + '">' + info['title'] + '</a>';
+          }
+
+          var author = info['author'] ? '<span class="author">' + info['author'] + '</span>' : '';
+
+          var intro = info['intro'] ? info['intro'] : '';
+
+          var star = '';
+          if (info['score'] == null) {
+            star = '';
+          } else {
+            var colorStar = '';
+            var greyStar = '';
+            var int = Math.floor(info['score']); //整数部分
+            var fract = 0;
+            if (info['score'] % 1 !== 0) {
+              fract = 1;
+            }
+            for (var m = 0; m < int; m++) {
+              colorStar += '★';
+            }
+            if (fract !== 0) {
+              colorStar += '☆';
+            }
+            for (var m = 0; m < (5 - fract - int); m++) {
+              greyStar += '☆';
+            }
+            if (info['score'] !== 5) {
+              star = '<span class="star-score">' + colorStar + '<span class="grey-star">' + greyStar + '</span></span>';
+            } else {
+              star = '<span class="star-score">' + colorStar + '</span>';
+            }
+          }
+
+          li += '<div class="media">';
+          li += '<div class="media-cover" style="background-image:url(' + coverPath + info['cover'] + ')"></div>';
+          li += '<div class="media-meta">';
+          li += '<div class="media-meta-item title">' + title + '</div>';
+          li += '<div class="media-meta-item">' + author + star + '</div>';
+          li += '<div class="media-meta-item intro">' + intro + '</div>';
+          li += '</div></div>';
+        }
+        
+        cultureList[j].innerHTML = li;
+      }
+    };
+    xhr.send();
+  }
+}
+</script>
+
+
+
+
+<script src="/resources/minigrid.min.js"></script>
+<script type="text/javascript">
+var album = document.querySelector(".album");
+if (album) {
+  // 相册列表 JSON 数据
+  var imgDataPath = album.getAttribute('json-src');
+  // 照片存储路径
+  var imgPath = album.getAttribute('photo-src');
+  // 最多显示数量
+  var imgMaxNum = 50;
+  // 获取窗口大小以决定图片宽度
+  var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  var imageWidth;
+
+  if (windowWidth < 768) {
+    imageWidth = 145; // 移动端图片宽度
+  } else {
+    imageWidth = 235;
+  }
+
+  // 腾讯云自定义样式 (数据万象外网流量需要付费)
+  //var imgStyle = '!' + imageWidth + 'x';
+  //var imgStyle = '!300x';
+
+  // 生成相册
+  var linkDataPath = imgDataPath;
+  var photo = {
+    page: 1,
+    offset: imgMaxNum,
+    init: function () {
+      var that = this;
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", linkDataPath, true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var data = JSON.parse(xhr.responseText);
+          that.render(that.page, data);
+        }
+      };
+      xhr.send();
+    },
+    render: function (page, data) {
+      var begin = (page - 1) * this.offset;
+      var end = page * this.offset;
+      if (begin >= data.length) return;
+      var imgNameWithPattern, imgName, imageSize, imageX, imageY, li = "";
+      for (var i = begin; i < end && i < data.length; i++) {
+        imgNameWithPattern = data[i].split(' ')[1];
+        imgName = imgNameWithPattern.split('.')[0];
+        imageSize = data[i].split(' ')[0];
+        imageX = imageSize.split('.')[0];
+        imageY = imageSize.split('.')[1];
+        li += '<div class="card" style="width:' + imageWidth + 'px" >';
+        li += '<div class="album-photo" style="height:'+ imageWidth * imageY / imageX + 'px">';
+        li += '<a class="fancybox fancybox.image" href="' + imgPath + imgNameWithPattern + '" itemscope="" itemtype="http://schema.org/ImageObject" itemprop="url" data-fancybox="group" rel="group" data-caption="' + imgName + '" title="' +  imgName + '">';
+        li += '<img data-src="' + imgPath + imgNameWithPattern + '" src="' + imgPath + imgNameWithPattern + '" alt="' +  imgName + '" data-loaded="true">';
+        li += '</a>';
+        li += '</div>';
+        li += '</div>';
+      }
+      album.insertAdjacentHTML('beforeend', li);
+      this.minigrid();
+    },
+    minigrid: function () {
+      var grid = new Minigrid({
+        container: '.album',
+        item: '.card',
+        gutter: 12
+      });
+      grid.mount();
+      window.addEventListener('resize', function () {
+        grid.mount();
+      });
+    }
+  };
+  photo.init();
+}
+</script>
+</body>
+</html>

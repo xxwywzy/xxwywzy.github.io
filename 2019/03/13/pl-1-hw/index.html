@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/resources/favicon/favicon.png">
+  <link rel="mask-icon" href="/resources/favicon/favicon.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"xxwywzy.github.io","root":"/","images":"/resources/img/","scheme":"Gemini","darkmode":true,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"livere","storage":true,"lazyload":false,"nav":null,"activeClass":"livere"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本篇博客为 coursera programming languages 课程的第一部分的课程作业。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Progamming Languages 第一部分作业">
+<meta property="og:url" content="https://xxwywzy.github.io/2019/03/13/pl-1-hw/">
+<meta property="og:site_name" content="口仆">
+<meta property="og:description" content="本篇博客为 coursera programming languages 课程的第一部分的课程作业。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-03-13T14:14:59.000Z">
+<meta property="article:modified_time" content="2023-08-06T12:17:49.000Z">
+<meta property="article:author" content="Zheyu Wang">
+<meta property="article:tag" content="编程思想">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://xxwywzy.github.io/2019/03/13/pl-1-hw/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://xxwywzy.github.io/2019/03/13/pl-1-hw/","path":"2019/03/13/pl-1-hw/","title":"Progamming Languages 第一部分作业"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Progamming Languages 第一部分作业 | 口仆</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/resources/fonts/longcang/longcang-regular.css" >
+<link rel="stylesheet" href="/resources/fonts/lxgw/lxgwwenkailite-regular.css" >
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">口仆</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Long may the sunshine</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-culture"><a href="/culture/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>MEME</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%9C%E4%B8%9A%E8%A6%81%E6%B1%82"><span class="nav-number">1.</span> <span class="nav-text">作业要求</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E5%8F%8A%E8%A7%A3%E7%AD%94"><span class="nav-number">2.</span> <span class="nav-text">问题及解答</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98-1"><span class="nav-number">2.1.</span> <span class="nav-text">问题 1</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E7%AD%94"><span class="nav-number">2.1.1.</span> <span class="nav-text">解答</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98-2"><span class="nav-number">2.2.</span> <span class="nav-text">问题 2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E7%AD%94-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">解答</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98-3"><span class="nav-number">2.3.</span> <span class="nav-text">问题 3</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E7%AD%94-2"><span class="nav-number">2.3.1.</span> <span class="nav-text">解答</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98-4"><span class="nav-number">2.4.</span> <span class="nav-text">问题 4</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E7%AD%94-3"><span class="nav-number">2.4.1.</span> <span class="nav-text">解答</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98-5"><span class="nav-number">2.5.</span> <span class="nav-text">问题 5</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E7%AD%94-4"><span class="nav-number">2.5.1.</span> <span class="nav-text">解答</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98-6"><span class="nav-number">2.6.</span> <span class="nav-text">问题 6</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E7%AD%94-5"><span class="nav-number">2.6.1.</span> <span class="nav-text">解答</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98-7"><span class="nav-number">2.7.</span> <span class="nav-text">问题 7</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E7%AD%94-6"><span class="nav-number">2.7.1.</span> <span class="nav-text">解答</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98-8"><span class="nav-number">2.8.</span> <span class="nav-text">问题 8</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E7%AD%94-7"><span class="nav-number">2.8.1.</span> <span class="nav-text">解答</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98-9"><span class="nav-number">2.9.</span> <span class="nav-text">问题 9</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E7%AD%94-8"><span class="nav-number">2.9.1.</span> <span class="nav-text">解答</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98-10"><span class="nav-number">2.10.</span> <span class="nav-text">问题 10</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E7%AD%94-9"><span class="nav-number">2.10.1.</span> <span class="nav-text">解答</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98-11"><span class="nav-number">2.11.</span> <span class="nav-text">问题 11</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E7%AD%94-10"><span class="nav-number">2.11.1.</span> <span class="nav-text">解答</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98-12%E6%8C%91%E6%88%98%E9%97%AE%E9%A2%98"><span class="nav-number">2.12.</span> <span class="nav-text">问题 12（挑战问题）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E7%AD%94-11"><span class="nav-number">2.12.1.</span> <span class="nav-text">解答</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98-13%E6%8C%91%E6%88%98%E9%97%AE%E9%A2%98"><span class="nav-number">2.13.</span> <span class="nav-text">问题 13（挑战问题）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E7%AD%94-12"><span class="nav-number">2.13.1.</span> <span class="nav-text">解答</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zheyu Wang"
+      src="/resources/favicon/avatar.png">
+  <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+  <div class="site-description" itemprop="description">相信过程</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">85</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xxwywzy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/xxwywzy" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/xxwywzy" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/xxwywzy" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2019/03/13/pl-1-hw/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resources/favicon/avatar.png">
+      <meta itemprop="name" content="Zheyu Wang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="口仆">
+      <meta itemprop="description" content="相信过程">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Progamming Languages 第一部分作业 | 口仆">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Progamming Languages 第一部分作业
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-03-13 22:14:59" itemprop="dateCreated datePublished" datetime="2019-03-13T22:14:59+08:00">2019-03-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">编程与算法</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B%E4%B8%8E%E7%AE%97%E6%B3%95/%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">课程笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>5 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><div class="note danger"><p>本篇博客为 coursera programming languages 课程的第一部分的课程作业。</p>
+</div>
+<span id="more"></span>
+<h1 id="作业要求">作业要求</h1>
+<ul>
+<li>完成 11 个关于日期的 SML 函数</li>
+<li>在所有的问题中，日期的类型均为 <code>int*int*int</code>（年月日）
+<ul>
+<li>一个合理的日期的年份为正数，月份在 1-12 之间，日期不超过 31（暂未考虑月份的限制）</li>
+</ul></li>
+<li><code>day of year</code> 代表一个从 1-365 之间的数字，可以用来特定到某一天</li>
+</ul>
+<h1 id="问题及解答">问题及解答</h1>
+<h2 id="问题-1">问题 1</h2>
+<ul>
+<li>完成一个函数 <code>is_order</code>
+<ul>
+<li>输入为两个日期</li>
+<li>输出为 <code>true</code> 或 <code>false</code></li>
+</ul></li>
+<li>如果前一个日期在后一个日期之前，则输出 <code>true</code> ，否则输出 <code>false</code></li>
+</ul>
+<h3 id="解答">解答</h3>
+<ul>
+<li>获取具体的年月日，逐一比较即可</li>
+<li>使用 <code>let</code> 表达式使函数更加简洁</li>
+</ul>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun is_older (date1 : int * int * int, date2 : int * int * int) =</span><br><span class="line">    let </span><br><span class="line">        val y1 = <span class="comment">#1 date1</span></span><br><span class="line">        val m1 = <span class="comment">#2 date1</span></span><br><span class="line">        val d1 = <span class="comment">#3 date1</span></span><br><span class="line">        val y2 = <span class="comment">#1 date2</span></span><br><span class="line">        val m2 = <span class="comment">#2 date2</span></span><br><span class="line">        val d2 = <span class="comment">#3 date2</span></span><br><span class="line">    <span class="keyword">in</span></span><br><span class="line">        y1 &lt; y2 orelse (y1=y2 andalso m1 &lt; m2)</span><br><span class="line">                orelse (y1=y2 andalso m1=m2 andalso d1 &lt; d2)</span><br><span class="line">    <span class="keyword">end</span> </span><br></pre></td></tr></table></figure>
+<h2 id="问题-2">问题 2</h2>
+<ul>
+<li>完成一个函数 <code>number_in_month</code>
+<ul>
+<li>输入为一个日期的 list 和一个月份</li>
+<li>输出为 list 中有多少日期在给定月份中</li>
+</ul></li>
+</ul>
+<h3 id="解答-1">解答</h3>
+<ul>
+<li>使用递归遍历 list 即可</li>
+</ul>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun number_in_month (dates : (int * int * int) list, month : int) =</span><br><span class="line">    <span class="keyword">if</span> null dates</span><br><span class="line">    <span class="keyword">then</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> <span class="comment">#2 (hd dates) = month</span></span><br><span class="line">    <span class="keyword">then</span> <span class="number">1</span> + number_in_month(tl dates, month)</span><br><span class="line">    <span class="keyword">else</span> number_in_month(tl dates, month) </span><br></pre></td></tr></table></figure>
+<h2 id="问题-3">问题 3</h2>
+<ul>
+<li>完成一个函数 <code>number_in_months</code>
+<ul>
+<li>输入为一个日期的 list 和一个月份的 list</li>
+<li>输出为 list 中有多少日期在给定 list 包含的月份中</li>
+</ul></li>
+<li>假设月份 list 中没有重复</li>
+</ul>
+<h3 id="解答-2">解答</h3>
+<ul>
+<li>使用上一个问题的结果，构建递归</li>
+</ul>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun number_in_months(dates : (int * int * int) list, months : int list) =</span><br><span class="line">    <span class="keyword">if</span> null months</span><br><span class="line">    <span class="keyword">then</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">else</span> number_in_month(dates, hd months) + number_in_months(dates, tl months)</span><br></pre></td></tr></table></figure>
+<h2 id="问题-4">问题 4</h2>
+<ul>
+<li>完成一个函数 <code>date_in_month</code>
+<ul>
+<li>输入为一个日期的 list 和一个月份</li>
+<li>输出为位于给定月份中的日期组成的 list</li>
+</ul></li>
+<li>日期的顺序保持原样</li>
+</ul>
+<h3 id="解答-3">解答</h3>
+<ul>
+<li>与问题 2 类似</li>
+</ul>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun dates_in_month (dates : (int * int * int) list, month : int) =</span><br><span class="line">    <span class="keyword">if</span> null dates</span><br><span class="line">    <span class="keyword">then</span> []</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> <span class="comment">#2 (hd dates) = month</span></span><br><span class="line">    <span class="keyword">then</span> (hd dates)<span class="symbol">:</span><span class="symbol">:dates_in_month</span>(tl dates, month)</span><br><span class="line">    <span class="keyword">else</span> dates_in_month(tl dates, month)</span><br></pre></td></tr></table></figure>
+<h2 id="问题-5">问题 5</h2>
+<ul>
+<li>完成一个函数 <code>date_in_months</code>
+<ul>
+<li>输入为一个日期的 list 和一个月份的 list</li>
+<li>输出为位于任意一个给定月份中的日期组成的 list</li>
+</ul></li>
+</ul>
+<h3 id="解答-4">解答</h3>
+<ul>
+<li>与问题 3 类似</li>
+<li>使用 @ 连接符连接两个 list</li>
+</ul>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun dates_in_months(dates : (int * int * int) list, months : int list) =</span><br><span class="line">    <span class="keyword">if</span> null months</span><br><span class="line">    <span class="keyword">then</span> []</span><br><span class="line">    <span class="keyword">else</span> dates_in_month(dates, hd months) @ dates_in_months(dates, tl months)</span><br></pre></td></tr></table></figure>
+<h2 id="问题-6">问题 6</h2>
+<ul>
+<li>完成一个函数 <code>get_nth</code>
+<ul>
+<li>输入为一个 string list 和一个整数 n</li>
+<li>输出为该 list 的第 n 个元素
+<ul>
+<li>从 1 开始计数</li>
+</ul></li>
+</ul></li>
+</ul>
+<h3 id="解答-5">解答</h3>
+<ul>
+<li>使用递归遍历 list</li>
+</ul>
+<figure class="highlight sml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fun</span> get_nth (lst : <span class="built_in">string</span> <span class="built_in">list</span>, n : <span class="built_in">int</span>) =</span><br><span class="line">    <span class="keyword">if</span> n=<span class="number">1</span></span><br><span class="line">    <span class="keyword">then</span> hd lst</span><br><span class="line">    <span class="keyword">else</span> get_nth(tl lst, n-<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="问题-7">问题 7</h2>
+<ul>
+<li>完成一个函数 <code>date_to_string</code>
+<ul>
+<li>输入为一个日期</li>
+<li>输出为一个字符串（如 January 20, 2013）</li>
+</ul></li>
+<li>使用操作符 ^ 来连接字符串</li>
+<li>使用库函数 <code>Int.toString</code> 来将 int 转换为 string</li>
+</ul>
+<h3 id="解答-6">解答</h3>
+<ul>
+<li>构建一个月份的 string list，使用问题 6 的结果将月份转换为 string</li>
+<li>年份和日期直接转换即可</li>
+</ul>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun date_to_string (date : int * int * int) =</span><br><span class="line">    let</span><br><span class="line">        val names = [<span class="string">&quot;January&quot;</span>, <span class="string">&quot;February&quot;</span>, <span class="string">&quot;March&quot;</span>, <span class="string">&quot;April&quot;</span>, <span class="string">&quot;May&quot;</span>, <span class="string">&quot;June&quot;</span>, <span class="string">&quot;July&quot;</span>, <span class="string">&quot;August&quot;</span>, <span class="string">&quot;September&quot;</span>, <span class="string">&quot;October&quot;</span>, <span class="string">&quot;November&quot;</span>, <span class="string">&quot;December&quot;</span>]</span><br><span class="line">    <span class="keyword">in</span></span><br><span class="line">        get_nth(names,<span class="comment">#2 date) ^ &quot; &quot; ^ Int.toString(#3 date) ^ &quot;, &quot; ^ Int.toString(#1 date)</span></span><br><span class="line">    <span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<h2 id="问题-8">问题 8</h2>
+<ul>
+<li>完成一个函数 <code>number_before_reaching_sum</code>
+<ul>
+<li>输入一个整数 sum 和一个 int list
+<ul>
+<li>假设均为正数</li>
+</ul></li>
+<li>返回一个整数 n
+<ul>
+<li>list 的前 n 个元素的和小于 sum</li>
+<li>前 n+1 个元素的和大于等于 sum</li>
+</ul></li>
+</ul></li>
+</ul>
+<h3 id="解答-7">解答</h3>
+<ul>
+<li>使用递归遍历 list
+<ul>
+<li>注意等号的处理</li>
+</ul></li>
+</ul>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun number_before_reaching_sum (sum : int, lst : int list) =</span><br><span class="line">    <span class="keyword">if</span> sum &lt;= hd lst</span><br><span class="line">    <span class="keyword">then</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">else</span> <span class="number">1</span> + number_before_reaching_sum(sum - hd lst, tl lst)</span><br></pre></td></tr></table></figure>
+<h2 id="问题-9">问题 9</h2>
+<ul>
+<li>完成一个函数 <code>what_month</code>
+<ul>
+<li>输入一个 <code>day of year</code></li>
+<li>返回其所属的月份</li>
+</ul></li>
+</ul>
+<h3 id="解答-8">解答</h3>
+<ul>
+<li>构建一个每月日期的 list，使用问题 8 的结果计算所属月份</li>
+</ul>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun what_month (day_of_year : int) =</span><br><span class="line">    let</span><br><span class="line">        val month_lengths = [<span class="number">31</span>,<span class="number">28</span>,<span class="number">31</span>,<span class="number">30</span>,<span class="number">31</span>,<span class="number">30</span>,<span class="number">31</span>,<span class="number">31</span>,<span class="number">30</span>,<span class="number">31</span>,<span class="number">30</span>,<span class="number">31</span>]</span><br><span class="line">    <span class="keyword">in</span></span><br><span class="line">        <span class="number">1</span> + number_before_reaching_sum(day_of_year, month_lengths)</span><br><span class="line">    <span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<h2 id="问题-10">问题 10</h2>
+<ul>
+<li>完成一个函数 <code>month_range</code>
+<ul>
+<li>输入两个 day of the year： <code>day1</code> 和 <code>day2</code></li>
+<li>返回一个 int list <code>[m1,m2,...,mn]</code>
+<ul>
+<li>其中 <code>m1</code> 是 <code>day1</code> 的月份, <code>m2</code> 是 <code>day1+1</code> 的月份...... <code>mn</code> 是 <code>day2</code> 的月份</li>
+</ul></li>
+</ul></li>
+</ul>
+<h3 id="解答-9">解答</h3>
+<ul>
+<li>使用问题 9 的结果，通过递归生成 list</li>
+</ul>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun month_range (day1 : int, day2 : int) =</span><br><span class="line">    <span class="keyword">if</span> day1 &gt; day2</span><br><span class="line">    <span class="keyword">then</span> []</span><br><span class="line">    <span class="keyword">else</span> what_month day1 <span class="symbol">:</span>: month_range(day1 + <span class="number">1</span>, day2)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="问题-11">问题 11</h2>
+<ul>
+<li>完成一个函数 <code>oldest</code>
+<ul>
+<li>输入一个日期的 list</li>
+<li>输出一个 <code>(int*int*int)</code> option
+<ul>
+<li>如果 list 中不包含日期，则为 <code>NONE</code></li>
+<li>否则返回 <code>SOME d</code> ，其中 d 是 list 中最早的日期</li>
+</ul></li>
+</ul></li>
+</ul>
+<h3 id="解答-10">解答</h3>
+<ul>
+<li>使用问题 1 的结果，通过递归查找
+<ul>
+<li>标准答案使用了多个 let 表达式
+<ul>
+<li>第一个 let 用于生成 option</li>
+<li>第二个 let 用于避免重复的递归</li>
+</ul></li>
+</ul></li>
+</ul>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun oldest (dates : (int * int * int) list) =</span><br><span class="line">    <span class="keyword">if</span> null dates</span><br><span class="line">    <span class="keyword">then</span> <span class="variable constant_">NONE</span></span><br><span class="line">    <span class="keyword">else</span> let </span><br><span class="line">             fun f dates =</span><br><span class="line">                 <span class="keyword">if</span> null (tl dates)</span><br><span class="line">                 <span class="keyword">then</span> hd dates</span><br><span class="line">                 <span class="keyword">else</span> let</span><br><span class="line">                          val ans = f (tl dates)</span><br><span class="line">                      <span class="keyword">in</span></span><br><span class="line">                          <span class="keyword">if</span> is_older(ans, hd dates)</span><br><span class="line">                          <span class="keyword">then</span> ans</span><br><span class="line">                          <span class="keyword">else</span> hd dates</span><br><span class="line">                      <span class="keyword">end</span></span><br><span class="line">          <span class="keyword">in</span></span><br><span class="line">              <span class="variable constant_">SOME</span>(f dates)</span><br><span class="line">          <span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<h2 id="问题-12挑战问题">问题 12（挑战问题）</h2>
+<ul>
+<li>完成两个函数 <code>number_in_months_challenge</code> 和 <code>dates_in_months_challenge</code>
+<ul>
+<li>其与问题 3 和问题 5 类似，只是现在月份的 list 允许存在重复</li>
+</ul></li>
+</ul>
+<h3 id="解答-11">解答</h3>
+<ul>
+<li>先构建一个函数，去除重复
+<ul>
+<li>mem 函数判断 x 在 xs 中是否存在</li>
+</ul></li>
+</ul>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun mem(x : int, xs : int list) =</span><br><span class="line">    <span class="keyword">not</span> (null xs) andalso (x = hd xs orelse mem(x, tl xs))</span><br><span class="line">fun remove_duplicates(xs : int list) =</span><br><span class="line">    <span class="keyword">if</span> null xs</span><br><span class="line">    <span class="keyword">then</span> []</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        let </span><br><span class="line">            val tl_ans = remove_duplicates (tl xs)</span><br><span class="line">        <span class="keyword">in</span></span><br><span class="line">            <span class="keyword">if</span> mem(hd xs, tl_ans)</span><br><span class="line">            <span class="keyword">then</span> tl_ans</span><br><span class="line">            <span class="keyword">else</span> (hd xs)<span class="symbol">:</span><span class="symbol">:tl_ans</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">fun number_in_months_challenge(dates : (int * int * int) list, months : int list) =</span><br><span class="line">    number_in_months(dates, remove_duplicates months)</span><br><span class="line"></span><br><span class="line">fun dates_in_months_challenge (dates : (int * int * int) list, months : int list) =</span><br><span class="line">    dates_in_months(dates, remove_duplicates months)</span><br></pre></td></tr></table></figure>
+<h2 id="问题-13挑战问题">问题 13（挑战问题）</h2>
+<ul>
+<li>完成一个函数 <code>reasonable_date</code>
+<ul>
+<li>输入一个日期</li>
+<li>输出其是否为一个合法的日期</li>
+</ul></li>
+</ul>
+<h3 id="解答-12">解答</h3>
+<ul>
+<li>列出所有规则，逐一判断即可
+<ul>
+<li>比较复杂的规则为每个月的合理天数</li>
+</ul></li>
+</ul>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">fun reasonable_date (date : int * int * int) =</span><br><span class="line">    let    </span><br><span class="line">        fun get_nth (lst : int list, n : int) =</span><br><span class="line">            <span class="keyword">if</span> n=<span class="number">1</span></span><br><span class="line">            <span class="keyword">then</span> hd lst</span><br><span class="line">            <span class="keyword">else</span> get_nth(tl lst, n-<span class="number">1</span>)</span><br><span class="line">        val year  = <span class="comment">#1 date</span></span><br><span class="line">        val month = <span class="comment">#2 date</span></span><br><span class="line">        val day   = <span class="comment">#3 date</span></span><br><span class="line">        val leap  = year mod <span class="number">400</span> = <span class="number">0</span> orelse (year mod <span class="number">4</span> = <span class="number">0</span> andalso year mod <span class="number">100</span> &lt;&gt; <span class="number">0</span>)</span><br><span class="line">        val feb_len = <span class="keyword">if</span> leap <span class="keyword">then</span> <span class="number">29</span> <span class="keyword">else</span> <span class="number">28</span></span><br><span class="line">        val lengths = [<span class="number">31</span>,feb_len,<span class="number">31</span>,<span class="number">30</span>,<span class="number">31</span>,<span class="number">30</span>,<span class="number">31</span>,<span class="number">31</span>,<span class="number">30</span>,<span class="number">31</span>,<span class="number">30</span>,<span class="number">31</span>]</span><br><span class="line">    <span class="keyword">in</span></span><br><span class="line">        year &gt; <span class="number">0</span> andalso month &gt;= <span class="number">1</span> andalso month &lt;= <span class="number">12</span></span><br><span class="line">        andalso day &gt;= <span class="number">1</span> andalso day &lt;= get_nth(lengths,month)</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+
+
+
+<div class="license">
+  <div class="license-title">Progamming Languages 第一部分作业</div>
+  <div class="license-link">
+    <a href="https://xxwywzy.github.io/2019/03/13/pl-1-hw/">https://xxwywzy.github.io/2019/03/13/pl-1-hw/</a>
+  </div>
+  <div class="license-meta">
+    <div class="license-meta-item">
+      <div class="license-meta-title">本文作者</div>
+      <div class="license-meta-text">
+          Zheyu Wang
+      </div>
+    </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">发布于</div>
+        <div class="license-meta-text">
+          2019-03-13
+        </div>
+      </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">更新于</div>
+        <div class="license-meta-text">
+          2023-08-06
+        </div>
+      </div>
+    <div class="license-meta-item">
+      <div class="license-meta-title">许可协议</div>
+      <div class="license-meta-text">
+          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank">CC BY-NC-SA 4.0</a>
+      </div>
+    </div>
+  </div>
+  <div class="license-statement">
+      转载或引用本文时，请遵守上述许可协议，注明出处、不得用于商业用途！
+  </div>
+</div>
+          <div class="post-tags">
+              <a href="/tags/%E7%BC%96%E7%A8%8B%E6%80%9D%E6%83%B3/" rel="tag"># 编程思想</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/03/01/cs229-12/" rel="prev" title="CS229 学习笔记之十二：独立成分分析">
+                  <i class="fa fa-angle-left"></i> CS229 学习笔记之十二：独立成分分析
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/03/15/cs224-1/" rel="next" title="CS224N 学习笔记之一：词向量 1">
+                  CS224N 学习笔记之一：词向量 1 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81ODgyNi8zNTI4OA=="></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">332k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">18:26</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+
+
+  <style>
+    #taboola-livere { display: none;}
+  </style>
+
+
+
+<script type="text/javascript">
+var linkLists = document.querySelectorAll(".link-list");
+
+linkLists.forEach(function(linkList) {
+  var listPath = linkList.getAttribute('json-src');
+  var iconPath = linkList.getAttribute('icon-src');
+  
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', listPath, true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      var data = JSON.parse(xhr.responseText);
+      
+      var li = "";
+      linkList.innerHTML = '';
+
+      for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+        var info = data[infoIndex];
+        var labelWarn = info['warn'] ? '<span class="label warn">' + info['warn'] + '</span>' : '';
+        var labelInfo = info['info'] ? '<span class="label info">' + info['info'] + '</span>' : '';
+
+        li += '<div class="link-list-container">';
+        li += '<img class="link-list-image" src="' + iconPath + info['logo'] + '">';
+        li += '<p>' + info['title'] + labelInfo + labelWarn + '</p>';
+        li += '<p>' + info['intro'] + '</p>';
+        li += '<a href="' + info['url'] + '" rel="noopener" target="_blank" data-pjax-state=""></a>';
+        li += '</div>';
+      }
+      
+      linkList.innerHTML = li;
+    }
+  };
+  xhr.send();
+});
+</script>
+
+
+<script type="text/javascript">
+var cultureList = document.querySelectorAll(".culture-list");
+if (cultureList.length !== 0) {
+  var j = -1;
+  for (var i = 0; i < cultureList.length; i++) {
+    const listPath = cultureList[i].getAttribute('json-src');
+    const coverPath = cultureList[i].getAttribute('cover-src');
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', listPath, true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        j++;
+        var data = JSON.parse(xhr.responseText);
+        var li = "";
+        
+        cultureList[j].innerHTML = '';
+
+        for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+          var info = data[infoIndex];
+          
+          var title = info['title'];
+          if (info['link']) {
+            title = '<a href="' + info['link'] + '">' + info['title'] + '</a>';
+          }
+
+          var author = info['author'] ? '<span class="author">' + info['author'] + '</span>' : '';
+
+          var intro = info['intro'] ? info['intro'] : '';
+
+          var star = '';
+          if (info['score'] == null) {
+            star = '';
+          } else {
+            var colorStar = '';
+            var greyStar = '';
+            var int = Math.floor(info['score']); //整数部分
+            var fract = 0;
+            if (info['score'] % 1 !== 0) {
+              fract = 1;
+            }
+            for (var m = 0; m < int; m++) {
+              colorStar += '★';
+            }
+            if (fract !== 0) {
+              colorStar += '☆';
+            }
+            for (var m = 0; m < (5 - fract - int); m++) {
+              greyStar += '☆';
+            }
+            if (info['score'] !== 5) {
+              star = '<span class="star-score">' + colorStar + '<span class="grey-star">' + greyStar + '</span></span>';
+            } else {
+              star = '<span class="star-score">' + colorStar + '</span>';
+            }
+          }
+
+          li += '<div class="media">';
+          li += '<div class="media-cover" style="background-image:url(' + coverPath + info['cover'] + ')"></div>';
+          li += '<div class="media-meta">';
+          li += '<div class="media-meta-item title">' + title + '</div>';
+          li += '<div class="media-meta-item">' + author + star + '</div>';
+          li += '<div class="media-meta-item intro">' + intro + '</div>';
+          li += '</div></div>';
+        }
+        
+        cultureList[j].innerHTML = li;
+      }
+    };
+    xhr.send();
+  }
+}
+</script>
+
+
+
+
+<script src="/resources/minigrid.min.js"></script>
+<script type="text/javascript">
+var album = document.querySelector(".album");
+if (album) {
+  // 相册列表 JSON 数据
+  var imgDataPath = album.getAttribute('json-src');
+  // 照片存储路径
+  var imgPath = album.getAttribute('photo-src');
+  // 最多显示数量
+  var imgMaxNum = 50;
+  // 获取窗口大小以决定图片宽度
+  var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  var imageWidth;
+
+  if (windowWidth < 768) {
+    imageWidth = 145; // 移动端图片宽度
+  } else {
+    imageWidth = 235;
+  }
+
+  // 腾讯云自定义样式 (数据万象外网流量需要付费)
+  //var imgStyle = '!' + imageWidth + 'x';
+  //var imgStyle = '!300x';
+
+  // 生成相册
+  var linkDataPath = imgDataPath;
+  var photo = {
+    page: 1,
+    offset: imgMaxNum,
+    init: function () {
+      var that = this;
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", linkDataPath, true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var data = JSON.parse(xhr.responseText);
+          that.render(that.page, data);
+        }
+      };
+      xhr.send();
+    },
+    render: function (page, data) {
+      var begin = (page - 1) * this.offset;
+      var end = page * this.offset;
+      if (begin >= data.length) return;
+      var imgNameWithPattern, imgName, imageSize, imageX, imageY, li = "";
+      for (var i = begin; i < end && i < data.length; i++) {
+        imgNameWithPattern = data[i].split(' ')[1];
+        imgName = imgNameWithPattern.split('.')[0];
+        imageSize = data[i].split(' ')[0];
+        imageX = imageSize.split('.')[0];
+        imageY = imageSize.split('.')[1];
+        li += '<div class="card" style="width:' + imageWidth + 'px" >';
+        li += '<div class="album-photo" style="height:'+ imageWidth * imageY / imageX + 'px">';
+        li += '<a class="fancybox fancybox.image" href="' + imgPath + imgNameWithPattern + '" itemscope="" itemtype="http://schema.org/ImageObject" itemprop="url" data-fancybox="group" rel="group" data-caption="' + imgName + '" title="' +  imgName + '">';
+        li += '<img data-src="' + imgPath + imgNameWithPattern + '" src="' + imgPath + imgNameWithPattern + '" alt="' +  imgName + '" data-loaded="true">';
+        li += '</a>';
+        li += '</div>';
+        li += '</div>';
+      }
+      album.insertAdjacentHTML('beforeend', li);
+      this.minigrid();
+    },
+    minigrid: function () {
+      var grid = new Minigrid({
+        container: '.album',
+        item: '.card',
+        gutter: 12
+      });
+      grid.mount();
+      window.addEventListener('resize', function () {
+        grid.mount();
+      });
+    }
+  };
+  photo.init();
+}
+</script>
+</body>
+</html>

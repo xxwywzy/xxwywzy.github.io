@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/resources/favicon/favicon.png">
+  <link rel="mask-icon" href="/resources/favicon/favicon.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"xxwywzy.github.io","root":"/","images":"/resources/img/","scheme":"Gemini","darkmode":true,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"livere","storage":true,"lazyload":false,"nav":null,"activeClass":"livere"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本篇博客是 Coursera 上音乐理论基础课的第一周笔记。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="音乐理论基础-第一周学习笔记">
+<meta property="og:url" content="https://xxwywzy.github.io/2019/06/06/music-coursera-1/">
+<meta property="og:site_name" content="口仆">
+<meta property="og:description" content="本篇博客是 Coursera 上音乐理论基础课的第一周笔记。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-104500.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-104605.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-104644.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-104833.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-104943.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-105824.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-110411.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-110447.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-111251.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-112019.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-112835.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-113852.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-113932.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-114423.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-114757.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-115036.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-115204.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-115918.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-121221.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-121857.png">
+<meta property="article:published_time" content="2019-06-06T09:02:13.000Z">
+<meta property="article:modified_time" content="2023-08-05T08:15:49.000Z">
+<meta property="article:author" content="Zheyu Wang">
+<meta property="article:tag" content="乐理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2019-03-24-104500.png">
+
+
+<link rel="canonical" href="https://xxwywzy.github.io/2019/06/06/music-coursera-1/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://xxwywzy.github.io/2019/06/06/music-coursera-1/","path":"2019/06/06/music-coursera-1/","title":"音乐理论基础-第一周学习笔记"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>音乐理论基础-第一周学习笔记 | 口仆</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/resources/fonts/longcang/longcang-regular.css" >
+<link rel="stylesheet" href="/resources/fonts/lxgw/lxgwwenkailite-regular.css" >
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">口仆</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Long may the sunshine</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-culture"><a href="/culture/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>MEME</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9F%B3%E7%AC%A6musical-notes"><span class="nav-number">1.</span> <span class="nav-text">音符（Musical Notes)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%91%BD%E5%90%8D%E9%9F%B3%E7%AC%A6"><span class="nav-number">1.1.</span> <span class="nav-text">命名音符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E5%BA%A6%E9%9F%B3octave"><span class="nav-number">1.2.</span> <span class="nav-text">八度音（Octave）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9F%B3%E7%A8%8Bintervals"><span class="nav-number">2.</span> <span class="nav-text">音程（Intervals）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%A8%E9%9F%B3%E5%92%8C%E5%8D%8A%E9%9F%B3tones-and-semitones"><span class="nav-number">2.1.</span> <span class="nav-text">全音和半音（Tones and semitones）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-%E5%A4%A7%E8%B0%83the-c-major-scale"><span class="nav-number">2.2.</span> <span class="nav-text">C 大调（The C major scale）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9F%B3%E9%98%B6scale"><span class="nav-number">3.</span> <span class="nav-text">音阶（Scale）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#c-%E5%A4%A7%E8%B0%83%E5%92%8C-a-%E5%B0%8F%E8%B0%83%E4%B8%89%E5%92%8C%E5%BC%A6triads"><span class="nav-number">4.</span> <span class="nav-text">C 大调和 A 小调三和弦（Triads）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%90%86%E8%A7%A3%E4%B8%89%E5%92%8C%E5%BC%A6%E7%9A%84%E5%86%85%E9%83%A8%E7%BB%93%E6%9E%84"><span class="nav-number">4.1.</span> <span class="nav-text">理解三和弦的内部结构</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E4%B8%AA%E4%B8%BB%E8%A6%81%E5%92%8C%E5%BC%A6"><span class="nav-number">5.</span> <span class="nav-text">三个主要和弦</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zheyu Wang"
+      src="/resources/favicon/avatar.png">
+  <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+  <div class="site-description" itemprop="description">相信过程</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">85</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xxwywzy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/xxwywzy" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/xxwywzy" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/xxwywzy" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2019/06/06/music-coursera-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resources/favicon/avatar.png">
+      <meta itemprop="name" content="Zheyu Wang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="口仆">
+      <meta itemprop="description" content="相信过程">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="音乐理论基础-第一周学习笔记 | 口仆">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          音乐理论基础-第一周学习笔记
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-06-06 17:02:13" itemprop="dateCreated datePublished" datetime="2019-06-06T17:02:13+08:00">2019-06-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E9%9F%B3%E4%B9%90/" itemprop="url" rel="index"><span itemprop="name">音乐</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E9%9F%B3%E4%B9%90/%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">课程笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>4 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><div class="note default"><p>本篇博客是 Coursera 上音乐理论基础课的第一周笔记。</p>
+</div>
+<span id="more"></span>
+<p><a target="_blank" rel="noopener" href="https://www.coursera.org/learn/edinburgh-music-theory/home/welcome">课程地址</a></p>
+<h1 id="音符musical-notes">音符（Musical Notes)</h1>
+<h2 id="命名音符">命名音符</h2>
+<ul>
+<li>早期的音乐中没有五线谱，导致音符难以被表示</li>
+<li>现代音乐使用<strong>五线谱</strong>（stave）与<strong>英文字母</strong>来表示音符</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-104500.png" width=80%></p>
+<ul>
+<li>可以通过以下方式来记忆音符在五线谱中的对应位置：</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-104605.png" width=80%></p>
+<ul>
+<li>在钢琴上，音符的位置如下图所示：</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-104644.png" width=40%></p>
+<h2 id="八度音octave">八度音（Octave）</h2>
+<ul>
+<li><strong>八度音</strong>是指来自不同音域的相同音名，下图展示了五线谱上相邻的八度音：</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-104833.png" width=80%></p>
+<ul>
+<li>可以看到如果一个音名在线上，则其相邻的八度音一定在两条线之间（反之亦然）
+<ul>
+<li>我们将较低的那个 C 称为<strong><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/C_(%E9%9F%B3%E5%90%8D)">中央C</a></strong>（middle C），它一般位于键盘的中央</li>
+</ul></li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-104943.png" width=20%></p>
+<h1 id="音程intervals">音程（Intervals）</h1>
+<ul>
+<li>音程指两个音的高低关系</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-105824.png" width=70%></p>
+<h2 id="全音和半音tones-and-semitones">全音和半音（Tones and semitones）</h2>
+<ul>
+<li>两个音之间的最小距离称为半音
+<ul>
+<li>两个半音距离构成一个全音</li>
+</ul></li>
+<li>如果只考虑白键，我们有如下两组半音
+<ul>
+<li>B 和 C</li>
+<li>E 和 F</li>
+</ul></li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-110411.png" width=35%></p>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-110447.png" width=35%></p>
+<h2 id="c-大调the-c-major-scale">C 大调（The C major scale）</h2>
+<ul>
+<li>在了解了全音和半音之间的关系之后，我们就可以推导出 C 大调</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-111251.png" width=80%></p>
+<ul>
+<li>C 大调是一个于 C 音开始的音乐的大调
+<ul>
+<li>C 音为主音（tonic）</li>
+<li>这是一个自然音阶组成的大调（没有升降号）
+<ul>
+<li>其特点是从一个八度音到其相邻八度音，其中包含 2 个半音和 5 个全音</li>
+</ul></li>
+</ul></li>
+</ul>
+<h1 id="音阶scale">音阶（Scale）</h1>
+<ul>
+<li>音阶不仅仅包含大调，下面的音阶表示了 A 自然小调（The A natural minor scale）：</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-112019.png" width=80%></p>
+<ul>
+<li>当全音与半音的排列模式不同时，音阶听起来也会不同（质量不同）</li>
+<li>可以发现自然小调和大调之间存在联系（以大调的第六个音作为主音即为自然小调）</li>
+<li>我们简单地通过从不同的音符开始来发现不同的音阶
+<ul>
+<li>通过仅选择自然音阶，可以实现对全音和半音的重新组合</li>
+</ul></li>
+<li>七种由自然音阶生成的模式如下：</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-112835.png" width=70%></p>
+<ul>
+<li>下面的句子可以帮助记忆这些模式：
+<ul>
+<li><strong>I</strong> <strong>D</strong>on’t <strong>P</strong>unch <strong>L</strong>ike <strong>M</strong>uhammad <strong>A</strong> - <strong>L</strong>i.</li>
+</ul></li>
+</ul>
+<h1 id="c-大调和-a-小调三和弦triads">C 大调和 A 小调三和弦（Triads）</h1>
+<ul>
+<li>三和弦就是由三个音符组成的和弦
+<ul>
+<li>和弦即不同的音的组合（组合后的音是和谐的）</li>
+</ul></li>
+<li>C 大调三和弦如下图所示：</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-113852.png" width=80%></p>
+<ul>
+<li>A 小调三和弦如下图所示：</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-113932.png" width=80%></p>
+<h2 id="理解三和弦的内部结构">理解三和弦的内部结构</h2>
+<p>首先我们计算三和弦中首尾两个音之间的音程：</p>
+<ul>
+<li>对于 C 大三和弦：
+<ul>
+<li>其音程包含了 7 个半音，被称为<strong>纯五度</strong>（perfect fifth）</li>
+</ul></li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-114423.png" width=70%></p>
+<ul>
+<li>对于 A 小三和弦：
+<ul>
+<li>其音程同样为纯五度</li>
+</ul></li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-114757.png" width=70%></p>
+<p>接着我们计算首音和中间音的音程：</p>
+<ul>
+<li>对于 C 大三和弦：
+<ul>
+<li>其音程包含了 4 个半音，被称为<strong>大三度</strong>（major third）</li>
+</ul></li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-115036.png" width=70%></p>
+<ul>
+<li>对于 A 小三和弦：
+<ul>
+<li>其音程包含了 3 个半音，被称为<strong>小三度</strong>（minor third）</li>
+</ul></li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-115204.png" width=70%></p>
+<ul>
+<li>基于上述结果我们可以得出三和弦的命名规则：
+<ul>
+<li>大三度 + 小三度（纯五度）：<strong>大三和弦</strong></li>
+<li>小三度 + 大三度（纯五度）：<strong>小三和弦</strong></li>
+<li>小三度 + 小三度（减五度）：<strong>减三和弦</strong></li>
+</ul></li>
+<li>自然音阶组成的和弦如下图所示：</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-115918.png" width=70%></p>
+<h1 id="三个主要和弦">三个主要和弦</h1>
+<ul>
+<li>在音阶中，不同的音有不同的名称：
+<ul>
+<li>第一个音称为主音（Tonic）</li>
+<li>第二个音称为上主音（Supertonic）</li>
+<li>第三个音称为中音（Mediant）</li>
+<li>第四个音称为下属音（Subdominant）</li>
+<li>第五个音称为属音（Dominant）</li>
+<li>第六个音称为下中音（Submediant）</li>
+<li>第七个音称为下主音（Subtonic）</li>
+</ul></li>
+<li>对于一个音阶，以下三个和弦最为重要：
+<ul>
+<li>主和弦：以主音开头的和弦</li>
+<li>下属和弦：以下属音开头的和弦</li>
+<li>属和弦：以属音开头的和弦</li>
+</ul></li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-121221.png" width=70%></p>
+<ul>
+<li>音阶中不同的音符适合与这三个和弦中不同的和弦搭配
+<ul>
+<li>搭配的和弦中应包括该音符</li>
+</ul></li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-121857.png" width=70%></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+
+
+
+<div class="license">
+  <div class="license-title">音乐理论基础-第一周学习笔记</div>
+  <div class="license-link">
+    <a href="https://xxwywzy.github.io/2019/06/06/music-coursera-1/">https://xxwywzy.github.io/2019/06/06/music-coursera-1/</a>
+  </div>
+  <div class="license-meta">
+    <div class="license-meta-item">
+      <div class="license-meta-title">本文作者</div>
+      <div class="license-meta-text">
+          Zheyu Wang
+      </div>
+    </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">发布于</div>
+        <div class="license-meta-text">
+          2019-06-06
+        </div>
+      </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">更新于</div>
+        <div class="license-meta-text">
+          2023-08-05
+        </div>
+      </div>
+    <div class="license-meta-item">
+      <div class="license-meta-title">许可协议</div>
+      <div class="license-meta-text">
+          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank">CC BY-NC-SA 4.0</a>
+      </div>
+    </div>
+  </div>
+  <div class="license-statement">
+      转载或引用本文时，请遵守上述许可协议，注明出处、不得用于商业用途！
+  </div>
+</div>
+          <div class="post-tags">
+              <a href="/tags/%E4%B9%90%E7%90%86/" rel="tag"># 乐理</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/06/05/ontology-101/" rel="prev" title="本体入门之一：本体构建 101">
+                  <i class="fa fa-angle-left"></i> 本体入门之一：本体构建 101
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/06/17/writing-stu-6/" rel="next" title="Writing in the Sciences Week6 学习笔记">
+                  Writing in the Sciences Week6 学习笔记 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81ODgyNi8zNTI4OA=="></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">332k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">18:26</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+
+
+  <style>
+    #taboola-livere { display: none;}
+  </style>
+
+
+
+<script type="text/javascript">
+var linkLists = document.querySelectorAll(".link-list");
+
+linkLists.forEach(function(linkList) {
+  var listPath = linkList.getAttribute('json-src');
+  var iconPath = linkList.getAttribute('icon-src');
+  
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', listPath, true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      var data = JSON.parse(xhr.responseText);
+      
+      var li = "";
+      linkList.innerHTML = '';
+
+      for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+        var info = data[infoIndex];
+        var labelWarn = info['warn'] ? '<span class="label warn">' + info['warn'] + '</span>' : '';
+        var labelInfo = info['info'] ? '<span class="label info">' + info['info'] + '</span>' : '';
+
+        li += '<div class="link-list-container">';
+        li += '<img class="link-list-image" src="' + iconPath + info['logo'] + '">';
+        li += '<p>' + info['title'] + labelInfo + labelWarn + '</p>';
+        li += '<p>' + info['intro'] + '</p>';
+        li += '<a href="' + info['url'] + '" rel="noopener" target="_blank" data-pjax-state=""></a>';
+        li += '</div>';
+      }
+      
+      linkList.innerHTML = li;
+    }
+  };
+  xhr.send();
+});
+</script>
+
+
+<script type="text/javascript">
+var cultureList = document.querySelectorAll(".culture-list");
+if (cultureList.length !== 0) {
+  var j = -1;
+  for (var i = 0; i < cultureList.length; i++) {
+    const listPath = cultureList[i].getAttribute('json-src');
+    const coverPath = cultureList[i].getAttribute('cover-src');
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', listPath, true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        j++;
+        var data = JSON.parse(xhr.responseText);
+        var li = "";
+        
+        cultureList[j].innerHTML = '';
+
+        for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+          var info = data[infoIndex];
+          
+          var title = info['title'];
+          if (info['link']) {
+            title = '<a href="' + info['link'] + '">' + info['title'] + '</a>';
+          }
+
+          var author = info['author'] ? '<span class="author">' + info['author'] + '</span>' : '';
+
+          var intro = info['intro'] ? info['intro'] : '';
+
+          var star = '';
+          if (info['score'] == null) {
+            star = '';
+          } else {
+            var colorStar = '';
+            var greyStar = '';
+            var int = Math.floor(info['score']); //整数部分
+            var fract = 0;
+            if (info['score'] % 1 !== 0) {
+              fract = 1;
+            }
+            for (var m = 0; m < int; m++) {
+              colorStar += '★';
+            }
+            if (fract !== 0) {
+              colorStar += '☆';
+            }
+            for (var m = 0; m < (5 - fract - int); m++) {
+              greyStar += '☆';
+            }
+            if (info['score'] !== 5) {
+              star = '<span class="star-score">' + colorStar + '<span class="grey-star">' + greyStar + '</span></span>';
+            } else {
+              star = '<span class="star-score">' + colorStar + '</span>';
+            }
+          }
+
+          li += '<div class="media">';
+          li += '<div class="media-cover" style="background-image:url(' + coverPath + info['cover'] + ')"></div>';
+          li += '<div class="media-meta">';
+          li += '<div class="media-meta-item title">' + title + '</div>';
+          li += '<div class="media-meta-item">' + author + star + '</div>';
+          li += '<div class="media-meta-item intro">' + intro + '</div>';
+          li += '</div></div>';
+        }
+        
+        cultureList[j].innerHTML = li;
+      }
+    };
+    xhr.send();
+  }
+}
+</script>
+
+
+
+
+<script src="/resources/minigrid.min.js"></script>
+<script type="text/javascript">
+var album = document.querySelector(".album");
+if (album) {
+  // 相册列表 JSON 数据
+  var imgDataPath = album.getAttribute('json-src');
+  // 照片存储路径
+  var imgPath = album.getAttribute('photo-src');
+  // 最多显示数量
+  var imgMaxNum = 50;
+  // 获取窗口大小以决定图片宽度
+  var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  var imageWidth;
+
+  if (windowWidth < 768) {
+    imageWidth = 145; // 移动端图片宽度
+  } else {
+    imageWidth = 235;
+  }
+
+  // 腾讯云自定义样式 (数据万象外网流量需要付费)
+  //var imgStyle = '!' + imageWidth + 'x';
+  //var imgStyle = '!300x';
+
+  // 生成相册
+  var linkDataPath = imgDataPath;
+  var photo = {
+    page: 1,
+    offset: imgMaxNum,
+    init: function () {
+      var that = this;
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", linkDataPath, true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var data = JSON.parse(xhr.responseText);
+          that.render(that.page, data);
+        }
+      };
+      xhr.send();
+    },
+    render: function (page, data) {
+      var begin = (page - 1) * this.offset;
+      var end = page * this.offset;
+      if (begin >= data.length) return;
+      var imgNameWithPattern, imgName, imageSize, imageX, imageY, li = "";
+      for (var i = begin; i < end && i < data.length; i++) {
+        imgNameWithPattern = data[i].split(' ')[1];
+        imgName = imgNameWithPattern.split('.')[0];
+        imageSize = data[i].split(' ')[0];
+        imageX = imageSize.split('.')[0];
+        imageY = imageSize.split('.')[1];
+        li += '<div class="card" style="width:' + imageWidth + 'px" >';
+        li += '<div class="album-photo" style="height:'+ imageWidth * imageY / imageX + 'px">';
+        li += '<a class="fancybox fancybox.image" href="' + imgPath + imgNameWithPattern + '" itemscope="" itemtype="http://schema.org/ImageObject" itemprop="url" data-fancybox="group" rel="group" data-caption="' + imgName + '" title="' +  imgName + '">';
+        li += '<img data-src="' + imgPath + imgNameWithPattern + '" src="' + imgPath + imgNameWithPattern + '" alt="' +  imgName + '" data-loaded="true">';
+        li += '</a>';
+        li += '</div>';
+        li += '</div>';
+      }
+      album.insertAdjacentHTML('beforeend', li);
+      this.minigrid();
+    },
+    minigrid: function () {
+      var grid = new Minigrid({
+        container: '.album',
+        item: '.card',
+        gutter: 12
+      });
+      grid.mount();
+      window.addEventListener('resize', function () {
+        grid.mount();
+      });
+    }
+  };
+  photo.init();
+}
+</script>
+</body>
+</html>

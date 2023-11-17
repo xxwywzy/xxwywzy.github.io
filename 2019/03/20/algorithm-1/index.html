@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/resources/favicon/favicon.png">
+  <link rel="mask-icon" href="/resources/favicon/favicon.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"xxwywzy.github.io","root":"/","images":"/resources/img/","scheme":"Gemini","darkmode":true,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"livere","storage":true,"lazyload":false,"nav":null,"activeClass":"livere"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本篇博客为《算法（第4版）》的读书笔记第一部分，主题是：基础编程模型。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《算法（第4版）》第一章读书笔记：基础编程模型">
+<meta property="og:url" content="https://xxwywzy.github.io/2019/03/20/algorithm-1/">
+<meta property="og:site_name" content="口仆">
+<meta property="og:description" content="本篇博客为《算法（第4版）》的读书笔记第一部分，主题是：基础编程模型。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-18-025406.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-19-014914.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-20-062417.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-20-084921.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-21-014507.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-21-015056.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-21-015510.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-21-022601.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-21-020719.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-21-021001.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-21-023008.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-21-030050.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-21-031458.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-21-032649.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-21-033041.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-21-033433.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-21-033607.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-18-023743.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-21-063428.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-03-24-103012.png">
+<meta property="article:published_time" content="2019-03-20T01:06:06.000Z">
+<meta property="article:modified_time" content="2023-08-05T06:22:20.000Z">
+<meta property="article:author" content="Zheyu Wang">
+<meta property="article:tag" content="算法">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2019-03-18-025406.png">
+
+
+<link rel="canonical" href="https://xxwywzy.github.io/2019/03/20/algorithm-1/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://xxwywzy.github.io/2019/03/20/algorithm-1/","path":"2019/03/20/algorithm-1/","title":"《算法（第4版）》第一章读书笔记：基础编程模型"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>《算法（第4版）》第一章读书笔记：基础编程模型 | 口仆</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/resources/fonts/longcang/longcang-regular.css" >
+<link rel="stylesheet" href="/resources/fonts/lxgw/lxgwwenkailite-regular.css" >
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">口仆</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Long may the sunshine</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-culture"><a href="/culture/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>MEME</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#java-%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84"><span class="nav-number">1.</span> <span class="nav-text">Java 程序的基本结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8E%9F%E5%A7%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text">原始数据类型和表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-number">2.1.</span> <span class="nav-text">表达式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="nav-number">2.2.</span> <span class="nav-text">类型转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AF%94%E8%BE%83"><span class="nav-number">2.3.</span> <span class="nav-text">比较</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%8E%9F%E5%A7%8B%E7%B1%BB%E5%9E%8B"><span class="nav-number">2.4.</span> <span class="nav-text">其他原始类型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AF%AD%E5%8F%A5"><span class="nav-number">3.</span> <span class="nav-text">语句</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A3%B0%E6%98%8E%E8%AF%AD%E5%8F%A5"><span class="nav-number">3.1.</span> <span class="nav-text">声明语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%8B%E5%80%BC%E8%AF%AD%E5%8F%A5"><span class="nav-number">3.2.</span> <span class="nav-text">赋值语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5"><span class="nav-number">3.3.</span> <span class="nav-text">条件语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%AA%E7%8E%AF%E8%AF%AD%E5%8F%A5"><span class="nav-number">3.4.</span> <span class="nav-text">循环语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#break-%E5%92%8C-continue-%E8%AF%AD%E5%8F%A5"><span class="nav-number">3.5.</span> <span class="nav-text">break 和 continue 语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%83%E7%94%A8%E5%92%8C%E8%BF%94%E5%9B%9E%E8%AF%AD%E5%8F%A5"><span class="nav-number">3.6.</span> <span class="nav-text">调用和返回语句</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E7%BB%84"><span class="nav-number">4.</span> <span class="nav-text">数组</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E5%B9%B6%E5%88%9D%E5%A7%8B%E5%8C%96%E6%95%B0%E7%BB%84"><span class="nav-number">4.1.</span> <span class="nav-text">创建并初始化数组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E5%8C%96%E5%86%99%E6%B3%95"><span class="nav-number">4.2.</span> <span class="nav-text">简化写法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%95%B0%E7%BB%84"><span class="nav-number">4.3.</span> <span class="nav-text">使用数组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%AB%E5%90%8D"><span class="nav-number">4.4.</span> <span class="nav-text">别名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84"><span class="nav-number">4.5.</span> <span class="nav-text">二维数组</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95"><span class="nav-number">5.</span> <span class="nav-text">静态方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95"><span class="nav-number">5.1.</span> <span class="nav-text">定义静态方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%83%E7%94%A8%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95"><span class="nav-number">5.2.</span> <span class="nav-text">调用静态方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E7%9A%84%E6%80%A7%E8%B4%A8"><span class="nav-number">5.3.</span> <span class="nav-text">方法的性质</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%92%E5%BD%92"><span class="nav-number">5.4.</span> <span class="nav-text">递归</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8B"><span class="nav-number">5.5.</span> <span class="nav-text">基础编程模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E5%8C%96%E7%BC%96%E7%A8%8B"><span class="nav-number">5.6.</span> <span class="nav-text">模块化编程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95"><span class="nav-number">5.7.</span> <span class="nav-text">单元测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%96%E9%83%A8%E5%BA%93"><span class="nav-number">5.8.</span> <span class="nav-text">外部库</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#api"><span class="nav-number">6.</span> <span class="nav-text">API</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">7.</span> <span class="nav-text">字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%8B%BC%E6%8E%A5"><span class="nav-number">7.1.</span> <span class="nav-text">字符串拼接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2-1"><span class="nav-number">7.2.</span> <span class="nav-text">类型转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E8%BD%AC%E6%8D%A2"><span class="nav-number">7.3.</span> <span class="nav-text">自动转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%8F%82%E6%95%B0"><span class="nav-number">7.4.</span> <span class="nav-text">命令行参数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA"><span class="nav-number">8.</span> <span class="nav-text">输入输出</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4%E5%92%8C%E5%8F%82%E6%95%B0"><span class="nav-number">8.1.</span> <span class="nav-text">命令和参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%87%E5%87%86%E8%BE%93%E5%87%BA"><span class="nav-number">8.2.</span> <span class="nav-text">标准输出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%BE%93%E5%87%BA"><span class="nav-number">8.3.</span> <span class="nav-text">格式化输出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%87%E5%87%86%E8%BE%93%E5%85%A5"><span class="nav-number">8.4.</span> <span class="nav-text">标准输入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%8E%E7%AE%A1%E9%81%93"><span class="nav-number">8.5.</span> <span class="nav-text">重定向与管道</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E6%96%87%E4%BB%B6%E7%9A%84%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA"><span class="nav-number">8.6.</span> <span class="nav-text">基于文件的输入输出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%87%E5%87%86%E7%BB%98%E5%9B%BE%E5%BA%93"><span class="nav-number">8.7.</span> <span class="nav-text">标准绘图库</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE"><span class="nav-number">9.</span> <span class="nav-text">二分查找</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0"><span class="nav-number">10.</span> <span class="nav-text">练习</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#sattolo-%E7%AE%97%E6%B3%95"><span class="nav-number">10.1.</span> <span class="nav-text">Sattolo 算法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE"><span class="nav-number">11.</span> <span class="nav-text">思维导图</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zheyu Wang"
+      src="/resources/favicon/avatar.png">
+  <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+  <div class="site-description" itemprop="description">相信过程</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">85</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xxwywzy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/xxwywzy" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/xxwywzy" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/xxwywzy" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2019/03/20/algorithm-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resources/favicon/avatar.png">
+      <meta itemprop="name" content="Zheyu Wang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="口仆">
+      <meta itemprop="description" content="相信过程">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="《算法（第4版）》第一章读书笔记：基础编程模型 | 口仆">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          《算法（第4版）》第一章读书笔记：基础编程模型
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-03-20 09:06:06" itemprop="dateCreated datePublished" datetime="2019-03-20T09:06:06+08:00">2019-03-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">编程与算法</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B%E4%B8%8E%E7%AE%97%E6%B3%95/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">读书笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>5.2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>17 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><div class="note danger"><p>本篇博客为《算法（第4版）》的读书笔记第一部分，主题是：基础编程模型。</p>
+</div>
+<span id="more"></span>
+<p>算法是一种有限、确定、有效的并适合用计算机程序来实现的解决问题的方法。我们把描述和实现算法所用到的语言特性、软件库和操作系统特性总称为<strong>基础编程模型</strong>。</p>
+<h1 id="java-程序的基本结构">Java 程序的基本结构</h1>
+<p>一段 Java 程序（类）是一个<strong>静态方法库</strong>（函数）或者一个<strong>数据类型定义</strong>。为了创建静态方法库和定义数据类型，会用到以下组成部分：</p>
+<ul>
+<li>原始数据类型</li>
+<li>语句</li>
+<li>数组</li>
+<li>静态方法</li>
+<li>字符串</li>
+<li>输入输出</li>
+<li>数据抽象</li>
+</ul>
+<p>我们将在本节学习前六种语法，数据抽象在下一篇介绍。</p>
+<h1 id="原始数据类型和表达式">原始数据类型和表达式</h1>
+<p>数据类型就是一组数据和对其所能进行的操作的集合。Java 语言最基本的原始数据类型包括：</p>
+<ul>
+<li>整型（<code>int</code>）</li>
+<li>浮点型（<code>double</code>）</li>
+<li>布尔型（<code>boolean</code>）</li>
+<li>字符型（<code>char</code>）</li>
+</ul>
+<p>Java 操作的是用<strong>标识符</strong>命名的<strong>变量</strong>。标识符是由字母、数字、下划线和 $ 组成的字符串，首字符不能是数字。每个变量都有自己的类型并存储了一个合法的值。我们用类似数学表达式的<strong>表达式</strong>来实现对各种类型的操作。</p>
+<p>只要能够制定值域和在此值域上的操作，就能够定义一个数据类型，如下表所示：</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-18-025406.png" width=70%></p>
+<p>需要注意的是算术运算符是经过重载的——根据上下文，同样的运算符对不同类型会执行不同的操作。这些初级运算的关键性质是<strong>运算所产生数据的数据类型和参与运算的数据的数据类型是相同的</strong>，这意味着我们经常需要处理近似值（例如 5/3 的值是 1）。</p>
+<h2 id="表达式">表达式</h2>
+<p>Java 使用的是<strong>中缀</strong>表达式：一个字面量（或表达式）紧接着一个运算符，再接着是另一个字面量（表达式）。字面量即值在源代码中的表示（表达式的结果）。</p>
+<p>当一个表达式包含多个运算符时，运算符的作用顺序非常重要，Java 规定的运算符优先级如下： + 对于算术运算符，<code>*</code> 和 <code>/</code> （以及 <code>%</code>）的优先级高于 <code>+</code> 和 <code>-</code> + 对于逻辑运算符，<code>!</code> 优先级最高，之后是 <code>&amp;&amp;</code> ，接下来是 <code>||</code></p>
+<p>与算术表达式一样，使用括号能够改变这些规则。为了避免错误，建议多使用括号。</p>
+<h2 id="类型转换">类型转换</h2>
+<p>如果不会损失信息，数字会被自动提升为<strong>高级</strong>的数据类型，如表达式 <code>1+2.5</code> 中，1 会被转换为浮点数 1.0，表达式的值为 <code>double</code> 值 3.5。</p>
+<p><strong>转换</strong>指的是在表达式中把类型名放在括号里将其后的值转换为括号中的类型，如 <code>(int)3.7</code> 的值是 3。 注意浮点型转换为整型将会截断小数部分而非四舍五入。</p>
+<h2 id="比较">比较</h2>
+<p>下列运算符能够比较相同数据类型的两个值并产生一个布尔值： + 相等（<code>==</code>） + 不等（<code>!=</code>） + 小于（<code>&lt;</code>） + 小于等于（<code>&lt;=</code>） + 大于（<code>&gt;</code>） + 大于等于（<code>&gt;=</code>）</p>
+<p>这些运算符被称为<strong>混合类型</strong>运算符，因为它们的结果是布尔型，而不是参与比较的数据类型。结果是布尔型的表达式被称为<strong>布尔表达式</strong></p>
+<h2 id="其他原始类型">其他原始类型</h2>
+<p>Java 的整型是 32 位，浮点型是 64 位。为了提供更大的灵活性，Java 还提供了其他四种原始数据类型：</p>
+<ul>
+<li>64位整数（<code>long</code>）</li>
+<li>16位整数（<code>short</code>）</li>
+<li>8位整数（<code>byte</code>）</li>
+<li>32位单精度实数（<code>float</code>）</li>
+</ul>
+<h1 id="语句">语句</h1>
+<p>Java 程序是由<strong>语句</strong>组成的。语句能够通过创建和操作变量，对变量赋值并控制这些操作的执行流程来描述运算。</p>
+<p>Java 语句一般包含以下几种：</p>
+<h2 id="声明语句">声明语句</h2>
+<p>声明语句用于创建某种类型的变量并用标识符为其命名。由于 Java 是一种强类型的语言（Java 编译器会检查类型的一致性），所以我们需要用声明语句来指定变量的名称和类型。变量的作用域就是定义它的地方，一般由相同代码段中声明之后的所有语句组成。</p>
+<h2 id="赋值语句">赋值语句</h2>
+<p>赋值语句将某个数据类型的值（由一个表达式定义）和一个变量关联起来。为了简洁，一般可以将声明语句和赋值语句结合起来，在声明一个变量的同时将它初始化，例如 <code>int i = 1;</code>。</p>
+<p><strong>隐性赋值</strong>：当希望一个变量的值相对于其当前的值变化时，可以使用一些简便的写法。</p>
+<ul>
+<li>递增/递减操作符：<code>++i</code> 等价于 <code>i=i+1</code>，且表达式为 <code>i+1</code>，<code>i++</code> 意思相同只是表达式为 <code>i</code> 的值</li>
+<li>其他复合运算符：在赋值语句中将一个二元运算符写在等号之前。<code>i/=2</code> 等价于 <code>i=i/2</code></li>
+</ul>
+<h2 id="条件语句">条件语句</h2>
+<p>条件语句能够简单地改变执行流程，根据指定的条件执行两个代码段之一。其基本格式如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (&lt;<span class="type">boolean</span> expression&gt;) &#123; &lt;block statements&gt; &#125; </span><br><span class="line"><span class="keyword">else</span>                      &#123; &lt;block statements&gt; &#125;</span><br></pre></td></tr></table></figure>
+<p>如果只有一条语句，代码的花括号可以省略（下同）。</p>
+<h2 id="循环语句">循环语句</h2>
+<p>循环语句可以更彻底地改变执行流程，只要条件为真就不断地反复执行代码段中的语句。其基本格式如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">while</span> (&lt;<span class="type">boolean</span> expression&gt;) &#123; &lt;block statements&gt; &#125;</span><br></pre></td></tr></table></figure>
+<p>我们将循环语句中的代码段称为<strong>循环体</strong>。</p>
+<p>有时候，很多循环的模式都是：初始化一个索引变量，然后使用 while 循环并将包含索引变量的表达式作为循环条件，while 循环的最后一条语句会将索引变量加 1（或其他操作）。对于这种情况，使用 for 语句可以更紧凑地表达这种<strong>初始化—递增</strong>循环：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (&lt;initialize&gt;; &lt;<span class="type">boolean</span> expression&gt;; &lt;increment&gt;)</span><br><span class="line">&#123;</span><br><span class="line">    &lt;block statements&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="break-和-continue-语句">break 和 continue 语句</h2>
+<p>有些情况下我们需要比基本的条件和循环语句更加复杂的流出控制。Java 支持在循环中使用另外两条语句：</p>
+<ul>
+<li><code>break</code> 语句：立即从循环中跳出</li>
+<li><code>continue</code> 语句：立即开始下一轮循环</li>
+</ul>
+<h2 id="调用和返回语句">调用和返回语句</h2>
+<p>调用和返回语句与静态方法有关，是改变执行流程和代码组织的另一种方式。请参见第五节。</p>
+<p>下表对不同种类的 Java 语句进行了总结：</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-19-014914.png" width=75%></p>
+<h1 id="数组">数组</h1>
+<p>数组能够顺序存储相同类型的多个数据。访问数组中的某个元素的方法是将其编号然后索引。如果我们有 N 个值，对于 0 到 <span class="math inline">\(N-1\)</span> 之间的任意的 <code>i</code>，我们就能够使用 <code>a[i]</code> 唯一的表示第 <code>i+1</code> 个元素的值（针对一维数组）。</p>
+<h2 id="创建并初始化数组">创建并初始化数组</h2>
+<p>在 Java 中创建一个数组需要三步： + 声明数组的名字和类型 + 创建数组 + 初始化数组元素</p>
+<h2 id="简化写法">简化写法</h2>
+<p>为了精简代码，我们常常会利用 Java 对数组默认的初始化来将三个步骤合为一条语句。数值类型的默认初始值是 0，布尔型的默认初始值是 <code>false</code>。</p>
+<p>如果想要不同的初始值，可以使用 for 循环或通过花括号将一列由逗号分隔的值在编译时将数组初始化。下图给出了完整模式和简化模式下的数组声明、创建和初始化。</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-20-062417.png" width=40%></p>
+<h2 id="使用数组">使用数组</h2>
+<p>在使用数组时要注意：数组一经创建，其大小就是固定的。程序能够通过 <code>a.length</code> 获取数组 <code>a[]</code> 的长度。Java 会自动进行边界检查，访问超出边界的位置时会抛出异常。</p>
+<h2 id="别名">别名</h2>
+<p>数组名表示的是整个数组。如果我们将一个数组变量赋予另一个变量，那么两个变量将会指向同一个数组：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span>[] a = <span class="keyword">new</span> <span class="title class_">int</span>[N];</span><br><span class="line">...</span><br><span class="line">a[i] = <span class="number">1234</span>;</span><br><span class="line">...</span><br><span class="line"><span class="type">int</span>[] b = a;</span><br><span class="line">...</span><br><span class="line">b[i] = <span class="number">5678</span>;   <span class="comment">// a[i] is now 5678.</span></span><br></pre></td></tr></table></figure>
+<p>这种情况叫做<strong>别名</strong>，有时可能会导致难以察觉的问题（可变性的锅）。如果想复制数组，应该声明、创建并初始化一个数组，然后将原数组中的元素挨个复制到新数组。</p>
+<h2 id="二维数组">二维数组</h2>
+<p>在 Java 中二维数组就是一维数组的数组。二维数组可以是参差不齐的（即元素数组的长度可以不一致），但大多数情况下我们都会使用 <span class="math inline">\(M\times N\)</span>，即 M 行长度为 N 的数组的二维数组。创建二维数组的简化模式如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">double</span>[][] a = <span class="keyword">new</span> <span class="title class_">double</span>[M][N];</span><br></pre></td></tr></table></figure>
+<p>在 Java 中访问二维数组 <code>a[][]</code> 的第 <code>i</code> 行第 <code>j</code> 列的元素可以写作 <code>a[i][j]</code>。</p>
+<h1 id="静态方法">静态方法</h1>
+<p>静态方法是一组在调用时会被顺序执行的语句。在许多语言中，静态方法被称为<strong>函数</strong>，因为它们和数学函数的性质类似。</p>
+<h2 id="定义静态方法">定义静态方法</h2>
+<p>方法封装了一系列语句所描述的运算。方法需要<strong>参数</strong>（某种类型的值）并根据参数计算出某种数据类型的<strong>返回值</strong>或者产生某种<strong>副作用</strong>。</p>
+<p>每个静态方法都是由<strong>签名</strong>和<strong>函数体</strong>组成的：</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-20-084921.png" width=50%></p>
+<h2 id="调用静态方法">调用静态方法</h2>
+<p>调用静态方法的方法是写出方法名并在后面的括号中列出参数值，用逗号分隔。调用方法时，它的参数变量将被初始化为调用时所给出的相应表达式的值。<strong>返回语句</strong>将结束静态方法并将控制权交还给调用者。如果静态方法的目的是计算某个值，返回语句应该指定这个值。</p>
+<h2 id="方法的性质">方法的性质</h2>
+<p>Java 方法拥有以下几个特点： + <strong>方法的参数按值传递</strong>：当调用一个函数时，其参数对应的值将被拷贝至参数变量。这意味着数组参数将会是原数组的别名（原数组的内容可能会被改变） + <strong>方法名可以被重载</strong>：一个类中的方法名称可以相同，只要签名不同即可 + <strong>方法只能返回一个值，但可以包含多个返回句</strong>：一个 Java 方法只能返回一个值。第一次执行到一条返回语句时控制权将会回到调用代码中 + <strong>方法可以产生副作用</strong>：方法的返回值可以是 <code>void</code>，这表示该方法没有返回值。<code>void</code> 类型的方法会产生副作用（接受输入、产生输出、修改数组或者改变系统状态）</p>
+<h2 id="递归">递归</h2>
+<p>递归方法是一种直接或间接调用自己的方法，编写递归代码时最重要的有以下三点： + 递归总有一个<strong>最简单</strong>的情况 + 递归调用总是去尝试解决一个<strong>规模更小</strong>的子问题，这样递归才能收敛到最简单的情况 + 递归调用尝试解决的子问题之间不应该有<strong>交集</strong></p>
+<p>违背其中任意一条都可能得到错误的结果或是低效的代码。</p>
+<h2 id="基础编程模型">基础编程模型</h2>
+<p><strong>静态方法库</strong>是定义在一个 Java 类中的一组静态方法。Java 开发的一个基本模型是通过创建一个静态方法库（包含一个 <code>main()</code> 方法）编写一个程序来完成一个特定的计算任务。</p>
+<h2 id="模块化编程">模块化编程</h2>
+<p>静态方法库实现了模块化编程。一个库中的静态方法也能够调用另一个库中定义的静态方法。模块化编程能够带来很多好处：</p>
+<ul>
+<li>处理的模块大小适中</li>
+<li>可以共享和重用代码而无需重新实现</li>
+<li>很容易用改进的实现替换老的实现</li>
+<li>可以为解决编程问题建立合适的抽象模型</li>
+<li>缩小调试范围</li>
+</ul>
+<h2 id="单元测试">单元测试</h2>
+<p>Java 编程的最佳实践之一就是每个静态方法库中都包含一个 main 函数来测试库中的所有方法。每个模块的 <code>main()</code> 方法至少应该调用模块中的其他代码并在某种程度上保证它的正确性。</p>
+<h2 id="外部库">外部库</h2>
+<p>我们会使用来自 4 个不同类型的库中的静态方法，重用每种库代码的方式稍有不同。 + 系统标准库 <code>java.lang</code>：包括 <code>java.lang.Math</code>，<code>java.lang.Integer</code> 和 <code>java.lang.Double</code> + 导入的系统库，例如 <code>java.utils.Arrays</code>。需要在程序的开头使用 <code>import</code> 语句导入 + 本书中的其他库：需要下载并放入你的工作目录中（或下载 jar 包添加路径）。放入同一目录中不需要 import，添加路径需要 import + 本书提供的标准库：同上</p>
+<p>要调用另一个库中的方法，需要在方法前指定库的名称，如 <code>Math.sqrt()</code>。</p>
+<h1 id="api">API</h1>
+<p>我们会统一使用<strong>应用程序编程接口</strong>（API）的方式来列出本书中使用的每个方法库名称、签名和简短的描述。</p>
+<p>API 的目的是将调用和实现分离。我们用<strong>客户端</strong>（client）来指代调用另一个库中方法的程序，用<strong>实现</strong>（implementation）来描述实现了某个 API 方法的 Java 代码。</p>
+<p>下面给出一个 API 的样例：</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-21-014507.png" width=70%></p>
+<h1 id="字符串">字符串</h1>
+<p>字符串是由一串字符组成的，一个 String 类型的字面量包括一对<strong>双引号</strong>和其中的字符。String 类型是 Java 的一个数据类型，但并<strong>不是</strong>原始数据类型。</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-21-015056.png" width=70%></p>
+<h2 id="字符串拼接">字符串拼接</h2>
+<p>Java 内置了一个串联 String 类型字符串的运算符（<code>+</code>），拼接两个 String 类型的字符串将得到一个新的 String 值，其中第一个字符串在前，第二个字符串在后。</p>
+<h2 id="类型转换-1">类型转换</h2>
+<p>字符串的两个主要用途分别是：</p>
+<ul>
+<li>将用户从键盘输入的内容转换成相应数据类型的值</li>
+<li>将各种数据类型的值转化成能够在屏幕上显示的内容</li>
+</ul>
+<p>举例来说，Integer 和 Double 库包含了分别和 String 类型相互转化的方法：</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-21-015510.png" width="70%"></p>
+<h2 id="自动转换">自动转换</h2>
+<p>Java 在连接字符串的时候会自动将任意数据类型的值转换为字符串，我们能够通过一个空字符串将任意数据类型的值转换为字符串值。</p>
+<h2 id="命令行参数">命令行参数</h2>
+<p>在 Java 中字符串的一个重要的用途就是使程序能够接收到从命令行传递来的信息。当你输入命令 <code>java</code> 和一个库名以及一系列字符串后，Java 系统会调用库的 main 方法并将那<strong>一系列字符串变成一个数据</strong>作为参数传递给它：</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-21-022601.png" width="40%"></p>
+<h1 id="输入输出">输入输出</h1>
+<p>在我们的模型中，Java 程序可以从<strong>命令行参数</strong>或者一个名为<strong>标准输入流</strong>的抽象字符流中获得输入，并将输出写入另一个名为<strong>标准输出流</strong>的字符流中：</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-21-020719.png" width=40%></p>
+<h2 id="命令和参数">命令和参数</h2>
+<p>终端窗口包含一个提示符，通过它我们能够向操作系统输入命令和参数。本书中会使用到如下几个命令：</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-21-021001.png" width=55%></p>
+<h2 id="标准输出">标准输出</h2>
+<p>系统默认会将标准输出打印到终端窗口。本书将使用自己编写的 StdOut 库：</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-21-023008.png" width=60%></p>
+<h2 id="格式化输出">格式化输出</h2>
+<p>在最简单的情况下 <code>printf</code> 方法接收两个参数：</p>
+<ul>
+<li>第一个参数是一个<strong>格式字符串</strong>，描述第二个参数应该如何在输出中被转换为一个字符串</li>
+<li>第二个参数是待转换的数据</li>
+</ul>
+<p>最简单的格式字符串的第一个字符是 % 并紧跟一个字符表示的转换代码。在 % 和转换代码之间可以插入一个整数来表示转换之后的值的宽度，在宽度之后还可以插入一个小数点以及数值来指定保留的小数位数或是字符串截取长度：</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-21-030050.png" width=65%></p>
+<h2 id="标准输入">标准输入</h2>
+<p>我们的 StdIn 库从标准输入流中获取数据。这些数据可能为空，也可能是一系列由空白字符分隔的值（空格、制表符、换行符等）。输入流由 <code>&lt;ctrl-d&gt;</code> 或 <code>&lt;ctrl-z&gt;</code> 结束，取决于你的终端。标准输入流最重要的特点是这些值会在你的程序读取它们之后消失。</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-21-031458.png" width=60%></p>
+<h2 id="重定向与管道">重定向与管道</h2>
+<p>只需要向启动程序的命令中加入一个简单的提示符，就可以将它的标准输出或输入<strong>重定向</strong>至一个文件。将一个程序的输出重定向为另一个程序的输入叫做<strong>管道</strong>。</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-21-032649.png" width=50%></p>
+<h2 id="基于文件的输入输出">基于文件的输入输出</h2>
+<p>我们的 In 和 Out 库提供了一些静态方法，来实现向文件中写入或从文件中读取一个原始数据类型（或 String 类型）的数组的抽象。借此我们可以在同一个程序中分别使用文件和标准输入输出达到两种不同的目的。</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-21-033041.png" width=70%></p>
+<h2 id="标准绘图库">标准绘图库</h2>
+<p>我们使用 StrDraw 来绘制图像，其基本方法如下：</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-21-033433.png" width=60%></p>
+<p>标准绘图库中还包含一些控制方法，用以改变画布大小、字体、颜色等：</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-21-033607.png" width=60%></p>
+<h1 id="二分查找">二分查找</h1>
+<p>下面的程序实现了一个被称为<strong>二分查找</strong>的经典算法，并通过<strong>白名单过滤</strong>进行了测试：</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-18-023743.png" width=70%></p>
+<p>算法是由静态方法 <code>rank()</code> 实现的。它接收一个整数键和一个已经<strong>有序</strong>的 int 数组作为参数，如果该键存在于数组中则返回它的索引，否则返回 -1。</p>
+<p>算法使用两个变量 <code>lo</code> 和 <code>hi</code>，并保证如果键在数组中则它一定在 <code>a[lo..hi]</code> 中，然后方法进入一个循环：不断地将数组的中间键（索引为 <code>mid</code>）和被查找的键比较，如果被查找的键等于 <code>a[mid]</code> ，返回 <code>mid</code>；否则算法就将查找范围缩小一半，如果被查找的键小于 <code>a[mid]</code> 就继续在左半边查找，如果被查找的键大于 <code>a[mid]</code> 就继续在右半边查找。算法找到被查找的键或是查找范围为空时则该过程结束。</p>
+<p>下图可视化了有序数组中的二分查找：</p>
+<p><img src="http://media.zjubiomedit.com/2019-03-21-063428.png" width=40%></p>
+<p>白名单过滤的过程如下：</p>
+<ul>
+<li>将客户的账号保存在一个文件中，我们称它为<strong>白名单</strong></li>
+<li>从标准输入中得到每笔交易的账号</li>
+<li>使用这个测试用例在标准输出中打印所有与任何客户无关的账号，拒绝此类交易</li>
+</ul>
+<h1 id="练习">练习</h1>
+<h2 id="sattolo-算法">Sattolo 算法</h2>
+<p>Sattolo 算法是一种随机打乱算法，对于一个序列 <code>0 1 2 … n-1</code>，我们将序列的 index 看做节点，将其值看做其指向的节点，则该算法打乱的序列所构成的图必定只有一个环。</p>
+<p>算法的基本思想是每次随机生成一个 index（不包括末尾），和序列末尾互换位置：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Sattolo</span>&#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">cycle</span><span class="params">(Object[] a)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> a.length;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> n; i &gt; <span class="number">1</span>; i--) &#123;</span><br><span class="line">      <span class="comment">// choose index uniformly in [0, i-1)</span></span><br><span class="line">      <span class="type">int</span> <span class="variable">r</span> <span class="operator">=</span> (<span class="type">int</span>) (Math.random() * (i-<span class="number">1</span>));</span><br><span class="line">      <span class="type">Object</span> <span class="variable">swap</span> <span class="operator">=</span> a[r];</span><br><span class="line">      a[r] = a[i-<span class="number">1</span>];</span><br><span class="line">      a[i-<span class="number">1</span>] = swap;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>与该算法相似的算法是 <strong>Fisher-Yates</strong> 算法（Durstenfeld 版本），与 Sattolo 不同的是其允许元素与其自身互换（无偏差）。该版本可生成的组合为 n! 种，而 Sattolo 算法为 (n-1)! 种。该方法同样是一个原地算法（in-place），也可以改写为 inside-out 版本（不改变原数组）。</p>
+<h1 id="思维导图">思维导图</h1>
+<p><img src="http://media.zjubiomedit.com/2019-03-24-103012.png" width=100%></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+
+
+
+<div class="license">
+  <div class="license-title">《算法（第4版）》第一章读书笔记：基础编程模型</div>
+  <div class="license-link">
+    <a href="https://xxwywzy.github.io/2019/03/20/algorithm-1/">https://xxwywzy.github.io/2019/03/20/algorithm-1/</a>
+  </div>
+  <div class="license-meta">
+    <div class="license-meta-item">
+      <div class="license-meta-title">本文作者</div>
+      <div class="license-meta-text">
+          Zheyu Wang
+      </div>
+    </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">发布于</div>
+        <div class="license-meta-text">
+          2019-03-20
+        </div>
+      </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">更新于</div>
+        <div class="license-meta-text">
+          2023-08-05
+        </div>
+      </div>
+    <div class="license-meta-item">
+      <div class="license-meta-title">许可协议</div>
+      <div class="license-meta-text">
+          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank">CC BY-NC-SA 4.0</a>
+      </div>
+    </div>
+  </div>
+  <div class="license-statement">
+      转载或引用本文时，请遵守上述许可协议，注明出处、不得用于商业用途！
+  </div>
+</div>
+          <div class="post-tags">
+              <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"># 算法</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/03/15/cs224-1/" rel="prev" title="CS224N 学习笔记之一：词向量 1">
+                  <i class="fa fa-angle-left"></i> CS224N 学习笔记之一：词向量 1
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/03/30/cs224-2/" rel="next" title="CS224N 学习笔记之二：词向量 2">
+                  CS224N 学习笔记之二：词向量 2 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81ODgyNi8zNTI4OA=="></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">332k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">18:26</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+
+
+  <style>
+    #taboola-livere { display: none;}
+  </style>
+
+
+
+<script type="text/javascript">
+var linkLists = document.querySelectorAll(".link-list");
+
+linkLists.forEach(function(linkList) {
+  var listPath = linkList.getAttribute('json-src');
+  var iconPath = linkList.getAttribute('icon-src');
+  
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', listPath, true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      var data = JSON.parse(xhr.responseText);
+      
+      var li = "";
+      linkList.innerHTML = '';
+
+      for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+        var info = data[infoIndex];
+        var labelWarn = info['warn'] ? '<span class="label warn">' + info['warn'] + '</span>' : '';
+        var labelInfo = info['info'] ? '<span class="label info">' + info['info'] + '</span>' : '';
+
+        li += '<div class="link-list-container">';
+        li += '<img class="link-list-image" src="' + iconPath + info['logo'] + '">';
+        li += '<p>' + info['title'] + labelInfo + labelWarn + '</p>';
+        li += '<p>' + info['intro'] + '</p>';
+        li += '<a href="' + info['url'] + '" rel="noopener" target="_blank" data-pjax-state=""></a>';
+        li += '</div>';
+      }
+      
+      linkList.innerHTML = li;
+    }
+  };
+  xhr.send();
+});
+</script>
+
+
+<script type="text/javascript">
+var cultureList = document.querySelectorAll(".culture-list");
+if (cultureList.length !== 0) {
+  var j = -1;
+  for (var i = 0; i < cultureList.length; i++) {
+    const listPath = cultureList[i].getAttribute('json-src');
+    const coverPath = cultureList[i].getAttribute('cover-src');
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', listPath, true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        j++;
+        var data = JSON.parse(xhr.responseText);
+        var li = "";
+        
+        cultureList[j].innerHTML = '';
+
+        for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+          var info = data[infoIndex];
+          
+          var title = info['title'];
+          if (info['link']) {
+            title = '<a href="' + info['link'] + '">' + info['title'] + '</a>';
+          }
+
+          var author = info['author'] ? '<span class="author">' + info['author'] + '</span>' : '';
+
+          var intro = info['intro'] ? info['intro'] : '';
+
+          var star = '';
+          if (info['score'] == null) {
+            star = '';
+          } else {
+            var colorStar = '';
+            var greyStar = '';
+            var int = Math.floor(info['score']); //整数部分
+            var fract = 0;
+            if (info['score'] % 1 !== 0) {
+              fract = 1;
+            }
+            for (var m = 0; m < int; m++) {
+              colorStar += '★';
+            }
+            if (fract !== 0) {
+              colorStar += '☆';
+            }
+            for (var m = 0; m < (5 - fract - int); m++) {
+              greyStar += '☆';
+            }
+            if (info['score'] !== 5) {
+              star = '<span class="star-score">' + colorStar + '<span class="grey-star">' + greyStar + '</span></span>';
+            } else {
+              star = '<span class="star-score">' + colorStar + '</span>';
+            }
+          }
+
+          li += '<div class="media">';
+          li += '<div class="media-cover" style="background-image:url(' + coverPath + info['cover'] + ')"></div>';
+          li += '<div class="media-meta">';
+          li += '<div class="media-meta-item title">' + title + '</div>';
+          li += '<div class="media-meta-item">' + author + star + '</div>';
+          li += '<div class="media-meta-item intro">' + intro + '</div>';
+          li += '</div></div>';
+        }
+        
+        cultureList[j].innerHTML = li;
+      }
+    };
+    xhr.send();
+  }
+}
+</script>
+
+
+
+
+<script src="/resources/minigrid.min.js"></script>
+<script type="text/javascript">
+var album = document.querySelector(".album");
+if (album) {
+  // 相册列表 JSON 数据
+  var imgDataPath = album.getAttribute('json-src');
+  // 照片存储路径
+  var imgPath = album.getAttribute('photo-src');
+  // 最多显示数量
+  var imgMaxNum = 50;
+  // 获取窗口大小以决定图片宽度
+  var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  var imageWidth;
+
+  if (windowWidth < 768) {
+    imageWidth = 145; // 移动端图片宽度
+  } else {
+    imageWidth = 235;
+  }
+
+  // 腾讯云自定义样式 (数据万象外网流量需要付费)
+  //var imgStyle = '!' + imageWidth + 'x';
+  //var imgStyle = '!300x';
+
+  // 生成相册
+  var linkDataPath = imgDataPath;
+  var photo = {
+    page: 1,
+    offset: imgMaxNum,
+    init: function () {
+      var that = this;
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", linkDataPath, true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var data = JSON.parse(xhr.responseText);
+          that.render(that.page, data);
+        }
+      };
+      xhr.send();
+    },
+    render: function (page, data) {
+      var begin = (page - 1) * this.offset;
+      var end = page * this.offset;
+      if (begin >= data.length) return;
+      var imgNameWithPattern, imgName, imageSize, imageX, imageY, li = "";
+      for (var i = begin; i < end && i < data.length; i++) {
+        imgNameWithPattern = data[i].split(' ')[1];
+        imgName = imgNameWithPattern.split('.')[0];
+        imageSize = data[i].split(' ')[0];
+        imageX = imageSize.split('.')[0];
+        imageY = imageSize.split('.')[1];
+        li += '<div class="card" style="width:' + imageWidth + 'px" >';
+        li += '<div class="album-photo" style="height:'+ imageWidth * imageY / imageX + 'px">';
+        li += '<a class="fancybox fancybox.image" href="' + imgPath + imgNameWithPattern + '" itemscope="" itemtype="http://schema.org/ImageObject" itemprop="url" data-fancybox="group" rel="group" data-caption="' + imgName + '" title="' +  imgName + '">';
+        li += '<img data-src="' + imgPath + imgNameWithPattern + '" src="' + imgPath + imgNameWithPattern + '" alt="' +  imgName + '" data-loaded="true">';
+        li += '</a>';
+        li += '</div>';
+        li += '</div>';
+      }
+      album.insertAdjacentHTML('beforeend', li);
+      this.minigrid();
+    },
+    minigrid: function () {
+      var grid = new Minigrid({
+        container: '.album',
+        item: '.card',
+        gutter: 12
+      });
+      grid.mount();
+      window.addEventListener('resize', function () {
+        grid.mount();
+      });
+    }
+  };
+  photo.init();
+}
+</script>
+</body>
+</html>

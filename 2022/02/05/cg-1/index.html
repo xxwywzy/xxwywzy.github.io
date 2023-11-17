@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/resources/favicon/favicon.png">
+  <link rel="mask-icon" href="/resources/favicon/favicon.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"xxwywzy.github.io","root":"/","images":"/resources/img/","scheme":"Gemini","darkmode":true,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"livere","storage":true,"lazyload":false,"nav":null,"activeClass":"livere"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本篇博客为《计算机图形学基础》的第一章读书笔记。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《计算机图形学基础》读书笔记（一）">
+<meta property="og:url" content="https://xxwywzy.github.io/2022/02/05/cg-1/">
+<meta property="og:site_name" content="口仆">
+<meta property="og:description" content="本篇博客为《计算机图形学基础》的第一章读书笔记。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/2022-02-05-081746.png">
+<meta property="article:published_time" content="2022-02-05T02:31:18.000Z">
+<meta property="article:modified_time" content="2023-08-07T08:44:08.000Z">
+<meta property="article:author" content="Zheyu Wang">
+<meta property="article:tag" content="计算机图形学">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2022-02-05-081746.png">
+
+
+<link rel="canonical" href="https://xxwywzy.github.io/2022/02/05/cg-1/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://xxwywzy.github.io/2022/02/05/cg-1/","path":"2022/02/05/cg-1/","title":"《计算机图形学基础》读书笔记（一）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>《计算机图形学基础》读书笔记（一） | 口仆</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/resources/fonts/longcang/longcang-regular.css" >
+<link rel="stylesheet" href="/resources/fonts/lxgw/lxgwwenkailite-regular.css" >
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">口仆</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Long may the sunshine</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-culture"><a href="/culture/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>MEME</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%BE%E5%BD%A2%E5%AD%A6%E9%A2%86%E5%9F%9F"><span class="nav-number">1.</span> <span class="nav-text">图形学领域</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E5%BA%94%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">主要应用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%BE%E5%BD%A2%E5%AD%A6-api"><span class="nav-number">3.</span> <span class="nav-text">图形学 API</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%BE%E5%BD%A2%E5%AD%A6%E7%AE%A1%E7%BA%BF"><span class="nav-number">4.</span> <span class="nav-text">图形学管线</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E5%80%BC%E9%97%AE%E9%A2%98"><span class="nav-number">5.</span> <span class="nav-text">数值问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%88%E7%8E%87"><span class="nav-number">6.</span> <span class="nav-text">效率</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E4%B8%8E%E7%BC%96%E7%A0%81%E5%9B%BE%E5%BD%A2%E5%AD%A6%E7%A8%8B%E5%BA%8F"><span class="nav-number">7.</span> <span class="nav-text">设计与编码图形学程序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E8%AE%BE%E8%AE%A1"><span class="nav-number">7.1.</span> <span class="nav-text">类设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%95%E7%B2%BE%E5%BA%A6-vs-%E5%8F%8C%E7%B2%BE%E5%BA%A6"><span class="nav-number">7.2.</span> <span class="nav-text">单精度 vs 双精度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%83%E8%AF%95%E5%9B%BE%E5%BD%A2%E5%AD%A6%E7%A8%8B%E5%BA%8F"><span class="nav-number">7.3.</span> <span class="nav-text">调试图形学程序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A7%91%E5%AD%A6%E6%96%B9%E6%B3%95"><span class="nav-number">7.3.1.</span> <span class="nav-text">科学方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%86%E5%9B%BE%E5%83%8F%E4%BD%9C%E4%B8%BA%E8%B0%83%E8%AF%95%E8%BE%93%E5%87%BA"><span class="nav-number">7.3.2.</span> <span class="nav-text">将图像作为调试输出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7"><span class="nav-number">7.3.3.</span> <span class="nav-text">使用调试工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96"><span class="nav-number">7.3.4.</span> <span class="nav-text">数据可视化</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E6%9D%A5%E6%BA%90"><span class="nav-number">8.</span> <span class="nav-text">信息来源</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE"><span class="nav-number">9.</span> <span class="nav-text">思维导图</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zheyu Wang"
+      src="/resources/favicon/avatar.png">
+  <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+  <div class="site-description" itemprop="description">相信过程</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">85</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xxwywzy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/xxwywzy" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/xxwywzy" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/xxwywzy" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2022/02/05/cg-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resources/favicon/avatar.png">
+      <meta itemprop="name" content="Zheyu Wang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="口仆">
+      <meta itemprop="description" content="相信过程">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="《计算机图形学基础》读书笔记（一） | 口仆">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          《计算机图形学基础》读书笔记（一）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-02-05 10:31:18" itemprop="dateCreated datePublished" datetime="2022-02-05T10:31:18+08:00">2022-02-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%B8%B8%E6%88%8F/" itemprop="url" rel="index"><span itemprop="name">游戏</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%B8%B8%E6%88%8F/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">读书笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3.5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>12 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><div class="note primary"><p>本篇博客为《计算机图形学基础》的第一章读书笔记。</p>
+</div>
+<span id="more"></span>
+<p><strong>计算机图形学</strong>（computer graphics）可以用来描述通过计算机来创造与操作图像的任何用途。本书介绍了创造与操作这些图像的基本算法与数学工具，特别是用于产生三维物体与场景合成图像的算法与工具。</p>
+<p>在实际场景下，计算机图形学需要基于特定的硬件、文件形式以及图形学 API 展开，而本书中会尽量避免依赖特定的硬件或 API，专注于适用于大多数场景的标准术语与概念。</p>
+<p>本章节将定义部分基本术语，提供一些计算机图形学的背景知识，以及计算机图形学相关的信息来源。</p>
+<h1 id="图形学领域">图形学领域</h1>
+<p>一般来说，计算机图形学的主要领域包括：</p>
+<ul>
+<li><strong>建模</strong>（Modeling）：计算机可存储的关于形状与外观属性的数学规范</li>
+<li><strong>渲染</strong>（Rendering）：从三维计算机模型中创建具有光影的图像（shaded images）</li>
+<li><strong>动画</strong>（Animation）：通过图像的序列创造出运动的假象（基于建模与渲染完成，并添加随时间推移的动作处理）</li>
+</ul>
+<p>除此之外，计算机图形学还涉及一些其他的领域，包括用户交互、虚拟现实、可视化、图像处理、三维扫描、计算摄影等。</p>
+<h1 id="主要应用">主要应用</h1>
+<p>计算机图形学的主要应用方向包括：</p>
+<ul>
+<li><strong>电子游戏</strong>（Video games）</li>
+<li><strong>卡通</strong>（Cartoons）</li>
+<li><strong>视觉特效</strong>（Visual effects）</li>
+<li><strong>动画电影</strong>（Animated films）</li>
+<li><strong>计算机辅助设计/制造</strong>（CAD/CAM）</li>
+<li><strong>模拟</strong>（Simulation）</li>
+<li><strong>医学影像</strong>（Medical imaging）</li>
+<li><strong>信息可视化</strong>（Information visualization）</li>
+</ul>
+<h1 id="图形学-api">图形学 API</h1>
+<p>使用图形学库的关键在于处理<strong>图形学 API</strong>（graphics API）。图形学 API 是一系列执行图形学基本操作的函数集合，例如绘制物体的 3D 表面。</p>
+<p>每个图形学程序都需要能使用两种相关的 API：</p>
+<ol type="1">
+<li>用于视觉输出的<strong>图形学 API</strong></li>
+<li>获取用户输入的<strong>用户界面 API</strong></li>
+</ol>
+<p>当前针对图形学与用户界面 API，有两类主要的范式：</p>
+<ul>
+<li>集成方式（以 Java 为代表）。图形学与用户界面工具是集成在一起的可移植标准化包，作为语言的一部分</li>
+<li>分离方式（以 Direct3D 和 OpenGL 为代表）。绘图命令是语言相关（例如 C++）的软件库的一部分，用户界面软件则是一个独立实体（不同系统中可能不同）</li>
+</ul>
+<p>对于后一种方式来说，编写可移植的代码相对困难（对于简单的程序，可以考虑用一个可移植的软件库层来封装系统特定的用户界面代码）。</p>
+<h1 id="图形学管线">图形学管线</h1>
+<p>如今，每个桌面电脑都具有一个强大的 3D <strong>图形学管线</strong>（graphics pipeline）。具体来说，其是一个特殊的软件/硬件子系统，能够高效地绘制出具有透视特征的 3D 基元。通常，这些基元体现为具有共同顶点的 3D <strong>三角形</strong>（triangles），管线的基本操作即为将 3D 的顶点位置映射到 2D 的屏幕位置，并对三角形进行光影处理（渲染），使其看起来逼真并以正确的<strong>从后向前</strong>（back-to-front）的顺序出现。</p>
+<p>在计算机图形学领域的研究中，以正确的从后向前的顺序绘制三角形曾经是一个重要的研究课题，而现在其通常使用 <strong>z-buffer</strong> （深度缓冲）来解决，该方法使用了一种特殊的内存缓冲来以暴力的方式解决这一问题。</p>
+<p>另一方面，图形学管线中所使用的几何操作可以通过一个 <strong>4D 坐标空间</strong>完成，该空间由三个传统的几何坐标（xyz）和第四个<strong>同质</strong>（homogeneous）的坐标（用于帮助透视观察）构成。这些 4D 坐标使用 <span class="math inline">\(4\times4\)</span> 的矩阵与 4 个向量进行操纵。图形学管线包含了大量用于高效处理与组合这些矩阵和向量的机制，该 4D 坐标系统也是计算机图形学入门必须掌握的一项内容。</p>
+<p>图像生成的速度高度依赖于绘制的三角形数量。由于在很多应用中，交互性要比视觉质量更加重要，所以表达模型时最小化三角形的数量是非常必要的。此外，如果以较远的距离观察模型，所需要的三角形数量要少于从更近的距离观察模型，这表明通过不同的<strong>细节级别</strong>（LOD）来表示模型是很有用的。</p>
+<h1 id="数值问题">数值问题</h1>
+<p>很多图形学程序本质上就是计算 3D 数值的代码，在这些程序中<strong>数值问题</strong>（numerical issues）至关重要。在以前，由于机器对于数字的内部表示方法各异，很难以一种鲁棒且可移植的方式处理这一问题。如今，几乎所有的现代计算机都遵循 <strong>IEEE 浮点数标准</strong>（IEEE floating-point standard），其允许程序员在如何处理某些数值条件时作出方便的假设。</p>
+<p>IEEE 浮点数标准有着许多对于编码数值算法非常有价值的特征。首先，IEEE 浮点数标准对于实数有三个<strong>特殊值</strong>：</p>
+<ol type="1">
+<li>正无穷（<span class="math inline">\(\infty\)</span>）：一个比其他所有有效数字（valid number）都大的有效数字。</li>
+<li>负无穷（<span class="math inline">\(-\infty\)</span>）：一个比其他所有有效数字都小的有效数字。</li>
+<li>非数字（NaN）：未定义结果的操作所产生的无效数字，例如 0 除 0。</li>
+</ol>
+<p>基于上述特殊值，IEEE 制定了一些特殊运算规则： <span class="math display">\[
+\begin{aligned}
+&amp;+a /(+\infty)=+0 \\
+&amp;-a /(+\infty)=-0 \\
+&amp;+a /(-\infty)=-0 \\
+&amp;-a /(-\infty)=+0
+\end{aligned}
+\]</span> 其中 <span class="math inline">\(+0\)</span> 和 <span class="math inline">\(-0\)</span> 只在部分场景下存在差异。除了上述特殊规则外，还有一些符合预期的操作，具体如下： <span class="math display">\[
+\begin{aligned}
+\infty+\infty &amp;=+\infty \\
+\infty-\infty &amp;=\mathrm{NaN} \\
+\infty \times \infty &amp;=\infty \\
+\infty / \infty &amp;=\mathrm{NaN} \\
+\infty / a &amp;=\infty \\
+\infty / 0 &amp;=\infty \\
+0 / 0 &amp;=\mathrm{NaN}
+\end{aligned}
+\]</span> 关于特殊值的布尔表达式包括：</p>
+<ol type="1">
+<li>所有有限合法数字都小于 <span class="math inline">\(+\infty\)</span></li>
+<li>所有有限合法数字都大于 <span class="math inline">\(-\infty\)</span></li>
+<li><span class="math inline">\(-\infty\)</span> 小于 <span class="math inline">\(+\infty\)</span></li>
+</ol>
+<p>关于 NaN 的表达式还具有如下规则：</p>
+<ol type="1">
+<li>任何包含 NaN 的算术表达式的结果都是 NaN</li>
+<li>任何包含 NaN 的布尔表达式的结果都是 false</li>
+</ol>
+<p>除了以上规则之外，IEEE 浮点数标准对于除 0 操作的处理也非常有用，其规定：对于任意正实数 <span class="math inline">\(a\)</span>（可以再添加符号），下述除 0 规则成立（注意是针对 <span class="math inline">\(+0\)</span>）： <span class="math display">\[
+\begin{aligned}
+&amp;+a /+0=+\infty \\
+&amp;-a /+0=-\infty
+\end{aligned}
+\]</span> 基于 IEEE 规则，很多数值计算可以变得更加简单。举例来说，对于下面的表达式： <span class="math display">\[
+a=\frac{1}{\frac{1}{b}+\frac{1}{c}}
+\]</span> 这种表达式常在电阻或透镜计算中出现，如果除 0 导致了程序异常（在 IEEE 标准前常出现），则需要额外设置两个 if 表达式来检查 b 或 c 的值。而在 IEEE 标准化，如果 b 或 c 是0，我们会计算得到 a 的值为 0，无需添加判断条件。</p>
+<p>另一种常用的避免特殊检查的技巧是利用 NaN 的布尔属性，例如如下代码片段： <span class="math display">\[
+\begin{aligned}
+&amp;a=f(x) \\
+&amp;\text { if }(a&gt;0) \text { then } \\
+&amp;\text { do something }
+\end{aligned}
+\]</span> 这里函数 <span class="math inline">\(f\)</span> 可能会返回一些特殊值，例如 NaN，但是 if 表达式可以正常执行，从而保证最终返回结果的正确性。总的来看，IEEE 标准可以让程序更加简洁、健壮与高效。</p>
+<h1 id="效率">效率</h1>
+<p>提升代码的效率并没有捷径可走，需要基于不同的架构进行仔细的<strong>权衡</strong>（tradeoff）。针对当前的计算机发展趋势，程序员应该更加关注内存访问的模式而非操作数，因为内存速度的发展并没有跟上处理器的速度。</p>
+<p>下面给出一种合理的提升代码效率的方式（需要按照顺序执行，可以跳过不需要的步骤）：</p>
+<ol type="1">
+<li>以最直接的方式编写代码。根据需要动态计算中间结果，而不是存储它们</li>
+<li>以优化模式进行编译</li>
+<li>使用任意分析工具来发现当前代码的关键瓶颈</li>
+<li>检查数据结构以寻找提升本地性的方法（例如让数据单元大小匹配目标架构上的缓存/页面大小）</li>
+<li>如果分析工具显示瓶颈在于数值计算，可以检查编译器生成的汇编代码，尝试重写源代码来提升效率</li>
+</ol>
+<h1 id="设计与编码图形学程序">设计与编码图形学程序</h1>
+<p>在图形学编程中，有一些常见的通用策略，本小节将对这些策略进行简要的介绍。</p>
+<h2 id="类设计">类设计</h2>
+<p>图形学程序的一大关键在于为几何实体（例如向量与矩阵）以及图形学实体（例如 RGB 颜色和图像）提供良好的类或例程（routines）。这些类或例程应该尽可能的简洁与高效。下面列举了一些基本的类：</p>
+<ul>
+<li><strong>vector2</strong>。一个包含 x 与 y 组分的 2D 向量类，应该以数组形式存储，并支持向量相关的运算操作</li>
+<li><strong>vector3</strong>。一个类似于 vector2 的 3D 向量类</li>
+<li><strong>hvector</strong>：一个包含 4 个组分的同质性向量</li>
+<li><strong>rgb</strong>：一个存储了 3 个组分的 RGB 颜色类，需要支持 RGB 相关的运算操作</li>
+<li><strong>transform</strong>：一个用于变换的 <span class="math inline">\(4\times4\)</span> 矩阵，应该包含矩阵相乘以及应用于位置（与位移存在差异，这里不做区分）、方向与平面法线向量（surface normal vector）的成员函数</li>
+<li><strong>image</strong>：一个包含输出操作的 RGB 像素的二维数组</li>
+</ul>
+<h2 id="单精度-vs-双精度">单精度 vs 双精度</h2>
+<p>如之前所述，现代计算机架构建议减少内存使用并保持一致的内存访问能够提升代码的效率。使用单精度浮点数（float）可以较好地遵循这一建议。然而，为了避免数值问题，建议使用双精度（double）的运算。在实际编写程序时，需要进行权衡，最好在类定义时提供默认设定（例如几何运算使用 double，颜色计算使用 float）。</p>
+<h2 id="调试图形学程序">调试图形学程序</h2>
+<p>对于图形学程序来说，有时候传统的调试工具针对复杂程序会比较不便，同时可能难以发现一些概念性的问题，导致了大量的时间浪费。下面介绍一些图形学中比较有用的调试策略。</p>
+<h3 id="科学方法">科学方法</h3>
+<p>科学方法要求我们直接创建出目标图像，观察其存在的问题，然后提出问题产生原因的假设并进行测试，通过不断的试验最终定位问题并进行解决。与传统的调试方法不同，科学方法不要求我们立即定位到错误值或者发现概念上的错误，而是通过<strong>观察→假设→试验验证</strong>的类似科学研究的方式来进行调试（文中以光线追踪程序中常出现的阴影瑕疵问题为例进行了进一步说明）。</p>
+<h3 id="将图像作为调试输出">将图像作为调试输出</h3>
+<p>在很多情况下，图形学程序中最简单的获取调试信息的方式是输出的图像本身。如果我们想知道运算中某些变量的值，我们可以修改程序直接将这些值复制到输出图像中，通过不同颜色等方式进行直观的展示。</p>
+<h3 id="使用调试工具">使用调试工具</h3>
+<p>有时候，科学方法可能会产生矛盾，或是难以找到直观的方式来观察问题所在，这时我们需要使用传统的调试工具。然而，图形学程序中包含了对相同代码的多次重复执行（例如针对每个像素、每个三角形），所以从零开始逐行调试是不切实际的，且最困难的bug通常发生在复杂的输入时。</p>
+<p>一种有效的方法是为 bug 设置一个“陷阱”。首先，确保程序是确定性的（所有的随机数都基于固定的种子生成），然后，找到有问题的像素或三角形，在怀疑有问题的代码前添加一条语句，仅针对怀疑的情况执行。例如，如果发现像素 <span class="math inline">\((126,247)\)</span> 有问题，可以添加如下语句： <span class="math display">\[
+\begin{aligned}
+\textbf{if }  &amp;x=126 \text{ and } y=247 \textbf{ then} \\
+ &amp;\text{print “blarg!” }
+\end{aligned}
+\]</span> 如果在打印语句处设置断点，我们可以直接跳转到该处，通过断言与重编译等方式进行调试。这些断言应该留在程序中，以防止未来可能出现类似的错误。此外，有些调试工具还支持<strong>条件断点</strong>功能，可以不用修改代码实现上述效果。</p>
+<h3 id="数据可视化">数据可视化</h3>
+<p>由于图形学程序常常在出错前包含大量的计算中间结果，有时很难理解程序的运行方式。一种可行的方法是参考策略大量数据的科学实验，通过较为直观的图表对数据可视化（例如在光线追踪器中可视化光线树，以了解哪条路径对像素有所贡献）来帮助进行调试，同时也有利于对代码进行优化。</p>
+<h1 id="信息来源">信息来源</h1>
+<p>书中列举了一些计算机图形学的相关会议：</p>
+<ul>
+<li>ACM SIGGRAPH</li>
+<li>SIGGRAPH Asia</li>
+<li>Graphics Interface</li>
+<li>the Game Developers Conference (GDC)</li>
+<li>Eurographics</li>
+<li>Paciﬁc Graphics</li>
+<li>High Performance Graphics</li>
+<li>the Eurographics Symposium on Rendering</li>
+<li>IEEE VisWeek</li>
+</ul>
+<h1 id="思维导图">思维导图</h1>
+<p><img src="http://media.zjubiomedit.com/2022-02-05-081746.png" width=95%></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+
+
+
+<div class="license">
+  <div class="license-title">《计算机图形学基础》读书笔记（一）</div>
+  <div class="license-link">
+    <a href="https://xxwywzy.github.io/2022/02/05/cg-1/">https://xxwywzy.github.io/2022/02/05/cg-1/</a>
+  </div>
+  <div class="license-meta">
+    <div class="license-meta-item">
+      <div class="license-meta-title">本文作者</div>
+      <div class="license-meta-text">
+          Zheyu Wang
+      </div>
+    </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">发布于</div>
+        <div class="license-meta-text">
+          2022-02-05
+        </div>
+      </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">更新于</div>
+        <div class="license-meta-text">
+          2023-08-07
+        </div>
+      </div>
+    <div class="license-meta-item">
+      <div class="license-meta-title">许可协议</div>
+      <div class="license-meta-text">
+          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank">CC BY-NC-SA 4.0</a>
+      </div>
+    </div>
+  </div>
+  <div class="license-statement">
+      转载或引用本文时，请遵守上述许可协议，注明出处、不得用于商业用途！
+  </div>
+</div>
+          <div class="post-tags">
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag"># 计算机图形学</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/12/20/dda-3/" rel="prev" title="《数据密集型应用系统设计》读书笔记（三）">
+                  <i class="fa fa-angle-left"></i> 《数据密集型应用系统设计》读书笔记（三）
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/05/04/dda-4/" rel="next" title="《数据密集型应用系统设计》读书笔记（四）">
+                  《数据密集型应用系统设计》读书笔记（四） <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81ODgyNi8zNTI4OA=="></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">332k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">18:26</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+
+
+  <style>
+    #taboola-livere { display: none;}
+  </style>
+
+
+
+<script type="text/javascript">
+var linkLists = document.querySelectorAll(".link-list");
+
+linkLists.forEach(function(linkList) {
+  var listPath = linkList.getAttribute('json-src');
+  var iconPath = linkList.getAttribute('icon-src');
+  
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', listPath, true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      var data = JSON.parse(xhr.responseText);
+      
+      var li = "";
+      linkList.innerHTML = '';
+
+      for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+        var info = data[infoIndex];
+        var labelWarn = info['warn'] ? '<span class="label warn">' + info['warn'] + '</span>' : '';
+        var labelInfo = info['info'] ? '<span class="label info">' + info['info'] + '</span>' : '';
+
+        li += '<div class="link-list-container">';
+        li += '<img class="link-list-image" src="' + iconPath + info['logo'] + '">';
+        li += '<p>' + info['title'] + labelInfo + labelWarn + '</p>';
+        li += '<p>' + info['intro'] + '</p>';
+        li += '<a href="' + info['url'] + '" rel="noopener" target="_blank" data-pjax-state=""></a>';
+        li += '</div>';
+      }
+      
+      linkList.innerHTML = li;
+    }
+  };
+  xhr.send();
+});
+</script>
+
+
+<script type="text/javascript">
+var cultureList = document.querySelectorAll(".culture-list");
+if (cultureList.length !== 0) {
+  var j = -1;
+  for (var i = 0; i < cultureList.length; i++) {
+    const listPath = cultureList[i].getAttribute('json-src');
+    const coverPath = cultureList[i].getAttribute('cover-src');
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', listPath, true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        j++;
+        var data = JSON.parse(xhr.responseText);
+        var li = "";
+        
+        cultureList[j].innerHTML = '';
+
+        for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+          var info = data[infoIndex];
+          
+          var title = info['title'];
+          if (info['link']) {
+            title = '<a href="' + info['link'] + '">' + info['title'] + '</a>';
+          }
+
+          var author = info['author'] ? '<span class="author">' + info['author'] + '</span>' : '';
+
+          var intro = info['intro'] ? info['intro'] : '';
+
+          var star = '';
+          if (info['score'] == null) {
+            star = '';
+          } else {
+            var colorStar = '';
+            var greyStar = '';
+            var int = Math.floor(info['score']); //整数部分
+            var fract = 0;
+            if (info['score'] % 1 !== 0) {
+              fract = 1;
+            }
+            for (var m = 0; m < int; m++) {
+              colorStar += '★';
+            }
+            if (fract !== 0) {
+              colorStar += '☆';
+            }
+            for (var m = 0; m < (5 - fract - int); m++) {
+              greyStar += '☆';
+            }
+            if (info['score'] !== 5) {
+              star = '<span class="star-score">' + colorStar + '<span class="grey-star">' + greyStar + '</span></span>';
+            } else {
+              star = '<span class="star-score">' + colorStar + '</span>';
+            }
+          }
+
+          li += '<div class="media">';
+          li += '<div class="media-cover" style="background-image:url(' + coverPath + info['cover'] + ')"></div>';
+          li += '<div class="media-meta">';
+          li += '<div class="media-meta-item title">' + title + '</div>';
+          li += '<div class="media-meta-item">' + author + star + '</div>';
+          li += '<div class="media-meta-item intro">' + intro + '</div>';
+          li += '</div></div>';
+        }
+        
+        cultureList[j].innerHTML = li;
+      }
+    };
+    xhr.send();
+  }
+}
+</script>
+
+
+
+
+<script src="/resources/minigrid.min.js"></script>
+<script type="text/javascript">
+var album = document.querySelector(".album");
+if (album) {
+  // 相册列表 JSON 数据
+  var imgDataPath = album.getAttribute('json-src');
+  // 照片存储路径
+  var imgPath = album.getAttribute('photo-src');
+  // 最多显示数量
+  var imgMaxNum = 50;
+  // 获取窗口大小以决定图片宽度
+  var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  var imageWidth;
+
+  if (windowWidth < 768) {
+    imageWidth = 145; // 移动端图片宽度
+  } else {
+    imageWidth = 235;
+  }
+
+  // 腾讯云自定义样式 (数据万象外网流量需要付费)
+  //var imgStyle = '!' + imageWidth + 'x';
+  //var imgStyle = '!300x';
+
+  // 生成相册
+  var linkDataPath = imgDataPath;
+  var photo = {
+    page: 1,
+    offset: imgMaxNum,
+    init: function () {
+      var that = this;
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", linkDataPath, true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var data = JSON.parse(xhr.responseText);
+          that.render(that.page, data);
+        }
+      };
+      xhr.send();
+    },
+    render: function (page, data) {
+      var begin = (page - 1) * this.offset;
+      var end = page * this.offset;
+      if (begin >= data.length) return;
+      var imgNameWithPattern, imgName, imageSize, imageX, imageY, li = "";
+      for (var i = begin; i < end && i < data.length; i++) {
+        imgNameWithPattern = data[i].split(' ')[1];
+        imgName = imgNameWithPattern.split('.')[0];
+        imageSize = data[i].split(' ')[0];
+        imageX = imageSize.split('.')[0];
+        imageY = imageSize.split('.')[1];
+        li += '<div class="card" style="width:' + imageWidth + 'px" >';
+        li += '<div class="album-photo" style="height:'+ imageWidth * imageY / imageX + 'px">';
+        li += '<a class="fancybox fancybox.image" href="' + imgPath + imgNameWithPattern + '" itemscope="" itemtype="http://schema.org/ImageObject" itemprop="url" data-fancybox="group" rel="group" data-caption="' + imgName + '" title="' +  imgName + '">';
+        li += '<img data-src="' + imgPath + imgNameWithPattern + '" src="' + imgPath + imgNameWithPattern + '" alt="' +  imgName + '" data-loaded="true">';
+        li += '</a>';
+        li += '</div>';
+        li += '</div>';
+      }
+      album.insertAdjacentHTML('beforeend', li);
+      this.minigrid();
+    },
+    minigrid: function () {
+      var grid = new Minigrid({
+        container: '.album',
+        item: '.card',
+        gutter: 12
+      });
+      grid.mount();
+      window.addEventListener('resize', function () {
+        grid.mount();
+      });
+    }
+  };
+  photo.init();
+}
+</script>
+</body>
+</html>

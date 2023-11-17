@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/resources/favicon/favicon.png">
+  <link rel="mask-icon" href="/resources/favicon/favicon.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"xxwywzy.github.io","root":"/","images":"/resources/img/","scheme":"Gemini","darkmode":true,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"livere","storage":true,"lazyload":false,"nav":null,"activeClass":"livere"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本篇博客是对 DQN 原始论文 Playing Atari with Deep Reinforcement Learning 的详细解读。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DQN 原理解析">
+<meta property="og:url" content="https://xxwywzy.github.io/2023/10/01/dqn/">
+<meta property="og:site_name" content="口仆">
+<meta property="og:description" content="本篇博客是对 DQN 原始论文 Playing Atari with Deep Reinforcement Learning 的详细解读。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-08-07-073047.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-08-16-072857.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-08-13-124808.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-08-16-114919.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-08-15-091305.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-08-15-091333.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-08-15-091616.png">
+<meta property="article:published_time" content="2023-10-01T07:17:08.000Z">
+<meta property="article:modified_time" content="2023-10-26T12:16:09.000Z">
+<meta property="article:author" content="Zheyu Wang">
+<meta property="article:tag" content="DQN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2020-08-07-073047.png">
+
+
+<link rel="canonical" href="https://xxwywzy.github.io/2023/10/01/dqn/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://xxwywzy.github.io/2023/10/01/dqn/","path":"2023/10/01/dqn/","title":"DQN 原理解析"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>DQN 原理解析 | 口仆</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/resources/fonts/longcang/longcang-regular.css" >
+<link rel="stylesheet" href="/resources/fonts/lxgw/lxgwwenkailite-regular.css" >
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">口仆</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Long may the sunshine</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-culture"><a href="/culture/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>MEME</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%83%8C%E6%99%AF"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80"><span class="nav-number">2.</span> <span class="nav-text">理论基础</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E5%B7%A5%E4%BD%9C"><span class="nav-number">3.</span> <span class="nav-text">相关工作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B7%B1%E5%BA%A6%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0"><span class="nav-number">4.</span> <span class="nav-text">深度强化学习</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E8%A7%A3%E8%AF%BB"><span class="nav-number">4.1.</span> <span class="nav-text">算法解读</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%84%E5%A4%84%E7%90%86%E5%92%8C%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84"><span class="nav-number">4.2.</span> <span class="nav-text">预处理和模型结构</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C"><span class="nav-number">5.</span> <span class="nav-text">实验</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83%E5%92%8C%E7%A8%B3%E5%AE%9A%E6%80%A7"><span class="nav-number">5.1.</span> <span class="nav-text">训练和稳定性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0%E5%8F%AF%E8%A7%86%E5%8C%96"><span class="nav-number">5.2.</span> <span class="nav-text">价值函数可视化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E8%AF%84%E4%BC%B0"><span class="nav-number">5.3.</span> <span class="nav-text">主要评估</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-number">6.</span> <span class="nav-text">结论</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zheyu Wang"
+      src="/resources/favicon/avatar.png">
+  <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+  <div class="site-description" itemprop="description">相信过程</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">85</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xxwywzy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/xxwywzy" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/xxwywzy" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/xxwywzy" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2023/10/01/dqn/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resources/favicon/avatar.png">
+      <meta itemprop="name" content="Zheyu Wang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="口仆">
+      <meta itemprop="description" content="相信过程">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="DQN 原理解析 | 口仆">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          DQN 原理解析
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-10-01 15:17:08" itemprop="dateCreated datePublished" datetime="2023-10-01T15:17:08+08:00">2023-10-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/%E6%96%87%E7%AB%A0%E7%B2%BE%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">文章精读</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>5.8k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>19 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><div class="note info"><p>本篇博客是对 DQN 原始论文 <em>Playing Atari with Deep Reinforcement Learning</em> 的详细解读。</p>
+</div>
+<span id="more"></span>
+<h1 id="背景">背景</h1>
+<p>在<strong>强化学习</strong>（RL）领域，直接从高维的原始输入（例如图像和声音）中学习以控制<strong>代理</strong>（agents）是一个比较大的挑战。大部分成功的 RL 算法都依赖于<strong>人工提取</strong>的特征结合线性的值函数或策略表示，因此系统的表现很大程度上取决于特征提取的质量。近年来，<strong>深度学习</strong>（DL）的发展使得我们可以直接从复杂的原始输入中捕获特征，而无需手工提取。然而，深度学习和强化学习又存在着一些差别，导致难以直接将深度神经网络应用于 RL：</p>
+<ul>
+<li>DL 通常基于大量的人工标注训练数据进行训练，而 RL 则是基于可能存在<strong>延时</strong>的奖励进行学习，很难通过标准的网络结构将输入直接与奖励进行关联</li>
+<li>大部分 DL 算法都假定数据样本之间相互<strong>独立</strong>，而 RL 则一般应用于高度相关的状态序列</li>
+<li>在 RL 中当算法学习到新的行为后，数据分布可能发生改变，而 DL 通常假设数据分布是<strong>不变</strong>的</li>
+</ul>
+<p>这篇论文提出了一种<strong>卷积神经网络</strong>（CNN）以解决上述挑战，在复杂的 RL 环境中直接通过视频数据生成控制策略。该网络基于 Q-learning 算法的变种进行训练，通过随机梯度下降来更新权重。为了缓解数据相关性以及分布的不稳定性，作者使用了一种<strong>经验回放机制</strong>（experience replay mechanism）来随机采样之前的状态转移，以平滑训练数据的分布。</p>
+<p>该方法被用于多款 Atari 2600 游戏的训练，其输入为 60Hz 的 <span class="math inline">\(210\times160\)</span> RGB 视频流。原文旨在通过<strong>单个网络</strong>来学习尽可能多的游戏，即不提供游戏特定的信息以及手工设计的特征，使用完全和人类玩家同等的<strong>视频信号</strong>、<strong>动作集</strong>以及<strong>奖励</strong>来训练代理，且网络的结构与超参数在训练不同的游戏时保持不变。结果表明，该网络在总共七款游戏中有六款的表现超越了之前的 RL 算法，且在其中三款中击败了专业的人类玩家。下图展示了用于训练的五款游戏的截图。</p>
+<p><img src="http://media.zjubiomedit.com/2020-08-07-073047.png" width=70%></p>
+<h1 id="理论基础">理论基础</h1>
+<p>在本研究中，代理基于一系列的动作、观察与奖励和<strong>环境</strong> <span class="math inline">\(\mathcal{E}\)</span> （即 Atari 模拟器）进行交互。在每一个时间步，代理从合法的游戏动作集 <span class="math inline">\(\mathcal{A}=\{1, \ldots, K\}\)</span> 中选择一个动作 <span class="math inline">\(a_t\)</span>，模拟器接收到该动作并修改其内在状态，反映到游戏得分上。一般情况下，环境 <span class="math inline">\(\mathcal{E}\)</span> 可能是随机生成的，代理无法观察到模拟器的内部状态，只能观察到来自模拟器的图像 <span class="math inline">\(x_{t} \in \mathbb{R}^{d}\)</span>，其是一个表示当前屏幕的原始像素值向量。此外，代理接收到一个奖励 <span class="math inline">\(r_t\)</span> 表示游戏得分的变化。一般情况下，游戏得分可能依赖于整个先前的动作与观察序列，一个动作的反馈可能在很多时间步之后才会体现。</p>
+<p>由于代理只能观测到当前屏幕的图像，无法获取模拟器的内部状态，即该任务是部分观测的，因此我们考虑基于当前时间 <span class="math inline">\(t\)</span> 前的整个动作与观察序列 <span class="math inline">\(s_t = x_1, a_1, x_2, \ldots, a_{t-1}, x_t\)</span> 来学习策略。模拟器中的所有序列都假定可以在<strong>有限</strong>时间步内终止。基于上述假设，我们可以将整个过程理解为一个<strong>有限</strong>马尔可夫决策过程（MDP），其中每个时间点对应的序列为一个状态 <span class="math inline">\(s_t\)</span>，这样就将原始任务转化为一个可以使用标准强化学习算法的 MDP 场景。</p>
+<p>代理的目标是通过与模拟器的交互来选择动作，使得未来的奖励最大化。这里假定未来奖励会随着时间步而衰减，衰减因子为 <span class="math inline">\(\gamma\)</span>，则在 <span class="math inline">\(t\)</span> 时刻未来的奖励和为： <span class="math display">\[
+R_{t}=\sum_{t^{\prime}=t}^{T} \gamma^{t^{\prime}-t} r_{t^{\prime}}
+\]</span> 我们定义<strong>最优动作-价值函数</strong> <span class="math inline">\(Q^{*}(s, a)\)</span> 为在观测到某个序列 <span class="math inline">\(s\)</span> 并执行动作 <span class="math inline">\(a\)</span> 后，通过后续的任意策略所能达到的奖励最大期望： <span class="math display">\[
+Q^{*}(s, a)=\max _{\pi} \mathbb{E}\left[R_{t} \mid s_{t}=s, a_{t}=a, \pi\right]
+\]</span> 其中 <span class="math inline">\(\pi\)</span> 是一个策略，将状态（这里指序列）映射为动作（或动作的分布）。最优动作-价值函数满足<strong>贝尔曼等式</strong>： <span class="math display">\[
+Q^{*}(s, a)=\mathbb{E}_{s^{\prime} \sim \mathcal{E}}\left[r+\gamma \max _{a^{\prime}} Q^{*}\left(s^{\prime}, a^{\prime}\right) \mid s, a\right] \tag{1}
+\]</span> 即目标期望由即时奖励和下一个时间步的折扣奖励的最大期望组成。很多强化学习算法的基本思想即使用贝尔曼等式进行<strong>迭代更新</strong>来估计动作-价值函数，直到收敛至最优值。在实践中，这种基于<strong>值迭代</strong>的方法并不好用，因为动作-价值函数是针对每个序列分别计算的，不具有推广性，难以应对复杂情况（如状态连续）。一种常用的解决方法是使用一个<strong>函数近似器</strong>来估计动作-价值函数： <span class="math display">\[
+Q(s, a ; \theta) \approx Q^{*}(s, a)
+\]</span> 在强化学习社区一般使用线性函数近似器，有时也可以使用诸如神经网络的非线性近似。本研究中使用了一个权重为 <span class="math inline">\(\theta\)</span> 的神经网络函数近似器，称为 <strong>Q-网络</strong>。Q-网络通过在每一次迭代 <span class="math inline">\(i\)</span> 最小化损失函数 <span class="math inline">\(L_{i}\left(\theta_{i}\right)\)</span> 进行训练： <span class="math display">\[
+L_{i}\left(\theta_{i}\right)=\mathbb{E}_{s, a \sim \rho(\cdot)}\left[\left(y_{i}-Q\left(s, a ; \theta_{i}\right)\right)^{2}\right] \tag{2}
+\]</span> 其中 <span class="math inline">\(y_{i}=\mathbb{E}_{s^{\prime} \sim \mathcal{E}}\left[r+\gamma \max _{a^{\prime}} Q\left(s^{\prime}, a^{\prime} ; \theta_{i-1}\right) \mid s, a\right]\)</span> 为当前迭代 <span class="math inline">\(i\)</span> 的目标，<span class="math inline">\(\rho(s, a)\)</span> 是一个关于序列 <span class="math inline">\(s\)</span> 和动作 <span class="math inline">\(a\)</span> 的概率分布，我们称之为<strong>行为分布</strong>（behaviour distribution）。来自上一次迭代的参数 <span class="math inline">\(\theta_{i-1}\)</span> 在优化损失函数 <span class="math inline">\(L_{i}\left(\theta_{i}\right)\)</span> 时保持不变，用于计算当前迭代下的最优价值函数。注意在 Q-网络中目标值是依赖于网络权重的，而普通监督学习中目标值（标签）通常是在学习开始前确定好的。将损失函数关于权重求导可得到如下梯度： <span class="math display">\[
+\nabla_{\theta_{i}} L_{i}\left(\theta_{i}\right)=\mathbb{E}_{s, a \sim \rho(\cdot) ; s^{\prime} \sim \mathcal{E}}\left[\left(r+\gamma \max _{a^{\prime}} Q\left(s^{\prime}, a^{\prime} ; \theta_{i-1}\right)-Q\left(s, a ; \theta_{i}\right)\right) \nabla_{\theta_{i}} Q\left(s, a ; \theta_{i}\right)\right] \tag{3}
+\]</span> 相比较直接计算上述梯度中的期望，为了计算效率我们可以通过<strong>随机梯度下降</strong>来优化损失函数。每次分别基于行为分布 <span class="math inline">\(\rho\)</span> 和模拟器 <span class="math inline">\(\mathcal{E}\)</span> 采样<strong>单个样本</strong>作为期望，用来更新权重（注意在实际算法中为基于经验回放的小批量更新）。这种做法类似于经典的 Q-learning 算法。</p>
+<p>本研究提出的方法是 <strong>model-free</strong> 的，即直接基于来自模拟器 <span class="math inline">\(\mathcal{E}\)</span> 的样本执行学习任务，并不需要对 <span class="math inline">\(\mathcal{E}\)</span> 进行精细地估计（建模）。本方法同样是 <strong>off-policy</strong> 的，每次迭代时基于贪婪法 <span class="math inline">\(a=\max _{a} Q(s, a ; \theta)\)</span> （注意这里实际上用的应该是 <span class="math inline">\(\theta_{i-1}\)</span>，因为还没有进行梯度更新）生成样本进行学习（该策略与上一步进行梯度下降时的最优策略并不相同，因为参数被更新了），通过行为分布来保证对状态空间的有效探索。在实践中，行为分布通常基于 <span class="math inline">\(\epsilon\)</span> 贪婪法得到：以 <span class="math inline">\(1-\epsilon\)</span> 的概率遵循贪婪法，以 <span class="math inline">\(\epsilon\)</span> 的概率选择一个随机动作。</p>
+<h1 id="相关工作">相关工作</h1>
+<p>在给出算法的详细步骤之前，作者先介绍了几项相关工作。首先是 <strong>TD-gammon</strong>，它是一个通过强化学习游玩西洋双陆棋的程序，其使用了一个 model-free 的类似于 Q-learning 的强化学习方法，通过多层感知机来估计值函数 <span class="math inline">\(V(s)\)</span>，但策略的学习方式是 on-policy 的。作者指出，由于<strong>非线性</strong>函数近似器结合 Q-learning （本质即 off-policy 学习）可能会导致 Q-网络的发散，因此当前大部分工作采用的都是线性函数近似器；而随着深度学习的出现，<strong>梯度时序差分</strong>方法被证明可以一定程度上缓解 Q-learning 的发散性问题，但还没有研究将其真正用于非线性控制。</p>
+<p>另一项工作是<strong>神经拟合 Q-学习</strong>（NFQ），其与本文中提出的方法较为相似，使用 RPROP 算法更新 Q-网络中的参数，以优化 <span class="math inline">\((2)\)</span> 式中的损失函数。不过其使用了批量更新，计算复杂度较高，而本文中则使用了随机梯度下降，每次迭代只使用单个样本。此外，NFQ 在面向视觉输入的任务时需要先使用深度自编码器学习一个任务的低维表示，再将其输入 NFQ 进行学习；而本文中的方法则直接端到端地应用强化学习，直接从视觉输入中学习策略。此外，早在 1993 年，就有一名研究者在其博士论文中将 Q-learning 和神经网络以及经验重放机制进行了结合，不过当时其使用的神经网络结构较为简单，且输入依旧为低维状态而非原始视觉输入（也许这才是真正的起源？）。</p>
+<p><img src="http://media.zjubiomedit.com/2020-08-16-072857.png" width=40%></p>
+<h1 id="深度强化学习">深度强化学习</h1>
+<h2 id="算法解读">算法解读</h2>
+<p>与之前的类似方法相比，本研究使用了一种称为<strong>经验回放</strong>（experience replay）的技术，将代理在每一个时间步的体验 <span class="math inline">\(e_{t}=\left(s_{t}, a_{t}, r_{t}, s_{t+1}\right)\)</span> 存放在数据集 <span class="math inline">\(\mathcal{D}=e_{1}, \ldots, e_{N}\)</span> 中，通过多个回合积累为一个<strong>回放记忆</strong>（replay memory）。在算法的内循环中，我们将 Q-learning 更新应用于从存储的记忆中随机采样的小批量经验样本 <span class="math inline">\(e \sim \mathcal{D}\)</span>。在执行完经验回放后，代理循 <strong><span class="math inline">\(\epsilon\)</span> 贪婪策略</strong>选择并执行一个动作。由于标准神经网络难以处理不定长的输入，所以本研究通过一个函数 <span class="math inline">\(\phi\)</span> 先将序列状态映射为一个<strong>固定长度</strong>的表示，再作为 Q-函数的输入。完整的算法称为<strong>深度 Q-learning</strong>，如下图所示：</p>
+<p><img src="http://media.zjubiomedit.com/2020-08-13-124808.png" width=70%></p>
+<p>算法的详细步骤为：首先<strong>初始化</strong>容量为 <span class="math inline">\(N\)</span> 的回放记忆 <span class="math inline">\(\mathcal{D}\)</span> ，以及随机权重的动作价值函数 <span class="math inline">\(Q\)</span>；然后执行回合迭代（<strong>外循环</strong>，共 <span class="math inline">\(M\)</span> 个回合），在每个回合中，先初始化序列 <span class="math inline">\(s_1 = \{x_1\}\)</span>，并将其预处理为定长 <span class="math inline">\(\phi_1 = \phi(s_1)\)</span>；再执行时间步迭代（<strong>内循环</strong>，共 <span class="math inline">\(T\)</span> 步），在每一步中，先基于 <span class="math inline">\(\epsilon\)</span> 策略选择动作 <span class="math inline">\(a_t\)</span>（随机动作或当前最优动作），然后在模拟器中执行 <span class="math inline">\(a_t\)</span> 观察奖励 <span class="math inline">\(r_t\)</span> 和图像 <span class="math inline">\(x_{t+1}\)</span>；设置 <span class="math inline">\(s_{t+1}=s_{t}, a_{t}, x_{t+1}\)</span> 并执行预处理 <span class="math inline">\(\phi_{t+1} = \phi(s_{t+1})\)</span>；将当前时间步中得到的转移 <span class="math inline">\(\left(\phi_{t}, a_{t}, r_{t}, \phi_{t+1}\right)\)</span> 存储到 <span class="math inline">\(\mathcal{D}\)</span> 中；基于 <span class="math inline">\(\mathcal{D}\)</span> 随机采样小批量的转移 <span class="math inline">\(\left(\phi_{j}, a_{j}, r_{j}, \phi_{j+1}\right)\)</span>；根据 <span class="math inline">\(\phi_{j+1}\)</span> 是否为终止状态，设置 <span class="math inline">\(y_i\)</span> 为： <span class="math display">\[
+y_{j}=\left\{\begin{array}{ll}
+r_{j} &amp; \text { for terminal } \phi_{j+1} \\
+r_{j}+\gamma \max _{a^{\prime}} Q\left(\phi_{j+1}, a^{\prime} ; \theta\right) &amp; \text { for non-terminal } \phi_{j+1}
+\end{array}\right.
+\]</span> 根据 <span class="math inline">\((3)\)</span> 式基于损失函数 <span class="math inline">\(\left(y_{j}-Q\left(\phi_{j}, a_{j} ; \theta\right)\right)^{2}\)</span> 执行梯度下降，更新网络参数。执行上述过程直到达到收敛条件或循环结束。</p>
+<p>与标准 Q-learning 相比，本研究提出的方法具有如下几点优势：首先，每一步中获得的经验都可能用于<strong>多次</strong>权重更新，这样可以提升数据的利用率；其次，由于样本间的强<strong>相关性</strong>，直接从连续样本中学习是低效的。随机化样本可以打破这种相关性，减少更新的方差；最后，对于 on-policy 式的学习来说，当前的参数决定了下一次训练所需的数据样本，由于执行当前动作后训练的分布会发生变化，因此延用当前策略可能会导致局部最优、参数发散等<strong>异常情况</strong>的发生；经验回放机制基于多个先前的状态对行为分布进行平均，可以平滑学习过程，避免参数的振荡和发散。同时由于使用了经验回放，梯度更新时的参数（状态）和用于生成样本的参数（状态）并不相同，因此自然需要使用 类似 Q-learning 的 <strong>off-policy</strong> 方法。</p>
+<p>在实践中，本算法只在回放记忆中存储最近的 <span class="math inline">\(N\)</span> 次回放，在执行更新时从 <span class="math inline">\(\mathcal{D}\)</span> 中均匀采样。这种方式存在着一定的<strong>局限性</strong>，因为其没有区分出比较重要的转移，只是单纯地用最近产生的转移覆盖之前的转移（受存储空间 <span class="math inline">\(N\)</span> 的限制）。类似地，均匀采样也为回放记忆中的所有转移赋予了同等的重要性。在之后的研究中，可以对采样方法进行改进，关注能够学习到更多东西的转移。</p>
+<h2 id="预处理和模型结构">预处理和模型结构</h2>
+<p>原始的 Atari 图像为 <span class="math inline">\(210 \times 160\)</span> 像素，每个像素可选颜色为 128 种。为了减小计算复杂度，本文加入了一个简单的预处理步骤以减少输入的维度。原始图像首先被转化为灰度图像，然后降采样为 <span class="math inline">\(110\times84\)</span> 像素大小。最后由于本研究使用的 2D 卷积 GPU 实现要求输入为正方形，所以再将图像裁剪为 <span class="math inline">\(84 \times 84\)</span> 大小，作为最终的输入表示。在本研究的试验中，算法中函数 <span class="math inline">\(\phi\)</span> 将一个状态序列的最后 4 帧进行上述预处理，并堆叠在一起作为 Q-函数的输入。</p>
+<p>关于网络的结构，之前的一些研究将历史状态和动作一起作为网络的输入，这种结构的缺点在于对每一个动作都需要单独进行一次前向传播。本研究中使用的网络结构对于每个可能的动作都提供一个单独的输出（因此动作不能连续），只有<strong>状态</strong>被作为网络的输入。网络的输出对应输入状态的每一个可能动作的预测 Q 值。这种结构的优点在于其能够仅通过一次前向传播就计算出一个给定状态的所有可能动作的 Q 值。网络的整体结构如下图所示（图片来自另一篇论文）：</p>
+<p><img src="http://media.zjubiomedit.com/2020-08-16-114919.png" width=60%></p>
+<p>上述结构对于所有七款游戏都相同，神经网络的输入为 <span class="math inline">\(\phi\)</span> 映射的 <span class="math inline">\(84 \times 84 \times 4\)</span> 的图像，第一层隐藏层为卷积层，包含 16 个 <span class="math inline">\(8 \times 8\)</span> 的卷积核，步长为 4，激活函数为 ReLU，对应输出为 <span class="math inline">\(20 \times 20 \times 16\)</span>；第二层隐藏层也为卷积层，包含 32 个 <span class="math inline">\(4 \times 4\)</span> 的卷积核，步长为 2，激活函数为 ReLU，对应输出为 <span class="math inline">\(9 \times 9 \times 32\)</span>；最后一层隐藏层为全连接层，包含 256 个整流单元，输出为 <span class="math inline">\(256 \times 1\)</span>；最终输出层同样为全连接层，输出一个包含每个合法动作 Q 值的向量。参与实验的游戏的合法动作数量为 4 到 18 个不等。本文中使用的卷积神经网络被称为<strong>深度 Q 网络</strong>（DQN）。</p>
+<h1 id="实验">实验</h1>
+<p>原文的实验共涉及七款游戏，分别是 Beam Rider、Breakout、Enduro、Pong、Q*bert、Seaquest 和 Space Invaders。如之前所述，为了证明模型的鲁棒性，所有游戏使用相同的网络结构、学习算法和超参数设置。与真实游戏反馈相比，实验的唯一不同在于对游戏的奖励进行了修改。由于不同游戏的实际奖励得分差异较大，为了便于训练，将所有的正向奖励置为 1，负向奖励置为 -1，不变则为 0。这种裁剪可以帮助减少训练误差，让不同的游戏可以使用相同的学习率，提升最终的表现。</p>
+<p>实验中使用的具体算法和超参数设置如下：</p>
+<ul>
+<li>学习率调整：RMSProp 算法</li>
+<li>小批量大小： 32</li>
+<li><span class="math inline">\(\epsilon\)</span> 策略：前 1,000,000 帧画面中 <span class="math inline">\(\epsilon\)</span> 线性地从 1 到 0.1 下降；之后保持 0.1（测试时使用 0.05）</li>
+<li>训练总时长：10,000,000 帧画面</li>
+<li>回放记忆：最近的 1,000,000 帧画面</li>
+</ul>
+<p>此外，实验中还使用了一个简单的 <strong>frame-skipping</strong> 技巧。代理只会在每 <span class="math inline">\(k\)</span> 帧进行观察并选择动作，而不是每一帧，在跳过的帧中重复最近一次选择的动作。由于简单运行模拟器比控制代理选择动作的计算量小很多，所以这一技术可以帮助代理在不显著增加运行时间的前提下玩更多次的游戏。原文中，对于除 Space Invaders 之外的游戏设置了 <span class="math inline">\(k=4\)</span>，由于该游戏设置为 4 会导致激光无法识别，所以设置 <span class="math inline">\(k=3\)</span>。</p>
+<h2 id="训练和稳定性">训练和稳定性</h2>
+<p>在监督学习中，我们可以通过模型在训练集和验证集上的表现对其进行评估。然而在强化学习中，在训练中并没有一个很好的评估标准。本研究首先计算了不同训练回合下代理所获得的<strong>总奖励</strong>，但发现总奖励的变化趋势波动较大，这可能是因为一个策略权重的微小改变会导致策略所访问状态分布的较大变化。下图中左边两张给出了在两个不同游戏中的平均总奖励随训练回合的变化（平均是指分游戏统计），展示效果不是很理想。第二种评估方式则是基于策略的<strong>动作价值函数</strong> Q，其估计了代理在遵循当前策略下所能得到的未来折扣奖励。实践证明该指标要比第一种更加稳定。具体来说，首先在训练开始前执行随机策略，采集一个固定的状态集合，然后跟踪不同训练回合时这些状态对应的最大预测 Q 值（从所有可能的动作中选）的平均值。下图中右边两张展示了平均预测 Q 值的平滑上升趋势，其他五个游戏也展示了类似的平滑曲线，在训练过程中也没有出现任何不收敛的问题。虽然缺乏理论证明，但是本文提出的方法能够使用强化学习信号和随机梯度下降来训练大型的神经网络，并保证收敛。</p>
+<p><img src="http://media.zjubiomedit.com/2020-08-15-091305.png" width=80%></p>
+<h2 id="价值函数可视化">价值函数可视化</h2>
+<p>下图给出了在游戏 Seaquest 中学习到的价值函数的可视化展示，三个点分别对应右边的三张画面。可以看到当一个新敌人（绿色的鱼）出现在屏幕中时，预测的价值明显上升（点 A）；而当鱼雷快要攻击到敌人时，价值进一步上升达到峰值（点 B）；当敌人消失后，价值则快速下降至原来的水平。该图表明本文提出的方法能够学习到价值函数如何在复杂的事件序列中进行演变。</p>
+<p><img src="http://media.zjubiomedit.com/2020-08-15-091333.png" width=80%></p>
+<h2 id="主要评估">主要评估</h2>
+<p>在本节中，作者首先将 DQN 和之前的一些 RL 方法进行了对比，如下表的前五行所示。表中的数值为以 <span class="math inline">\(\epsilon\)</span> 策略执行固定步骤后的平均总奖励（执行多个回合取平均）。除去随机策略和人工玩家，共对比了两种方法：<strong>Sarsa</strong> 和 <strong>Contingency</strong>。这两种方法都在手工提取特征的同时，将画面中的不同颜色进行分离并标注。人工玩家的奖励为玩游戏两小时后获得的奖励的中位数。下表的后三行比较了 DQN 和两种进化策略搜索方法：<strong>HNeat Best</strong> 和 <strong>HNeat Pixel</strong>。HNeat Best 基于人工标注的目标检测算法，输出屏幕上物体的类型和位置；HNeat Pixel 则使用 8 个特别的颜色表示 Atari 游戏中的特定物体类型。这两种方法依赖于找到一个确定的状态序列，不会存在随机扰动，因此对比的是<strong>单个</strong>回合下的最佳表现。</p>
+<p><img src="http://media.zjubiomedit.com/2020-08-15-091616.png" width=70%></p>
+<p>总的来看，我们的方法在 Breakout、Enduro 和 Pong 这三款游戏上击败了人类玩家；在 Beam Rider 上和人类玩家表现接近。而差距较大的三款游戏需要网络基于更长的时间范围寻找策略，因此挑战性更大。</p>
+<h1 id="结论">结论</h1>
+<p>本文可以说是将深度学习应用于强化学习领域的开山之作，其在 Atari 2600 游戏上展示了深度学习仅基于原始图像即能够掌握复杂控制策略的能力。本研究提出的方法也可以理解为一种在线 Q-learning 的变种，融合了<strong>随机小批量更新</strong>和<strong>经验回放</strong>以便于深度网络的训练。在无需额外调整结构和超参数的前提下，本方法在七款游戏中的六款达到了 SOTA 的结果。</p>
+<p><strong>后记</strong>：在 <em>Human-level control through deep reinforcement learning</em> 中，作者对本文中的算法进行了改进，创建了另一个 Q-网络，其参数只会定期更新，并不会参与完整的迭代。这种方式可以缓解 Q-值的不稳定问题，在 49 个 Atari 游戏中取得了比本文更好的效果。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+
+
+
+<div class="license">
+  <div class="license-title">DQN 原理解析</div>
+  <div class="license-link">
+    <a href="https://xxwywzy.github.io/2023/10/01/dqn/">https://xxwywzy.github.io/2023/10/01/dqn/</a>
+  </div>
+  <div class="license-meta">
+    <div class="license-meta-item">
+      <div class="license-meta-title">本文作者</div>
+      <div class="license-meta-text">
+          Zheyu Wang
+      </div>
+    </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">发布于</div>
+        <div class="license-meta-text">
+          2023-10-01
+        </div>
+      </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">更新于</div>
+        <div class="license-meta-text">
+          2023-10-26
+        </div>
+      </div>
+    <div class="license-meta-item">
+      <div class="license-meta-title">许可协议</div>
+      <div class="license-meta-text">
+          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank">CC BY-NC-SA 4.0</a>
+      </div>
+    </div>
+  </div>
+  <div class="license-statement">
+      转载或引用本文时，请遵守上述许可协议，注明出处、不得用于商业用途！
+  </div>
+</div>
+          <div class="post-tags">
+              <a href="/tags/DQN/" rel="tag"># DQN</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/08/06/chatgpt-prompt/" rel="prev" title="ChatGPT 提示工程总结">
+                  <i class="fa fa-angle-left"></i> ChatGPT 提示工程总结
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/10/02/ml-summary/" rel="next" title="《百面机器学习》精华总结">
+                  《百面机器学习》精华总结 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81ODgyNi8zNTI4OA=="></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">332k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">18:26</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+
+
+  <style>
+    #taboola-livere { display: none;}
+  </style>
+
+
+
+<script type="text/javascript">
+var linkLists = document.querySelectorAll(".link-list");
+
+linkLists.forEach(function(linkList) {
+  var listPath = linkList.getAttribute('json-src');
+  var iconPath = linkList.getAttribute('icon-src');
+  
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', listPath, true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      var data = JSON.parse(xhr.responseText);
+      
+      var li = "";
+      linkList.innerHTML = '';
+
+      for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+        var info = data[infoIndex];
+        var labelWarn = info['warn'] ? '<span class="label warn">' + info['warn'] + '</span>' : '';
+        var labelInfo = info['info'] ? '<span class="label info">' + info['info'] + '</span>' : '';
+
+        li += '<div class="link-list-container">';
+        li += '<img class="link-list-image" src="' + iconPath + info['logo'] + '">';
+        li += '<p>' + info['title'] + labelInfo + labelWarn + '</p>';
+        li += '<p>' + info['intro'] + '</p>';
+        li += '<a href="' + info['url'] + '" rel="noopener" target="_blank" data-pjax-state=""></a>';
+        li += '</div>';
+      }
+      
+      linkList.innerHTML = li;
+    }
+  };
+  xhr.send();
+});
+</script>
+
+
+<script type="text/javascript">
+var cultureList = document.querySelectorAll(".culture-list");
+if (cultureList.length !== 0) {
+  var j = -1;
+  for (var i = 0; i < cultureList.length; i++) {
+    const listPath = cultureList[i].getAttribute('json-src');
+    const coverPath = cultureList[i].getAttribute('cover-src');
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', listPath, true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        j++;
+        var data = JSON.parse(xhr.responseText);
+        var li = "";
+        
+        cultureList[j].innerHTML = '';
+
+        for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+          var info = data[infoIndex];
+          
+          var title = info['title'];
+          if (info['link']) {
+            title = '<a href="' + info['link'] + '">' + info['title'] + '</a>';
+          }
+
+          var author = info['author'] ? '<span class="author">' + info['author'] + '</span>' : '';
+
+          var intro = info['intro'] ? info['intro'] : '';
+
+          var star = '';
+          if (info['score'] == null) {
+            star = '';
+          } else {
+            var colorStar = '';
+            var greyStar = '';
+            var int = Math.floor(info['score']); //整数部分
+            var fract = 0;
+            if (info['score'] % 1 !== 0) {
+              fract = 1;
+            }
+            for (var m = 0; m < int; m++) {
+              colorStar += '★';
+            }
+            if (fract !== 0) {
+              colorStar += '☆';
+            }
+            for (var m = 0; m < (5 - fract - int); m++) {
+              greyStar += '☆';
+            }
+            if (info['score'] !== 5) {
+              star = '<span class="star-score">' + colorStar + '<span class="grey-star">' + greyStar + '</span></span>';
+            } else {
+              star = '<span class="star-score">' + colorStar + '</span>';
+            }
+          }
+
+          li += '<div class="media">';
+          li += '<div class="media-cover" style="background-image:url(' + coverPath + info['cover'] + ')"></div>';
+          li += '<div class="media-meta">';
+          li += '<div class="media-meta-item title">' + title + '</div>';
+          li += '<div class="media-meta-item">' + author + star + '</div>';
+          li += '<div class="media-meta-item intro">' + intro + '</div>';
+          li += '</div></div>';
+        }
+        
+        cultureList[j].innerHTML = li;
+      }
+    };
+    xhr.send();
+  }
+}
+</script>
+
+
+
+
+<script src="/resources/minigrid.min.js"></script>
+<script type="text/javascript">
+var album = document.querySelector(".album");
+if (album) {
+  // 相册列表 JSON 数据
+  var imgDataPath = album.getAttribute('json-src');
+  // 照片存储路径
+  var imgPath = album.getAttribute('photo-src');
+  // 最多显示数量
+  var imgMaxNum = 50;
+  // 获取窗口大小以决定图片宽度
+  var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  var imageWidth;
+
+  if (windowWidth < 768) {
+    imageWidth = 145; // 移动端图片宽度
+  } else {
+    imageWidth = 235;
+  }
+
+  // 腾讯云自定义样式 (数据万象外网流量需要付费)
+  //var imgStyle = '!' + imageWidth + 'x';
+  //var imgStyle = '!300x';
+
+  // 生成相册
+  var linkDataPath = imgDataPath;
+  var photo = {
+    page: 1,
+    offset: imgMaxNum,
+    init: function () {
+      var that = this;
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", linkDataPath, true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var data = JSON.parse(xhr.responseText);
+          that.render(that.page, data);
+        }
+      };
+      xhr.send();
+    },
+    render: function (page, data) {
+      var begin = (page - 1) * this.offset;
+      var end = page * this.offset;
+      if (begin >= data.length) return;
+      var imgNameWithPattern, imgName, imageSize, imageX, imageY, li = "";
+      for (var i = begin; i < end && i < data.length; i++) {
+        imgNameWithPattern = data[i].split(' ')[1];
+        imgName = imgNameWithPattern.split('.')[0];
+        imageSize = data[i].split(' ')[0];
+        imageX = imageSize.split('.')[0];
+        imageY = imageSize.split('.')[1];
+        li += '<div class="card" style="width:' + imageWidth + 'px" >';
+        li += '<div class="album-photo" style="height:'+ imageWidth * imageY / imageX + 'px">';
+        li += '<a class="fancybox fancybox.image" href="' + imgPath + imgNameWithPattern + '" itemscope="" itemtype="http://schema.org/ImageObject" itemprop="url" data-fancybox="group" rel="group" data-caption="' + imgName + '" title="' +  imgName + '">';
+        li += '<img data-src="' + imgPath + imgNameWithPattern + '" src="' + imgPath + imgNameWithPattern + '" alt="' +  imgName + '" data-loaded="true">';
+        li += '</a>';
+        li += '</div>';
+        li += '</div>';
+      }
+      album.insertAdjacentHTML('beforeend', li);
+      this.minigrid();
+    },
+    minigrid: function () {
+      var grid = new Minigrid({
+        container: '.album',
+        item: '.card',
+        gutter: 12
+      });
+      grid.mount();
+      window.addEventListener('resize', function () {
+        grid.mount();
+      });
+    }
+  };
+  photo.init();
+}
+</script>
+</body>
+</html>

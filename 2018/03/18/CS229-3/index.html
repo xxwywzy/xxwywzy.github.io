@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/resources/favicon/favicon.png">
+  <link rel="mask-icon" href="/resources/favicon/favicon.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"xxwywzy.github.io","root":"/","images":"/resources/img/","scheme":"Gemini","darkmode":true,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"livere","storage":true,"lazyload":false,"nav":null,"activeClass":"livere"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本篇博客为 CS229 学习笔记第三部分，主题是：广义线性模型。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CS229 学习笔记之三：广义线性模型">
+<meta property="og:url" content="https://xxwywzy.github.io/2018/03/18/CS229-3/">
+<meta property="og:site_name" content="口仆">
+<meta property="og:description" content="本篇博客为 CS229 学习笔记第三部分，主题是：广义线性模型。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-14-062359.png">
+<meta property="article:published_time" content="2018-03-18T01:45:38.000Z">
+<meta property="article:modified_time" content="2023-11-02T08:38:08.000Z">
+<meta property="article:author" content="Zheyu Wang">
+<meta property="article:tag" content="CS229">
+<meta property="article:tag" content="广义线性模型">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2019-04-14-062359.png">
+
+
+<link rel="canonical" href="https://xxwywzy.github.io/2018/03/18/CS229-3/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://xxwywzy.github.io/2018/03/18/CS229-3/","path":"2018/03/18/CS229-3/","title":"CS229 学习笔记之三：广义线性模型"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>CS229 学习笔记之三：广义线性模型 | 口仆</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/resources/fonts/longcang/longcang-regular.css" >
+<link rel="stylesheet" href="/resources/fonts/lxgw/lxgwwenkailite-regular.css" >
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">口仆</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Long may the sunshine</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-culture"><a href="/culture/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>MEME</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8C%87%E6%95%B0%E6%97%8F%E5%88%86%E5%B8%83"><span class="nav-number">1.</span> <span class="nav-text">指数族分布</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%AF%E5%8A%AA%E5%88%A9%E5%88%86%E5%B8%83%E7%9A%84%E8%AF%81%E6%98%8E"><span class="nav-number">1.1.</span> <span class="nav-text">伯努利分布的证明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A3%E6%80%81%E5%88%86%E5%B8%83%E7%9A%84%E8%AF%81%E6%98%8E"><span class="nav-number">1.2.</span> <span class="nav-text">正态分布的证明</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E5%B9%BF%E4%B9%89%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.</span> <span class="nav-text">构建广义线性模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92"><span class="nav-number">2.1.</span> <span class="nav-text">线性回归</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92"><span class="nav-number">2.2.</span> <span class="nav-text">逻辑回归</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#softmax-%E5%9B%9E%E5%BD%92"><span class="nav-number">2.3.</span> <span class="nav-text">softmax 回归</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE"><span class="nav-number">3.</span> <span class="nav-text">思维导图</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zheyu Wang"
+      src="/resources/favicon/avatar.png">
+  <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+  <div class="site-description" itemprop="description">相信过程</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">85</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xxwywzy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/xxwywzy" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/xxwywzy" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/xxwywzy" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2018/03/18/CS229-3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resources/favicon/avatar.png">
+      <meta itemprop="name" content="Zheyu Wang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="口仆">
+      <meta itemprop="description" content="相信过程">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="CS229 学习笔记之三：广义线性模型 | 口仆">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CS229 学习笔记之三：广义线性模型
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-03-18 09:45:38" itemprop="dateCreated datePublished" datetime="2018-03-18T09:45:38+08:00">2018-03-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">课程笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.6k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>9 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><div class="note info"><p>本篇博客为 CS229 学习笔记第三部分，主题是：广义线性模型。</p>
+</div>
+<span id="more"></span>
+<p>在前两章我们分别介绍了线性回归与逻辑回归，其分别符合不同的概率分布：</p>
+<ul>
+<li>线性回归问题符合正态分布 <span class="math inline">\(y\mid x;\theta \sim {\cal N}\left( \mu ,\sigma ^{2}\right)\)</span></li>
+<li>逻辑回归问题符合伯努利分布 <span class="math inline">\(y\mid x;\theta \sim \text {Bernoulli}( \phi)\)</span></li>
+</ul>
+<p>实际上这些模型都是一个更为广泛的模型族的特例，这个模型族被称为<strong>广义线性模型</strong>（Generalized Linear Models）。</p>
+<h1 id="指数族分布">指数族分布</h1>
+<p>为了引出广义线性模型，我们首先需要介绍<strong>指数族分布</strong>：</p>
+<p>如果一个分布可以被表示成如下形式，我们就称其属于指数分布族： <span class="math display">\[
+p(y;\eta) =b(y) \exp \left( \eta ^{T}T(y)-a(\eta)\right) \qquad(1)
+\]</span></p>
+<ul>
+<li><span class="math inline">\(\eta\)</span> 被称为分布的<strong>自然参数</strong>（或者称为<strong>典范参数</strong>）</li>
+<li><span class="math inline">\(T(y)\)</span> 被称为<strong>充分统计量</strong>，通常 <span class="math inline">\(T(y)=y\)</span></li>
+<li><span class="math inline">\(a(\eta)\)</span> 被称为<strong>对数分割函数</strong></li>
+<li><span class="math inline">\(e^{-a(\eta)}\)</span> 本质上是一个<strong>归一化常数</strong>，确保概率 <span class="math inline">\(p(y;\eta)\)</span> 和为 1</li>
+</ul>
+<p>当选定 <span class="math inline">\(T,a,b\)</span> 时，我们就得到了一种以 <span class="math inline">\(\eta\)</span> 为参数的分布。下面我们来证明<strong>伯努利分布</strong>和<strong>高斯分布</strong>属于指数族分布。</p>
+<h2 id="伯努利分布的证明">伯努利分布的证明</h2>
+<p>伯努利分布可以表示为： <span class="math display">\[
+\begin{align*}
+p(y;\phi) &amp;= \phi^y(1-\phi)^{1-y} \\
+&amp;= \exp\left(y\log \phi+(1-y)\log (1-\phi)\right) \\
+&amp;= \exp \left(\left(\log\left(\frac \phi {1-\phi}\right)\right)y+\log(1-\phi)\right)
+\end{align*}
+\]</span></p>
+<p>自然参数 <span class="math inline">\(\eta=\log\left(\frac \phi {1-\phi}\right)\)</span>，这里自然参数不是向量，所以其转置不变。而从该式可以导出 <span class="math inline">\(\phi = \frac 1 {1+e^{-\eta}}\)</span>，这正是我们熟悉的 sigmoid 函数！之后我们推导逻辑回归是广义线性模型时会再提到这个。</p>
+<p>现在，我们可以得到： <span class="math display">\[
+\begin{align*}
+T(y) &amp;= y \\
+a(\eta) &amp;= -\log(1-\phi)\\
+&amp;=\log(1+e^{\eta})\\
+b(y) &amp;= 1
+\end{align*}
+\]</span></p>
+<p>这表明通过设定适当的 <span class="math inline">\(T,a,b\)</span> ，伯努利分布可以写成等式 (1) 的形式，即其属于指数族分布。</p>
+<h2 id="正态分布的证明">正态分布的证明</h2>
+<p>之前我们推导线性回归时得出了 <span class="math inline">\(\sigma\)</span> 的值对 <span class="math inline">\(\theta\)</span> 的选择没有影响，所以为了简化推导，这里设定<span class="math inline">\(\sigma^2=1\)</span>，于是我们有： <span class="math display">\[
+\begin{align*} 
+ p\left( y;\mu \right) &amp;=\dfrac {1} {\sqrt {2\pi }}\exp \left( -\dfrac {1} {2}\left( y-\mu \right) ^{2}\right) \\ 
+ &amp; =\dfrac {1} {\sqrt {2\pi }}\exp \left( -\dfrac {1} {2}y^{2}\right) \cdot \exp \left( \mu y-\frac 1 2 \mu^2\right) \end{align*}
+\]</span></p>
+<p>因此，通过如下选择，我们可以证明高斯分布属于指数族分布： <span class="math display">\[
+\begin{align*} 
+\eta &amp;= \mu\\
+T(y) &amp;= y\\
+a(\eta) &amp;= \mu^2/2 \\
+&amp;= \eta^2 \\
+b(y) &amp;= ( 1/\sqrt{2\pi}) \exp( -y^2/2)
+\end{align*}
+\]</span> 其实，还有许多其他的分布属于指数族，比如多项式分布、泊松分布、伽马分布等.</p>
+<h1 id="构建广义线性模型">构建广义线性模型</h1>
+<p>首先，广义线性模型的构建需要基于以下三条假设： 1. <span class="math inline">\(y\mid x;\theta\)</span> 符合以 <span class="math inline">\(\eta\)</span> 为参数的指数族分布 2. 给定 <span class="math inline">\(x\)</span>，我们的目标是预测 <span class="math inline">\(T(y)\)</span> 的理想值，而在大多数的案例中，<span class="math inline">\(T(y) = y\)</span> + 这意味着我们的假设 <span class="math inline">\(h\)</span> 应该满足 <span class="math inline">\(h(x)=E[y\mid x]\)</span>（可以从期望的定义上来进行理解，即反映随机变量平均取值的大小） 3. 自然参数 <span class="math inline">\(\eta\)</span> 和 输入 <span class="math inline">\(x\)</span> 满足线性关系 <span class="math inline">\(\eta=\theta^T x\)</span>（如果 <span class="math inline">\(\eta\)</span> 是向量，那么 <span class="math inline">\(\eta_i=\theta_i^T x\)</span> )</p>
+<p>基于上面三条假设，我们就可以利用广义线性模型来优雅地解决问题。下面，我们将用广义线性模型来推导<strong>线性回归</strong>和<strong>逻辑回归</strong>的假设函数，并引出 <strong>softmax 回归</strong>。</p>
+<h2 id="线性回归">线性回归</h2>
+<p>线性回归的目标变量（在 GLM 术语集中也称为<strong>反应变量</strong>）满足<strong>高斯分布</strong>：<span class="math inline">\(y\mid x;\theta \sim {\cal N}\left( \mu ,\sigma ^{2}\right)\)</span>。根据之前推导的结果，我们有：</p>
+<p><span class="math display">\[
+\begin{align*}
+h_\theta(x) &amp;= E[y|x;\theta] \\
+&amp;= \mu \\
+&amp;= \eta \\
+&amp;= \theta^Tx
+\end{align*}
+\]</span></p>
+<p>第一个等式来源于假设 2；第二个等式是高斯分布的性质；第三个等式是之前推导过高斯分布属于指数族分布的条件；最后一个等式则来源于假设 3。</p>
+<h2 id="逻辑回归">逻辑回归</h2>
+<p>逻辑回归的反应变量满足<strong>伯努利分布</strong>：<span class="math inline">\(y\mid x;\theta \sim \text {Bernoulli}( \phi)\)</span>。之前我们在证明伯努利分布属于指数族分布时已经推导出了<span class="math inline">\(\phi = \frac 1 {1+e^{-\eta}}\)</span>，因此，与线性回归类似，我们有：</p>
+<p><span class="math display">\[
+\begin{align*}
+h_\theta(x) &amp;= E[y|x;\theta] \\
+&amp;= \phi \\
+&amp;=\frac 1 {1+e^{-\eta}} \\
+&amp;=\frac 1 {1+e^{-\theta^Tx}}
+\end{align*}
+\]</span></p>
+<p>上式证明了为什么逻辑回归的假设函数是 sigmod 函数，当反应变量满足伯努利分布时，这是广义线性模型的定义导出的结果。</p>
+<p>此外，我们将表示分布均值（期望）与自然参数 <span class="math inline">\(\eta\)</span> 关系的函数 <span class="math inline">\(g(\eta) = E[T(y);\eta]\)</span> 称为<strong>正则响应函数</strong>（canonical response function），将其反函数称为<strong>正则关联函数</strong>（canonical link function）。因此，高斯分布的正则响应函数即为其本身，伯努利分布的正则响应函数即为逻辑函数。</p>
+<h2 id="softmax-回归">softmax 回归</h2>
+<p>如果对于分类问题，<span class="math inline">\(y\)</span> 可以取 <span class="math inline">\(k\)</span> 个值（<span class="math inline">\(k&gt;2\)</span>），那么这就是一个<strong>多元分类</strong>问题。此时反应变量的条件概率分布模型为<strong>多项分布</strong>。下面让我们推导出多项分布数据的广义线性模型。</p>
+<p>在这之前，需要首先将多项式分布表示为指数族分布。假设多项式分布有 <span class="math inline">\(k\)</span> 个输出，一般我们应该定义 <span class="math inline">\(k\)</span> 个参数 <span class="math inline">\(\phi_1, \ldots \phi_k\)</span> 来表示每个输出的概率，但这其实存在冗余，因为第 <span class="math inline">\(k\)</span> 个输出的概率可以用其他 <span class="math inline">\(k-1\)</span> 个输出的概率来表示（概率之和必定为 1 ）。因此，我们只定义 <span class="math inline">\(k-1\)</span> 个参数 <span class="math inline">\(\phi_1, \ldots \phi_{k-1}\)</span> ，其中 <span class="math inline">\(\phi_i = p(y=i;\phi)\)</span>，则 <span class="math inline">\(\phi_k = 1- \sum_{i=1}^{k-1}\phi_i\)</span>，注意其并不是一个参数，而是由 <span class="math inline">\(\phi_1, \ldots \phi_{k-1}\)</span> 确定的。</p>
+<p>为了将多项分布表示为指数族分布，我们首先定义 <span class="math inline">\(T(y) \in \mathbb{R}^{k-1}\)</span> 如下： <span class="math display">\[
+T(1) = \left[
+ \begin{matrix}
+   1  \\
+   0  \\
+   0  \\
+   \vdots \\
+   0
+  \end{matrix}
+  \right],
+  T(2) = \left[
+ \begin{matrix}
+   0  \\
+   1  \\
+   0  \\
+   \vdots \\
+   0
+  \end{matrix}
+  \right],
+  T(3) = \left[
+ \begin{matrix}
+   0  \\
+   0  \\
+   1  \\
+   \vdots \\
+   0
+  \end{matrix}
+  \right],\cdots
+  T(k-1) = \left[
+ \begin{matrix}
+   0  \\
+   0  \\
+   0  \\
+   \vdots \\
+   1
+  \end{matrix}
+  \right],
+  T(k) = \left[
+ \begin{matrix}
+   0  \\
+   0  \\
+   0  \\
+   \vdots \\
+   0
+  \end{matrix}
+  \right]
+\]</span></p>
+<p>与之前不同，<span class="math inline">\(T(y)\)</span> 与 <span class="math inline">\(y\)</span> 并不相等，<span class="math inline">\(T(y)\)</span> 是一个 <span class="math inline">\(k-1\)</span> 维的向量而非一个实数。我们将用 <span class="math inline">\((T(y))_i\)</span> 来表示向量 <span class="math inline">\(T(y)\)</span> 的第 <span class="math inline">\(i\)</span> 个元素。</p>
+<p>下面我们将再介绍一个有用的操作符：<span class="math inline">\(1\{\cdot\}\)</span>，其运算法则为： <span class="math display">\[
+1\{\text{True}\} =1, 1\{\text{False}\} =0
+\]</span></p>
+<ul>
+<li>例如：<span class="math inline">\(1\{2=3\} =0, 1\{3=5-2\} =1\)</span></li>
+</ul>
+<p>因此，我们可以得到如下等式： <span class="math display">\[
+(T(y))_i = 1\{y=i\}
+\]</span></p>
+<p>即只有当 <span class="math inline">\(y=i\)</span> 时，第 <span class="math inline">\(i\)</span> 个元素才为 1，其他都为 0。</p>
+<p>进一步可以得到： <span class="math display">\[
+\text{E}[(T(y))_i] = P(y=i) = \phi_i
+\]</span></p>
+<p>因为求期望时，只有当 <span class="math inline">\(y=i\)</span> 时，乘积不为 0。</p>
+<p>基于上述结论，我们可以将多项分布表示为指数族分布： <span class="math display">\[
+\begin{align*}
+p(y;\phi) &amp;= \phi_1^{1\{y=1\}} \phi_2^{1\{y=2\}} \cdots  \phi_k^{1\{y=k\}}\\
+&amp;=\phi_1^{1\{y=1\}} \phi_2^{1\{y=2\}} \cdots  \phi_k^{1-\sum_{i=1}^{k-1}1\{y=i\}}\\
+&amp;= \phi_1^{(T(y))_1}\phi_2^{(T(y))_2} \cdots  \phi_k^{1-\sum_{i=1}^{k-1}(T(y))_i}\\
+&amp;=\exp\left(\left(T(y)\right)_1\log(\phi_1)+\left(T(y)\right)_2\log(\phi_2)+\cdots+\left(1-\sum_{i=1}^{k-1}\left(T(y)\right)_i\right)\log(\phi_k)\right)\\
+&amp;=\exp\left(\left(T(y)\right)_1\log\left(\phi_1/\phi_k\right)+\left(T(y)\right)_2\log\left(\phi_2/\phi_k\right)+\cdots+\left(T(y)\right)_{k-1}\log\left(\phi_{k-1}/\phi_k\right)+\log(\phi_k)\right)\\
+&amp;= b(y) \exp \left( \eta ^{T}T(y)-a(\eta)\right)
+\end{align*}
+\]</span></p>
+<p>其中： <span class="math display">\[
+\begin{align*}
+\eta &amp;=\left[
+ \begin{matrix}
+   \log\left(\phi_1/\phi_k\right)  \\
+  \log\left(\phi_1/\phi_k\right)  \\
+   \vdots \\
+   \log\left(\phi_{k-1}/\phi_k\right)
+  \end{matrix}
+  \right] \\
+  a(\eta) &amp;= -\log(\phi_k) \\
+  b(y) &amp;= 1
+\end{align*}
+\]</span> 上述推导表明了多项分布属于指数族分布，并得到了<strong>关联函数</strong>如下（前面已经证明了期望值即为 <span class="math inline">\(\phi_i\)</span> ）： <span class="math display">\[
+\eta_i = \log \frac{\phi_i}{\phi_k}
+\]</span> 类似地，我们定义 <span class="math inline">\(\eta_k = \log(\phi_k/\phi_k) = 0\)</span>。下面我们将推导出<strong>响应函数</strong>： <span class="math display">\[
+\begin{align*}
+e^{\eta_i} &amp;= \frac{\phi_i}{\phi_k} \\
+\phi_ke^{\eta_i} &amp;= \phi_i  \\
+\phi_k \sum_{i=1}^k e^{\eta_i} &amp;= \sum_{i=1}^k\phi_i = 1
+\end{align*}
+\]</span></p>
+<p>这表明 <span class="math inline">\(\phi_k = 1/\sum_{i=1}^k e^{\eta_i}\)</span>，将其代回上式，即可得到响应函数为： <span class="math display">\[
+\phi_i = \frac{e^{\eta_i}}{\sum_{j=1}^k e^{\eta_j} }
+\]</span></p>
+<p>这个将 <span class="math inline">\(\eta\)</span> 映射到 <span class="math inline">\(\phi\)</span> 的函数又被称为 <strong>softmax</strong>（柔性最大值）函数。根据之前的假设 3，我们有 <span class="math inline">\(\eta_i=\theta_i^T x \ (i=1,\ldots,k-1)\)</span> ，其中 <span class="math inline">\(\phi_1,\ldots,\phi_{k-1} \in\mathbb{R}^{n+1}\)</span>.</p>
+<p>为了方便，我们定义<span class="math inline">\(\theta_k = 0\)</span>，这样 <span class="math inline">\(\eta_k = \theta_k^T x = 0\)</span>，因此，我们的模型给出 y 的条件分布如下： <span class="math display">\[
+\begin{align*}
+p(y=i \mid x;\theta) &amp;= \phi_i \\
+&amp;=  \frac{e^{\eta_i}}{\sum_{j=1}^k e^{\eta_j} } \\
+&amp;=  \frac{e^{\theta_i^T x}}{\sum_{j=1}^k e^{\theta_j^T x} } 
+\end{align*}
+\]</span> 这个模型可以应用于多元分类问题 <span class="math inline">\(y \in \{1,\ldots k\}\)</span>，被称为 <strong>softmax 回归</strong>，它是逻辑回归的推广</p>
+<p>综上，我们的假设函数为： <span class="math display">\[
+\begin{align*}
+h_{\theta}(x) &amp;= E[T(y)\mid x;\theta]\\
+ &amp;=E \left [
+ \begin{array}{c|c}
+    1\{y=1\}  \\
+ 1\{y=2\}  \\
+   \vdots &amp; x;\theta \\
+   1\{y=k-1\} 
+  \end{array}
+  \right] \\
+ &amp;= \left [
+ \begin{matrix}
+    \phi_1  \\
+ \phi_2  \\
+   \vdots \\
+   \phi_{k-1} 
+  \end{matrix}
+  \right] \\
+  &amp;= \left [
+ \begin{matrix}
+    \frac{e^{\theta_1^T x}}{\sum_{j=1}^k e^{\theta_j^T x} }   \\
+ \frac{e^{\theta_2^T x}}{\sum_{j=1}^k e^{\theta_j^T x} }   \\
+   \vdots \\
+   \frac{e^{\theta_{k-1}^T x}}{\sum_{j=1}^k e^{\theta_j^T x} } 
+  \end{matrix}
+  \right] 
+\end{align*}
+\]</span></p>
+<p>该假设函数给出了 <span class="math inline">\(y\)</span> 取每个可能的值的条件概率 <span class="math inline">\((i = 1,\ldots , k)\)</span> 。其中 <span class="math inline">\(p(y=k \mid x;\theta)\)</span> 由 <span class="math inline">\(1-\sum_{i=1}^{k-1} \phi_i\)</span> 得到。</p>
+<p>最后，我们来讨论 softmax 回归的参数拟合。与之前类似，如果我们有一个训练集 <span class="math inline">\(\{(x^{(i)},y^{(i)}); i=1,\ldots,m\}\)</span>，希望学习出这个模型的参数 <span class="math inline">\(\theta_i\)</span>，我们首先会给出其对数似然函数：</p>
+<p><span class="math display">\[
+\begin{align*}
+\ell(\theta) &amp;=\sum_{i=1}^m \log p(y^{(i)} \mid x^{(i)};\theta) \\
+&amp;= \sum_{i=1}^m \log \prod_{l=1}^k \left(\frac{e^{\theta_{l}^T x^{(i)}}}{\sum_{j=1}^k e^{\theta_j^T x^{(i)}} } \right)^{ 1\{y^{(i)}=l\} }
+\end{align*}
+\]</span></p>
+<p>下面我们就可以通过最大似然分析求出参数 <span class="math inline">\(\theta\)</span>，使用梯度上升或牛顿方法。</p>
+<h1 id="思维导图">思维导图</h1>
+<p><img src="http://media.zjubiomedit.com/2019-04-14-062359.png" width=80%></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+
+
+
+<div class="license">
+  <div class="license-title">CS229 学习笔记之三：广义线性模型</div>
+  <div class="license-link">
+    <a href="https://xxwywzy.github.io/2018/03/18/CS229-3/">https://xxwywzy.github.io/2018/03/18/CS229-3/</a>
+  </div>
+  <div class="license-meta">
+    <div class="license-meta-item">
+      <div class="license-meta-title">本文作者</div>
+      <div class="license-meta-text">
+          Zheyu Wang
+      </div>
+    </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">发布于</div>
+        <div class="license-meta-text">
+          2018-03-18
+        </div>
+      </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">更新于</div>
+        <div class="license-meta-text">
+          2023-11-02
+        </div>
+      </div>
+    <div class="license-meta-item">
+      <div class="license-meta-title">许可协议</div>
+      <div class="license-meta-text">
+          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank">CC BY-NC-SA 4.0</a>
+      </div>
+    </div>
+  </div>
+  <div class="license-statement">
+      转载或引用本文时，请遵守上述许可协议，注明出处、不得用于商业用途！
+  </div>
+</div>
+          <div class="post-tags">
+              <a href="/tags/CS229/" rel="tag"># CS229</a>
+              <a href="/tags/%E5%B9%BF%E4%B9%89%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/" rel="tag"># 广义线性模型</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/03/15/CS229-2/" rel="prev" title="CS229 学习笔记之二：分类与逻辑回归">
+                  <i class="fa fa-angle-left"></i> CS229 学习笔记之二：分类与逻辑回归
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/03/22/CS229-4/" rel="next" title="CS229 学习笔记之四：生成学习算法">
+                  CS229 学习笔记之四：生成学习算法 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81ODgyNi8zNTI4OA=="></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">332k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">18:26</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+
+
+  <style>
+    #taboola-livere { display: none;}
+  </style>
+
+
+
+<script type="text/javascript">
+var linkLists = document.querySelectorAll(".link-list");
+
+linkLists.forEach(function(linkList) {
+  var listPath = linkList.getAttribute('json-src');
+  var iconPath = linkList.getAttribute('icon-src');
+  
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', listPath, true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      var data = JSON.parse(xhr.responseText);
+      
+      var li = "";
+      linkList.innerHTML = '';
+
+      for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+        var info = data[infoIndex];
+        var labelWarn = info['warn'] ? '<span class="label warn">' + info['warn'] + '</span>' : '';
+        var labelInfo = info['info'] ? '<span class="label info">' + info['info'] + '</span>' : '';
+
+        li += '<div class="link-list-container">';
+        li += '<img class="link-list-image" src="' + iconPath + info['logo'] + '">';
+        li += '<p>' + info['title'] + labelInfo + labelWarn + '</p>';
+        li += '<p>' + info['intro'] + '</p>';
+        li += '<a href="' + info['url'] + '" rel="noopener" target="_blank" data-pjax-state=""></a>';
+        li += '</div>';
+      }
+      
+      linkList.innerHTML = li;
+    }
+  };
+  xhr.send();
+});
+</script>
+
+
+<script type="text/javascript">
+var cultureList = document.querySelectorAll(".culture-list");
+if (cultureList.length !== 0) {
+  var j = -1;
+  for (var i = 0; i < cultureList.length; i++) {
+    const listPath = cultureList[i].getAttribute('json-src');
+    const coverPath = cultureList[i].getAttribute('cover-src');
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', listPath, true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        j++;
+        var data = JSON.parse(xhr.responseText);
+        var li = "";
+        
+        cultureList[j].innerHTML = '';
+
+        for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+          var info = data[infoIndex];
+          
+          var title = info['title'];
+          if (info['link']) {
+            title = '<a href="' + info['link'] + '">' + info['title'] + '</a>';
+          }
+
+          var author = info['author'] ? '<span class="author">' + info['author'] + '</span>' : '';
+
+          var intro = info['intro'] ? info['intro'] : '';
+
+          var star = '';
+          if (info['score'] == null) {
+            star = '';
+          } else {
+            var colorStar = '';
+            var greyStar = '';
+            var int = Math.floor(info['score']); //整数部分
+            var fract = 0;
+            if (info['score'] % 1 !== 0) {
+              fract = 1;
+            }
+            for (var m = 0; m < int; m++) {
+              colorStar += '★';
+            }
+            if (fract !== 0) {
+              colorStar += '☆';
+            }
+            for (var m = 0; m < (5 - fract - int); m++) {
+              greyStar += '☆';
+            }
+            if (info['score'] !== 5) {
+              star = '<span class="star-score">' + colorStar + '<span class="grey-star">' + greyStar + '</span></span>';
+            } else {
+              star = '<span class="star-score">' + colorStar + '</span>';
+            }
+          }
+
+          li += '<div class="media">';
+          li += '<div class="media-cover" style="background-image:url(' + coverPath + info['cover'] + ')"></div>';
+          li += '<div class="media-meta">';
+          li += '<div class="media-meta-item title">' + title + '</div>';
+          li += '<div class="media-meta-item">' + author + star + '</div>';
+          li += '<div class="media-meta-item intro">' + intro + '</div>';
+          li += '</div></div>';
+        }
+        
+        cultureList[j].innerHTML = li;
+      }
+    };
+    xhr.send();
+  }
+}
+</script>
+
+
+
+
+<script src="/resources/minigrid.min.js"></script>
+<script type="text/javascript">
+var album = document.querySelector(".album");
+if (album) {
+  // 相册列表 JSON 数据
+  var imgDataPath = album.getAttribute('json-src');
+  // 照片存储路径
+  var imgPath = album.getAttribute('photo-src');
+  // 最多显示数量
+  var imgMaxNum = 50;
+  // 获取窗口大小以决定图片宽度
+  var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  var imageWidth;
+
+  if (windowWidth < 768) {
+    imageWidth = 145; // 移动端图片宽度
+  } else {
+    imageWidth = 235;
+  }
+
+  // 腾讯云自定义样式 (数据万象外网流量需要付费)
+  //var imgStyle = '!' + imageWidth + 'x';
+  //var imgStyle = '!300x';
+
+  // 生成相册
+  var linkDataPath = imgDataPath;
+  var photo = {
+    page: 1,
+    offset: imgMaxNum,
+    init: function () {
+      var that = this;
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", linkDataPath, true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var data = JSON.parse(xhr.responseText);
+          that.render(that.page, data);
+        }
+      };
+      xhr.send();
+    },
+    render: function (page, data) {
+      var begin = (page - 1) * this.offset;
+      var end = page * this.offset;
+      if (begin >= data.length) return;
+      var imgNameWithPattern, imgName, imageSize, imageX, imageY, li = "";
+      for (var i = begin; i < end && i < data.length; i++) {
+        imgNameWithPattern = data[i].split(' ')[1];
+        imgName = imgNameWithPattern.split('.')[0];
+        imageSize = data[i].split(' ')[0];
+        imageX = imageSize.split('.')[0];
+        imageY = imageSize.split('.')[1];
+        li += '<div class="card" style="width:' + imageWidth + 'px" >';
+        li += '<div class="album-photo" style="height:'+ imageWidth * imageY / imageX + 'px">';
+        li += '<a class="fancybox fancybox.image" href="' + imgPath + imgNameWithPattern + '" itemscope="" itemtype="http://schema.org/ImageObject" itemprop="url" data-fancybox="group" rel="group" data-caption="' + imgName + '" title="' +  imgName + '">';
+        li += '<img data-src="' + imgPath + imgNameWithPattern + '" src="' + imgPath + imgNameWithPattern + '" alt="' +  imgName + '" data-loaded="true">';
+        li += '</a>';
+        li += '</div>';
+        li += '</div>';
+      }
+      album.insertAdjacentHTML('beforeend', li);
+      this.minigrid();
+    },
+    minigrid: function () {
+      var grid = new Minigrid({
+        container: '.album',
+        item: '.card',
+        gutter: 12
+      });
+      grid.mount();
+      window.addEventListener('resize', function () {
+        grid.mount();
+      });
+    }
+  };
+  photo.init();
+}
+</script>
+</body>
+</html>

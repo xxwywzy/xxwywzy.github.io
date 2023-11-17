@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/resources/favicon/favicon.png">
+  <link rel="mask-icon" href="/resources/favicon/favicon.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"xxwywzy.github.io","root":"/","images":"/resources/img/","scheme":"Gemini","darkmode":true,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"livere","storage":true,"lazyload":false,"nav":null,"activeClass":"livere"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本篇博客为 CS229 学习笔记第七部分，主题是：正则化与模型选择。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CS229 学习笔记之七：正则化与模型选择">
+<meta property="og:url" content="https://xxwywzy.github.io/2018/04/19/CS229-7/">
+<meta property="og:site_name" content="口仆">
+<meta property="og:description" content="本篇博客为 CS229 学习笔记第七部分，主题是：正则化与模型选择。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-07-07-024755.png">
+<meta property="article:published_time" content="2018-04-19T12:43:02.000Z">
+<meta property="article:modified_time" content="2023-08-15T06:20:21.000Z">
+<meta property="article:author" content="Zheyu Wang">
+<meta property="article:tag" content="CS229">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2019-07-07-024755.png">
+
+
+<link rel="canonical" href="https://xxwywzy.github.io/2018/04/19/CS229-7/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://xxwywzy.github.io/2018/04/19/CS229-7/","path":"2018/04/19/CS229-7/","title":"CS229 学习笔记之七：正则化与模型选择"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>CS229 学习笔记之七：正则化与模型选择 | 口仆</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/resources/fonts/longcang/longcang-regular.css" >
+<link rel="stylesheet" href="/resources/fonts/lxgw/lxgwwenkailite-regular.css" >
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">口仆</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Long may the sunshine</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-culture"><a href="/culture/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>MEME</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E9%80%89%E6%8B%A9"><span class="nav-number">1.</span> <span class="nav-text">模型选择</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%A4%E5%8F%89%E9%AA%8C%E8%AF%81"><span class="nav-number">2.</span> <span class="nav-text">交叉验证</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9"><span class="nav-number">3.</span> <span class="nav-text">特征选择</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8C%85%E8%A3%85%E5%99%A8%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9"><span class="nav-number">3.1.</span> <span class="nav-text">包装器特征选择</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%87%E6%BB%A4%E5%99%A8%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9"><span class="nav-number">3.2.</span> <span class="nav-text">过滤器特征选择</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%BB%9F%E8%AE%A1%E4%B8%8E%E6%AD%A3%E5%88%99%E5%8C%96"><span class="nav-number">4.</span> <span class="nav-text">贝叶斯统计与正则化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE"><span class="nav-number">5.</span> <span class="nav-text">思维导图</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zheyu Wang"
+      src="/resources/favicon/avatar.png">
+  <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+  <div class="site-description" itemprop="description">相信过程</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">85</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xxwywzy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/xxwywzy" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/xxwywzy" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/xxwywzy" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2018/04/19/CS229-7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resources/favicon/avatar.png">
+      <meta itemprop="name" content="Zheyu Wang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="口仆">
+      <meta itemprop="description" content="相信过程">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="CS229 学习笔记之七：正则化与模型选择 | 口仆">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CS229 学习笔记之七：正则化与模型选择
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-04-19 20:43:02" itemprop="dateCreated datePublished" datetime="2018-04-19T20:43:02+08:00">2018-04-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">课程笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>8 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><div class="note info"><p>本篇博客为 CS229 学习笔记第七部分，主题是：正则化与模型选择。</p>
+</div>
+<span id="more"></span>
+<h1 id="模型选择">模型选择</h1>
+<p>对于一个学习问题，我们可能有多种模型可以选择，例如：</p>
+<ul>
+<li>多项式回归中的不同项数对应的模型</li>
+<li>局部加权回归中不同带宽参数对应的模型</li>
+<li>L1 正则化支持向量机中的不同参数 <span class="math inline">\(C\)</span> 对应的模型</li>
+</ul>
+<p>我们希望可以自动选择一个权衡方差与偏差最好的模型。为了更加具体，本节所讨论的模型集合为<strong>有限集</strong> <span class="math inline">\(\mathcal{M} = \{\mathcal{M}_1,\dots,\mathcal{M}_d\}\)</span>，向无限集的推广并不难。该模型集合可以是一系列类似的模型（如不同项数的多项式模型），也可以是完全不同的模型（如 SVM、神经网络或逻辑回归）。</p>
+<h1 id="交叉验证">交叉验证</h1>
+<p>给定一个训练集 <span class="math inline">\(S\)</span>，基于经验风险最小化，我们可以考虑如下的算法进行模型选择：</p>
+<ol type="1">
+<li>在 <span class="math inline">\(S\)</span> 上训练每个模型 <span class="math inline">\(M_i\)</span>，得到每个模型对应的假设 <span class="math inline">\(h_i\)</span></li>
+<li>选择具有最小训练误差的假设</li>
+</ol>
+<p>很遗憾，上述算法并<em>不会</em>工作。以多项式模型为例，其项数越高，对训练集的拟合越好，因此上述算法一定会选出高项数且高方差的模型，这并不是一个好的选择。</p>
+<p>下面给出一个可以工作的算法：<strong>保留交叉验证</strong>（hold-out cross validation)</p>
+<ol type="1">
+<li>随机将训练集 <span class="math inline">\(S\)</span> 分为 <span class="math inline">\(S_{\text{train}}\)</span>（通常用 70% 的数据）和 <span class="math inline">\(S_{\text{cv}}\)</span>（剩余的 30%）。<span class="math inline">\(S_{\text{cv}}\)</span> 称为<strong>保留交叉验证集</strong></li>
+<li>仅在 <span class="math inline">\(S_{\text{train}}\)</span> 上训练每个模型 <span class="math inline">\(M_i\)</span>，得到其对应的假设 <span class="math inline">\(h_i\)</span></li>
+<li>选择在保留交叉验证集上误差（<span class="math inline">\(\hat\epsilon_{S_{\text{cv}}}(h_i)\)</span>）最小的假设 <span class="math inline">\(h_i\)</span> 作为输出</li>
+</ol>
+<p>通过在模型没有训练的 <span class="math inline">\(S_{\text{cv}}\)</span> 上进行测试，我们可以更好地估计假设 <span class="math inline">\(h_i\)</span> 的真实泛化误差。</p>
+<p>上述算法的第三步也可以用如下方法替代：根据保留交叉验证集选择选择出模型后，再使用全部训练集对模型进行训练。这通常是一个好的主意，除非算法对于数据的初始状态十分敏感，即可能在 <span class="math inline">\(S_{\text{cv}}\)</span> 上的训练表现会很差。</p>
+<p>保留交叉验证集的缺点是其浪费了很多数据（30%）。虽然我们可以使用全部训练集重新训练模型，但我们仍然只使用了 70% 的数据来找到一个好的模型。如果数据量较大，那么这并没有什么问题，但是如果数据量很小的话，我们应该考虑其他的算法。</p>
+<p>下面给出 <strong>k 保留交叉验证</strong>方法（k-fold cross validation），这种方法每次保留更少的数据用于验证：</p>
+<ol type="1">
+<li>随机将 <span class="math inline">\(S\)</span> 分为 <span class="math inline">\(k\)</span> 个互斥的子集，每个子集中含有 <span class="math inline">\(m/k\)</span> 个训练样本，我们称之为子集 <span class="math inline">\(S_1,\dots,S_k\)</span></li>
+<li>对于每个模型 <span class="math inline">\(M_i\)</span>，按照如下步骤进行分析：For <span class="math inline">\(j=1,\dots,k\)</span>，在除去子集 <span class="math inline">\(S_j\)</span> 上的训练集上训练每个模型，得到对应的假设 <span class="math inline">\(h_{ij}\)</span>；在 <span class="math inline">\(S_j\)</span> 上测试假设 <span class="math inline">\(h_{ij}\)</span>，得到 <span class="math inline">\(\hat\epsilon_{S_j}(h_{ij})\)</span>；模型 <span class="math inline">\(M_i\)</span> 的估计泛化误差通过求 <span class="math inline">\(\hat\epsilon_{S_j}(h_{ij})\)</span> 的平均得到</li>
+<li>选择具有最小估计泛化误差的模型 <span class="math inline">\(M_i\)</span>，然后在整个训练集上重新训练，得出的结果即为我们的最终假设</li>
+</ol>
+<p>与保留交叉验证相比，该方法需要训练每个模型 <span class="math inline">\(k\)</span> 次，计算代价更高。对于 <span class="math inline">\(k\)</span> 一个经典的选择是 <span class="math inline">\(k=10\)</span>。在某些样本量很小的情况下，我们会选择 <span class="math inline">\(k=m\)</span>，这种方法被称为<strong>留一交叉验证</strong>（leave-one-out cross validation）。</p>
+<p>虽然我们介绍各种不同的交叉验证作为模型选择的方法，但其也可以用来评估<em>单个</em>模型或算法的性能。</p>
+<h1 id="特征选择">特征选择</h1>
+<p>模型选择的一个特例是<strong>特征选择</strong>（feature selection）。为了引出特征选择问题，假设我们有一个监督学习算法，其特征数量非常之大（<span class="math inline">\(n \gg m\)</span>），但是你认为只有一小部分特征与学习任务相关。即便使用一个简单的线性分类器，假设的 VC 维也会是 <span class="math inline">\(O(n)\)</span>，如果训练集不是特别大，很容易出现过拟合的问题。</p>
+<p>因此，我们需要一个特征选择算法来减少特征的数量。给定 <span class="math inline">\(n\)</span> 个特征，总共有 <span class="math inline">\(2^n\)</span> 种可能的子集（每个特征可选可不选），可以将其看作是一个包含 <span class="math inline">\(2^n\)</span> 种模型的模型选择问题。由于 <span class="math inline">\(n\)</span> 较大，因此遍历所有的模型代价过高，一般会采用一些<strong>启发式</strong>的搜索流程来找到好的特征子集。下面介绍两种启发式的特征选择算法：<strong>包装器特征选择</strong>（wrapper feature selection）和<strong>过滤器特征选择</strong>（filter feature selection）。</p>
+<h2 id="包装器特征选择">包装器特征选择</h2>
+<p>包装器特征选择可以分为<strong>前向搜索</strong>与<strong>后向搜索</strong>两种。前向搜索的流程如下：</p>
+<ol type="1">
+<li>初始化 <span class="math inline">\(\mathcal{F} = \emptyset\)</span></li>
+<li>重复：对于 <span class="math inline">\(i=1,\dots,n\)</span>，如果 <span class="math inline">\(i \notin \mathcal{F}\)</span>，令 <span class="math inline">\(\mathcal{F}_i=\mathcal{F} \cup \{i\}\)</span>，使用某种交叉验证来评估特征集 <span class="math inline">\(\mathcal{F}_i\)</span>（<span class="math inline">\(i \in \mathcal{F}\)</span> 时不评估）。将 <span class="math inline">\(\mathcal{F}\)</span> 设为上一步骤（遍历一次）中表现最佳的特征子集</li>
+<li>选择整个搜索过程中表现最佳的特征子集输出</li>
+</ol>
+<p>第二步中循环的结束条件可以是当 <span class="math inline">\(\mathcal{F}= \{1,\ldots,n\}\)</span> 为整个特征集，也可以指定一个特征数量的上界。后向搜索与前向搜索类似，只是其初始值为 <span class="math inline">\(\mathcal{F}= \{1,\ldots,n\}\)</span>，然后逐步减少特征数量。</p>
+<p>包装器特征选择算法通常效果较好，但是相对来说计算代价较高。完整的前向搜索过程会进行约 <span class="math inline">\(O(n^2)\)</span>次学习算法的调用。</p>
+<h2 id="过滤器特征选择">过滤器特征选择</h2>
+<p>相比之下，过滤器特征选择算法的计算代价很小。算法思想是计算每个特征 <span class="math inline">\(x_i\)</span> 对其类别标签 <span class="math inline">\(y\)</span> 所能体现的信息量 <span class="math inline">\(S(i)\)</span>，然后选择得分最高的 <span class="math inline">\(k\)</span> 个特征作为特征集。一般将 <span class="math inline">\(S(i)\)</span> 定义为 <span class="math inline">\(x_i\)</span> 与 <span class="math inline">\(y\)</span> 之间的相关程度（基于训练集计算）。</p>
+<p>实践中通过 <span class="math inline">\(x_i\)</span> 与 <span class="math inline">\(y\)</span> 之间的<strong>互信息</strong>（mutual information）来计算 <span class="math inline">\(S(i)\)</span>： <span class="math display">\[
+\text{MI}(x_i,y) = \sum_{x_i \in \{0,1\}} \sum_{y \in \{0,1\}} p(x_i,y) \log \frac {p(x_i,y)}{p(x_i)p(y)}
+\]</span></p>
+<p>这里假设 <span class="math inline">\(x_i\)</span> 和 <span class="math inline">\(y\)</span> 都是二元分类。上式中的概率值都基于训练集来估计。</p>
+<p>为了更好的理解互信息，可以将其表示成 <strong>KL 散度</strong>（Kullback-Leibler divergence） <span class="math display">\[
+\text{MI}(x_i,y) = \text{KL}(p(x_i,y)||p(x_i)p(y))
+\]</span></p>
+<p>KL 散度表明 <span class="math inline">\(p(x_i,y)\)</span> 与 <span class="math inline">\(p(x_i)p(y)\)</span> 的不同程度。如果 <span class="math inline">\(x_i\)</span> 和 <span class="math inline">\(y\)</span> 独立同分布，那么我们有 <span class="math inline">\(p(x_i,y) = p(x_i)p(y)\)</span>，其 KL 散度为 0。</p>
+<p>当你得到所有的 <span class="math inline">\(S(i)\)</span> 并排序完成后，应该如何选择 <span class="math inline">\(k\)</span> ？一个标准的方法是使用交叉验证来在 <span class="math inline">\(k\)</span> 的可能选项中选择。</p>
+<h1 id="贝叶斯统计与正则化">贝叶斯统计与正则化</h1>
+<p>本部分将介绍对抗过拟合的另外一个工具。之前我们介绍了基于最大似然法的参数拟合，其公式如下： <span class="math display">\[
+\theta_{\text{ML}} = \arg \max_\theta \prod_{i=1}^m p(y^{(i)}|x^{(i)};\theta)
+\]</span></p>
+<p>我们将 <span class="math inline">\(\theta\)</span> 看作一个<strong>未知常量</strong>，而并不是一个随机变量，这是一种<strong>频率学派</strong>的观点。从<strong>贝叶斯学派</strong>的角度，我们将 <span class="math inline">\(\theta\)</span> 看作一个<strong>未知的随机变量</strong>，指定一个 <span class="math inline">\(\theta\)</span> 的先验分布 <span class="math inline">\(p(\theta)\)</span>。</p>
+<p>给定一个训练集 <span class="math inline">\(S=\{(x^{(i)},y^{(i)})\}_{i=1}^m\)</span>，我们可以先计算参数的后验分布： <span class="math display">\[
+\begin{aligned}
+p(\theta|S) &amp;= \frac {p(S|\theta)p(\theta)} {p(S)} \\
+&amp;= \frac {\left(\prod_{i=1}^m  p(y^{(i)}|x^{(i)},\theta)\right)p(\theta)} {\int_{\theta}\left(\prod_{i=1}^m  p(y^{(i)}|x^{(i)},\theta)p(\theta)\right)d\theta}
+\end{aligned}
+\]</span></p>
+<p>注意这里使用了逗号而不是分号（表明 <span class="math inline">\(\theta\)</span> 是一个随机变量）。<span class="math inline">\(p(y^{(i)}|x^{(i)},\theta)\)</span> 根据你使用的模型来决定。当要预测一个新的 <span class="math inline">\(x\)</span> 的输出时，我们可以基于 <span class="math inline">\(\theta\)</span> 的后验分布来计算分类标签的后验分布： <span class="math display">\[
+p(y|x,S) = \int_\theta p(y|x,\theta)p(\theta|S)d\theta
+\]</span> 因此，预测的输出（对离散型变量为求和）为： <span class="math display">\[
+\text{E}[y|x,S] = \int_y yp(y|x,S)dy
+\]</span> 上述过程是完整的贝叶斯预测，但是实际上该后验分布是很难计算的（因为 <span class="math inline">\(\theta\)</span> 的积分计算难以求出闭合解/解析解）。因此，实际应用中我们会对 <span class="math inline">\(\theta\)</span> 的后验分布进行估计。</p>
+<p>一个常用的估计方法是将后验分布使用一个单点估计来代替。对 <span class="math inline">\(\theta\)</span> 的<strong>最大后验估计</strong>（MAP）为： <span class="math display">\[
+\theta_{\text{MAP}} = \arg \max_\theta \prod_{i=1}^m p(y^{(i)}|x^{(i)},\theta)p(\theta)
+\]</span></p>
+<p>和最大似然相比，只是末尾多了一项 <span class="math inline">\(\theta\)</span> 的先验分布 <span class="math inline">\(p(\theta)\)</span>。在实际应用中，<span class="math inline">\(p(\theta)\)</span> 的一个常用选择是 <span class="math inline">\(\theta \sim \mathcal{N}(0, \tau^2I)\)</span>。</p>
+<p>与最大似然相比，拟合出的参数将具有更小的范数，从而使得贝叶斯 MAP 更<strong>易于避免过拟合</strong>。例如，对于文本分类问题，虽然 <span class="math inline">\(n \gg m\)</span>，贝叶斯逻辑回归仍然是一个比较高效的算法。我们可以将贝叶斯 MAP 看作是在最大似然的公式里加入了一个惩罚项，以防止参数过拟合。</p>
+<h1 id="思维导图">思维导图</h1>
+<p><img src="http://media.zjubiomedit.com/2019-07-07-024755.png" width=100%></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+
+
+
+<div class="license">
+  <div class="license-title">CS229 学习笔记之七：正则化与模型选择</div>
+  <div class="license-link">
+    <a href="https://xxwywzy.github.io/2018/04/19/CS229-7/">https://xxwywzy.github.io/2018/04/19/CS229-7/</a>
+  </div>
+  <div class="license-meta">
+    <div class="license-meta-item">
+      <div class="license-meta-title">本文作者</div>
+      <div class="license-meta-text">
+          Zheyu Wang
+      </div>
+    </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">发布于</div>
+        <div class="license-meta-text">
+          2018-04-19
+        </div>
+      </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">更新于</div>
+        <div class="license-meta-text">
+          2023-08-15
+        </div>
+      </div>
+    <div class="license-meta-item">
+      <div class="license-meta-title">许可协议</div>
+      <div class="license-meta-text">
+          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank">CC BY-NC-SA 4.0</a>
+      </div>
+    </div>
+  </div>
+  <div class="license-statement">
+      转载或引用本文时，请遵守上述许可协议，注明出处、不得用于商业用途！
+  </div>
+</div>
+          <div class="post-tags">
+              <a href="/tags/CS229/" rel="tag"># CS229</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/04/16/uncharted4/" rel="prev" title="A thief's end —— 神秘海域4通关感想">
+                  <i class="fa fa-angle-left"></i> A thief's end —— 神秘海域4通关感想
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/04/22/game-engine-1/" rel="next" title="《游戏引擎架构》读书笔记之一：导论">
+                  《游戏引擎架构》读书笔记之一：导论 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81ODgyNi8zNTI4OA=="></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">332k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">18:26</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+
+
+  <style>
+    #taboola-livere { display: none;}
+  </style>
+
+
+
+<script type="text/javascript">
+var linkLists = document.querySelectorAll(".link-list");
+
+linkLists.forEach(function(linkList) {
+  var listPath = linkList.getAttribute('json-src');
+  var iconPath = linkList.getAttribute('icon-src');
+  
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', listPath, true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      var data = JSON.parse(xhr.responseText);
+      
+      var li = "";
+      linkList.innerHTML = '';
+
+      for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+        var info = data[infoIndex];
+        var labelWarn = info['warn'] ? '<span class="label warn">' + info['warn'] + '</span>' : '';
+        var labelInfo = info['info'] ? '<span class="label info">' + info['info'] + '</span>' : '';
+
+        li += '<div class="link-list-container">';
+        li += '<img class="link-list-image" src="' + iconPath + info['logo'] + '">';
+        li += '<p>' + info['title'] + labelInfo + labelWarn + '</p>';
+        li += '<p>' + info['intro'] + '</p>';
+        li += '<a href="' + info['url'] + '" rel="noopener" target="_blank" data-pjax-state=""></a>';
+        li += '</div>';
+      }
+      
+      linkList.innerHTML = li;
+    }
+  };
+  xhr.send();
+});
+</script>
+
+
+<script type="text/javascript">
+var cultureList = document.querySelectorAll(".culture-list");
+if (cultureList.length !== 0) {
+  var j = -1;
+  for (var i = 0; i < cultureList.length; i++) {
+    const listPath = cultureList[i].getAttribute('json-src');
+    const coverPath = cultureList[i].getAttribute('cover-src');
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', listPath, true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        j++;
+        var data = JSON.parse(xhr.responseText);
+        var li = "";
+        
+        cultureList[j].innerHTML = '';
+
+        for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+          var info = data[infoIndex];
+          
+          var title = info['title'];
+          if (info['link']) {
+            title = '<a href="' + info['link'] + '">' + info['title'] + '</a>';
+          }
+
+          var author = info['author'] ? '<span class="author">' + info['author'] + '</span>' : '';
+
+          var intro = info['intro'] ? info['intro'] : '';
+
+          var star = '';
+          if (info['score'] == null) {
+            star = '';
+          } else {
+            var colorStar = '';
+            var greyStar = '';
+            var int = Math.floor(info['score']); //整数部分
+            var fract = 0;
+            if (info['score'] % 1 !== 0) {
+              fract = 1;
+            }
+            for (var m = 0; m < int; m++) {
+              colorStar += '★';
+            }
+            if (fract !== 0) {
+              colorStar += '☆';
+            }
+            for (var m = 0; m < (5 - fract - int); m++) {
+              greyStar += '☆';
+            }
+            if (info['score'] !== 5) {
+              star = '<span class="star-score">' + colorStar + '<span class="grey-star">' + greyStar + '</span></span>';
+            } else {
+              star = '<span class="star-score">' + colorStar + '</span>';
+            }
+          }
+
+          li += '<div class="media">';
+          li += '<div class="media-cover" style="background-image:url(' + coverPath + info['cover'] + ')"></div>';
+          li += '<div class="media-meta">';
+          li += '<div class="media-meta-item title">' + title + '</div>';
+          li += '<div class="media-meta-item">' + author + star + '</div>';
+          li += '<div class="media-meta-item intro">' + intro + '</div>';
+          li += '</div></div>';
+        }
+        
+        cultureList[j].innerHTML = li;
+      }
+    };
+    xhr.send();
+  }
+}
+</script>
+
+
+
+
+<script src="/resources/minigrid.min.js"></script>
+<script type="text/javascript">
+var album = document.querySelector(".album");
+if (album) {
+  // 相册列表 JSON 数据
+  var imgDataPath = album.getAttribute('json-src');
+  // 照片存储路径
+  var imgPath = album.getAttribute('photo-src');
+  // 最多显示数量
+  var imgMaxNum = 50;
+  // 获取窗口大小以决定图片宽度
+  var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  var imageWidth;
+
+  if (windowWidth < 768) {
+    imageWidth = 145; // 移动端图片宽度
+  } else {
+    imageWidth = 235;
+  }
+
+  // 腾讯云自定义样式 (数据万象外网流量需要付费)
+  //var imgStyle = '!' + imageWidth + 'x';
+  //var imgStyle = '!300x';
+
+  // 生成相册
+  var linkDataPath = imgDataPath;
+  var photo = {
+    page: 1,
+    offset: imgMaxNum,
+    init: function () {
+      var that = this;
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", linkDataPath, true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var data = JSON.parse(xhr.responseText);
+          that.render(that.page, data);
+        }
+      };
+      xhr.send();
+    },
+    render: function (page, data) {
+      var begin = (page - 1) * this.offset;
+      var end = page * this.offset;
+      if (begin >= data.length) return;
+      var imgNameWithPattern, imgName, imageSize, imageX, imageY, li = "";
+      for (var i = begin; i < end && i < data.length; i++) {
+        imgNameWithPattern = data[i].split(' ')[1];
+        imgName = imgNameWithPattern.split('.')[0];
+        imageSize = data[i].split(' ')[0];
+        imageX = imageSize.split('.')[0];
+        imageY = imageSize.split('.')[1];
+        li += '<div class="card" style="width:' + imageWidth + 'px" >';
+        li += '<div class="album-photo" style="height:'+ imageWidth * imageY / imageX + 'px">';
+        li += '<a class="fancybox fancybox.image" href="' + imgPath + imgNameWithPattern + '" itemscope="" itemtype="http://schema.org/ImageObject" itemprop="url" data-fancybox="group" rel="group" data-caption="' + imgName + '" title="' +  imgName + '">';
+        li += '<img data-src="' + imgPath + imgNameWithPattern + '" src="' + imgPath + imgNameWithPattern + '" alt="' +  imgName + '" data-loaded="true">';
+        li += '</a>';
+        li += '</div>';
+        li += '</div>';
+      }
+      album.insertAdjacentHTML('beforeend', li);
+      this.minigrid();
+    },
+    minigrid: function () {
+      var grid = new Minigrid({
+        container: '.album',
+        item: '.card',
+        gutter: 12
+      });
+      grid.mount();
+      window.addEventListener('resize', function () {
+        grid.mount();
+      });
+    }
+  };
+  photo.init();
+}
+</script>
+</body>
+</html>

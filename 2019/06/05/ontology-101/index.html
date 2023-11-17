@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/resources/favicon/favicon.png">
+  <link rel="mask-icon" href="/resources/favicon/favicon.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"xxwywzy.github.io","root":"/","images":"/resources/img/","scheme":"Gemini","darkmode":true,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"livere","storage":true,"lazyload":false,"nav":null,"activeClass":"livere"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本篇博客介绍如何构建你的第一个本体。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="本体入门之一：本体构建 101">
+<meta property="og:url" content="https://xxwywzy.github.io/2019/06/05/ontology-101/">
+<meta property="og:site_name" content="口仆">
+<meta property="og:description" content="本篇博客介绍如何构建你的第一个本体。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/blog/20190507/vzdyuGRfoQvC.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/blog/20190507/UFTV5jvRLSKS.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/blog/20190507/soyN3PUVmIFW.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/blog/20190507/j1NxqtRDgkBS.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-05-29-115510.jpg">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-05-30-024010.png">
+<meta property="article:published_time" content="2019-06-05T14:23:06.000Z">
+<meta property="article:modified_time" content="2023-08-06T09:35:47.000Z">
+<meta property="article:author" content="Zheyu Wang">
+<meta property="article:tag" content="本体">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/blog/20190507/vzdyuGRfoQvC.png">
+
+
+<link rel="canonical" href="https://xxwywzy.github.io/2019/06/05/ontology-101/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://xxwywzy.github.io/2019/06/05/ontology-101/","path":"2019/06/05/ontology-101/","title":"本体入门之一：本体构建 101"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>本体入门之一：本体构建 101 | 口仆</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/resources/fonts/longcang/longcang-regular.css" >
+<link rel="stylesheet" href="/resources/fonts/lxgw/lxgwwenkailite-regular.css" >
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">口仆</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Long may the sunshine</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-culture"><a href="/culture/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>MEME</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9E%84%E5%BB%BA%E6%9C%AC%E4%BD%93"><span class="nav-number">1.</span> <span class="nav-text">为什么构建本体？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%9C%AC%E4%BD%93"><span class="nav-number">2.</span> <span class="nav-text">什么是本体？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%AC%E4%BD%93%E6%9E%84%E5%BB%BA%E6%96%B9%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">本体构建方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5-%E7%A1%AE%E5%AE%9A%E6%9C%AC%E4%BD%93%E7%9A%84%E9%A2%86%E5%9F%9F%E5%92%8C%E8%8C%83%E5%9B%B4"><span class="nav-number">3.1.</span> <span class="nav-text">第一步 确定本体的领域和范围</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5-%E8%80%83%E8%99%91%E9%87%8D%E7%94%A8%E7%8E%B0%E6%9C%89%E7%9A%84%E6%9C%AC%E4%BD%93"><span class="nav-number">3.2.</span> <span class="nav-text">第二步 考虑重用现有的本体</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5-%E5%88%97%E4%B8%BE%E6%9C%AC%E4%BD%93%E4%B8%AD%E7%9A%84%E9%87%8D%E8%A6%81%E6%9C%AF%E8%AF%AD"><span class="nav-number">3.3.</span> <span class="nav-text">第三步 列举本体中的重要术语</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E5%9B%9B%E6%AD%A5-%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%8F%8A%E5%85%B6%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84"><span class="nav-number">3.4.</span> <span class="nav-text">第四步 定义类及其层次结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%94%E6%AD%A5-%E5%AE%9A%E4%B9%89%E7%B1%BB%E7%9A%84%E5%B1%9E%E6%80%A7"><span class="nav-number">3.5.</span> <span class="nav-text">第五步 定义类的属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E5%85%AD%E6%AD%A5-%E5%AE%9A%E4%B9%89%E5%B1%9E%E6%80%A7%E7%9A%84%E9%99%90%E5%88%B6"><span class="nav-number">3.6.</span> <span class="nav-text">第六步 定义属性的限制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%9E%E6%80%A7%E5%9F%BA%E6%95%B0"><span class="nav-number">3.6.1.</span> <span class="nav-text">属性基数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%9E%E6%80%A7%E5%80%BC%E7%B1%BB%E5%9E%8B"><span class="nav-number">3.6.2.</span> <span class="nav-text">属性值类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%9E%E6%80%A7%E7%9A%84%E9%A2%86%E5%9F%9F%E5%92%8C%E8%8C%83%E5%9B%B4"><span class="nav-number">3.6.3.</span> <span class="nav-text">属性的领域和范围</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%83%E6%AD%A5-%E5%88%9B%E9%80%A0%E5%AE%9E%E4%BE%8B"><span class="nav-number">3.7.</span> <span class="nav-text">第七步 创造实例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%8F%8A%E5%85%B6%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84"><span class="nav-number">4.</span> <span class="nav-text">定义类及其层次结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A1%AE%E4%BF%9D%E7%B1%BB%E7%9A%84%E5%B1%82%E6%AC%A1%E7%AD%89%E7%BA%A7%E6%98%AF%E6%AD%A3%E7%A1%AE%E7%9A%84"><span class="nav-number">4.1.</span> <span class="nav-text">确保类的层次等级是正确的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%9E%90%E7%B1%BB%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E4%B8%AD%E7%9A%84%E5%85%84%E5%BC%9F%E5%A7%90%E5%A6%B9"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 分析类层次结构中的兄弟姐妹</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E9%87%8D%E7%BB%A7%E6%89%BF"><span class="nav-number">4.3.</span> <span class="nav-text">多重继承</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E5%88%9B%E5%BB%BA%E6%96%B0%E7%9A%84%E7%B1%BB"><span class="nav-number">4.4.</span> <span class="nav-text">什么时候创建新的类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B0%E7%9A%84%E7%B1%BB%E8%BF%98%E6%98%AF%E6%96%B0%E7%9A%84%E5%B1%9E%E6%80%A7%E5%80%BC"><span class="nav-number">4.5.</span> <span class="nav-text">新的类还是新的属性值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E8%BF%98%E6%98%AF%E7%B1%BB"><span class="nav-number">4.6.</span> <span class="nav-text">实例还是类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%90%E5%88%B6%E8%8C%83%E5%9B%B4"><span class="nav-number">4.7.</span> <span class="nav-text">限制范围</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E7%A6%BB%E5%AD%90%E7%B1%BB"><span class="nav-number">4.8.</span> <span class="nav-text">分离子类</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E5%B1%9E%E6%80%A7%E6%9B%B4%E5%A4%9A%E7%BB%86%E8%8A%82"><span class="nav-number">5.</span> <span class="nav-text">定义属性—更多细节</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BD%AC%E7%BD%AE%E5%B1%9E%E6%80%A7"><span class="nav-number">5.1.</span> <span class="nav-text">转置属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%BB%98%E8%AE%A4%E5%80%BC"><span class="nav-number">5.2.</span> <span class="nav-text">默认值</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%91%BD%E5%90%8D"><span class="nav-number">6.</span> <span class="nav-text">命名</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%A7%E5%B0%8F%E5%86%99%E4%B8%8E%E5%88%86%E9%9A%94%E7%AC%A6"><span class="nav-number">6.1.</span> <span class="nav-text">大小写与分隔符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%95%E6%95%B0%E6%88%96%E5%A4%8D%E6%95%B0"><span class="nav-number">6.2.</span> <span class="nav-text">单数或复数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E7%BC%80%E5%92%8C%E5%90%8E%E7%BC%80"><span class="nav-number">6.3.</span> <span class="nav-text">前缀和后缀</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83"><span class="nav-number">6.4.</span> <span class="nav-text">其他命名规范</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%93%E8%AF%AD"><span class="nav-number">7.</span> <span class="nav-text">结语</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zheyu Wang"
+      src="/resources/favicon/avatar.png">
+  <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+  <div class="site-description" itemprop="description">相信过程</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">85</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xxwywzy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/xxwywzy" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/xxwywzy" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/xxwywzy" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2019/06/05/ontology-101/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resources/favicon/avatar.png">
+      <meta itemprop="name" content="Zheyu Wang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="口仆">
+      <meta itemprop="description" content="相信过程">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="本体入门之一：本体构建 101 | 口仆">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          本体入门之一：本体构建 101
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-06-05 22:23:06" itemprop="dateCreated datePublished" datetime="2019-06-05T22:23:06+08:00">2019-06-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%A7%91%E7%A0%94%E4%B8%8E%E5%86%99%E4%BD%9C/" itemprop="url" rel="index"><span itemprop="name">科研与写作</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%A7%91%E7%A0%94%E4%B8%8E%E5%86%99%E4%BD%9C/%E7%A7%91%E7%A0%94%E5%BF%83%E5%BE%97/" itemprop="url" rel="index"><span itemprop="name">科研心得</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3.8k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>13 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><div class="note warning"><p>本篇博客介绍如何构建你的第一个本体。</p>
+</div>
+<span id="more"></span>
+<p><a target="_blank" rel="noopener" href="https://protege.stanford.edu/publications/ontology_development/ontology101.pdf">原文地址</a></p>
+<p>本文是 <strong><em>Ontology Development 101: A Guide to Creating Your First Ontology</em></strong> 的学习笔记，旨在将介绍本体的基本概念和通用构建方法。</p>
+<h1 id="为什么构建本体">为什么构建本体？</h1>
+<p>构建本体的原因主要有以下几点： + 在人或软件之间分享对信息结构的共同理解 + 实现领域知识的重复使用 + 使得领域假设更明确 + 将领域知识与操作性知识分离 + 分析领域知识</p>
+<h1 id="什么是本体">什么是本体？</h1>
+<p>在本文中，本体指对<strong>某个领域内的概念的正式且详细的描述</strong>，其包括： + <strong>classes</strong>：描述领域中的概念 + <strong>slots</strong>：描述每个概念的属性 + <strong>facets</strong>：描述属性的限制</p>
+<p>一个本体及其 classes 的实例集构成一个<strong>知识库</strong>。实际应用中，构建一个本体包括：</p>
+<ul>
+<li>定义本体中的概念</li>
+<li>将概念进行分层，确定超类与子类关系</li>
+<li>定义概念的属性以及对这些属性的值的限制</li>
+<li>为实例填充这些属性值</li>
+</ul>
+<h1 id="本体构建方法">本体构建方法</h1>
+<p>下面介绍一种可行的构建本体的方法。首先，需要强调本体构建中的三条基础准则：</p>
+<ol type="1">
+<li>不存在对一个领域建模的绝对正确的方法
+<ul>
+<li>总是存在可行的替代方法</li>
+<li>最佳解决方法取决于具体的应用场景和预期的扩展性</li>
+</ul></li>
+<li>本体开发必然是一个迭代的过程</li>
+<li>本体中的概念应该与对应领域中的对象（物理或逻辑上）和关系接近
+<ul>
+<li>这些最可能作为名词（对象）或动词（关系）出现在描述领域的句子中</li>
+</ul></li>
+</ol>
+<h2 id="第一步-确定本体的领域和范围">第一步 确定本体的领域和范围</h2>
+<p>我们首先应该定义本体的领域和范围，即回答下列的基本问题： + 本体覆盖的领域是什么？ + 我们要用这个本体来干什么？ + 本体中的信息应该为何种类型的问题提供答案？ + 谁将来使用并维护本体？</p>
+<p>在确定了本体的基本范围后，一种确定本体具体范围的方法是，列出一系列本体应该能够回答的问题，这些问题被称为 <strong>competency questions</strong>，其专注于本体所涉及的领域，但也不用过于具体，我们将用这些问题来对已完成的本体进行测试，观察其是否能提供足够的信息。</p>
+<h2 id="第二步-考虑重用现有的本体">第二步 考虑重用现有的本体</h2>
+<p>在从头开始构建本体之前，最好先调研是否有相关的本体已经被构建出来了。我们可以基于这些本体进行进一步的改进和扩展。当前大部分本体都以电子形式提供，能够直接导入，可以方便地进行扩展。</p>
+<h2 id="第三步-列举本体中的重要术语">第三步 列举本体中的重要术语</h2>
+<p>写下我们想要展示的所有术语的列表是很有用的。一开始并不需要考虑术语之间的关系或概念重叠等问题，先保证<strong>列表的全面性</strong>。</p>
+<p>接下来的两步是开发类层次结构以及定义概念属性。这两步是本体设计中最重要的步骤，也是联系紧密的两步，我们通常先在层次结构中创建一些概念，然后描述这些概念的属性。</p>
+<h2 id="第四步-定义类及其层次结构">第四步 定义类及其层次结构</h2>
+<p>定义类及其层次结构通常有以下几种方法：</p>
+<ul>
+<li><strong>自顶向下</strong>的方法：先定义领域中最宽泛的概念，然后进行细化</li>
+<li><strong>自底向上</strong>的方法：先定义领域中最具体的概念，然后进行归纳</li>
+<li><strong>混合</strong>方法：将上述两种方法结合起来</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/blog/20190507/vzdyuGRfoQvC.png" width=40%></p>
+<p>上述三种方法没有优劣之分，取决于开发者对于领域的视角。不论使用哪种方法，我们都需要先定义类，再定义层次结构。先从第三步中的列表中选取能描述对象独特性的术语作为类，然后将这些类按层次结构组织。</p>
+<blockquote>
+<p>如果一个类 A 是类 B 的父类，则每一个 B 的实例都是 A 的实例。</p>
+</blockquote>
+<h2 id="第五步-定义类的属性">第五步 定义类的属性</h2>
+<p>仅仅靠类无法提供足够的信息，我们还需要定义类的属性来进一步描述类</p>
+<p><img src="http://media.zjubiomedit.com/blog/20190507/UFTV5jvRLSKS.png" width=60%></p>
+<p>我们已经从第三步的列表中选择了术语来构建类，大部分剩余的术语都将是类的属性。</p>
+<p>一般来说，属性可以分为以下几种：</p>
+<ul>
+<li>内在属性：如酒的味道</li>
+<li>外在属性：如酒的名称、地域</li>
+<li>部件：针对结构化的对象，可以是物理或抽象的部件</li>
+<li>关系：与其他个体之间的关系（注意和类层次结构区分）</li>
+</ul>
+<p>所有的子类都会<strong>继承</strong>其父类的属性，属性应该被放置到最宽泛的类中（即越靠近顶层越好）。</p>
+<h2 id="第六步-定义属性的限制">第六步 定义属性的限制</h2>
+<p>类的属性有着许多限制（facets），如值的类型、允许的值、值的数量等。下面将介绍一些常见的 facets：</p>
+<h3 id="属性基数">属性基数</h3>
+<p>定义一个属性可以有多少个值。有些本体只区分单数或复数的基数，有些本体则进一步定义基数最大和最小值；</p>
+<h3 id="属性值类型">属性值类型</h3>
+<p>描述一个属性的值的类型，常见的类型有：</p>
+<ul>
+<li>String 类型</li>
+<li>Number 类型</li>
+<li>Boolean 类型</li>
+<li>Enumerated 类型</li>
+<li>Instance 类型</li>
+</ul>
+<p>需要注意的是，Instance 类型用于表示个体之间的关系，需要定义允许的类的列表：</p>
+<p><img src="http://media.zjubiomedit.com/blog/20190507/soyN3PUVmIFW.png" width=50%></p>
+<h3 id="属性的领域和范围">属性的领域和范围</h3>
+<p>对于 Instance 类型的属性，其允许的类的列表被称为属性的<strong>范围</strong>（range），而一个属性所属的类被称为该属性的<strong>领域</strong>（domain）。领域一般不需要单独指定，在设置属性时通常默认被设置的类为该属性的领域。</p>
+<p>决定一个属性的领域和范围的法则是类似的：</p>
+<blockquote>
+<p>尽量保持类的宽泛性，但不要过于宽泛。</p>
+</blockquote>
+<h2 id="第七步-创造实例">第七步 创造实例</h2>
+<p>最后一步是创造类的具体实例，步骤如下</p>
+<ol type="1">
+<li>选择一个类</li>
+<li>创造该类的实例</li>
+<li>填充属性值</li>
+</ol>
+<p><img src="http://media.zjubiomedit.com/blog/20190507/j1NxqtRDgkBS.png" width=70%></p>
+<h1 id="定义类及其层次结构">定义类及其层次结构</h1>
+<p>本节介绍在定义类及其层次结构中可能会出现的错误。虽然类的层次结构取决于具体的应用场景，但是存在一些通用的规则。</p>
+<h2 id="确保类的层次等级是正确的">确保类的层次等级是正确的</h2>
+<p>类 A 是类 B 的子类表示 A 为 B 的<strong>一种</strong>，两者之间是 <strong>is-a</strong> 关系。一个常见错误是将单数的类作为其复数的子类，两者间并不满足”<strong>一种</strong>“关系，在命名时可以统一单复数来避免这一错误。</p>
+<p>等级关系具有<strong>传递性</strong>： &gt; 如果 B 是 A 的子类，C 是 B 的子类，那么 C 是 A 的子类。</p>
+<p>距离一个类最近的子类称为<strong>直接子类</strong>。类层次结构不是一成不变的，可能随着时间的推移需要重构结构。</p>
+<p>此外，还要注意区分类及其名称： &gt; 类表示的是一类概念，而不是表示这些概念的词语。</p>
+<p>相同概念的近义词不应该被表示成多个类。很多系统允许为类关联近义词，如果不能，应该在类的文档中说明。</p>
+<p>在构建类的层次结构时，还应该避免类的循环，即 A 是 B 的子类，同时 B 又是 A 的子类，这意味着 A 与 B 等价。</p>
+<h2 id="分析类层次结构中的兄弟姐妹">4.2 分析类层次结构中的兄弟姐妹</h2>
+<p><strong>Siblings</strong> 指同一类的不同直接子类，它们应该处于<strong>同一层级</strong>下。</p>
+<p>关于 siblings 的数量：一般在 2-12 个之间：</p>
+<ul>
+<li>如果只有一个子类，说明建模可能有问题或本体不完整</li>
+<li>如果超过一打子类，则可能需要一个额外的中间类</li>
+</ul>
+<p>有时候，如果没有自然的中间类，那么可以保持原样（不需要人造类）。</p>
+<h2 id="多重继承">多重继承</h2>
+<p>一个类可以同时是多个类的子类，它会继承所有父类的属性和限制。</p>
+<h2 id="什么时候创建新的类">什么时候创建新的类</h2>
+<p>一般来说，如果子类包含超类所不具有的特征时，可以考虑创建，包括： + 有额外的属性 + 属性有不同的限制 + 参与了和超类不同的关系</p>
+<p>在实际应用中，子类通常具有新属性，或新的属性值，抑或新的属性限制。但是，有时即便子类没有上述特征，也应该创建，例如：</p>
+<ul>
+<li>类之间有术语层级结构关系。一个例子是对于疾病的分类，其可能没有属性或属性相同， 但也应该划分等级。</li>
+<li>领域专家的判断。当领域专家普遍认为应该将某些概念与现有本体进行区分时，也需要为这些概念创建新的类。</li>
+</ul>
+<p>最后，我们不应该为每种额外的限制都构建子类，需要在创建有用的新类和创建过多的类中间保持平衡。</p>
+<h2 id="新的类还是新的属性值">新的类还是新的属性值</h2>
+<p>有时候，我们需要考虑是创建新的类还是将其用不同的属性值区分。一般来说，应该遵循如下原则：</p>
+<ol type="1">
+<li>如果不同属性值的概念会导致其他类中的属性值发生变化，那我们应该考虑创建新的类。否则使用不同的属性值即可。</li>
+<li>如果不同属性值的区别在你研究的领域中非常重要，并且你将不同属性值的对象看作不同种类的对象，则应该考虑新建类。</li>
+<li>如果一个独立实例所属的类会经常发生变化，则那个类应该作为属性值。</li>
+</ol>
+<p>一般我们常将数字、颜色、地点作为属性值。当然也存在例外情况，比如不同颜色的酒适合当作不同的类。</p>
+<h2 id="实例还是类">实例还是类</h2>
+<p>有时候，我们需要决定一个具体的概念是一个类还是单个实例。一般来说，应该遵循如下原则：</p>
+<ol type="1">
+<li>单个实例是知识库需要表达的最具体的概念，这取决于本体的应用目标。</li>
+<li>如果概念形成了自然的层级，那么应该被表示为类。</li>
+</ol>
+<p>只有类之间存在层级结构，知识表示系统中没有子实例的概念，因此我们需要将这些概念表示为类，即使其不再具有直接实例。</p>
+<p>Protege 允许用户建立抽象类：</p>
+<p><img src="http://media.zjubiomedit.com/2019-05-29-115510.jpg" width=30%></p>
+<h2 id="限制范围">限制范围</h2>
+<p>下面给出一些判断本体是否完整的规则： 1. 本体不应该包含领域中所有可能的信息。 2. 本体不应该包含所有可能的属性和类之间的关系。</p>
+<p>本体不要过于具体，也不要过于宽泛，一般最多定义一层额外的等级。例外，本体应该只保留最关键的属性，包含一些额外的关系信息会影响本体的使用，如一个生物学试验本体，不能将试验者看做生物体的子类，应该在文档中进行注明。</p>
+<h2 id="分离子类">分离子类</h2>
+<p>许多系统要求在构建本体时明确哪些类是<strong>分离</strong>（disjoint）的，即这些类不含有<strong>共同</strong>的实例。明确分离的类有助于验证本体的合法性。</p>
+<h1 id="定义属性更多细节">定义属性—更多细节</h1>
+<h2 id="转置属性">转置属性</h2>
+<p>一个属性的值可能会影响另外一个属性的值。例如制造者与制造的东西，两者之间相互关联，已知 A 是 B 的制造者，则可以推断出 A 制造了 B，这种关系称为<strong>转置关系</strong>。</p>
+<p>虽然这种关系看上去有些冗余，但从知识获取的角度保留两者更加方便。定义了转置关系后，知识系统会根据一个值自动填充另一个：</p>
+<p><img src="http://media.zjubiomedit.com/2019-05-30-024010.png" width=50%></p>
+<h2 id="默认值">默认值</h2>
+<p>大部分系统允许为属性指定默认值。如果一个类的大部分实例都具有相同的某个属性值，则我们可以将其设置为默认值。默认值可以在该属性的限制内改为任意值。</p>
+<p>注意：要区分默认属性值与属性值，属性值一旦确定是无法更改的。如所有甜酒的糖度属性都为 SWEET，这并不是默认属性，不可修改。</p>
+<h1 id="命名">命名</h1>
+<p>在本体中，为命名制定规范有助于本体更加容易被理解，也可以避免一些建模错误。</p>
+<p>在制定命名规范时，我们需要明确系统的特征，例如： + 对于类、属性和实例是否共享命名空间（即是否可以使用相同的名称） + 是否大小写敏感 + 名字中允许哪些分隔符</p>
+<h2 id="大小写与分隔符">大小写与分隔符</h2>
+<p>对于一个本体中的命名，保持同样的大小写习惯可以提升其可读性。通常将类名首字母大写，属性名首字母小写（如果系统大小写敏感）。</p>
+<p>当一个概念名称包含超过一个单词，我们需要进行分割，下面给出一些可能的选择： + 使用空格 + 将单词连在一起，首字母均大写 + 使用下划线、破折号或其他分隔符（要决定每一个单词要不要首字母大写）</p>
+<p>一般如果系统允许，建议使用空格。如果要和其他系统交互，还要考虑那些系统是否支持空格。</p>
+<h2 id="单数或复数">单数或复数</h2>
+<p>在命名中使用单复数没有好坏之分，只要保持前后一致即可，通常用单数。有的系统可能会提前要求确定单复数并不允许更改。</p>
+<h2 id="前缀和后缀">前缀和后缀</h2>
+<p>有些系统会使用前缀或后缀来区分类和属性，如 <code>has-</code> 或 <code>-of</code>。这种方法可以快速区分出类和属性，只是名称会稍长。</p>
+<h2 id="其他命名规范">其他命名规范</h2>
+<p>不要在名称后再添加 class、property、slot 这样的字符串，一般从上下文中已经可以区分类和属性，如类名首字母大写，属性名首字母小写。</p>
+<p>尽量避免在名称中使用缩略词。对于一个类的所有直接子类，其名称中关于是否包括超类的名称应该统一。</p>
+<h1 id="结语">结语</h1>
+<p>本文简单介绍了如何构建一个本体，最重要的信息是：<strong>任何领域都没有单一的正确本体</strong>。构建本体是一个创造性的过程，本体的质量只能通过实际应用来评价。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+
+
+
+<div class="license">
+  <div class="license-title">本体入门之一：本体构建 101</div>
+  <div class="license-link">
+    <a href="https://xxwywzy.github.io/2019/06/05/ontology-101/">https://xxwywzy.github.io/2019/06/05/ontology-101/</a>
+  </div>
+  <div class="license-meta">
+    <div class="license-meta-item">
+      <div class="license-meta-title">本文作者</div>
+      <div class="license-meta-text">
+          Zheyu Wang
+      </div>
+    </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">发布于</div>
+        <div class="license-meta-text">
+          2019-06-05
+        </div>
+      </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">更新于</div>
+        <div class="license-meta-text">
+          2023-08-06
+        </div>
+      </div>
+    <div class="license-meta-item">
+      <div class="license-meta-title">许可协议</div>
+      <div class="license-meta-text">
+          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank">CC BY-NC-SA 4.0</a>
+      </div>
+    </div>
+  </div>
+  <div class="license-statement">
+      转载或引用本文时，请遵守上述许可协议，注明出处、不得用于商业用途！
+  </div>
+</div>
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%AC%E4%BD%93/" rel="tag"># 本体</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/06/05/writing-stu-5/" rel="prev" title="Writing in the Sciences Week5 学习笔记">
+                  <i class="fa fa-angle-left"></i> Writing in the Sciences Week5 学习笔记
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/06/06/music-coursera-1/" rel="next" title="音乐理论基础-第一周学习笔记">
+                  音乐理论基础-第一周学习笔记 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81ODgyNi8zNTI4OA=="></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">332k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">18:26</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+
+
+  <style>
+    #taboola-livere { display: none;}
+  </style>
+
+
+
+<script type="text/javascript">
+var linkLists = document.querySelectorAll(".link-list");
+
+linkLists.forEach(function(linkList) {
+  var listPath = linkList.getAttribute('json-src');
+  var iconPath = linkList.getAttribute('icon-src');
+  
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', listPath, true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      var data = JSON.parse(xhr.responseText);
+      
+      var li = "";
+      linkList.innerHTML = '';
+
+      for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+        var info = data[infoIndex];
+        var labelWarn = info['warn'] ? '<span class="label warn">' + info['warn'] + '</span>' : '';
+        var labelInfo = info['info'] ? '<span class="label info">' + info['info'] + '</span>' : '';
+
+        li += '<div class="link-list-container">';
+        li += '<img class="link-list-image" src="' + iconPath + info['logo'] + '">';
+        li += '<p>' + info['title'] + labelInfo + labelWarn + '</p>';
+        li += '<p>' + info['intro'] + '</p>';
+        li += '<a href="' + info['url'] + '" rel="noopener" target="_blank" data-pjax-state=""></a>';
+        li += '</div>';
+      }
+      
+      linkList.innerHTML = li;
+    }
+  };
+  xhr.send();
+});
+</script>
+
+
+<script type="text/javascript">
+var cultureList = document.querySelectorAll(".culture-list");
+if (cultureList.length !== 0) {
+  var j = -1;
+  for (var i = 0; i < cultureList.length; i++) {
+    const listPath = cultureList[i].getAttribute('json-src');
+    const coverPath = cultureList[i].getAttribute('cover-src');
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', listPath, true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        j++;
+        var data = JSON.parse(xhr.responseText);
+        var li = "";
+        
+        cultureList[j].innerHTML = '';
+
+        for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+          var info = data[infoIndex];
+          
+          var title = info['title'];
+          if (info['link']) {
+            title = '<a href="' + info['link'] + '">' + info['title'] + '</a>';
+          }
+
+          var author = info['author'] ? '<span class="author">' + info['author'] + '</span>' : '';
+
+          var intro = info['intro'] ? info['intro'] : '';
+
+          var star = '';
+          if (info['score'] == null) {
+            star = '';
+          } else {
+            var colorStar = '';
+            var greyStar = '';
+            var int = Math.floor(info['score']); //整数部分
+            var fract = 0;
+            if (info['score'] % 1 !== 0) {
+              fract = 1;
+            }
+            for (var m = 0; m < int; m++) {
+              colorStar += '★';
+            }
+            if (fract !== 0) {
+              colorStar += '☆';
+            }
+            for (var m = 0; m < (5 - fract - int); m++) {
+              greyStar += '☆';
+            }
+            if (info['score'] !== 5) {
+              star = '<span class="star-score">' + colorStar + '<span class="grey-star">' + greyStar + '</span></span>';
+            } else {
+              star = '<span class="star-score">' + colorStar + '</span>';
+            }
+          }
+
+          li += '<div class="media">';
+          li += '<div class="media-cover" style="background-image:url(' + coverPath + info['cover'] + ')"></div>';
+          li += '<div class="media-meta">';
+          li += '<div class="media-meta-item title">' + title + '</div>';
+          li += '<div class="media-meta-item">' + author + star + '</div>';
+          li += '<div class="media-meta-item intro">' + intro + '</div>';
+          li += '</div></div>';
+        }
+        
+        cultureList[j].innerHTML = li;
+      }
+    };
+    xhr.send();
+  }
+}
+</script>
+
+
+
+
+<script src="/resources/minigrid.min.js"></script>
+<script type="text/javascript">
+var album = document.querySelector(".album");
+if (album) {
+  // 相册列表 JSON 数据
+  var imgDataPath = album.getAttribute('json-src');
+  // 照片存储路径
+  var imgPath = album.getAttribute('photo-src');
+  // 最多显示数量
+  var imgMaxNum = 50;
+  // 获取窗口大小以决定图片宽度
+  var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  var imageWidth;
+
+  if (windowWidth < 768) {
+    imageWidth = 145; // 移动端图片宽度
+  } else {
+    imageWidth = 235;
+  }
+
+  // 腾讯云自定义样式 (数据万象外网流量需要付费)
+  //var imgStyle = '!' + imageWidth + 'x';
+  //var imgStyle = '!300x';
+
+  // 生成相册
+  var linkDataPath = imgDataPath;
+  var photo = {
+    page: 1,
+    offset: imgMaxNum,
+    init: function () {
+      var that = this;
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", linkDataPath, true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var data = JSON.parse(xhr.responseText);
+          that.render(that.page, data);
+        }
+      };
+      xhr.send();
+    },
+    render: function (page, data) {
+      var begin = (page - 1) * this.offset;
+      var end = page * this.offset;
+      if (begin >= data.length) return;
+      var imgNameWithPattern, imgName, imageSize, imageX, imageY, li = "";
+      for (var i = begin; i < end && i < data.length; i++) {
+        imgNameWithPattern = data[i].split(' ')[1];
+        imgName = imgNameWithPattern.split('.')[0];
+        imageSize = data[i].split(' ')[0];
+        imageX = imageSize.split('.')[0];
+        imageY = imageSize.split('.')[1];
+        li += '<div class="card" style="width:' + imageWidth + 'px" >';
+        li += '<div class="album-photo" style="height:'+ imageWidth * imageY / imageX + 'px">';
+        li += '<a class="fancybox fancybox.image" href="' + imgPath + imgNameWithPattern + '" itemscope="" itemtype="http://schema.org/ImageObject" itemprop="url" data-fancybox="group" rel="group" data-caption="' + imgName + '" title="' +  imgName + '">';
+        li += '<img data-src="' + imgPath + imgNameWithPattern + '" src="' + imgPath + imgNameWithPattern + '" alt="' +  imgName + '" data-loaded="true">';
+        li += '</a>';
+        li += '</div>';
+        li += '</div>';
+      }
+      album.insertAdjacentHTML('beforeend', li);
+      this.minigrid();
+    },
+    minigrid: function () {
+      var grid = new Minigrid({
+        container: '.album',
+        item: '.card',
+        gutter: 12
+      });
+      grid.mount();
+      window.addEventListener('resize', function () {
+        grid.mount();
+      });
+    }
+  };
+  photo.init();
+}
+</script>
+</body>
+</html>

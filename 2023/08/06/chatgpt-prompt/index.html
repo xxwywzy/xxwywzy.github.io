@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/resources/favicon/favicon.png">
+  <link rel="mask-icon" href="/resources/favicon/favicon.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"xxwywzy.github.io","root":"/","images":"/resources/img/","scheme":"Gemini","darkmode":true,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"livere","storage":true,"lazyload":false,"nav":null,"activeClass":"livere"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本篇博客是 deeplearning.ai 最近推出的短期课程《ChatGPT Prompt Engineering for Developers》的学习总结。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ChatGPT 提示工程总结">
+<meta property="og:url" content="https://xxwywzy.github.io/2023/08/06/chatgpt-prompt/">
+<meta property="og:site_name" content="口仆">
+<meta property="og:description" content="本篇博客是 deeplearning.ai 最近推出的短期课程《ChatGPT Prompt Engineering for Developers》的学习总结。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/2023-05-17-085124.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2023-05-17-092701.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2023-05-17-102151.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2023-05-17-113926.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2023-05-18-120427.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2023-05-18-123714.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2023-05-17-091554.png">
+<meta property="article:published_time" content="2023-08-06T11:07:06.000Z">
+<meta property="article:modified_time" content="2023-10-21T04:36:10.000Z">
+<meta property="article:author" content="Zheyu Wang">
+<meta property="article:tag" content="ChatGPT">
+<meta property="article:tag" content="Prompt Engineering">
+<meta property="article:tag" content="大模型">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2023-05-17-085124.png">
+
+
+<link rel="canonical" href="https://xxwywzy.github.io/2023/08/06/chatgpt-prompt/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://xxwywzy.github.io/2023/08/06/chatgpt-prompt/","path":"2023/08/06/chatgpt-prompt/","title":"ChatGPT 提示工程总结"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>ChatGPT 提示工程总结 | 口仆</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/resources/fonts/longcang/longcang-regular.css" >
+<link rel="stylesheet" href="/resources/fonts/lxgw/lxgwwenkailite-regular.css" >
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">口仆</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Long may the sunshine</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-culture"><a href="/culture/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>MEME</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%95%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8C%87%E5%8D%97"><span class="nav-number">2.</span> <span class="nav-text">指南</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E5%86%99%E6%98%8E%E7%A1%AE%E8%80%8C%E6%B8%85%E6%99%B0%E7%9A%84%E6%8C%87%E4%BB%A4"><span class="nav-number">2.1.</span> <span class="nav-text">编写明确而清晰的指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%99%E6%A8%A1%E5%9E%8B%E8%B6%B3%E5%A4%9F%E7%9A%84%E6%97%B6%E9%97%B4%E6%80%9D%E8%80%83"><span class="nav-number">2.2.</span> <span class="nav-text">给模型足够的时间思考</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%AD%E4%BB%A3"><span class="nav-number">3.</span> <span class="nav-text">迭代</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%91%98%E8%A6%81"><span class="nav-number">4.</span> <span class="nav-text">摘要</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%86%E5%8C%96%E9%9C%80%E6%B1%82"><span class="nav-number">4.1.</span> <span class="nav-text">细化需求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%AD%97%E5%B7%AE%E5%BC%82"><span class="nav-number">4.2.</span> <span class="nav-text">关键字差异</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8E%A8%E7%90%86"><span class="nav-number">5.</span> <span class="nav-text">推理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%83%85%E6%84%9F%E5%88%86%E6%9E%90"><span class="nav-number">5.1.</span> <span class="nav-text">情感分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E6%8F%90%E5%8F%96"><span class="nav-number">5.2.</span> <span class="nav-text">信息提取</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BD%AC%E6%8D%A2"><span class="nav-number">6.</span> <span class="nav-text">转换</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BF%BB%E8%AF%91"><span class="nav-number">6.1.</span> <span class="nav-text">翻译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%AD%E6%B0%94%E8%B0%83%E6%95%B4"><span class="nav-number">6.2.</span> <span class="nav-text">语气调整</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%BC%E5%BC%8F%E8%BD%AC%E6%8D%A2"><span class="nav-number">6.3.</span> <span class="nav-text">格式转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E5%AD%97%E6%A3%80%E6%9F%A5"><span class="nav-number">6.4.</span> <span class="nav-text">文字检查</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%89%A9%E5%B1%95"><span class="nav-number">7.</span> <span class="nav-text">扩展</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%A9%E5%B1%95%E7%A4%BA%E4%BE%8B"><span class="nav-number">7.1.</span> <span class="nav-text">扩展示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B8%A9%E5%BA%A6%E5%8F%82%E6%95%B0"><span class="nav-number">7.2.</span> <span class="nav-text">温度参数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%81%8A%E5%A4%A9%E6%9C%BA%E5%99%A8%E4%BA%BA"><span class="nav-number">8.</span> <span class="nav-text">聊天机器人</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">9.</span> <span class="nav-text">总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zheyu Wang"
+      src="/resources/favicon/avatar.png">
+  <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+  <div class="site-description" itemprop="description">相信过程</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">85</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xxwywzy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/xxwywzy" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/xxwywzy" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/xxwywzy" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2023/08/06/chatgpt-prompt/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resources/favicon/avatar.png">
+      <meta itemprop="name" content="Zheyu Wang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="口仆">
+      <meta itemprop="description" content="相信过程">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="ChatGPT 提示工程总结 | 口仆">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ChatGPT 提示工程总结
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-08-06 19:07:06" itemprop="dateCreated datePublished" datetime="2023-08-06T19:07:06+08:00">2023-08-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">课程笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>4.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>15 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><div class="note info"><p>本篇博客是 deeplearning.ai 最近推出的短期课程《ChatGPT Prompt Engineering for Developers》的学习总结。</p>
+</div>
+<span id="more"></span>
+<h1 id="引言">引言</h1>
+<p>总的来说，当前有两类大语言模型（LLM）：<strong>基础 LLM</strong> 和<strong>指令微调 LLM</strong>。</p>
+<p><img src="http://media.zjubiomedit.com/2023-05-17-085124.png" width=70% /></p>
+<p>基础 LLM 基于大量文本数据训练而成，核心思想为预测一句话的下一个单词（即词语接龙）。基于语料的限制，有时会返回不符合预期的结果（如上图所示）。</p>
+<p>指令微调 LLM 基于人类设定的指令（格式化的输入与输出）对基础 LLM 进行微调训练，使其能够返回更加有用且无害的结果。当前还会使用 RLHF（基于人类反馈的强化学习）来进一步提升模型效果，此处不做展开。</p>
+<p>本课程旨在介绍如何基于 ChatGPT 官方 API 编写 Prompt（即指令），来驱动模型更好地完成各种各样的任务。</p>
+<h1 id="指南">指南</h1>
+<p>总的来说，Prompt 的编写有两大原则：</p>
+<ul>
+<li>原则一：编写明确而清晰的指令</li>
+<li>原则二：给模型足够的时间思考</li>
+</ul>
+<p>下面将结合具体的代码来对这两条原则进行详细说明。在这之前，首先给出本课程中所使用的模型调用函数的代码（略去了从环境变量获取 key 的部分）：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> openai</span><br><span class="line"></span><br><span class="line">openai.api_key = <span class="string">&#x27;xxx&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_completion</span>(<span class="params">prompt, model=<span class="string">&quot;gpt-3.5-turbo&quot;</span></span>):</span><br><span class="line">    messages = [&#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: prompt&#125;]</span><br><span class="line">    response = openai.ChatCompletion.create(</span><br><span class="line">        model=model,</span><br><span class="line">        messages=messages,</span><br><span class="line">        temperature=<span class="number">0</span>, <span class="comment"># this is the degree of randomness of the model&#x27;s output</span></span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">return</span> response.choices[<span class="number">0</span>].message[<span class="string">&quot;content&quot;</span>]</span><br></pre></td></tr></table></figure>
+<h2 id="编写明确而清晰的指令">编写明确而清晰的指令</h2>
+<p>对于这一原则，课程中给出了四条具体的策略来实践该原则：</p>
+<p><strong>策略 1：使用分隔符，避免 Prompt 入侵</strong></p>
+<p>我们可以通过分隔符来标识仅需要 ChatGPT 进行阅读的文本，防止其被解析为指令（即 Prompt 入侵）。常用的分隔符包括：三个引号、三个反引号、三个破折号等，ChatGPT 对于这些分隔符的区分并不是很敏感（例如在 Prompt 中说明使用反引号分隔，但实际用的是引号，并不会影响模型输出）。</p>
+<p><img src="http://media.zjubiomedit.com/2023-05-17-092701.png" width=50%/></p>
+<p>具体的代码示例如下（Prompt 不作翻译，可以自行替换为中文）：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">text = <span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">内容省略（可添加任意内容）</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line">prompt = <span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Summarize the text delimited by triple backticks \</span></span><br><span class="line"><span class="string">into a single sentence.</span></span><br><span class="line"><span class="string">```<span class="subst">&#123;text&#125;</span>```</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">response = get_completion(prompt)</span><br><span class="line"><span class="built_in">print</span>(response)</span><br></pre></td></tr></table></figure>
+<p><strong>策略 2：要求模型提供结构化输出</strong></p>
+<p>对于开发者来说，要求模型提供诸如 HTML 或 JSON 的格式化输出，有利于构建更加健壮的应用。具体的代码示例如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">prompt = <span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Generate a list of three made-up book titles along \</span></span><br><span class="line"><span class="string">with their authors and genres. </span></span><br><span class="line"><span class="string">Provide them in JSON format with the following keys: </span></span><br><span class="line"><span class="string">book_id, title, author, genre.</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">response = get_completion(prompt)</span><br><span class="line"><span class="built_in">print</span>(response)</span><br></pre></td></tr></table></figure>
+<p><strong>策略 3：让模型进行条件判断</strong></p>
+<p>对于较复杂的 Prompt，模型生成结果的时间可能会较长，同时可能浪费大量的 token。为了规避不必要的 API 调用消耗，我们可以在 Prompt 中包含一定的条件判断逻辑，来帮助模型在不满足条件时提前终止运算，直接返回结果。具体的代码示例如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">text_1 = <span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">如何把大象放进冰箱？\</span></span><br><span class="line"><span class="string">首先打开冰箱的门，\</span></span><br><span class="line"><span class="string">然后把大象放进去，\</span></span><br><span class="line"><span class="string">最后关上冰箱门。</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line">prompt = <span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">You will be provided with text delimited by triple quotes. </span></span><br><span class="line"><span class="string">If it contains a sequence of instructions, \</span></span><br><span class="line"><span class="string">re-write those instructions in the following format:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Step 1 - ...</span></span><br><span class="line"><span class="string">Step 2 - …</span></span><br><span class="line"><span class="string">…</span></span><br><span class="line"><span class="string">Step N - …</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">If the text does not contain a sequence of instructions, \</span></span><br><span class="line"><span class="string">then simply write \&quot;No steps provided.\&quot;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">```<span class="subst">&#123;text_1&#125;</span>```</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">response = get_completion(prompt)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Completion for Text 1:&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(response)</span><br></pre></td></tr></table></figure>
+<p><strong>策略 4：少量（Few-shot）训练提示</strong></p>
+<p>有时候，对于某些任务，我们需要为模型提供少量完成该任务的成功示例，来帮助模型更好地理解并完成该任务。具体的代码示例如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">prompt = <span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Your task is to answer in a consistent style.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&lt;child&gt;: Teach me about patience.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&lt;grandparent&gt;: The river that carves the deepest \</span></span><br><span class="line"><span class="string">valley flows from a modest spring; the \</span></span><br><span class="line"><span class="string">grandest symphony originates from a single note; \</span></span><br><span class="line"><span class="string">the most intricate tapestry begins with a solitary thread.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&lt;child&gt;: Teach me about love.</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">response = get_completion(prompt)</span><br><span class="line"><span class="built_in">print</span>(response)</span><br></pre></td></tr></table></figure>
+<h2 id="给模型足够的时间思考">给模型足够的时间思考</h2>
+<p>这一原则的意义是：对于较为复杂的任务，如果不进行拆解，要求模型在短时间内通过少量词语进行回答，则可能导致结果的不准确。课程中给出了两条具体的策略来实践该原则：</p>
+<p><strong>策略 1：指定完成任务所需的步骤</strong></p>
+<p>该策略即通过 Prompt 拆解任务步骤降低复杂度，以帮助模型更好地完成任务。具体的代码示例如下（省略了 text 的内容，指定输出格式）：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">prompt = <span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Your task is to perform the following actions: </span></span><br><span class="line"><span class="string">1 - Summarize the following text delimited by </span></span><br><span class="line"><span class="string">  &lt;&gt; with 1 sentence.</span></span><br><span class="line"><span class="string">2 - Translate the summary into Chinese.</span></span><br><span class="line"><span class="string">3 - List each name in the Chinese summary.</span></span><br><span class="line"><span class="string">4 - Output a json object that contains the </span></span><br><span class="line"><span class="string">  following keys: chinese_summary, num_names.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Use the following format:</span></span><br><span class="line"><span class="string">Text: &lt;text to summarize&gt;</span></span><br><span class="line"><span class="string">Summary: &lt;summary&gt;</span></span><br><span class="line"><span class="string">Translation: &lt;summary translation&gt;</span></span><br><span class="line"><span class="string">Names: &lt;list of names in Chinese summary&gt;</span></span><br><span class="line"><span class="string">Output JSON: &lt;json with summary and num_names&gt;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Text: &lt;<span class="subst">&#123;text&#125;</span>&gt;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">response = get_completion(prompt)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\nCompletion for prompt 2:&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(response)</span><br></pre></td></tr></table></figure>
+<p><strong>策略 2：提示模型在匆忙得出结论之前思考自己的解决方案</strong></p>
+<p>通过提示模型在回答之前思考自己的解决方案，有时可以得到更好的结果。课程中给出了一个解数学题的案例，如果没有提示模型首先尝试解题，则模型会判断学生的解法是正确的，但是如果提示模型首先自己推导解题过程再进行判断，则其会得出学生的解法是错误的结论。具体的代码如下（比较长）：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">prompt = <span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Your task is to determine if the student&#x27;s solution \</span></span><br><span class="line"><span class="string">is correct or not.</span></span><br><span class="line"><span class="string">To solve the problem do the following:</span></span><br><span class="line"><span class="string">- First, work out your own solution to the problem. </span></span><br><span class="line"><span class="string">- Then compare your solution to the student&#x27;s solution \ </span></span><br><span class="line"><span class="string">and evaluate if the student&#x27;s solution is correct or not. </span></span><br><span class="line"><span class="string">Don&#x27;t decide if the student&#x27;s solution is correct until </span></span><br><span class="line"><span class="string">you have done the problem yourself.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Use the following format:</span></span><br><span class="line"><span class="string">Question:</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">question here</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">Student&#x27;s solution:</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">student&#x27;s solution here</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">Actual solution:</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">steps to work out the solution and your solution here</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">Is the student&#x27;s solution the same as actual solution \</span></span><br><span class="line"><span class="string">just calculated:</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">yes or no</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">Student grade:</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">correct or incorrect</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Question:</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">I&#x27;m building a solar power installation and I need help \</span></span><br><span class="line"><span class="string">working out the financials. </span></span><br><span class="line"><span class="string">- Land costs $100 / square foot</span></span><br><span class="line"><span class="string">- I can buy solar panels for $250 / square foot</span></span><br><span class="line"><span class="string">- I negotiated a contract for maintenance that will cost \</span></span><br><span class="line"><span class="string">me a flat $100k per year, and an additional $10 / square \</span></span><br><span class="line"><span class="string">foot</span></span><br><span class="line"><span class="string">What is the total cost for the first year of operations \</span></span><br><span class="line"><span class="string">as a function of the number of square feet.</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">Student&#x27;s solution:</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">Let x be the size of the installation in square feet.</span></span><br><span class="line"><span class="string">Costs:</span></span><br><span class="line"><span class="string">1. Land cost: 100x</span></span><br><span class="line"><span class="string">2. Solar panel cost: 250x</span></span><br><span class="line"><span class="string">3. Maintenance cost: 100,000 + 100x</span></span><br><span class="line"><span class="string">Total cost: 100x + 250x + 100,000 + 100x = 450x + 100,000</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">Actual solution:</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">response = get_completion(prompt)</span><br><span class="line"><span class="built_in">print</span>(response)</span><br></pre></td></tr></table></figure>
+<p>该代码的输出结果为：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">Let x be the size <span class="keyword">of</span> the installation <span class="keyword">in</span> square feet.</span><br><span class="line"></span><br><span class="line">Costs:</span><br><span class="line"><span class="number">1.</span> Land cost: <span class="number">100</span>x</span><br><span class="line"><span class="number">2.</span> Solar panel cost: <span class="number">250</span>x</span><br><span class="line"><span class="number">3.</span> Maintenance cost: <span class="number">100</span>,<span class="number">000</span> <span class="operator">+</span> <span class="number">10</span>x</span><br><span class="line"></span><br><span class="line">Total cost: <span class="number">100</span>x <span class="operator">+</span> <span class="number">250</span>x <span class="operator">+</span> <span class="number">100</span>,<span class="number">000</span> <span class="operator">+</span> <span class="number">10</span>x <span class="operator">=</span> <span class="number">360</span>x <span class="operator">+</span> <span class="number">100</span>,<span class="number">000</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">Is</span> the student<span class="string">&#x27;s solution the same as actual solution just calculated:</span></span><br><span class="line"><span class="string">No</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Student grade:</span></span><br><span class="line"><span class="string">Incorrect</span></span><br></pre></td></tr></table></figure>
+<p>PS：课程中在多行文本中使用反斜杠来代替换行符，保证原始文本中没有换行，但是其在反斜杠添加了空格，会导致换行依旧存在，需要去除空格（实际对模型来说并没有影响，只是影响展示）</p>
+<p>此外，本节还提到了模型的一种局限性：<strong>幻觉</strong>（Hallucination）。幻觉指 LLM 模型对于知识的边界性有时把握不足，可能会出现一本正经地胡说八道的情况。为了减少幻觉，我们可以提示模型首先收集相关信息，基于这些信息来回答问题。</p>
+<h1 id="迭代">迭代</h1>
+<p>编写 Prompt 是一个持续迭代的过程，通过对模型返回结果的分析，不断地修改 Prompt，我们可以最终得到较为满意的输出。同时，对 Prompt 的修改需要遵循上一章节提到的原则。</p>
+<p><img src="http://media.zjubiomedit.com/2023-05-17-102151.png" width=50%></p>
+<h1 id="摘要">摘要</h1>
+<p>我们可以使用 ChatGPT 来辅助生成对长文本的总结，以帮助我们在短时间内获取更多的信息。具体来说，通过模型执行摘要任务有以下两个注意点：</p>
+<h2 id="细化需求">细化需求</h2>
+<p>通过 Prompt 来细化摘要的具体目的与关注点，可以获得更加精准的摘要。具体的代码示例如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">prompt = <span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Your task is to generate a short summary of a product \</span></span><br><span class="line"><span class="string">review from an ecommerce site to give feedback to the \</span></span><br><span class="line"><span class="string">Shipping deparmtment. </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Summarize the review below in Chinese, delimited by triple </span></span><br><span class="line"><span class="string">backticks, in at most 30 words, and focusing on any aspects \</span></span><br><span class="line"><span class="string">that mention shipping and delivery of the product. </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Review: &#x27;&#x27;&#x27;<span class="subst">&#123;prod_review&#125;</span>&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">response = get_completion(prompt)</span><br><span class="line"><span class="built_in">print</span>(response)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="关键字差异">关键字差异</h2>
+<p>如果在 Prompt 中使用关键字<strong>总结</strong>（summarize），虽然模型会基于 Prompt 返回对应的总结，但其中通常会包含一些其他的信息；而如果使用关键字<strong>提取</strong>（extract），则模型会专注于提取在 prompt 中所提示的范围，返回更加精准的摘要。具体的代码示例如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">prompt = <span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Your task is to extract relevant information from \</span></span><br><span class="line"><span class="string">a product review from an ecommerce site to give \</span></span><br><span class="line"><span class="string">feedback to the Shipping department. The extracted result \</span></span><br><span class="line"><span class="string">should be translated into Chinese.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">From the review below delimited by triple quotes \</span></span><br><span class="line"><span class="string">extract the information relevant to shipping and \</span></span><br><span class="line"><span class="string">delivery. Limit to 30 words. </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Review: &#x27;&#x27;&#x27;<span class="subst">&#123;prod_review&#125;</span>&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">response = get_completion(prompt)</span><br><span class="line"><span class="built_in">print</span>(response)</span><br></pre></td></tr></table></figure>
+<h1 id="推理">推理</h1>
+<p>ChatGPT 非常适合用来对文本进行推理，对于传统 NLP 方法来说需要大量步骤（例如数据收集、打标签、训练、测试等）才能完成的任务，ChatGPT 可以通过 Prompt 轻松完成。本节将列举两种主要的推理任务：<strong>情感分析</strong>与<strong>信息提取</strong>。</p>
+<h2 id="情感分析">情感分析</h2>
+<p>我们可以通过多种方式来指导 ChatGPT 分析一段文字中的情感，例如：</p>
+<p><strong>识别积极/消极</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">prompt = <span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">What is the sentiment of the following product review, </span></span><br><span class="line"><span class="string">which is delimited with triple backticks?</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Give your answer as a single word, either &quot;positive&quot; \</span></span><br><span class="line"><span class="string">or &quot;negative&quot;.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Review text: &#x27;&#x27;&#x27;<span class="subst">&#123;lamp_review&#125;</span>&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">response = get_completion(prompt)</span><br><span class="line"><span class="built_in">print</span>(response)</span><br></pre></td></tr></table></figure>
+<p><strong>识别多种情感</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">prompt = <span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Identify a list of emotions that the writer of the \</span></span><br><span class="line"><span class="string">following review is expressing. Include no more than \</span></span><br><span class="line"><span class="string">five items in the list. Format your answer as a list of \</span></span><br><span class="line"><span class="string">lower-case words separated by commas.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Review text: &#x27;&#x27;&#x27;<span class="subst">&#123;lamp_review&#125;</span>&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">response = get_completion(prompt)</span><br><span class="line"><span class="built_in">print</span>(response)</span><br></pre></td></tr></table></figure>
+<p><strong>识别特定情感</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">prompt = <span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Is the writer of the following review expressing anger?\</span></span><br><span class="line"><span class="string">The review is delimited with triple backticks. \</span></span><br><span class="line"><span class="string">Give your answer as either yes or no.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Review text: &#x27;&#x27;&#x27;<span class="subst">&#123;lamp_review&#125;</span>&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line">response = get_completion(prompt)</span><br><span class="line"><span class="built_in">print</span>(response)</span><br></pre></td></tr></table></figure>
+<h2 id="信息提取">信息提取</h2>
+<p>我们可以通过不同的 Prompt 指导 ChatGPT 提取不同维度的信息，例如：</p>
+<p><strong>提取标签（实体）信息</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">prompt = <span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Identify the following items from the review text: </span></span><br><span class="line"><span class="string">- Item purchased by reviewer</span></span><br><span class="line"><span class="string">- Company that made the item</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">The review is delimited with triple backticks. \</span></span><br><span class="line"><span class="string">Format your response as a JSON object with \</span></span><br><span class="line"><span class="string">&quot;Item&quot; and &quot;Brand&quot; as the keys. </span></span><br><span class="line"><span class="string">If the information isn&#x27;t present, use &quot;unknown&quot; \</span></span><br><span class="line"><span class="string">as the value.</span></span><br><span class="line"><span class="string">Make your response as short as possible.</span></span><br><span class="line"><span class="string">  </span></span><br><span class="line"><span class="string">Review text: &#x27;&#x27;&#x27;<span class="subst">&#123;lamp_review&#125;</span>&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">response = get_completion(prompt)</span><br><span class="line"><span class="built_in">print</span>(response)</span><br></pre></td></tr></table></figure>
+<p><strong>提取主题信息</strong></p>
+<p>对于主题提取，ChatGPT 可以直接提取多个主题：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">prompt = <span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Determine five topics that are being discussed in the \</span></span><br><span class="line"><span class="string">following text, which is delimited by triple backticks.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Make each item one or two words long. </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Format your response as a list of items separated by commas.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Text sample: &#x27;&#x27;&#x27;<span class="subst">&#123;story&#125;</span>&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">response = get_completion(prompt)</span><br><span class="line"><span class="built_in">print</span>(response)</span><br></pre></td></tr></table></figure>
+<p>也可以给定主题列表，判断输入文本中包含了哪些特定主题（该方式也被称为 Zero Shot 训练）：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">topic_list = [</span><br><span class="line">    <span class="string">&quot;nasa&quot;</span>, <span class="string">&quot;local government&quot;</span>, <span class="string">&quot;engineering&quot;</span>, </span><br><span class="line">    <span class="string">&quot;employee satisfaction&quot;</span>, <span class="string">&quot;federal government&quot;</span></span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">prompt = <span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Determine whether each item in the following list of \</span></span><br><span class="line"><span class="string">topics is a topic in the text below, which</span></span><br><span class="line"><span class="string">is delimited with triple backticks.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Give your answer as list with 0 or 1 for each topic.\</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">List of topics: <span class="subst">&#123;<span class="string">&quot;, &quot;</span>.join(topic_list)&#125;</span></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Text sample: &#x27;&#x27;&#x27;<span class="subst">&#123;story&#125;</span>&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">response = get_completion(prompt)</span><br><span class="line"><span class="built_in">print</span>(response)</span><br></pre></td></tr></table></figure>
+<h1 id="转换">转换</h1>
+<p>本节将介绍如何使用 ChatGPT 来进行文本转换任务，例如翻译、拼写与语法检查、语气调整、格式转换等，主要以代码示例为主。</p>
+<h2 id="翻译">翻译</h2>
+<p>ChatGPT 基于多种语言进行训练，具有较强的翻译能力，例如：</p>
+<p><strong>翻译多种语言</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">prompt = <span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Translate the following  text to French and Spanish</span></span><br><span class="line"><span class="string">and English pirate: \</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;I want to order a basketball&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">response = get_completion(prompt)</span><br><span class="line"><span class="built_in">print</span>(response)</span><br></pre></td></tr></table></figure>
+<p><strong>识别当前语言</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">prompt = <span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Tell me which language this is: </span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;Combien coûte le lampadaire?&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">response = get_completion(prompt)</span><br><span class="line"><span class="built_in">print</span>(response)</span><br></pre></td></tr></table></figure>
+<h2 id="语气调整">语气调整</h2>
+<p>基于不同的读者（观众），输出的文字可能有较大差异。ChatGPT 可以基于 Prompt 产生不同的语调，例如：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">prompt = <span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Translate the following from slang to a business letter: </span></span><br><span class="line"><span class="string">&#x27;Dude, This is Joe, check out this spec on this standing lamp.&#x27;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">response = get_completion(prompt)</span><br><span class="line"><span class="built_in">print</span>(response)</span><br></pre></td></tr></table></figure>
+<h2 id="格式转换">格式转换</h2>
+<p>ChatGPT 支持多种格式的转换，Prompt 应该清楚地描述输入与输出格式，例如：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data_json = &#123; <span class="string">&quot;resturant employees&quot;</span> :[ </span><br><span class="line">    &#123;<span class="string">&quot;name&quot;</span>:<span class="string">&quot;Shyam&quot;</span>, <span class="string">&quot;email&quot;</span>:<span class="string">&quot;shyamjaiswal@gmail.com&quot;</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;name&quot;</span>:<span class="string">&quot;Bob&quot;</span>, <span class="string">&quot;email&quot;</span>:<span class="string">&quot;bob32@gmail.com&quot;</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;name&quot;</span>:<span class="string">&quot;Jai&quot;</span>, <span class="string">&quot;email&quot;</span>:<span class="string">&quot;jai87@gmail.com&quot;</span>&#125;</span><br><span class="line">]&#125;</span><br><span class="line"></span><br><span class="line">prompt = <span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Translate the following python dictionary from JSON to an HTML \</span></span><br><span class="line"><span class="string">table with column headers and title: <span class="subst">&#123;data_json&#125;</span></span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">response = get_completion(prompt)</span><br><span class="line"><span class="built_in">print</span>(response)</span><br></pre></td></tr></table></figure>
+<h2 id="文字检查">文字检查</h2>
+<p>ChatGPT 还可以用来检查拼写和语法，帮助你改写文字（写文章必备），例如：</p>
+<p><strong>普通校对与改写</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">text = <span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Got this for my daughter for her birthday cuz she keeps taking \</span></span><br><span class="line"><span class="string">mine from my room.  Yes, adults also like pandas too.  She takes \</span></span><br><span class="line"><span class="string">it everywhere with her, and it&#x27;s super soft and cute.  One of the \</span></span><br><span class="line"><span class="string">ears is a bit lower than the other, and I don&#x27;t think that was \</span></span><br><span class="line"><span class="string">designed to be asymmetrical. It&#x27;s a bit small for what I paid for it \</span></span><br><span class="line"><span class="string">though. I think there might be other options that are bigger for \</span></span><br><span class="line"><span class="string">the same price.  It arrived a day earlier than expected, so I got \</span></span><br><span class="line"><span class="string">to play with it myself before I gave it to my daughter.</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">prompt = <span class="string">f&quot;proofread and correct this review: ```<span class="subst">&#123;text&#125;</span>```&quot;</span></span><br><span class="line">response = get_completion(prompt)</span><br><span class="line"><span class="built_in">print</span>(response)</span><br></pre></td></tr></table></figure>
+<p>课程中还使用了 redlines 包来查看改写前后的差异：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> redlines <span class="keyword">import</span> Redlines</span><br><span class="line"></span><br><span class="line">diff = Redlines(text,response)</span><br><span class="line">display(Markdown(diff.output_markdown))</span><br></pre></td></tr></table></figure>
+<p><img src="http://media.zjubiomedit.com/2023-05-17-113926.png" width=50%/></p>
+<p><strong>基于特定风格的校对与改写</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">prompt = <span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">proofread and correct this review. Make it more compelling. </span></span><br><span class="line"><span class="string">Ensure it follows APA style guide and targets an advanced reader. </span></span><br><span class="line"><span class="string">Output in markdown format.</span></span><br><span class="line"><span class="string">Text: ```<span class="subst">&#123;text&#125;</span>```</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">response = get_completion(prompt)</span><br><span class="line">display(Markdown(response))</span><br></pre></td></tr></table></figure>
+<h1 id="扩展">扩展</h1>
+<p>ChatGPT 可以用来对文字进行扩展（将短文本变成长文本），本节将给出一个使用 ChatGPT 自动回复 email 的示例，并介绍对扩展来说很重要的一个 API 参数：<strong>温度</strong>（Temperature）</p>
+<h2 id="扩展示例">扩展示例</h2>
+<p>下面的例子给出了基于用户的评价生成自动回复 email 的 Prompt：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">prompt = <span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">You are a customer service AI assistant.</span></span><br><span class="line"><span class="string">Your task is to send an email reply in Chinese to a valued customer.</span></span><br><span class="line"><span class="string">Given the customer email delimited by ```, \</span></span><br><span class="line"><span class="string">Generate a reply to thank the customer for their review.</span></span><br><span class="line"><span class="string">If the sentiment is positive or neutral, thank them for \</span></span><br><span class="line"><span class="string">their review.</span></span><br><span class="line"><span class="string">If the sentiment is negative, apologize and suggest that \</span></span><br><span class="line"><span class="string">they can reach out to customer service. </span></span><br><span class="line"><span class="string">Make sure to use specific details from the review.</span></span><br><span class="line"><span class="string">Write in a concise and professional tone.</span></span><br><span class="line"><span class="string">Sign the email as `AI customer agent`.</span></span><br><span class="line"><span class="string">Customer review: &#x27;&#x27;&#x27;<span class="subst">&#123;review&#125;</span>&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">Review sentiment: <span class="subst">&#123;sentiment&#125;</span></span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">response = get_completion(prompt)</span><br><span class="line"><span class="built_in">print</span>(response)</span><br></pre></td></tr></table></figure>
+<p>实际上情感可以由 ChatGPT 自动提取，无需指定。此外，为了防止不好的用途，课程中建议明确表明上述内容是由 AI 生成的。</p>
+<h2 id="温度参数">温度参数</h2>
+<p>温度参数可以用来控制模型输出的随机性，具体规则如下：</p>
+<ul>
+<li>温度越低，模型的输出越稳定（更保守）</li>
+<li>温度越高，模型的输出越随机（更具有创造力）</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2023-05-18-120427.png" width=50%></p>
+<p>在不同的场景下，通过对温度参数的控制，可以得到更加合适的输出（温度参数通常设置在 0-2 之间）。</p>
+<h1 id="聊天机器人">聊天机器人</h1>
+<p>本节将介绍如何使用 ChatGPT 构建一个聊天机器人，其关键在于如何为模型提供<strong>上下文信息</strong>。对模型来说，每一轮对话都是独立的，我们需要在接口中传入之前对话的历史信息。对于接口来说，总共存在三种角色，分别是：</p>
+<ul>
+<li>System 角色：用于设定模型的身份，约束模型行为，放置于一轮对话的最开头</li>
+<li>User 角色：当前对话的用户，提供输入信息</li>
+<li>Assistant 角色：生成回复的模型</li>
+</ul>
+<p>历史信息需要明确地表明每一条消息所对应的角色，如下图所示：</p>
+<p><img src="http://media.zjubiomedit.com/2023-05-18-123714.png" width=50%/></p>
+<p>为了实现历史信息的传入，需要修改之前的模型调用函数：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">get_completion_from_messages</span>(<span class="params">messages, model=<span class="string">&quot;gpt-3.5-turbo&quot;</span>, temperature=<span class="number">0</span></span>):</span><br><span class="line">    response = openai.ChatCompletion.create(</span><br><span class="line">        model=model,</span><br><span class="line">        messages=messages,</span><br><span class="line">        temperature=temperature, <span class="comment"># this is the degree of randomness of the model&#x27;s output</span></span><br><span class="line">    )</span><br><span class="line"><span class="comment">#     print(str(response.choices[0].message))</span></span><br><span class="line">    <span class="keyword">return</span> response.choices[<span class="number">0</span>].message[<span class="string">&quot;content&quot;</span>]</span><br></pre></td></tr></table></figure>
+<p>基于上述函数，可以手动实现历史消息的传入：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">messages =  [  </span><br><span class="line">&#123;<span class="string">&#x27;role&#x27;</span>:<span class="string">&#x27;system&#x27;</span>, <span class="string">&#x27;content&#x27;</span>:<span class="string">&#x27;You are friendly chatbot.&#x27;</span>&#125;,</span><br><span class="line">&#123;<span class="string">&#x27;role&#x27;</span>:<span class="string">&#x27;user&#x27;</span>, <span class="string">&#x27;content&#x27;</span>:<span class="string">&#x27;Hi, my name is Isa&#x27;</span>&#125;,</span><br><span class="line">&#123;<span class="string">&#x27;role&#x27;</span>:<span class="string">&#x27;assistant&#x27;</span>, <span class="string">&#x27;content&#x27;</span>: <span class="string">&quot;Hi Isa! It&#x27;s nice to meet you. \</span></span><br><span class="line"><span class="string">Is there anything I can help you with today?&quot;</span>&#125;,</span><br><span class="line">&#123;<span class="string">&#x27;role&#x27;</span>:<span class="string">&#x27;user&#x27;</span>, <span class="string">&#x27;content&#x27;</span>:<span class="string">&#x27;Yes, you can remind me, What is my name?&#x27;</span>&#125;  ]</span><br><span class="line">response = get_completion_from_messages(messages, temperature=<span class="number">1</span>)</span><br><span class="line"><span class="built_in">print</span>(response)</span><br></pre></td></tr></table></figure>
+<p>为了实现一个聊天机器人，我们需要支持对于对话历史消息的自动收集，课程中基于 panel 包实现了一个点菜机器人，通过精心设置的 System Prompt 实现了自动化点菜与价格计算，具体的代码此处不作展开。</p>
+<p>这里给出一个更加通用的聊天机器人 demo，基于 Streamlit 实现，可以自由设置 System Prompt，同时对于对话历史消息进行了自动收集与上传：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> streamlit <span class="keyword">as</span> st</span><br><span class="line"><span class="keyword">import</span> openai</span><br><span class="line"></span><br><span class="line">st.markdown(<span class="string">&#x27;# ChatGPT demo&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">init_session</span>():</span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;round&#x27;</span> <span class="keyword">not</span> <span class="keyword">in</span> st.session_state:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;重置轮数&quot;</span>)</span><br><span class="line">        st.session_state[<span class="string">&#x27;round&#x27;</span>] = <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;question&#x27;</span> <span class="keyword">not</span> <span class="keyword">in</span> st.session_state:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;重置问题记录&quot;</span>)</span><br><span class="line">        st.session_state[<span class="string">&#x27;question&#x27;</span>] = []</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;answer&#x27;</span> <span class="keyword">not</span> <span class="keyword">in</span> st.session_state:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;重置回答记录&quot;</span>)</span><br><span class="line">        st.session_state[<span class="string">&#x27;answer&#x27;</span>] = []</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">init_session()</span><br><span class="line">code_input = st.text_input(<span class="string">&#x27;请输入使用密钥&#x27;</span>)</span><br><span class="line">system_input = st.text_input(<span class="string">&#x27;请设定 ChatGPT 角色（用于生成符合角色的回答）&#x27;</span>, <span class="string">&quot;你是一个有用的AI助手&quot;</span>)</span><br><span class="line">latest_input = st.text_area(<span class="string">&#x27;请输入内容&#x27;</span>)</span><br><span class="line"></span><br><span class="line">openai.api_key = code_input</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> st.button(<span class="string">&#x27;发送&#x27;</span>):</span><br><span class="line">    st.session_state[<span class="string">&#x27;question&#x27;</span>].append(latest_input)</span><br><span class="line"></span><br><span class="line">    message_list = []</span><br><span class="line">    dic_q_item = &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;system&quot;</span>, <span class="string">&quot;content&quot;</span>: system_input&#125;</span><br><span class="line">    message_list.append(dic_q_item)</span><br><span class="line">    <span class="keyword">for</span> n <span class="keyword">in</span> <span class="built_in">range</span>(st.session_state[<span class="string">&#x27;round&#x27;</span>]):</span><br><span class="line">        <span class="comment"># 第 n 轮，有 n 个问题，n - 1 个答案待组装</span></span><br><span class="line">        <span class="keyword">if</span> n - <span class="number">1</span> &gt;= <span class="number">0</span>:</span><br><span class="line">            dic_a_item = &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;assistant&quot;</span>, <span class="string">&quot;content&quot;</span>: st.session_state[<span class="string">&#x27;answer&#x27;</span>][n - <span class="number">1</span>]&#125;</span><br><span class="line">            message_list.append(dic_a_item)</span><br><span class="line">        dic_q_item = &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: st.session_state[<span class="string">&#x27;question&#x27;</span>][n]&#125;</span><br><span class="line">        message_list.append(dic_q_item)</span><br><span class="line"></span><br><span class="line">    completion = openai.ChatCompletion.create(</span><br><span class="line">        model=<span class="string">&quot;gpt-3.5-turbo&quot;</span>,</span><br><span class="line">        max_tokens=<span class="number">1000</span>,</span><br><span class="line">        user=<span class="string">&quot;wzy&quot;</span>,</span><br><span class="line">        messages=message_list,</span><br><span class="line">        temperature=<span class="number">0</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    answer = completion.choices[<span class="number">0</span>].message[<span class="string">&#x27;content&#x27;</span>]</span><br><span class="line">    st.session_state[<span class="string">&#x27;answer&#x27;</span>].append(answer)</span><br><span class="line"></span><br><span class="line">    col1, col2 = st.columns(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(st.session_state[<span class="string">&#x27;round&#x27;</span>]):</span><br><span class="line">        <span class="keyword">with</span> col1:</span><br><span class="line">            st.text(<span class="string">&#x27;User&#x27;</span>)</span><br><span class="line">            st.write(<span class="string">&#x27;  &#x27;</span> + st.session_state[<span class="string">&#x27;question&#x27;</span>][i])</span><br><span class="line">            st.text(<span class="string">&#x27; &#x27;</span>)</span><br><span class="line">            st.write(<span class="string">&#x27; &#x27;</span>)</span><br><span class="line">        <span class="keyword">with</span> col2:</span><br><span class="line">            st.text(<span class="string">&#x27; &#x27;</span>)</span><br><span class="line">            st.write(<span class="string">&#x27; &#x27;</span>)</span><br><span class="line">            st.text(<span class="string">&#x27;ChatGPT&#x27;</span>)</span><br><span class="line">            st.write(<span class="string">&#x27;  &#x27;</span> + st.session_state[<span class="string">&#x27;answer&#x27;</span>][i])</span><br><span class="line"></span><br><span class="line">    st.session_state[<span class="string">&#x27;round&#x27;</span>] += <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> st.button(<span class="string">&#x27;清空对话记录&#x27;</span>):</span><br><span class="line">    st.session_state.clear()</span><br></pre></td></tr></table></figure>
+<h1 id="总结">总结</h1>
+<p>以下为本课程核心知识点的思维导图总结：</p>
+<p><img src="http://media.zjubiomedit.com/2023-05-17-091554.png" width=90% /></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+
+
+
+<div class="license">
+  <div class="license-title">ChatGPT 提示工程总结</div>
+  <div class="license-link">
+    <a href="https://xxwywzy.github.io/2023/08/06/chatgpt-prompt/">https://xxwywzy.github.io/2023/08/06/chatgpt-prompt/</a>
+  </div>
+  <div class="license-meta">
+    <div class="license-meta-item">
+      <div class="license-meta-title">本文作者</div>
+      <div class="license-meta-text">
+          Zheyu Wang
+      </div>
+    </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">发布于</div>
+        <div class="license-meta-text">
+          2023-08-06
+        </div>
+      </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">更新于</div>
+        <div class="license-meta-text">
+          2023-10-21
+        </div>
+      </div>
+    <div class="license-meta-item">
+      <div class="license-meta-title">许可协议</div>
+      <div class="license-meta-text">
+          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank">CC BY-NC-SA 4.0</a>
+      </div>
+    </div>
+  </div>
+  <div class="license-statement">
+      转载或引用本文时，请遵守上述许可协议，注明出处、不得用于商业用途！
+  </div>
+</div>
+          <div class="post-tags">
+              <a href="/tags/ChatGPT/" rel="tag"># ChatGPT</a>
+              <a href="/tags/Prompt-Engineering/" rel="tag"># Prompt Engineering</a>
+              <a href="/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" rel="tag"># 大模型</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/08/05/catalan/" rel="prev" title="卡特兰数入门">
+                  <i class="fa fa-angle-left"></i> 卡特兰数入门
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/10/01/dqn/" rel="next" title="DQN 原理解析">
+                  DQN 原理解析 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81ODgyNi8zNTI4OA=="></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">332k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">18:26</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+
+
+  <style>
+    #taboola-livere { display: none;}
+  </style>
+
+
+
+<script type="text/javascript">
+var linkLists = document.querySelectorAll(".link-list");
+
+linkLists.forEach(function(linkList) {
+  var listPath = linkList.getAttribute('json-src');
+  var iconPath = linkList.getAttribute('icon-src');
+  
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', listPath, true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      var data = JSON.parse(xhr.responseText);
+      
+      var li = "";
+      linkList.innerHTML = '';
+
+      for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+        var info = data[infoIndex];
+        var labelWarn = info['warn'] ? '<span class="label warn">' + info['warn'] + '</span>' : '';
+        var labelInfo = info['info'] ? '<span class="label info">' + info['info'] + '</span>' : '';
+
+        li += '<div class="link-list-container">';
+        li += '<img class="link-list-image" src="' + iconPath + info['logo'] + '">';
+        li += '<p>' + info['title'] + labelInfo + labelWarn + '</p>';
+        li += '<p>' + info['intro'] + '</p>';
+        li += '<a href="' + info['url'] + '" rel="noopener" target="_blank" data-pjax-state=""></a>';
+        li += '</div>';
+      }
+      
+      linkList.innerHTML = li;
+    }
+  };
+  xhr.send();
+});
+</script>
+
+
+<script type="text/javascript">
+var cultureList = document.querySelectorAll(".culture-list");
+if (cultureList.length !== 0) {
+  var j = -1;
+  for (var i = 0; i < cultureList.length; i++) {
+    const listPath = cultureList[i].getAttribute('json-src');
+    const coverPath = cultureList[i].getAttribute('cover-src');
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', listPath, true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        j++;
+        var data = JSON.parse(xhr.responseText);
+        var li = "";
+        
+        cultureList[j].innerHTML = '';
+
+        for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+          var info = data[infoIndex];
+          
+          var title = info['title'];
+          if (info['link']) {
+            title = '<a href="' + info['link'] + '">' + info['title'] + '</a>';
+          }
+
+          var author = info['author'] ? '<span class="author">' + info['author'] + '</span>' : '';
+
+          var intro = info['intro'] ? info['intro'] : '';
+
+          var star = '';
+          if (info['score'] == null) {
+            star = '';
+          } else {
+            var colorStar = '';
+            var greyStar = '';
+            var int = Math.floor(info['score']); //整数部分
+            var fract = 0;
+            if (info['score'] % 1 !== 0) {
+              fract = 1;
+            }
+            for (var m = 0; m < int; m++) {
+              colorStar += '★';
+            }
+            if (fract !== 0) {
+              colorStar += '☆';
+            }
+            for (var m = 0; m < (5 - fract - int); m++) {
+              greyStar += '☆';
+            }
+            if (info['score'] !== 5) {
+              star = '<span class="star-score">' + colorStar + '<span class="grey-star">' + greyStar + '</span></span>';
+            } else {
+              star = '<span class="star-score">' + colorStar + '</span>';
+            }
+          }
+
+          li += '<div class="media">';
+          li += '<div class="media-cover" style="background-image:url(' + coverPath + info['cover'] + ')"></div>';
+          li += '<div class="media-meta">';
+          li += '<div class="media-meta-item title">' + title + '</div>';
+          li += '<div class="media-meta-item">' + author + star + '</div>';
+          li += '<div class="media-meta-item intro">' + intro + '</div>';
+          li += '</div></div>';
+        }
+        
+        cultureList[j].innerHTML = li;
+      }
+    };
+    xhr.send();
+  }
+}
+</script>
+
+
+
+
+<script src="/resources/minigrid.min.js"></script>
+<script type="text/javascript">
+var album = document.querySelector(".album");
+if (album) {
+  // 相册列表 JSON 数据
+  var imgDataPath = album.getAttribute('json-src');
+  // 照片存储路径
+  var imgPath = album.getAttribute('photo-src');
+  // 最多显示数量
+  var imgMaxNum = 50;
+  // 获取窗口大小以决定图片宽度
+  var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  var imageWidth;
+
+  if (windowWidth < 768) {
+    imageWidth = 145; // 移动端图片宽度
+  } else {
+    imageWidth = 235;
+  }
+
+  // 腾讯云自定义样式 (数据万象外网流量需要付费)
+  //var imgStyle = '!' + imageWidth + 'x';
+  //var imgStyle = '!300x';
+
+  // 生成相册
+  var linkDataPath = imgDataPath;
+  var photo = {
+    page: 1,
+    offset: imgMaxNum,
+    init: function () {
+      var that = this;
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", linkDataPath, true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var data = JSON.parse(xhr.responseText);
+          that.render(that.page, data);
+        }
+      };
+      xhr.send();
+    },
+    render: function (page, data) {
+      var begin = (page - 1) * this.offset;
+      var end = page * this.offset;
+      if (begin >= data.length) return;
+      var imgNameWithPattern, imgName, imageSize, imageX, imageY, li = "";
+      for (var i = begin; i < end && i < data.length; i++) {
+        imgNameWithPattern = data[i].split(' ')[1];
+        imgName = imgNameWithPattern.split('.')[0];
+        imageSize = data[i].split(' ')[0];
+        imageX = imageSize.split('.')[0];
+        imageY = imageSize.split('.')[1];
+        li += '<div class="card" style="width:' + imageWidth + 'px" >';
+        li += '<div class="album-photo" style="height:'+ imageWidth * imageY / imageX + 'px">';
+        li += '<a class="fancybox fancybox.image" href="' + imgPath + imgNameWithPattern + '" itemscope="" itemtype="http://schema.org/ImageObject" itemprop="url" data-fancybox="group" rel="group" data-caption="' + imgName + '" title="' +  imgName + '">';
+        li += '<img data-src="' + imgPath + imgNameWithPattern + '" src="' + imgPath + imgNameWithPattern + '" alt="' +  imgName + '" data-loaded="true">';
+        li += '</a>';
+        li += '</div>';
+        li += '</div>';
+      }
+      album.insertAdjacentHTML('beforeend', li);
+      this.minigrid();
+    },
+    minigrid: function () {
+      var grid = new Minigrid({
+        container: '.album',
+        item: '.card',
+        gutter: 12
+      });
+      grid.mount();
+      window.addEventListener('resize', function () {
+        grid.mount();
+      });
+    }
+  };
+  photo.init();
+}
+</script>
+</body>
+</html>

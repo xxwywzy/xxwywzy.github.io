@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/resources/favicon/favicon.png">
+  <link rel="mask-icon" href="/resources/favicon/favicon.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"xxwywzy.github.io","root":"/","images":"/resources/img/","scheme":"Gemini","darkmode":true,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"livere","storage":true,"lazyload":false,"nav":null,"activeClass":"livere"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本篇博客旨在对 OpenAI Gym 工具包的使用进行简单总结。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenAI Gym 入门">
+<meta property="og:url" content="https://xxwywzy.github.io/2023/10/05/open-ai-gym/">
+<meta property="og:site_name" content="口仆">
+<meta property="og:description" content="本篇博客旨在对 OpenAI Gym 工具包的使用进行简单总结。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-08-05-113007.gif">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-08-05-115045.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-08-26-090544.gif">
+<meta property="article:published_time" content="2023-10-05T10:07:06.000Z">
+<meta property="article:modified_time" content="2023-10-25T07:08:00.000Z">
+<meta property="article:author" content="Zheyu Wang">
+<meta property="article:tag" content="强化学习">
+<meta property="article:tag" content="OpenAI">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2020-08-05-113007.gif">
+
+
+<link rel="canonical" href="https://xxwywzy.github.io/2023/10/05/open-ai-gym/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://xxwywzy.github.io/2023/10/05/open-ai-gym/","path":"2023/10/05/open-ai-gym/","title":"OpenAI Gym 入门"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>OpenAI Gym 入门 | 口仆</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/resources/fonts/longcang/longcang-regular.css" >
+<link rel="stylesheet" href="/resources/fonts/lxgw/lxgwwenkailite-regular.css" >
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">口仆</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Long may the sunshine</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-culture"><a href="/culture/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>MEME</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83"><span class="nav-number">1.1.</span> <span class="nav-text">环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%82%E6%B5%8B"><span class="nav-number">1.2.</span> <span class="nav-text">观测</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A9%BA%E9%97%B4"><span class="nav-number">1.3.</span> <span class="nav-text">空间</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E7%8E%AF%E5%A2%83"><span class="nav-number">2.</span> <span class="nav-text">自定义环境</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="nav-number">2.1.</span> <span class="nav-text">文件结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B"><span class="nav-number">2.2.</span> <span class="nav-text">案例</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zheyu Wang"
+      src="/resources/favicon/avatar.png">
+  <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+  <div class="site-description" itemprop="description">相信过程</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">85</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xxwywzy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/xxwywzy" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/xxwywzy" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/xxwywzy" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2023/10/05/open-ai-gym/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resources/favicon/avatar.png">
+      <meta itemprop="name" content="Zheyu Wang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="口仆">
+      <meta itemprop="description" content="相信过程">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="OpenAI Gym 入门 | 口仆">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          OpenAI Gym 入门
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-10-05 18:07:06" itemprop="dateCreated datePublished" datetime="2023-10-05T18:07:06+08:00">2023-10-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93/" itemprop="url" rel="index"><span itemprop="name">实践总结</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.3k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>8 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><div class="note info"><p>本篇博客旨在对 OpenAI Gym 工具包的使用进行简单总结。</p>
+</div>
+<span id="more"></span>
+<h1 id="简介">简介</h1>
+<p>这一部分参考官网提供的<a target="_blank" rel="noopener" href="https://gym.openai.com/docs/" title="OpenAI Gym 官方文档">文档</a>，对 Gym 的运作方式进行简单的介绍。Gym 是一个用于开发和比较强化学习算法的工具包，其对<strong>代理</strong>（agent）的结构不作要求，还可以和任意数值计算库兼容（如 Tensorflow 和 Pytorch）。Gym 提供了一系列用于交互的<strong>环境</strong>，这些环境共享统一的接口，以方便算法的编写。</p>
+<h2 id="环境">环境</h2>
+<p>首先我们可以通过如下代码调用并展示（可视化）一个环境：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> gym</span><br><span class="line">env = gym.make(<span class="string">&#x27;CartPole-v0&#x27;</span>)</span><br><span class="line">env.reset()</span><br><span class="line"><span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1000</span>):</span><br><span class="line">    env.render() <span class="comment"># 可视化环境</span></span><br><span class="line">    env.step(env.action_space.sample()) <span class="comment"># 选择随机动作</span></span><br><span class="line">env.close()</span><br></pre></td></tr></table></figure>
+<p>该代码创建了一个著名的 CartPole 环境，用于控制小车使上面的杆保持竖直不倒，如下图所示。在每一次迭代中，我们从动作空间中采样了一个随机动作（本环境中只有<strong>向左</strong>和<strong>向右</strong>两个动作）并执行。</p>
+<p><img src="http://media.zjubiomedit.com/2020-08-05-113007.gif" width=50%></p>
+<p>执行代码后我们会发现，小车并不能如上图所示维持住平衡，而会直接滚出屏幕外。这是因为我们并没有根据环境的反馈而采取正确的动作。</p>
+<h2 id="观测">观测</h2>
+<p>为了做出更加合适的动作，我们需要先了解环境的反馈。环境的 <code>step</code> 函数可以返回我们想要的值，其总共返回如下四个值：</p>
+<ul>
+<li><code>observation</code>（<strong>object</strong>）：一个环境特定的对象以表示当前环境的观测状态，如相机的像素数据，机器人的关节角度和速度，桌游中的即时战况等</li>
+<li><code>reward</code>（<strong>float</strong>）：前一个动作所获得的奖励值，其范围往往随着环境的变化而各不相同，但目标一般都是提升总奖励值</li>
+<li><code>done</code>（<strong>boolean</strong>）：是否需要重置（<code>reset</code>）环境，不同的环境会有不同的终止条件，包括执行动作的次数限制、状态的变化阈值等</li>
+<li><code>info</code>（<strong>dict</strong>）：输出学习过程中的相关信息，一般用于调试</li>
+</ul>
+<p>通过上述函数，我们可以实现经典的<strong>代理-环境循环</strong>，在每个时间步，代理选择一个动作，环境返回一个观察（状态）和一个奖励：</p>
+<p><img src="http://media.zjubiomedit.com/2020-08-05-115045.png" width=40%></p>
+<p>基于环境的反馈，我们可以对代码进行如下修改，达到终止条件时即退出循环：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> gym</span><br><span class="line">env = gym.make(<span class="string">&#x27;CartPole-v0&#x27;</span>)</span><br><span class="line"><span class="keyword">for</span> i_episode <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">20</span>):</span><br><span class="line">    observation = env.reset()</span><br><span class="line">    <span class="keyword">for</span> t <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">100</span>):</span><br><span class="line">        env.render()</span><br><span class="line">        <span class="built_in">print</span>(observation)</span><br><span class="line">        action = env.action_space.sample()</span><br><span class="line">        observation, reward, done, info = env.step(action)</span><br><span class="line">        <span class="keyword">if</span> done:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;Episode finished after &#123;&#125; timesteps&quot;</span>.<span class="built_in">format</span>(t+<span class="number">1</span>))</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">env.close()</span><br></pre></td></tr></table></figure>
+<p>在 CartPole 环境中，根据<a target="_blank" rel="noopener" href="https://github.com/openai/gym/wiki/CartPole-v0" title="OpenAI Wiki CartPole v0">官方 wiki</a>，<strong>观测状态</strong>有四维：小车位置、小车速度、杆的角度和杆顶端的速度（初始状态每个值均在 ±0.05 区间内取随机值）；<strong>终止条件</strong>有三条：杆的角度大于 ±12 度，小车的位置超过 ±2.4，以及迭代次数超过 200（v1 为 500）；每个步骤的<strong>奖励</strong>均为 1（包括终止步）。</p>
+<h2 id="空间">空间</h2>
+<p>在 Gym 中，状态和动作都是通过 <code>Space</code> 类型来表示的，其可以定义连续或离散的子空间。最常用的两种 <code>Space</code> 是 <code>Box</code> 和 <code>Discrete</code>，在 CartPole 环境中状态空间和动作空间就分别对应这两种 <code>Space</code>：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> gym</span><br><span class="line">env = gym.make(<span class="string">&#x27;CartPole-v0&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(env.action_space)</span><br><span class="line"><span class="comment">#&gt; Discrete(2)</span></span><br><span class="line"><span class="built_in">print</span>(env.observation_space)</span><br><span class="line"><span class="comment">#&gt; Box(4,) # 注意其第二维未指定</span></span><br></pre></td></tr></table></figure>
+<p><code>Discrete</code> 定义了一个从 0 开始取值的离散空间，而 <code>Box</code> 则可以表示一个 <code>m*n</code> 维的连续空间，需要为每个维度设置上下界。我们可以通过如下方式新建空间：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> gym <span class="keyword">import</span> spaces</span><br><span class="line">space = spaces.Discrete(<span class="number">8</span>) <span class="comment"># 包含 &#123;0, 1, 2, ..., 7&#125; 八个元素的集合</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 每一维相同的上下界</span></span><br><span class="line">space_box_1 = Box(low=-<span class="number">1.0</span>, high=<span class="number">2.0</span>, shape=(<span class="number">3</span>, <span class="number">4</span>), dtype=np.float32)</span><br><span class="line"><span class="comment"># Box(3, 4)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 每一维不同的上下界</span></span><br><span class="line">space_box_2 = Box(low=np.array([-<span class="number">1.0</span>, -<span class="number">2.0</span>]), high=np.array([<span class="number">2.0</span>, <span class="number">4.0</span>]), dtype=np.float32)</span><br><span class="line"><span class="comment"># Box(2,)</span></span><br></pre></td></tr></table></figure>
+<p>除了上述两种空间外，Gym 还提供了一些其他的空间，包括多维离散空间、字典空间等，具体可以参考<a target="_blank" rel="noopener" href="https://github.com/openai/gym/tree/master/gym/spaces" title="spaces">官方源码</a>。</p>
+<h1 id="自定义环境">自定义环境</h1>
+<p>Gym 内置了许多强化学习的经典环境，包括经典控制、雅达利游戏、算法、机器人控制等。我们可以通过下述代码查看所有可以直接调用的环境：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">from gym import envs</span><br><span class="line">print(envs.registry.all())</span><br></pre></td></tr></table></figure>
+<p>但在实际应用中，面对一个全新的场景，我们往往需要自定义一个环境来训练我们的算法。本节将介绍如何自定义一个环境。</p>
+<h2 id="文件结构">文件结构</h2>
+<p>根据<a target="_blank" rel="noopener" href="https://github.com/openai/gym/blob/master/docs/creating-environments.md" title="How to create new environments for Gym">官方说明</a>，创建一个新的环境需要建立如下结构的 PIP 包：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">gym-cdm/</span><br><span class="line">├── README.md</span><br><span class="line">├── setup.py <span class="comment"># 声明模块的相关信息和依赖</span></span><br><span class="line">└── gym_cdm/</span><br><span class="line">    ├── __init__.py <span class="comment"># 通过register注册自定义环境</span></span><br><span class="line">    └── envs/</span><br><span class="line">        ├── __init__.py <span class="comment"># 导入自定义环境模块</span></span><br><span class="line">        └── cdm_env.py <span class="comment"># 实现环境所需的各种方法</span></span><br></pre></td></tr></table></figure>
+<p>其中 <code>gym-foo/setup.py</code> 应包含如下代码：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> setuptools <span class="keyword">import</span> setup</span><br><span class="line"></span><br><span class="line">setup(name=<span class="string">&#x27;gym_foo&#x27;</span>,</span><br><span class="line">      version=<span class="string">&#x27;0.0.1&#x27;</span>,</span><br><span class="line">      install_requires=[<span class="string">&#x27;gym&#x27;</span>]  <span class="comment"># 声明包依赖</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p><code>gym-foo/gym-foo/__init__py</code> 应包含如下代码：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> gym.envs.registration <span class="keyword">import</span> register</span><br><span class="line"></span><br><span class="line">register(</span><br><span class="line">    <span class="built_in">id</span>=<span class="string">&#x27;foo-v0&#x27;</span>,</span><br><span class="line">    entry_point=<span class="string">&#x27;gym_foo.envs:FooEnv&#x27;</span>,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p><code>gym-foo/gym-foo/envs/__init__py</code> 应包含如下代码：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> gym_foo.envs.foo_env <span class="keyword">import</span> FooEnv</span><br></pre></td></tr></table></figure>
+<p><code>gym-foo/gym_foo/envs/foo_env.py</code> 应包含如下代码：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> gym</span><br><span class="line"><span class="keyword">from</span> gym <span class="keyword">import</span> error, spaces, utils</span><br><span class="line"><span class="keyword">from</span> gym.utils <span class="keyword">import</span> seeding</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">FooEnv</span>(gym.Env):</span><br><span class="line">  metadata = &#123;<span class="string">&#x27;render.modes&#x27;</span>: [<span class="string">&#x27;human&#x27;</span>]&#125; <span class="comment"># 只是示例，并不是必要语句</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">    ...</span><br><span class="line">  <span class="keyword">def</span> <span class="title function_">step</span>(<span class="params">self, action</span>):</span><br><span class="line">    ...</span><br><span class="line">  <span class="keyword">def</span> <span class="title function_">reset</span>(<span class="params">self</span>):</span><br><span class="line">    ...</span><br><span class="line">  <span class="keyword">def</span> <span class="title function_">render</span>(<span class="params">self, mode=<span class="string">&#x27;human&#x27;</span></span>):</span><br><span class="line">    ...</span><br><span class="line">  <span class="keyword">def</span> <span class="title function_">close</span>(<span class="params">self</span>):</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+<p>当全部定义完成后，我们可以在一级目录下通过 <code>pip install -e .</code> 来安装自定义环境（<code>-e</code> 表示本地可编辑的代码，可以快速更新改动），然后即可在程序中调用该环境：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> gym</span><br><span class="line"><span class="keyword">import</span> gym_foo</span><br><span class="line">env = gym.make(<span class="string">&#x27;foo-v0&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="案例">案例</h2>
+<p>下面通过经典的<strong>井字棋</strong>（Tic-Tac-Toe）游戏来说明环境的自定义方法。井字棋的玩法如下（就是简化版五子棋）：</p>
+<p><img src="http://media.zjubiomedit.com/2020-08-26-090544.gif" width=15%></p>
+<p>在井字棋环境中，状态即当前棋盘的局面，动作则是每一回合玩家的走棋。这里假定玩家为先手，电脑为后手。奖励基于玩家的胜负情况制定。具体代码如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">CdmEnv</span>(gym.Env):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        self.state = [[<span class="string">&#x27;-&#x27;</span> <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>)] <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>)]</span><br><span class="line">        self.counter = <span class="number">0</span> <span class="comment"># 当前步数</span></span><br><span class="line">        self.done = <span class="number">0</span> <span class="comment"># 对局是否结束</span></span><br><span class="line">        self.add = [<span class="number">0</span>, <span class="number">0</span>] <span class="comment"># 表示胜负情况，1代表获胜</span></span><br><span class="line">        self.reward = <span class="number">0</span></span><br><span class="line">  </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">check</span>(<span class="params">self</span>): <span class="comment"># 检查当前棋盘是否有人可以获得胜利</span></span><br><span class="line">        <span class="keyword">if</span> self.counter &lt; <span class="number">5</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span> <span class="comment"># 步数小于五步，无人获胜</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>): <span class="comment"># 判断横竖三行是否有连子，有则返回对应胜者</span></span><br><span class="line">            <span class="keyword">if</span> self.state[i][<span class="number">0</span>] != <span class="string">&#x27;-&#x27;</span> <span class="keyword">and</span> self.state[i][<span class="number">1</span>] == self.state[i][<span class="number">0</span>] <span class="keyword">and</span> self.state[i][<span class="number">1</span>] == self.state[i][<span class="number">2</span>]:</span><br><span class="line">                <span class="keyword">if</span> self.state[i][<span class="number">0</span>] == <span class="string">&#x27;o&#x27;</span>: <span class="comment"># o代表第一名选手的棋子</span></span><br><span class="line">                    <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    <span class="keyword">return</span> <span class="number">2</span></span><br><span class="line">            <span class="keyword">if</span> self.state[<span class="number">0</span>][i] != <span class="string">&#x27;-&#x27;</span> <span class="keyword">and</span> self.state[<span class="number">1</span>][i] == self.state[<span class="number">0</span>][i] <span class="keyword">and</span> self.state[<span class="number">1</span>][i] == self.state[<span class="number">2</span>][i]:</span><br><span class="line">                <span class="keyword">if</span> self.state[<span class="number">0</span>][i] == <span class="string">&#x27;o&#x27;</span>: <span class="comment"># o代表第一名选手的棋子</span></span><br><span class="line">                    <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    <span class="keyword">return</span> <span class="number">2</span></span><br><span class="line">        <span class="comment"># 判断两条对角线上是否有连子</span></span><br><span class="line">        <span class="keyword">if</span> self.state[<span class="number">0</span>][<span class="number">0</span>] != <span class="string">&#x27;-&#x27;</span> <span class="keyword">and</span> self.state[<span class="number">1</span>][<span class="number">1</span>] == self.state[<span class="number">0</span>][<span class="number">0</span>] <span class="keyword">and</span> self.state[<span class="number">1</span>][<span class="number">1</span>] == self.state[<span class="number">2</span>][<span class="number">2</span>]:</span><br><span class="line">            <span class="keyword">if</span> self.state[<span class="number">0</span>][<span class="number">0</span>] == <span class="string">&#x27;o&#x27;</span>: <span class="comment"># o代表第一名选手的棋子</span></span><br><span class="line">                    <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">return</span> <span class="number">2</span></span><br><span class="line">        <span class="keyword">if</span> self.state[<span class="number">0</span>][<span class="number">2</span>] != <span class="string">&#x27;-&#x27;</span> <span class="keyword">and</span> self.state[<span class="number">1</span>][<span class="number">1</span>] == self.state[<span class="number">0</span>][<span class="number">2</span>] <span class="keyword">and</span> self.state[<span class="number">1</span>][<span class="number">1</span>] == self.state[<span class="number">2</span>][<span class="number">0</span>]:</span><br><span class="line">            <span class="keyword">if</span> self.state[<span class="number">0</span>][<span class="number">2</span>] == <span class="string">&#x27;o&#x27;</span>: <span class="comment"># o代表第一名选手的棋子</span></span><br><span class="line">                <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">return</span> <span class="number">2</span></span><br><span class="line">        <span class="comment"># 所有其他情况均无胜者</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">step</span>(<span class="params">self, action</span>): <span class="comment"># 执行动作，返回状态、奖励、是否重置及相关信息</span></span><br><span class="line">        x, y = action[<span class="number">0</span>], action[<span class="number">1</span>]<span class="comment"># 这里用1-9的数字表示棋盘上点的坐标</span></span><br><span class="line">        <span class="keyword">if</span> self.done == <span class="number">1</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;游戏结束&quot;</span>)</span><br><span class="line">            <span class="keyword">return</span> [self.state, self.reward, self.done, self.add]</span><br><span class="line">        <span class="keyword">elif</span> self.state[x][y] != <span class="string">&#x27;-&#x27;</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;非法步骤&quot;</span>)</span><br><span class="line">            <span class="keyword">return</span> [self.state, self.reward, self.done, self.add]</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">if</span> self.counter % <span class="number">2</span> == <span class="number">0</span>: <span class="comment"># 偶数步表示第一名选手</span></span><br><span class="line">                self.state[x][y] = <span class="string">&#x27;o&#x27;</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                self.state[x][y] = <span class="string">&#x27;x&#x27;</span></span><br><span class="line">            self.counter += <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> self.counter == <span class="number">9</span>: <span class="comment"># 棋盘放满则游戏结束</span></span><br><span class="line">                self.done = <span class="number">1</span></span><br><span class="line">            <span class="comment"># self.render() # 可视化棋盘</span></span><br><span class="line">        win = self.check() <span class="comment"># 判断当前的胜负情况</span></span><br><span class="line">        <span class="keyword">if</span> win: <span class="comment"># 如果可以分出胜负</span></span><br><span class="line">            self.done = <span class="number">1</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;玩家 &quot;</span>, win, <span class="string">&quot; 号获胜&quot;</span>, sep = <span class="string">&#x27;&#x27;</span>, end = <span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">            self.add[win - <span class="number">1</span>] = <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> win == <span class="number">1</span>: <span class="comment"># 这里1号玩家赢了给予奖励，2号赢了则给予惩罚（即环境希望1号获胜）</span></span><br><span class="line">                self.reward = <span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                self.reward = -<span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> [self.state, self.reward, self.done, self.add]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">reset</span>(<span class="params">self</span>): <span class="comment"># 重置环境</span></span><br><span class="line">        self.state = [[<span class="string">&#x27;-&#x27;</span> <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>)] <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>)]</span><br><span class="line">        self.counter = <span class="number">0</span></span><br><span class="line">        self.done = <span class="number">0</span></span><br><span class="line">        self.add = [<span class="number">0</span>, <span class="number">0</span>]</span><br><span class="line">        self.reward = <span class="number">0</span></span><br><span class="line">        <span class="keyword">return</span> self.state</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">render</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>):</span><br><span class="line">                <span class="built_in">print</span>(self.state[i][j], end = <span class="string">&quot; &quot;</span>)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;&quot;</span>) <span class="comment"># 换行</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">getPosition</span>(<span class="params">self, x, y</span>):</span><br><span class="line">        item = self.state[x][y]</span><br><span class="line">        <span class="keyword">return</span> item</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">close</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;env closed&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>实际上，上述环境存在许多缺陷。首先是状态空间的表示，我们无法直接判断当前位置是否包含棋子，需要在 agent 中去记录，这显然是不合理的；其次是获胜条件与奖励函数的制定，我们希望环境不去区分玩家与电脑，而是针对每一步给出当前玩家应该受到的奖励。因此，可以考虑将奖励改为当前步下获胜以及防止下一步对方获胜的奖励，相应的胜负判断条件也需要进行修改。一个比较完善的代码（基于 Q 学习）可以参考<a target="_blank" rel="noopener" href="https://github.com/RickardKarl/bill-the-bot" title="Q-learning for Tic Tac Toe">这里</a>。</p>
+<p>以上就是 OpenAI Gym 的相关介绍及自定义环境的简单示范。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+
+
+
+<div class="license">
+  <div class="license-title">OpenAI Gym 入门</div>
+  <div class="license-link">
+    <a href="https://xxwywzy.github.io/2023/10/05/open-ai-gym/">https://xxwywzy.github.io/2023/10/05/open-ai-gym/</a>
+  </div>
+  <div class="license-meta">
+    <div class="license-meta-item">
+      <div class="license-meta-title">本文作者</div>
+      <div class="license-meta-text">
+          Zheyu Wang
+      </div>
+    </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">发布于</div>
+        <div class="license-meta-text">
+          2023-10-05
+        </div>
+      </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">更新于</div>
+        <div class="license-meta-text">
+          2023-10-25
+        </div>
+      </div>
+    <div class="license-meta-item">
+      <div class="license-meta-title">许可协议</div>
+      <div class="license-meta-text">
+          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank">CC BY-NC-SA 4.0</a>
+      </div>
+    </div>
+  </div>
+  <div class="license-statement">
+      转载或引用本文时，请遵守上述许可协议，注明出处、不得用于商业用途！
+  </div>
+</div>
+          <div class="post-tags">
+              <a href="/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/" rel="tag"># 强化学习</a>
+              <a href="/tags/OpenAI/" rel="tag"># OpenAI</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/10/04/FLAT/" rel="prev" title="FLAT：基于 Flat-Lattice Transformer 的中文 NER 模型">
+                  <i class="fa fa-angle-left"></i> FLAT：基于 Flat-Lattice Transformer 的中文 NER 模型
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/10/05/pandas/" rel="next" title="pandas 实践手册">
+                  pandas 实践手册 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81ODgyNi8zNTI4OA=="></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">332k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">18:26</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+
+
+  <style>
+    #taboola-livere { display: none;}
+  </style>
+
+
+
+<script type="text/javascript">
+var linkLists = document.querySelectorAll(".link-list");
+
+linkLists.forEach(function(linkList) {
+  var listPath = linkList.getAttribute('json-src');
+  var iconPath = linkList.getAttribute('icon-src');
+  
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', listPath, true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      var data = JSON.parse(xhr.responseText);
+      
+      var li = "";
+      linkList.innerHTML = '';
+
+      for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+        var info = data[infoIndex];
+        var labelWarn = info['warn'] ? '<span class="label warn">' + info['warn'] + '</span>' : '';
+        var labelInfo = info['info'] ? '<span class="label info">' + info['info'] + '</span>' : '';
+
+        li += '<div class="link-list-container">';
+        li += '<img class="link-list-image" src="' + iconPath + info['logo'] + '">';
+        li += '<p>' + info['title'] + labelInfo + labelWarn + '</p>';
+        li += '<p>' + info['intro'] + '</p>';
+        li += '<a href="' + info['url'] + '" rel="noopener" target="_blank" data-pjax-state=""></a>';
+        li += '</div>';
+      }
+      
+      linkList.innerHTML = li;
+    }
+  };
+  xhr.send();
+});
+</script>
+
+
+<script type="text/javascript">
+var cultureList = document.querySelectorAll(".culture-list");
+if (cultureList.length !== 0) {
+  var j = -1;
+  for (var i = 0; i < cultureList.length; i++) {
+    const listPath = cultureList[i].getAttribute('json-src');
+    const coverPath = cultureList[i].getAttribute('cover-src');
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', listPath, true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        j++;
+        var data = JSON.parse(xhr.responseText);
+        var li = "";
+        
+        cultureList[j].innerHTML = '';
+
+        for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+          var info = data[infoIndex];
+          
+          var title = info['title'];
+          if (info['link']) {
+            title = '<a href="' + info['link'] + '">' + info['title'] + '</a>';
+          }
+
+          var author = info['author'] ? '<span class="author">' + info['author'] + '</span>' : '';
+
+          var intro = info['intro'] ? info['intro'] : '';
+
+          var star = '';
+          if (info['score'] == null) {
+            star = '';
+          } else {
+            var colorStar = '';
+            var greyStar = '';
+            var int = Math.floor(info['score']); //整数部分
+            var fract = 0;
+            if (info['score'] % 1 !== 0) {
+              fract = 1;
+            }
+            for (var m = 0; m < int; m++) {
+              colorStar += '★';
+            }
+            if (fract !== 0) {
+              colorStar += '☆';
+            }
+            for (var m = 0; m < (5 - fract - int); m++) {
+              greyStar += '☆';
+            }
+            if (info['score'] !== 5) {
+              star = '<span class="star-score">' + colorStar + '<span class="grey-star">' + greyStar + '</span></span>';
+            } else {
+              star = '<span class="star-score">' + colorStar + '</span>';
+            }
+          }
+
+          li += '<div class="media">';
+          li += '<div class="media-cover" style="background-image:url(' + coverPath + info['cover'] + ')"></div>';
+          li += '<div class="media-meta">';
+          li += '<div class="media-meta-item title">' + title + '</div>';
+          li += '<div class="media-meta-item">' + author + star + '</div>';
+          li += '<div class="media-meta-item intro">' + intro + '</div>';
+          li += '</div></div>';
+        }
+        
+        cultureList[j].innerHTML = li;
+      }
+    };
+    xhr.send();
+  }
+}
+</script>
+
+
+
+
+<script src="/resources/minigrid.min.js"></script>
+<script type="text/javascript">
+var album = document.querySelector(".album");
+if (album) {
+  // 相册列表 JSON 数据
+  var imgDataPath = album.getAttribute('json-src');
+  // 照片存储路径
+  var imgPath = album.getAttribute('photo-src');
+  // 最多显示数量
+  var imgMaxNum = 50;
+  // 获取窗口大小以决定图片宽度
+  var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  var imageWidth;
+
+  if (windowWidth < 768) {
+    imageWidth = 145; // 移动端图片宽度
+  } else {
+    imageWidth = 235;
+  }
+
+  // 腾讯云自定义样式 (数据万象外网流量需要付费)
+  //var imgStyle = '!' + imageWidth + 'x';
+  //var imgStyle = '!300x';
+
+  // 生成相册
+  var linkDataPath = imgDataPath;
+  var photo = {
+    page: 1,
+    offset: imgMaxNum,
+    init: function () {
+      var that = this;
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", linkDataPath, true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var data = JSON.parse(xhr.responseText);
+          that.render(that.page, data);
+        }
+      };
+      xhr.send();
+    },
+    render: function (page, data) {
+      var begin = (page - 1) * this.offset;
+      var end = page * this.offset;
+      if (begin >= data.length) return;
+      var imgNameWithPattern, imgName, imageSize, imageX, imageY, li = "";
+      for (var i = begin; i < end && i < data.length; i++) {
+        imgNameWithPattern = data[i].split(' ')[1];
+        imgName = imgNameWithPattern.split('.')[0];
+        imageSize = data[i].split(' ')[0];
+        imageX = imageSize.split('.')[0];
+        imageY = imageSize.split('.')[1];
+        li += '<div class="card" style="width:' + imageWidth + 'px" >';
+        li += '<div class="album-photo" style="height:'+ imageWidth * imageY / imageX + 'px">';
+        li += '<a class="fancybox fancybox.image" href="' + imgPath + imgNameWithPattern + '" itemscope="" itemtype="http://schema.org/ImageObject" itemprop="url" data-fancybox="group" rel="group" data-caption="' + imgName + '" title="' +  imgName + '">';
+        li += '<img data-src="' + imgPath + imgNameWithPattern + '" src="' + imgPath + imgNameWithPattern + '" alt="' +  imgName + '" data-loaded="true">';
+        li += '</a>';
+        li += '</div>';
+        li += '</div>';
+      }
+      album.insertAdjacentHTML('beforeend', li);
+      this.minigrid();
+    },
+    minigrid: function () {
+      var grid = new Minigrid({
+        container: '.album',
+        item: '.card',
+        gutter: 12
+      });
+      grid.mount();
+      window.addEventListener('resize', function () {
+        grid.mount();
+      });
+    }
+  };
+  photo.init();
+}
+</script>
+</body>
+</html>

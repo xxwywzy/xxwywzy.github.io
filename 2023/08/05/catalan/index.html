@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/resources/favicon/favicon.png">
+  <link rel="mask-icon" href="/resources/favicon/favicon.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"xxwywzy.github.io","root":"/","images":"/resources/img/","scheme":"Gemini","darkmode":true,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"livere","storage":true,"lazyload":false,"nav":null,"activeClass":"livere"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本篇博客主要介绍编程问题中常考的一种数列：卡特兰数。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="卡特兰数入门">
+<meta property="og:url" content="https://xxwywzy.github.io/2023/08/05/catalan/">
+<meta property="og:site_name" content="口仆">
+<meta property="og:description" content="本篇博客主要介绍编程问题中常考的一种数列：卡特兰数。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-08-02-032202.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-08-02-033348.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-08-02-043302.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-08-02-070904.png">
+<meta property="article:published_time" content="2023-08-05T11:07:06.000Z">
+<meta property="article:modified_time" content="2023-10-21T04:24:47.000Z">
+<meta property="article:author" content="Zheyu Wang">
+<meta property="article:tag" content="卡特兰数">
+<meta property="article:tag" content="编程问题">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2020-08-02-032202.png">
+
+
+<link rel="canonical" href="https://xxwywzy.github.io/2023/08/05/catalan/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://xxwywzy.github.io/2023/08/05/catalan/","path":"2023/08/05/catalan/","title":"卡特兰数入门"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>卡特兰数入门 | 口仆</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/resources/fonts/longcang/longcang-regular.css" >
+<link rel="stylesheet" href="/resources/fonts/lxgw/lxgwwenkailite-regular.css" >
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">口仆</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Long may the sunshine</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-culture"><a href="/culture/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>MEME</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">基本原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">3.</span> <span class="nav-text">应用场景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%98%E5%BC%8F"><span class="nav-number">4.</span> <span class="nav-text">变式</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zheyu Wang"
+      src="/resources/favicon/avatar.png">
+  <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+  <div class="site-description" itemprop="description">相信过程</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">85</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xxwywzy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/xxwywzy" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/xxwywzy" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/xxwywzy" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2023/08/05/catalan/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resources/favicon/avatar.png">
+      <meta itemprop="name" content="Zheyu Wang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="口仆">
+      <meta itemprop="description" content="相信过程">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="卡特兰数入门 | 口仆">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          卡特兰数入门
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-08-05 19:07:06" itemprop="dateCreated datePublished" datetime="2023-08-05T19:07:06+08:00">2023-08-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">编程与算法</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%AE%97%E6%B3%95%E8%A7%A3%E6%9E%90/" itemprop="url" rel="index"><span itemprop="name">算法解析</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>7 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><div class="note danger"><p>本篇博客主要介绍编程问题中常考的一种数列：卡特兰数。</p>
+</div>
+<span id="more"></span>
+<h1 id="简介">简介</h1>
+<p><strong>卡特兰数</strong>是组合数学中一个常在各种计数问题中出现的数列，其对应的序列为：</p>
+<p><img src="http://media.zjubiomedit.com/2020-08-02-032202.png" width=50%></p>
+<p>其通项公式为： <span class="math display">\[
+H_{n}=C_{2 n}^{n} - C_{2 n}^{n + 1} = \frac{C_{2 n}^{n}}{n+1}\left(n \geq 2, n \in \mathbf{N}_{+} \right)
+\]</span> 我们可以基于通项公式得出如下递推关系： <span class="math display">\[
+\begin{aligned}
+H_{n+1}&amp;=\frac{H_{n}(4 n+2)}{n+2} \\
+H_{n}&amp;=\left\{\begin{array}{ll}
+\sum_{i=1}^{n} H_{i-1} H_{n-i} &amp; n \geq 2, n \in \mathbf{N}_{+} \\
+1 &amp; n=0,1
+\end{array}\right.
+\end{aligned}
+\]</span> 下面我们将通过一些经典的题目介绍卡特兰数的基本原理，应用场景及其变式。</p>
+<h1 id="基本原理">基本原理</h1>
+<p>我们可以通过<strong>括号匹配</strong>这个问题来了解卡特兰数的基本原理。该题目的描述如下：</p>
+<blockquote>
+<p>对于 n 对括号，其共有多少种合法的匹配方式？</p>
+</blockquote>
+<p>括号的合法匹配方式为：一个左括号对应一个右括号，且左括号必须要在右括号前面出现。为了方便说明，这里将左括号记作 +1，右括号记作 -1，则一个合法序列和一个非法序列可以表示为如下形式：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">()(()) -&gt; +1 -1 +1 +1 -1 -1</span><br><span class="line">())()( -&gt; +1 -1 -1 +1 -1 +1</span><br></pre></td></tr></table></figure>
+<p>我们可以证明，对于合法序列来说，其<strong>所有前缀和</strong>必然大于等于 0，而对于非法序列来说，其必然存在前缀和小于 0 的情况。下面我们将尝试去推导序列长度为 2n 时非法序列的数量。</p>
+<p>对于一个非法序列，我们找到其<strong>第一个</strong>和小于 0 的前缀，并对其中每一位进行取反。以上面的非法序列为例，我们会得到：<code>-1 +1 +1 +1 -1 +1</code>，此时该序列中共有 <code>3+1</code> 个 +1 和 <code>3-1</code> 个 -1。直观上来看，第一个小于 0 的前缀和必为 -1，即 -1 比 +1 多一个，取反后则 -1 比 + 1 少一个，这样总数上看 +1 必变为 <code>n+1</code> 个，-1 则变为 <code>n-1</code> 个（因为原来二者相等）。我们可以将该结论推广为（严格的证明省略）：</p>
+<blockquote>
+<p>对于 <code>n</code> 对括号的每种非法匹配序列 A，都会有一个含有 <code>n+1</code> 个 +1 和 <code>n-1</code> 个 -1 的序列 B 与其一一对应。</p>
+</blockquote>
+<p>B 的数量我们可以通过 <span class="math inline">\(C_{2n}^{n+1}\)</span> 来计算（等价于 <span class="math inline">\(C_{2 n}^{n-1}\)</span>），即非法序列的数量为 <span class="math inline">\(C_{2n}^{n+1}\)</span>。而序列的总数量为 <span class="math inline">\(C_{2n}^{n}\)</span>（从 2n 个位置中选择 n 个位置放左括号，无先后顺序），因此合法的匹配序列数量为： <span class="math display">\[
+C_{2 n}^{n}-C_{2 n}^{n+1}=\frac{C_{2 n}^{n}}{n+1}
+\]</span> 此即为卡特兰数的通项公式。</p>
+<h1 id="应用场景">应用场景</h1>
+<p>卡特兰数可以应用于很多有趣的组合数学问题，如：</p>
+<blockquote>
+<p>给定 <code>n</code> 个数的入栈顺序，求其有多少种出栈序列？</p>
+</blockquote>
+<p>将进栈看做 +1，出栈看做 -1，则其为一个标准的卡特兰数，对应的结果为 <span class="math inline">\(H_n = \frac{C_{2 n}^{n}}{n+1}\)</span>。</p>
+<blockquote>
+<p>对于有 <code>n+1</code> 个叶子节点，其能构成多少种形状不同的满二叉树？</p>
+</blockquote>
+<p>这里的<strong>满二叉树</strong>使用国际定义，即如果一棵二叉树的节点要么是叶子节点，要么有两个子节点，则其为满二叉树。</p>
+<p>我们可以证明，包含 <code>n+1</code> 个叶子节点（总节点个数为 <code>2n+1</code>）需要进行 <code>2n</code> 次扩展来形成满二叉树，如下图所示（月牙形表示叶子节点）。扩展即从父节点向左或向右添加子节点的过程，我们可以将其理解为左右括号匹配问题，则总共可以构成 <span class="math inline">\(H_n = \frac{C_{2 n}^{n}}{n+1}\)</span> 种形状不同的满二叉树。</p>
+<p><img src="http://media.zjubiomedit.com/2020-08-02-033348.png" width=50%></p>
+<p>此外，上图还可以看做 <code>n</code> 个节点组成不同二叉树的方案数，其中圆形表示节点，月牙形表示什么都没有。我们可以基于卡特兰数的递推关系得出该方案数即为 <span class="math inline">\(H_n\)</span>，具体请参考 Leetcode 第 96 题。</p>
+<blockquote>
+<p>在一个 <code>n*n</code> 的方格中从左下角走到右上角，不穿过对角线的单调路线有多少种？</p>
+</blockquote>
+<p>通过下图我们可以发现，只存在向右走和向上走两种选择，两者的总数需匹配且任意时刻向上走的数量不能多于向右走。很明显这也是一个卡特兰数，对应的单调路线有 <span class="math inline">\(H_n\)</span> 种。</p>
+<p><img src="http://media.zjubiomedit.com/2020-08-02-043302.png" width=50%></p>
+<blockquote>
+<p>将 <code>n</code> 边的凸多边形以不相交的对角线分成 <code>n-2</code> 个三角形，共有多少种方法？</p>
+</blockquote>
+<p>这个问题我们需要从递归的角度来考虑。因为凸 <span class="math inline">\(n\)</span> 边形的任意一条边必定属于某一个三角形，所以我们以某一条边为基准，将这条边的两个顶点分别记作 <span class="math inline">\(P_1\)</span> 和 <span class="math inline">\(P_{n}\)</span>，将该凸多边形的顶点依序标记为 <span class="math inline">\(P_1,P_2,\ldots,P_{n}\)</span>，再在该凸多边形中选择任意一个不属于这两个顶点的顶点 <span class="math inline">\(P_k\)</span>（<span class="math inline">\(2 \le k \le n-1\)</span>），来构成一个三角形，用这个三角形把该凸多边形划分为两个凸多边形，其中一个凸多边形为由 <span class="math inline">\(P_{1}, P_{2}, \ldots, P_{k}\)</span> 构成的凸 <span class="math inline">\(k\)</span> 边形，另一个则是由 <span class="math inline">\(P_{k}, P_{k+1}, \ldots, P_{n}\)</span> 构成的凸 <span class="math inline">\(n-k+1\)</span> 边形。根据乘法原理，问题的解 <span class="math inline">\(f(n)\)</span> 等价于凸 <span class="math inline">\(k\)</span> 边形的划分方案数乘以凸 <span class="math inline">\(n-k+1\)</span> 边形的划分方案数，遍历所有的 <span class="math inline">\(k\)</span>，可以得到： <span class="math display">\[
+f(n)=\left\{\begin{array}{ll}
+\sum_{k=2}^{n-1} f(k)f(n-k+1) &amp; n \geq 4, n \in \mathbf{N}_{+} \\
+1 &amp; n=2,3
+\end{array}\right.
+\]</span> 可以看到，对于一个凸 <span class="math inline">\(n\)</span> 边形来说，其分割方法数即等价于 <span class="math inline">\(H_{n-2}\)</span>。下图给出了一个正六边形的分割方案，共有 <span class="math inline">\(H_4 = 14\)</span> 种。</p>
+<p><img src="http://media.zjubiomedit.com/2020-08-02-070904.png" width=40%></p>
+<p>在实际编程中，这类问题通常可以通过找出递归关系，然后基于动态规划的方式求解。如果可以直接分辨出其为卡特兰数，那么使公式进行求解是一种最快的方法。</p>
+<h1 id="变式">变式</h1>
+<p>下面介绍一种卡特兰数的变式，也是编程面试中常考的一种问题：<strong>买票</strong>问题。</p>
+<blockquote>
+<p>假设一张门票 5 元，售票房没有额外的零钱。现在有 <code>m</code> 个人持有 5 元的纸币，<code>n</code> 个人持有 10 元的纸币排队买票，问有多少种排队方式，可以让每个人都买到电影票。</p>
+</blockquote>
+<p>这道题本质上就是要让持有 5 元纸币的人和持有 10 元纸币的人保持匹配，且 5 元纸币的人需要在前面，如果将持有 5 元纸币的人看做左括号，持有 10 元纸币的人看做右括号，不难理解这就是一个卡特兰数的问题。</p>
+<p>然而，与标准卡特兰数相比，这里的求解还有两个不同之处：首先是持有 5 元纸币的人数 <code>m</code> 和持有 10 元纸币的人数 <code>n</code> 不一定相等（注意 <code>m</code> 需要不少于 <code>n</code> ），这样我们不能直接套用卡特兰数的通项公式，而应该从原理出发重新推导，基于<strong>总序列数减去非法序列数</strong>的思想，合法序列数为 <span class="math inline">\(C_{m+n}^{m}-C_{m+n}^{m+1}\)</span>。此外，我们还需要考虑排队的先后顺序，因此总的排队方式数为： <span class="math display">\[
+\begin{aligned}
+C_{n} &amp;=C_{m+n}^{m}-C_{m+n}^{m+1} \\
+&amp;=\frac{(m+n) !}{m ! * n !}-\frac{(m+n) !}{(m+1) ! *(n-1) !} \\
+&amp;=\frac{(m+n) !}{m ! * n !}-\frac{(m+n) ! * \frac{1}{m+1} * n}{m ! * n !} \\
+&amp;=\frac{(m+n) !}{m ! * n !} *\left(1-\frac{1}{m+1} * n\right) \\
+&amp;=\frac{(m+n) !}{m ! * n !} * \frac{m+1-n}{m+1} \\
+A_n &amp;= C_{n} * m ! * n ! \\
+&amp;= (m+n)! * \frac {m+1-n}{m+1}
+\end{aligned}
+\]</span> 注：本篇文章的整体思路与部分内容参考自 LeetCode 上的一篇<a target="_blank" rel="noopener" href="https://leetcode-cn.com/circle/article/lWYCzv/" title="「算法入门笔记」卡特兰数">笔记</a>，图片则来自 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%8D%A1%E5%A1%94%E5%85%B0%E6%95%B0" title="卡塔兰数">wiki 百科</a>。</p>
+<p>组合数计算公式如下（备忘）： <span class="math display">\[
+C_n^m=\frac{A_n^m}{m !}=\frac{n !}{m !(n-m) !}
+\]</span></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+
+
+
+<div class="license">
+  <div class="license-title">卡特兰数入门</div>
+  <div class="license-link">
+    <a href="https://xxwywzy.github.io/2023/08/05/catalan/">https://xxwywzy.github.io/2023/08/05/catalan/</a>
+  </div>
+  <div class="license-meta">
+    <div class="license-meta-item">
+      <div class="license-meta-title">本文作者</div>
+      <div class="license-meta-text">
+          Zheyu Wang
+      </div>
+    </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">发布于</div>
+        <div class="license-meta-text">
+          2023-08-05
+        </div>
+      </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">更新于</div>
+        <div class="license-meta-text">
+          2023-10-21
+        </div>
+      </div>
+    <div class="license-meta-item">
+      <div class="license-meta-title">许可协议</div>
+      <div class="license-meta-text">
+          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank">CC BY-NC-SA 4.0</a>
+      </div>
+    </div>
+  </div>
+  <div class="license-statement">
+      转载或引用本文时，请遵守上述许可协议，注明出处、不得用于商业用途！
+  </div>
+</div>
+          <div class="post-tags">
+              <a href="/tags/%E5%8D%A1%E7%89%B9%E5%85%B0%E6%95%B0/" rel="tag"># 卡特兰数</a>
+              <a href="/tags/%E7%BC%96%E7%A8%8B%E9%97%AE%E9%A2%98/" rel="tag"># 编程问题</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/02/06/writing-summary/" rel="prev" title="科学写作经验总结">
+                  <i class="fa fa-angle-left"></i> 科学写作经验总结
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/08/06/chatgpt-prompt/" rel="next" title="ChatGPT 提示工程总结">
+                  ChatGPT 提示工程总结 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81ODgyNi8zNTI4OA=="></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">332k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">18:26</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+
+
+  <style>
+    #taboola-livere { display: none;}
+  </style>
+
+
+
+<script type="text/javascript">
+var linkLists = document.querySelectorAll(".link-list");
+
+linkLists.forEach(function(linkList) {
+  var listPath = linkList.getAttribute('json-src');
+  var iconPath = linkList.getAttribute('icon-src');
+  
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', listPath, true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      var data = JSON.parse(xhr.responseText);
+      
+      var li = "";
+      linkList.innerHTML = '';
+
+      for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+        var info = data[infoIndex];
+        var labelWarn = info['warn'] ? '<span class="label warn">' + info['warn'] + '</span>' : '';
+        var labelInfo = info['info'] ? '<span class="label info">' + info['info'] + '</span>' : '';
+
+        li += '<div class="link-list-container">';
+        li += '<img class="link-list-image" src="' + iconPath + info['logo'] + '">';
+        li += '<p>' + info['title'] + labelInfo + labelWarn + '</p>';
+        li += '<p>' + info['intro'] + '</p>';
+        li += '<a href="' + info['url'] + '" rel="noopener" target="_blank" data-pjax-state=""></a>';
+        li += '</div>';
+      }
+      
+      linkList.innerHTML = li;
+    }
+  };
+  xhr.send();
+});
+</script>
+
+
+<script type="text/javascript">
+var cultureList = document.querySelectorAll(".culture-list");
+if (cultureList.length !== 0) {
+  var j = -1;
+  for (var i = 0; i < cultureList.length; i++) {
+    const listPath = cultureList[i].getAttribute('json-src');
+    const coverPath = cultureList[i].getAttribute('cover-src');
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', listPath, true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        j++;
+        var data = JSON.parse(xhr.responseText);
+        var li = "";
+        
+        cultureList[j].innerHTML = '';
+
+        for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+          var info = data[infoIndex];
+          
+          var title = info['title'];
+          if (info['link']) {
+            title = '<a href="' + info['link'] + '">' + info['title'] + '</a>';
+          }
+
+          var author = info['author'] ? '<span class="author">' + info['author'] + '</span>' : '';
+
+          var intro = info['intro'] ? info['intro'] : '';
+
+          var star = '';
+          if (info['score'] == null) {
+            star = '';
+          } else {
+            var colorStar = '';
+            var greyStar = '';
+            var int = Math.floor(info['score']); //整数部分
+            var fract = 0;
+            if (info['score'] % 1 !== 0) {
+              fract = 1;
+            }
+            for (var m = 0; m < int; m++) {
+              colorStar += '★';
+            }
+            if (fract !== 0) {
+              colorStar += '☆';
+            }
+            for (var m = 0; m < (5 - fract - int); m++) {
+              greyStar += '☆';
+            }
+            if (info['score'] !== 5) {
+              star = '<span class="star-score">' + colorStar + '<span class="grey-star">' + greyStar + '</span></span>';
+            } else {
+              star = '<span class="star-score">' + colorStar + '</span>';
+            }
+          }
+
+          li += '<div class="media">';
+          li += '<div class="media-cover" style="background-image:url(' + coverPath + info['cover'] + ')"></div>';
+          li += '<div class="media-meta">';
+          li += '<div class="media-meta-item title">' + title + '</div>';
+          li += '<div class="media-meta-item">' + author + star + '</div>';
+          li += '<div class="media-meta-item intro">' + intro + '</div>';
+          li += '</div></div>';
+        }
+        
+        cultureList[j].innerHTML = li;
+      }
+    };
+    xhr.send();
+  }
+}
+</script>
+
+
+
+
+<script src="/resources/minigrid.min.js"></script>
+<script type="text/javascript">
+var album = document.querySelector(".album");
+if (album) {
+  // 相册列表 JSON 数据
+  var imgDataPath = album.getAttribute('json-src');
+  // 照片存储路径
+  var imgPath = album.getAttribute('photo-src');
+  // 最多显示数量
+  var imgMaxNum = 50;
+  // 获取窗口大小以决定图片宽度
+  var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  var imageWidth;
+
+  if (windowWidth < 768) {
+    imageWidth = 145; // 移动端图片宽度
+  } else {
+    imageWidth = 235;
+  }
+
+  // 腾讯云自定义样式 (数据万象外网流量需要付费)
+  //var imgStyle = '!' + imageWidth + 'x';
+  //var imgStyle = '!300x';
+
+  // 生成相册
+  var linkDataPath = imgDataPath;
+  var photo = {
+    page: 1,
+    offset: imgMaxNum,
+    init: function () {
+      var that = this;
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", linkDataPath, true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var data = JSON.parse(xhr.responseText);
+          that.render(that.page, data);
+        }
+      };
+      xhr.send();
+    },
+    render: function (page, data) {
+      var begin = (page - 1) * this.offset;
+      var end = page * this.offset;
+      if (begin >= data.length) return;
+      var imgNameWithPattern, imgName, imageSize, imageX, imageY, li = "";
+      for (var i = begin; i < end && i < data.length; i++) {
+        imgNameWithPattern = data[i].split(' ')[1];
+        imgName = imgNameWithPattern.split('.')[0];
+        imageSize = data[i].split(' ')[0];
+        imageX = imageSize.split('.')[0];
+        imageY = imageSize.split('.')[1];
+        li += '<div class="card" style="width:' + imageWidth + 'px" >';
+        li += '<div class="album-photo" style="height:'+ imageWidth * imageY / imageX + 'px">';
+        li += '<a class="fancybox fancybox.image" href="' + imgPath + imgNameWithPattern + '" itemscope="" itemtype="http://schema.org/ImageObject" itemprop="url" data-fancybox="group" rel="group" data-caption="' + imgName + '" title="' +  imgName + '">';
+        li += '<img data-src="' + imgPath + imgNameWithPattern + '" src="' + imgPath + imgNameWithPattern + '" alt="' +  imgName + '" data-loaded="true">';
+        li += '</a>';
+        li += '</div>';
+        li += '</div>';
+      }
+      album.insertAdjacentHTML('beforeend', li);
+      this.minigrid();
+    },
+    minigrid: function () {
+      var grid = new Minigrid({
+        container: '.album',
+        item: '.card',
+        gutter: 12
+      });
+      grid.mount();
+      window.addEventListener('resize', function () {
+        grid.mount();
+      });
+    }
+  };
+  photo.init();
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/resources/favicon/favicon.png">
+  <link rel="mask-icon" href="/resources/favicon/favicon.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"xxwywzy.github.io","root":"/","images":"/resources/img/","scheme":"Gemini","darkmode":true,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"livere","storage":true,"lazyload":false,"nav":null,"activeClass":"livere"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本篇博客是《Trino 权威指南》一书的学习笔记（Part 1）。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Trino 权威指南 Part 1">
+<meta property="og:url" content="https://xxwywzy.github.io/2022/06/18/trino-1/">
+<meta property="og:site_name" content="口仆">
+<meta property="og:description" content="本篇博客是《Trino 权威指南》一书的学习笔记（Part 1）。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/2022-12-16-084326.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2022-12-16-084330.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2022-12-16-084339.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2022-12-16-084344.png">
+<meta property="article:published_time" content="2022-06-18T11:07:06.000Z">
+<meta property="article:modified_time" content="2023-08-07T07:01:43.000Z">
+<meta property="article:author" content="Zheyu Wang">
+<meta property="article:tag" content="大数据">
+<meta property="article:tag" content="Trino">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2022-12-16-084326.png">
+
+
+<link rel="canonical" href="https://xxwywzy.github.io/2022/06/18/trino-1/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://xxwywzy.github.io/2022/06/18/trino-1/","path":"2022/06/18/trino-1/","title":"Trino 权威指南 Part 1"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Trino 权威指南 Part 1 | 口仆</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/resources/fonts/longcang/longcang-regular.css" >
+<link rel="stylesheet" href="/resources/fonts/lxgw/lxgwwenkailite-regular.css" >
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">口仆</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Long may the sunshine</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-culture"><a href="/culture/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>MEME</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#trino-%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">Trino 简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">1.1.</span> <span class="nav-text">大数据的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#trino-%E7%89%B9%E6%80%A7"><span class="nav-number">1.2.</span> <span class="nav-text">Trino 特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#trino-%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">1.3.</span> <span class="nav-text">Trino 使用场景</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#trino-%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE"><span class="nav-number">2.</span> <span class="nav-text">Trino 安装与配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E-docker"><span class="nav-number">2.1.</span> <span class="nav-text">基于 Docker</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E6%96%87%E4%BB%B6"><span class="nav-number">2.2.</span> <span class="nav-text">基于文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E5%AE%89%E8%A3%85%E5%8C%85"><span class="nav-number">2.2.1.</span> <span class="nav-text">获取安装包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">2.2.2.</span> <span class="nav-text">添加配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%8A%82%E7%82%B9%E5%B1%9E%E6%80%A7"><span class="nav-number">2.2.2.1.</span> <span class="nav-text">节点属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#jvm-%E9%85%8D%E7%BD%AE"><span class="nav-number">2.2.2.2.</span> <span class="nav-text">JVM 配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E5%B1%9E%E6%80%A7"><span class="nav-number">2.2.2.3.</span> <span class="nav-text">配置属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%97%A5%E5%BF%97%E7%AD%89%E7%BA%A7"><span class="nav-number">2.2.2.4.</span> <span class="nav-text">日志等级</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%BA%90%E9%85%8D%E7%BD%AE"><span class="nav-number">2.2.2.5.</span> <span class="nav-text">数据源配置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8-trino"><span class="nav-number">2.2.3.</span> <span class="nav-text">启动 Trino</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-trino"><span class="nav-number">3.</span> <span class="nav-text">使用 Trino</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#trino-%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%8E%A5%E5%8F%A3"><span class="nav-number">3.1.</span> <span class="nav-text">Trino 命令行接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#trino-jdbc-%E9%A9%B1%E5%8A%A8"><span class="nav-number">3.2.</span> <span class="nav-text">Trino JDBC 驱动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#trino-web-ui"><span class="nav-number">3.3.</span> <span class="nav-text">Trino Web UI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#trino-sql-%E6%A6%82%E8%A6%81"><span class="nav-number">3.4.</span> <span class="nav-text">Trino SQL 概要</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5"><span class="nav-number">3.4.1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%A5%E9%97%A8%E6%A1%88%E4%BE%8B"><span class="nav-number">3.4.2.</span> <span class="nav-text">入门案例</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE"><span class="nav-number">4.</span> <span class="nav-text">思维导图</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zheyu Wang"
+      src="/resources/favicon/avatar.png">
+  <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+  <div class="site-description" itemprop="description">相信过程</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">85</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xxwywzy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/xxwywzy" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/xxwywzy" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/xxwywzy" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2022/06/18/trino-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resources/favicon/avatar.png">
+      <meta itemprop="name" content="Zheyu Wang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="口仆">
+      <meta itemprop="description" content="相信过程">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Trino 权威指南 Part 1 | 口仆">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Trino 权威指南 Part 1
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-06-18 19:07:06" itemprop="dateCreated datePublished" datetime="2022-06-18T19:07:06+08:00">2022-06-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">编程与算法</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B%E4%B8%8E%E7%AE%97%E6%B3%95/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">读书笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.7k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>9 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><div class="note danger"><p>本篇博客是《Trino 权威指南》一书的学习笔记（Part 1）。</p>
+</div>
+<span id="more"></span>
+<h1 id="trino-简介">Trino 简介</h1>
+<p><a target="_blank" rel="noopener" href="https://trino.io/" title="Trino 官网">Trino</a> 是一种支持使用 SQL 访问任意数据源的 SQL 查询引擎，其能够提供更加灵活与高效的查询服务。本章节将简单介绍 Trino 的基本功能与使用场景。</p>
+<h2 id="大数据的问题">大数据的问题</h2>
+<p>在如今的信息化时代，数据无处不在。无论是个人还是企业，对于数据的理解与洞察都是取得成功的关键。当前，对于数据的存储机制存在极强的多样性，例如关系型数据库、NoSQL 数据库、文档数据库、键值存储、对象存储，如下图所示。现代的信息系统通常需要将多种存储机制进行结合才能满足实际的使用需求。</p>
+<p><img src="http://media.zjubiomedit.com/2022-12-16-084326.png" width=70%/></p>
+<p>概括来说，上述这些不同的数据存储系统在数据查询方面存在着如下问题：</p>
+<ul>
+<li>不同的系统使用不同的查询语言与分析工具，缺乏统一的标准工具（不同系统的 SQL 语法也存在差异）</li>
+<li>不同系统的数据分布在不同的孤岛上，跨数据库的联邦查询支持还并不完善</li>
+<li>传统的构建并维护大型数据仓库的方法成本过高，且步骤过于繁琐</li>
+</ul>
+<p>为了解决以上问题，Trino 应运而生。</p>
+<h2 id="trino-特性">Trino 特性</h2>
+<p>Trino 是一个开源的<strong>分布式 SQL 查询引擎</strong>，能够通过联邦查询、并行查询、水平集群伸缩等方式解决上述问题。</p>
+<p><img src="http://media.zjubiomedit.com/2022-12-16-084330.png" width=70%/></p>
+<p>概括来说，Trino 具有以下三点特性：</p>
+<ol type="1">
+<li>专为性能与规模而设计</li>
+<li>万物皆可 SQL</li>
+<li>数据存储与查询计算资源隔离</li>
+</ol>
+<h2 id="trino-使用场景">Trino 使用场景</h2>
+<p>Trino 灵活而高效的特性使得用户可以自由地选择何时去使用 Trino，下面对 Trino 的一些典型使用场景进行了总结：</p>
+<ul>
+<li>通过统一 SQL 访问各类数据源</li>
+<li>执行多数据源联邦查询</li>
+<li>执行 SQL 转换与 ETL</li>
+<li>构建虚拟数仓（语义层）</li>
+<li>构建数据湖查询引擎</li>
+</ul>
+<h1 id="trino-安装与配置">Trino 安装与配置</h1>
+<p>本章节将简单介绍如何安装 Trino、配置数据源，以及查询数据。</p>
+<h2 id="基于-docker">基于 Docker</h2>
+<p>Trino 可以通过 Docker 进行安装，首先在本地安装 <a target="_blank" rel="noopener" href="https://www.docker.com/get-started/%20”Docker%20官网“">Docker</a>，然后使用如下命令下载镜像（需要注册 Docker 个人用户）：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ docker pull trinodb/trino</span><br></pre></td></tr></table></figure>
+<p>下载完成后，直接通过如下命令启动容器（不绑定对外端口的话无法访问 Web UI）：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ docker run -p 8080:8080 --name trino trinodb/trino</span><br></pre></td></tr></table></figure>
+<p>启动成功后，可以连接容器进入 Trino CLI 测试是否安装成功（配置位于 <em>/etc/trino</em> 下）：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ docker <span class="built_in">exec</span> -it trino trino </span><br><span class="line">trino&gt; <span class="keyword">select</span> count(*) from tpch.sf1.nation; </span><br><span class="line"> _col0 </span><br><span class="line">------- </span><br><span class="line">    25 </span><br><span class="line">(1 row) </span><br><span class="line"> </span><br><span class="line">Query 20181105_001601_00002_e6r6y, FINISHED, 1 node</span><br><span class="line">Splits: 21 total, 21 <span class="keyword">done</span> (100.00%) </span><br><span class="line">0:06 [25 rows, 0B] [4 rows/s, 0B/s]</span><br></pre></td></tr></table></figure>
+<h2 id="基于文件">基于文件</h2>
+<h3 id="获取安装包">获取安装包</h3>
+<p>第二种方式是基于安装包文件进行安装，Trino 可以在 Linux 与 macOS 系统上运行，其需要 JVM 与 Python 的支持，具体版本为（针对 385 版本）：</p>
+<ul>
+<li>Java 虚拟机：jdk 版本 <strong>11.0.11</strong> 或以上（可通过 <code>java --version</code> 确认）</li>
+<li>Python：版本 <strong>2.6</strong> 或以上（可通过 <code>python --version</code> 确认）</li>
+</ul>
+<p>在官网或 Maven 中心库下载最新或指定版本的 <em>tar.gz</em> 压缩包文件，并通过如下命令解压：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ tar xvzf trino-server-*.tar.gz</span><br></pre></td></tr></table></figure>
+<p>解压后的文件夹包含如下目录：</p>
+<ul>
+<li>lib：服务相关 jar 包及依赖</li>
+<li>plugins：相关插件及依赖</li>
+<li>bin：启动脚本</li>
+<li>etc：配置文件（用户创建）</li>
+<li>var：相关日志（服务创建）</li>
+</ul>
+<h3 id="添加配置文件">添加配置文件</h3>
+<p>在启动 Trino 之前，还需要提供一系列配置文件，具体如下（本文基于 Trino 385 文档给出的参考配置）：</p>
+<h4 id="节点属性">节点属性</h4>
+<p>存储于 <em>etc/node.properties</em> 中，包含每个节点的配置信息。一个节点是 Trino 的单个安装实例，可参考的初始配置如下：</p>
+<figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="attr">node.environment</span>=<span class="string">demo</span></span><br><span class="line"><span class="attr">node.id</span>=<span class="string">ffffffff-ffff-ffff-ffff-ffffffffffff</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>node.environment</code> 表示节点的环境名称（只能包含小写字母或下划线）。同一集群的所有节点必须具有相同的环境名称</li>
+<li><code>node.id</code> 表示当前节点的唯一标识符（只能包含小写字母、下划线与横杠）</li>
+<li>（可选）<code>node.data-dir</code> 可以任意配置日志的存储位置（注意文件夹权限）</li>
+</ul>
+<h4 id="jvm-配置">JVM 配置</h4>
+<p>存储于 <em>etc/jvm.config</em> 中，Java 虚拟机启动的相关选项，可参考的配置如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">-server</span><br><span class="line">-Xmx4G</span><br><span class="line">-XX:-UseBiasedLocking</span><br><span class="line">-XX:+UseG1GC</span><br><span class="line">-XX:G1HeapRegionSize=32M</span><br><span class="line">-XX:+ExplicitGCInvokesConcurrent</span><br><span class="line">-XX:+HeapDumpOnOutOfMemoryError</span><br><span class="line">-XX:+ExitOnOutOfMemoryError</span><br><span class="line">-XX:ReservedCodeCacheSize=512M</span><br><span class="line">-XX:PerMethodRecompilationCutoff=10000</span><br><span class="line">-XX:PerBytecodeRecompilationCutoff=10000</span><br><span class="line">-Djdk.nio.maxCachedBufferSize=2000000</span><br><span class="line">-Djdk.attach.allowAttachSelf=<span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<h4 id="配置属性">配置属性</h4>
+<p>存储于 <em>etc/config.properties</em> 中，包含 Trino 服务的基本配置信息。每个 Trino 服务器可以作为 coordinator 或 worker 来执行功能。对于单节点机器来说，Trino 需同时作为 coordinator 与 worker，可参考的配置如下：</p>
+<figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="attr">coordinator</span>=<span class="string">true</span></span><br><span class="line"><span class="attr">node-scheduler.include-coordinator</span>=<span class="string">true</span></span><br><span class="line"><span class="attr">http-server.http.port</span>=<span class="string">8080</span></span><br><span class="line"><span class="attr">query.max-memory</span>=<span class="string">5GB</span></span><br><span class="line"><span class="attr">query.max-memory-per-node</span>=<span class="string">1GB</span></span><br><span class="line"><span class="attr">discovery.uri</span>=<span class="string">http://localhost:8080</span></span><br></pre></td></tr></table></figure>
+<h4 id="日志等级">日志等级</h4>
+<p>存储于 <em>etc/log.properties</em> 中，属于可选配置，可以指定特定日志输出的最低等级：</p>
+<figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="attr">io.trino</span>=<span class="string">INFO</span></span><br></pre></td></tr></table></figure>
+<p>日志默认输出 <code>INFO</code> 等级，上述语句将作用于 <code>io.trino.server</code> 与 <code>io.trino.plugin.hive</code> 两个类。</p>
+<h4 id="数据源配置">数据源配置</h4>
+<p>Trino 通过 <em>catalogs</em> 来定义用户可以使用的数据源。实际的数据访问通过 catalog 中所配置的 Trino <strong>连接器</strong>（connector）来完成，连接器中将暴露数据源所有的 <em>schema</em>（库） 与 <em>table</em>（表）。</p>
+<p>数据源存储于 <code>etc/catalog</code> 目录中，通过 <code>xxx.properties</code> 来指定特定的 catalog（名称匹配）。例如，我们可以创建文件 <code>mysql.properties</code> 来配置 MySQL 连接器：</p>
+<figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="attr">connector.name</span>=<span class="string">mysql</span></span><br><span class="line"><span class="attr">connection-url</span>=<span class="string">jdbc:mysql://xxx:3306?serverTimezone=UTC&amp;useSSL=false</span></span><br><span class="line"><span class="attr">connection-user</span>=<span class="string">root</span></span><br><span class="line"><span class="attr">connection-password</span>=<span class="string">xxx</span></span><br></pre></td></tr></table></figure>
+<p>每个 catalog 文件都需要 <code>connector.name</code> 属性，其他的属性取决于具体的连接器实现。</p>
+<p><strong>PS</strong>：对于 oracle 数据源，可能需要在 JVM 配置中添加时区设置 <code>-Duser.timezone="+08:00"</code>（针对 ORA-01882 报错）。</p>
+<h3 id="启动-trino">启动 Trino</h3>
+<p>添加好配置后，可以在安装文件夹下启动脚本：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ bin/launcher run</span><br></pre></td></tr></table></figure>
+<p>如果运行成功，将看到如下信息（实际上会打印出很多超多信息..）：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">INFO        main io.trino.server.Server ======== SERVER STARTED</span><br></pre></td></tr></table></figure>
+<p>也可以通过如下命令在后台启动 Trino（终端不输出信息）：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ bin/launcher start</span><br></pre></td></tr></table></figure>
+<p>通过 <code>stop</code> 可以停止 Trino（前台启动的话直接退出即可）。</p>
+<h1 id="使用-trino">使用 Trino</h1>
+<p>本章节将介绍 Trino 的使用方式。</p>
+<h2 id="trino-命令行接口">Trino 命令行接口</h2>
+<p>Trino 命令行工具需要单独下载（Docker 安装的话已经自动集成），在官网或 Maven 中心库下载 <em>xxx-executable.jar</em> 文件，然后将其重命名为 <strong>trino</strong>（后缀名也要去掉），并通过如下命令使其可执行：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">chmod</span> +x trino</span><br></pre></td></tr></table></figure>
+<p>将该文件转移到 <em>bin</em> 文件夹下，配置路径后即可调用，MacOS 下可以修改 <em>.zshrc</em> 文件（修改为实际路径）：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">export</span> PATH=~/bin/:<span class="variable">$PATH</span></span><br></pre></td></tr></table></figure>
+<p>现在即可在终端运行 Trino CLI：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ trino --version </span><br><span class="line">Trino CLI 385</span><br></pre></td></tr></table></figure>
+<p>如果直接使用的是本地测试或 docker 部署，可以直接启动 trino CLI，否则需要指定服务器地址：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ trino --server https://trino.example.com:8080 </span><br><span class="line">trino&gt;</span><br></pre></td></tr></table></figure>
+<p>启动成功后，可以直接编写 SQL 进行查询，注意需要以分号结尾：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">trino&gt; SELECT count(*) FROM tpch.tiny.nation;</span><br><span class="line"> _col0</span><br><span class="line">-------</span><br><span class="line">    25</span><br><span class="line">(1 row)</span><br><span class="line"></span><br><span class="line">Query 20220614_023919_00001_vdub7, FINISHED, 1 node</span><br><span class="line">Splits: 13 total, 13 <span class="keyword">done</span> (100.00%)</span><br><span class="line">1.42 [25 rows, 0B] [17 rows/s, 0B/s]</span><br></pre></td></tr></table></figure>
+<p><strong>PS</strong>：如果有对网络进行过改动（例如连接我司办公网），Trino 可能会报 <code>Failed communicating with server</code> 的错误，Docker 下启动就没有这个问题。</p>
+<h2 id="trino-jdbc-驱动">Trino JDBC 驱动</h2>
+<p>Trino 还可以通过 JDBC 驱动在任意 Java 应用中访问，其是一种 Type 4 驱动，与 Trino 原生协议直接通信。下面以 Spring Boot 为例，介绍如何在常见的后端应用中引入 Trino。</p>
+<p>首先通过 maven 引入相关 jar 包（要求 Jave 8 或以上），也可以下载 jar 包手动添加：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.trino<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>trino-jdbc<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>385<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>引入驱动后，需要在配置文件中进行 Trino 的连接配置，下面给出的是 yaml 格式的配置示例：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">datasource:</span></span><br><span class="line">    <span class="attr">presto:</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">presto</span></span><br><span class="line">      <span class="attr">driver-class-name:</span> <span class="string">io.trino.jdbc.TrinoDriver</span></span><br><span class="line">      <span class="attr">jdbc-url:</span> <span class="string">jdbc:trino://127.0.0.1:8080</span></span><br><span class="line">      <span class="attr">username:</span> <span class="string">admin</span></span><br></pre></td></tr></table></figure>
+<p>其中 <code>jdbc-url</code> 中可以额外去指定 catalog 与 schema 以限定数据源范围，<code>user-name</code> 无论是否执行认证都需要指定。</p>
+<p>配置完成后，需要手动创建相关数据源配置（注意注解的名称不能与类名称重复）：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Bean(name = &quot;prestoConfigDataSource&quot;)</span></span><br><span class="line"><span class="meta">@ConfigurationProperties(prefix = &quot;spring.datasource.presto&quot;)</span></span><br><span class="line"><span class="keyword">public</span> DataSource <span class="title function_">getPrestoDataSource</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> DataSourceBuilder.create().build();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Bean(name = &quot;prestoJdbcTemplate&quot;)</span></span><br><span class="line"><span class="keyword">public</span> JdbcTemplate <span class="title function_">prestoJdbcTemplate</span><span class="params">(<span class="meta">@Qualifier(&quot;prestoConfigDataSource&quot;)</span> DataSource dataSource)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">JdbcTemplate</span>(dataSource);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>执行调用时，可以通过自动装配的方式实现：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="meta">@Qualifier(&quot;prestoJdbcTemplate&quot;)</span></span><br><span class="line"><span class="keyword">private</span> JdbcTemplate prestoJdbcTemplate;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 调用查询方法获取查询结果（基于String类型的sql）</span></span><br><span class="line">List&lt;Map&lt;String, Object&gt;&gt; res = prestoJdbcTemplate.queryForList(sql);</span><br></pre></td></tr></table></figure>
+<h2 id="trino-web-ui">Trino Web UI</h2>
+<p>Trino 服务器提供了 Web UI 来监控 Trino 的相关信息，对于本地部署的 Trino，可以通过 <em>http://localhost:8080</em> 访问：</p>
+<p><img src="http://media.zjubiomedit.com/2022-12-16-084339.png" width=70%/></p>
+<h2 id="trino-sql-概要">Trino SQL 概要</h2>
+<p>Trino 是一个遵循 ANSI SQL 的查询引擎，其在遵循标准的前提下引入了部分与其兼容的新特性。下面将对 Trino 中 SQL 的基础使用方法进行介绍。</p>
+<h3 id="概念">概念</h3>
+<p>Trino 能够通过 SQL 访问任意的外部数据源，主要涉及以下四个概念：</p>
+<ul>
+<li><em>Connector</em>：将 Trino 与数据源进行适配的连接器，每个数据源都需要关联到一个特定的连接器</li>
+<li><em>Catalog</em>：定义访问某个数据源的具体细节，例如所包含的 schema 以及使用的连接器</li>
+<li><em>Schema</em>：组织 table 的一种方式。catalog 和 schema 共同定义了可以被查询的 table 集合</li>
+<li><em>Table</em>：无序行的集合，被组织为具有数据类型的命名列（比较拗口，其实就是表或者类似表的数据集合，不限于关系型数据库）</li>
+</ul>
+<h3 id="入门案例">入门案例</h3>
+<p>首先可以通过如下语句查找所有数据源：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SHOW</span> CATALOGS; </span><br><span class="line"> Catalog </span><br><span class="line"> <span class="comment">--------- </span></span><br><span class="line"> <span class="keyword">system</span> </span><br><span class="line"> tpch </span><br><span class="line"> (<span class="number">2</span> <span class="keyword">rows</span>)</span><br></pre></td></tr></table></figure>
+<p>然后可进一步查找特定数据源下的所有 schema：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SHOW</span> SCHEMAS <span class="keyword">FROM</span> tpch; </span><br><span class="line">       Schema </span><br><span class="line"> <span class="comment">------------------ </span></span><br><span class="line"> information_schema </span><br><span class="line"> sf1 </span><br><span class="line"> sf100 </span><br><span class="line"> sf1000 </span><br><span class="line"> sf10000 </span><br><span class="line"> sf100000 </span><br><span class="line"> sf300 </span><br><span class="line"> sf3000 </span><br><span class="line"> sf30000 </span><br><span class="line"> tiny</span><br><span class="line">(<span class="number">10</span> <span class="keyword">rows</span>)</span><br></pre></td></tr></table></figure>
+<p>再进一步查找特定 schema 下的所有 table：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SHOW</span> TABLES <span class="keyword">FROM</span> tpch.sf1; </span><br><span class="line">  <span class="keyword">Table</span> </span><br><span class="line"> <span class="comment">--------- </span></span><br><span class="line"> customer </span><br><span class="line"> lineitem </span><br><span class="line"> nation </span><br><span class="line"> orders </span><br><span class="line"> part </span><br><span class="line"> partsupp </span><br><span class="line"> region </span><br><span class="line"> supplier</span><br><span class="line">(<span class="number">8</span> <span class="keyword">rows</span>)</span><br></pre></td></tr></table></figure>
+<p>可以通过 <code>DESCRIBE</code> 查看 table 中的所有列：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">DESCRIBE</span> tpch.sf1.region; </span><br><span class="line">  <span class="keyword">Column</span>   <span class="operator">|</span>     Type     <span class="operator">|</span> Extra <span class="operator">|</span> Comment</span><br><span class="line"><span class="comment">-----------+--------------+-------+--------- </span></span><br><span class="line"> regionkey <span class="operator">|</span> <span class="type">bigint</span>       <span class="operator">|</span>       <span class="operator">|</span> </span><br><span class="line"> name      <span class="operator">|</span> <span class="type">varchar</span>(<span class="number">25</span>)  <span class="operator">|</span>       <span class="operator">|</span> </span><br><span class="line"> comment   <span class="operator">|</span> <span class="type">varchar</span>(<span class="number">152</span>) <span class="operator">|</span>       <span class="operator">|</span></span><br><span class="line">(<span class="number">3</span> <span class="keyword">rows</span>)</span><br></pre></td></tr></table></figure>
+<p>接下来，即可采用标准 SQL 来查询数据：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> name <span class="keyword">FROM</span> tpch.sf1.region; </span><br><span class="line">    name </span><br><span class="line"> <span class="comment">------------ </span></span><br><span class="line"> AFRICA </span><br><span class="line"> AMERICA </span><br><span class="line"> ASIA </span><br><span class="line"> EUROPE </span><br><span class="line"> MIDDLE EAST</span><br><span class="line">(<span class="number">5</span> <span class="keyword">rows</span>)</span><br></pre></td></tr></table></figure>
+<p>Trino 支持非常多的函数与操作符，可以在官方文档中进行查阅。</p>
+<h1 id="思维导图">思维导图</h1>
+<p><img src="http://media.zjubiomedit.com/2022-12-16-084344.png" width=90%></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+
+
+
+<div class="license">
+  <div class="license-title">Trino 权威指南 Part 1</div>
+  <div class="license-link">
+    <a href="https://xxwywzy.github.io/2022/06/18/trino-1/">https://xxwywzy.github.io/2022/06/18/trino-1/</a>
+  </div>
+  <div class="license-meta">
+    <div class="license-meta-item">
+      <div class="license-meta-title">本文作者</div>
+      <div class="license-meta-text">
+          Zheyu Wang
+      </div>
+    </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">发布于</div>
+        <div class="license-meta-text">
+          2022-06-18
+        </div>
+      </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">更新于</div>
+        <div class="license-meta-text">
+          2023-08-07
+        </div>
+      </div>
+    <div class="license-meta-item">
+      <div class="license-meta-title">许可协议</div>
+      <div class="license-meta-text">
+          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank">CC BY-NC-SA 4.0</a>
+      </div>
+    </div>
+  </div>
+  <div class="license-statement">
+      转载或引用本文时，请遵守上述许可协议，注明出处、不得用于商业用途！
+  </div>
+</div>
+          <div class="post-tags">
+              <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag"># 大数据</a>
+              <a href="/tags/Trino/" rel="tag"># Trino</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/05/04/dda-4/" rel="prev" title="《数据密集型应用系统设计》读书笔记（四）">
+                  <i class="fa fa-angle-left"></i> 《数据密集型应用系统设计》读书笔记（四）
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/02/06/writing-summary/" rel="next" title="科学写作经验总结">
+                  科学写作经验总结 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81ODgyNi8zNTI4OA=="></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">332k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">18:26</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+
+
+  <style>
+    #taboola-livere { display: none;}
+  </style>
+
+
+
+<script type="text/javascript">
+var linkLists = document.querySelectorAll(".link-list");
+
+linkLists.forEach(function(linkList) {
+  var listPath = linkList.getAttribute('json-src');
+  var iconPath = linkList.getAttribute('icon-src');
+  
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', listPath, true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      var data = JSON.parse(xhr.responseText);
+      
+      var li = "";
+      linkList.innerHTML = '';
+
+      for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+        var info = data[infoIndex];
+        var labelWarn = info['warn'] ? '<span class="label warn">' + info['warn'] + '</span>' : '';
+        var labelInfo = info['info'] ? '<span class="label info">' + info['info'] + '</span>' : '';
+
+        li += '<div class="link-list-container">';
+        li += '<img class="link-list-image" src="' + iconPath + info['logo'] + '">';
+        li += '<p>' + info['title'] + labelInfo + labelWarn + '</p>';
+        li += '<p>' + info['intro'] + '</p>';
+        li += '<a href="' + info['url'] + '" rel="noopener" target="_blank" data-pjax-state=""></a>';
+        li += '</div>';
+      }
+      
+      linkList.innerHTML = li;
+    }
+  };
+  xhr.send();
+});
+</script>
+
+
+<script type="text/javascript">
+var cultureList = document.querySelectorAll(".culture-list");
+if (cultureList.length !== 0) {
+  var j = -1;
+  for (var i = 0; i < cultureList.length; i++) {
+    const listPath = cultureList[i].getAttribute('json-src');
+    const coverPath = cultureList[i].getAttribute('cover-src');
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', listPath, true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        j++;
+        var data = JSON.parse(xhr.responseText);
+        var li = "";
+        
+        cultureList[j].innerHTML = '';
+
+        for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+          var info = data[infoIndex];
+          
+          var title = info['title'];
+          if (info['link']) {
+            title = '<a href="' + info['link'] + '">' + info['title'] + '</a>';
+          }
+
+          var author = info['author'] ? '<span class="author">' + info['author'] + '</span>' : '';
+
+          var intro = info['intro'] ? info['intro'] : '';
+
+          var star = '';
+          if (info['score'] == null) {
+            star = '';
+          } else {
+            var colorStar = '';
+            var greyStar = '';
+            var int = Math.floor(info['score']); //整数部分
+            var fract = 0;
+            if (info['score'] % 1 !== 0) {
+              fract = 1;
+            }
+            for (var m = 0; m < int; m++) {
+              colorStar += '★';
+            }
+            if (fract !== 0) {
+              colorStar += '☆';
+            }
+            for (var m = 0; m < (5 - fract - int); m++) {
+              greyStar += '☆';
+            }
+            if (info['score'] !== 5) {
+              star = '<span class="star-score">' + colorStar + '<span class="grey-star">' + greyStar + '</span></span>';
+            } else {
+              star = '<span class="star-score">' + colorStar + '</span>';
+            }
+          }
+
+          li += '<div class="media">';
+          li += '<div class="media-cover" style="background-image:url(' + coverPath + info['cover'] + ')"></div>';
+          li += '<div class="media-meta">';
+          li += '<div class="media-meta-item title">' + title + '</div>';
+          li += '<div class="media-meta-item">' + author + star + '</div>';
+          li += '<div class="media-meta-item intro">' + intro + '</div>';
+          li += '</div></div>';
+        }
+        
+        cultureList[j].innerHTML = li;
+      }
+    };
+    xhr.send();
+  }
+}
+</script>
+
+
+
+
+<script src="/resources/minigrid.min.js"></script>
+<script type="text/javascript">
+var album = document.querySelector(".album");
+if (album) {
+  // 相册列表 JSON 数据
+  var imgDataPath = album.getAttribute('json-src');
+  // 照片存储路径
+  var imgPath = album.getAttribute('photo-src');
+  // 最多显示数量
+  var imgMaxNum = 50;
+  // 获取窗口大小以决定图片宽度
+  var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  var imageWidth;
+
+  if (windowWidth < 768) {
+    imageWidth = 145; // 移动端图片宽度
+  } else {
+    imageWidth = 235;
+  }
+
+  // 腾讯云自定义样式 (数据万象外网流量需要付费)
+  //var imgStyle = '!' + imageWidth + 'x';
+  //var imgStyle = '!300x';
+
+  // 生成相册
+  var linkDataPath = imgDataPath;
+  var photo = {
+    page: 1,
+    offset: imgMaxNum,
+    init: function () {
+      var that = this;
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", linkDataPath, true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var data = JSON.parse(xhr.responseText);
+          that.render(that.page, data);
+        }
+      };
+      xhr.send();
+    },
+    render: function (page, data) {
+      var begin = (page - 1) * this.offset;
+      var end = page * this.offset;
+      if (begin >= data.length) return;
+      var imgNameWithPattern, imgName, imageSize, imageX, imageY, li = "";
+      for (var i = begin; i < end && i < data.length; i++) {
+        imgNameWithPattern = data[i].split(' ')[1];
+        imgName = imgNameWithPattern.split('.')[0];
+        imageSize = data[i].split(' ')[0];
+        imageX = imageSize.split('.')[0];
+        imageY = imageSize.split('.')[1];
+        li += '<div class="card" style="width:' + imageWidth + 'px" >';
+        li += '<div class="album-photo" style="height:'+ imageWidth * imageY / imageX + 'px">';
+        li += '<a class="fancybox fancybox.image" href="' + imgPath + imgNameWithPattern + '" itemscope="" itemtype="http://schema.org/ImageObject" itemprop="url" data-fancybox="group" rel="group" data-caption="' + imgName + '" title="' +  imgName + '">';
+        li += '<img data-src="' + imgPath + imgNameWithPattern + '" src="' + imgPath + imgNameWithPattern + '" alt="' +  imgName + '" data-loaded="true">';
+        li += '</a>';
+        li += '</div>';
+        li += '</div>';
+      }
+      album.insertAdjacentHTML('beforeend', li);
+      this.minigrid();
+    },
+    minigrid: function () {
+      var grid = new Minigrid({
+        container: '.album',
+        item: '.card',
+        gutter: 12
+      });
+      grid.mount();
+      window.addEventListener('resize', function () {
+        grid.mount();
+      });
+    }
+  };
+  photo.init();
+}
+</script>
+</body>
+</html>

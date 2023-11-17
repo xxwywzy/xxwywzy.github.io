@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/resources/favicon/favicon.png">
+  <link rel="mask-icon" href="/resources/favicon/favicon.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"xxwywzy.github.io","root":"/","images":"/resources/img/","scheme":"Gemini","darkmode":true,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"livere","storage":true,"lazyload":false,"nav":null,"activeClass":"livere"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本篇博客是《数据密集型应用系统设计》一书的学习笔记（第二章）。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《数据密集型应用系统设计》读书笔记（二）">
+<meta property="og:url" content="https://xxwywzy.github.io/2021/08/24/dda-2/">
+<meta property="og:site_name" content="口仆">
+<meta property="og:description" content="本篇博客是《数据密集型应用系统设计》一书的学习笔记（第二章）。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/2021-04-28-083034.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2021-04-28-085336.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2021-04-28-085609.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2021-08-17-100508.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2021-08-24-115550.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2023-08-07-073149.png">
+<meta property="article:published_time" content="2021-08-24T11:07:06.000Z">
+<meta property="article:modified_time" content="2023-08-07T07:35:51.000Z">
+<meta property="article:author" content="Zheyu Wang">
+<meta property="article:tag" content="大数据">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2021-04-28-083034.png">
+
+
+<link rel="canonical" href="https://xxwywzy.github.io/2021/08/24/dda-2/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://xxwywzy.github.io/2021/08/24/dda-2/","path":"2021/08/24/dda-2/","title":"《数据密集型应用系统设计》读书笔记（二）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>《数据密集型应用系统设计》读书笔记（二） | 口仆</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/resources/fonts/longcang/longcang-regular.css" >
+<link rel="stylesheet" href="/resources/fonts/lxgw/lxgwwenkailite-regular.css" >
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">口仆</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Long may the sunshine</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-culture"><a href="/culture/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>MEME</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%96%87%E6%A1%A3%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.</span> <span class="nav-text">关系模型与文档模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%96%87%E6%A1%A3%E6%A8%A1%E5%9E%8B%E7%A4%BA%E4%BE%8B"><span class="nav-number">1.1.</span> <span class="nav-text">关系模型与文档模型示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%96%87%E6%A1%A3%E6%A8%A1%E5%9E%8B%E5%8F%91%E5%B1%95%E7%AE%80%E5%8F%B2"><span class="nav-number">1.2.</span> <span class="nav-text">关系模型与文档模型发展简史</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%96%87%E6%A1%A3%E6%A8%A1%E5%9E%8B%E5%AF%B9%E6%AF%94"><span class="nav-number">1.3.</span> <span class="nav-text">关系模型与文档模型对比</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%9F%A5%E8%AF%A2%E8%AF%AD%E8%A8%80"><span class="nav-number">2.</span> <span class="nav-text">数据查询语言</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A3%B0%E6%98%8E%E5%BC%8F%E6%9F%A5%E8%AF%A2%E4%B8%8E%E5%91%BD%E4%BB%A4%E5%BC%8F%E6%9F%A5%E8%AF%A2"><span class="nav-number">2.1.</span> <span class="nav-text">声明式查询与命令式查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web-%E4%B8%8A%E7%9A%84%E5%A3%B0%E6%98%8E%E5%BC%8F%E6%9F%A5%E8%AF%A2"><span class="nav-number">2.2.</span> <span class="nav-text">Web 上的声明式查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mapreduce-%E6%9F%A5%E8%AF%A2"><span class="nav-number">2.3.</span> <span class="nav-text">MapReduce 查询</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%BE%E7%8A%B6%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B"><span class="nav-number">3.</span> <span class="nav-text">图状数据模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B1%9E%E6%80%A7%E5%9B%BE"><span class="nav-number">3.1.</span> <span class="nav-text">属性图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cypher-%E6%9F%A5%E8%AF%A2%E8%AF%AD%E8%A8%80"><span class="nav-number">3.2.</span> <span class="nav-text">Cypher 查询语言</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#sql-%E4%B8%AD%E7%9A%84%E5%9B%BE%E6%9F%A5%E8%AF%A2"><span class="nav-number">3.2.1.</span> <span class="nav-text">SQL 中的图查询</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E5%85%83%E5%AD%98%E5%82%A8%E5%92%8C-sparql"><span class="nav-number">3.3.</span> <span class="nav-text">三元存储和 SPARQL</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E5%85%83%E5%AD%98%E5%82%A8%E6%A8%A1%E5%9E%8B"><span class="nav-number">3.3.1.</span> <span class="nav-text">三元存储模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E4%B9%89%E7%BD%91%E4%B8%8E-rdf-%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B"><span class="nav-number">3.3.2.</span> <span class="nav-text">语义网与 RDF 数据模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sparql-%E6%9F%A5%E8%AF%A2%E8%AF%AD%E8%A8%80"><span class="nav-number">3.3.3.</span> <span class="nav-text">SPARQL 查询语言</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#datalog-%E8%AF%AD%E8%A8%80"><span class="nav-number">3.4.</span> <span class="nav-text">Datalog 语言</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text">小结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE"><span class="nav-number">5.</span> <span class="nav-text">思维导图</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zheyu Wang"
+      src="/resources/favicon/avatar.png">
+  <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+  <div class="site-description" itemprop="description">相信过程</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">85</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xxwywzy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/xxwywzy" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/xxwywzy" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/xxwywzy" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2021/08/24/dda-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resources/favicon/avatar.png">
+      <meta itemprop="name" content="Zheyu Wang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="口仆">
+      <meta itemprop="description" content="相信过程">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="《数据密集型应用系统设计》读书笔记（二） | 口仆">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          《数据密集型应用系统设计》读书笔记（二）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-08-24 19:07:06" itemprop="dateCreated datePublished" datetime="2021-08-24T19:07:06+08:00">2021-08-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">编程与算法</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B%E4%B8%8E%E7%AE%97%E6%B3%95/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">读书笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>8k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>27 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><div class="note danger"><p>本篇博客是《数据密集型应用系统设计》一书的学习笔记（第二章）。</p>
+</div>
+<span id="more"></span>
+<p>本篇笔记对应原书第二章：<strong>数据模型与查询语言</strong>。</p>
+<p><strong>数据模型</strong>（Data models）是软件开发中最重要的部分之一，大部分应用程序都是通过数据模型的层层叠加来构建的，例如：</p>
+<ol type="1">
+<li>应用程序开发人员通过对象或数据结构，以及操作这些数据结构的API来对真实世界建模。</li>
+<li>数据库开发人员采用通用数据模型（如关系数据库中的表）来存储上述数据结构。</li>
+<li>数据库工程师决定用何种字节格式来表述上述通用数据模型，数据表示需要支持查询、搜索等操作。</li>
+<li>硬件工程师需要考虑如何用电流、光脉冲、磁场等来表示字节。</li>
+</ol>
+<p>可以看出，每一层都通过提供一个简洁的数据模型来隐藏下层的复杂性，这些抽象机制使得不同的人群可以高效协作。本章节将介绍一系列用于数据存储和查询的<strong>通用数据模型</strong>（对应列表中的第2点）。</p>
+<h1 id="关系模型与文档模型">关系模型与文档模型</h1>
+<p>当前，以 SQL（结构化查询语言）为代表的<strong>关系模型</strong>（relational model）可能是最著名的数据模型。SQL将数据组织成关系，存储在表（table）中，其中每个关系都是元组（tuples）的无序集合（在 SQL 中称为行）。关系模型的目标是将实现细节隐藏在更简洁的接口后面。进入21世纪，以文档模型与图模型为代表的<strong>非关系数据模型</strong>（NoSQL）开始逐渐涌现并不断发展。采用NoSQL数据库的驱动因素包括比关系数据库更好的扩展性需求、免费与开源、对特定查询操作的支持、不满关系模式的限制性等。本节将重点关注关系模型与文档模型。</p>
+<h2 id="关系模型与文档模型示例">关系模型与文档模型示例</h2>
+<p>下面将通过一个简历数据模型来说明关系模型与文档模型的差异性。下图给出了在关系模型中表示简历数据的示例。整个简历可以通过唯一的标识符 <code>user_id</code> 来标识，该标识同时也作为其他表的外键来表示简历数据中的一对多关系（职位、教育、联系信息）。</p>
+<p><img src="http://media.zjubiomedit.com/2021-04-28-083034.png" width=75%></p>
+<p>另一方面，通过文档模型（以 JSON 格式为例），简历数据可以被表示为如下所示：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;user_id&quot;</span><span class="punctuation">:</span> <span class="number">251</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;first_name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Bill&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;last_name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Gates&quot;</span><span class="punctuation">,</span> </span><br><span class="line">    <span class="attr">&quot;summary&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Co-chair of the Bill &amp; Melinda Gates... Active blogger.&quot;</span><span class="punctuation">,</span> </span><br><span class="line">    <span class="attr">&quot;region_id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;us:91&quot;</span><span class="punctuation">,</span> </span><br><span class="line">    <span class="attr">&quot;industry_id&quot;</span><span class="punctuation">:</span> <span class="number">131</span><span class="punctuation">,</span> </span><br><span class="line">    <span class="attr">&quot;photo_url&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/p/7/000/253/05b/308dd6e.jpg&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;positions&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span><span class="attr">&quot;job_title&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Co-chair&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;organization&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Bill &amp; Melinda Gates Foundation&quot;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span> </span><br><span class="line">        <span class="punctuation">&#123;</span><span class="attr">&quot;job_title&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Co-founder, Chairman&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;organization&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Microsoft&quot;</span><span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;education&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span><span class="attr">&quot;school_name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Harvard University&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;start&quot;</span><span class="punctuation">:</span> <span class="number">1973</span><span class="punctuation">,</span> <span class="attr">&quot;end&quot;</span><span class="punctuation">:</span> <span class="number">1975</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="punctuation">&#123;</span><span class="attr">&quot;school_name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Lakeside School, Seattle&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;start&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span> <span class="attr">&quot;end&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">&#125;</span> </span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;contact_info&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;blog&quot;</span><span class="punctuation">:</span> <span class="string">&quot;http://thegatesnotes.com&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;twitter&quot;</span><span class="punctuation">:</span> <span class="string">&quot;http://twitter.com/BillGates&quot;</span> </span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>与关系模型相比，文档模型可以减少应用程序代码与存储层之间的阻抗失配（关系模型从数据库到应用层对象需要进行转换，即对象-关系映射），且具有模式灵活性与更好的局部性（之后详述）。总的来看，文档模型对于以一对多关系为主（即<strong>树状结构</strong>）的数据来说较为适合，上述简历数据的树结构如下图所示：</p>
+<p><img src="http://media.zjubiomedit.com/2021-04-28-085336.png" width=40% /></p>
+<p>在上面的 JSON 示例中，<code>region_id</code> 与 <code>industry_id</code> 被定义为 ID 而非纯文本字符串形式，这样做的好处是可以将实际的信息只存储在一个地方，引用它的内容都使用 ID，从而消除内容的重复，体现了数据库规范化的思想。然而，这种规范化本质上是一种<strong>多对一</strong>的关系，对于文档模型来说，其通常对<strong>联结</strong>操作支持较弱（即关系数据库中通过外键关联至其他表中的行），导致有时候需要在应用层代码中进行模拟联结。</p>
+<p>进一步地，如果要采用<strong>多对多关系</strong>来扩展简历，可以采用如下图所示的数据模型，其中虚线框内的数据可以组织为一个文档，但是指向组织、学校与其他用户的关系需要被表示为引用，且在查询时需要联结操作，相对于关系数据库来说较为不便。</p>
+<p><img src="http://media.zjubiomedit.com/2021-04-28-085609.png" width=60%/></p>
+<h2 id="关系模型与文档模型发展简史">关系模型与文档模型发展简史</h2>
+<p>20 世纪 70 年代最受欢迎的商业数据处理库是 IBM 信息管理系统（简称 IMS），其采用了相当简单的数据模型，称为<strong>层次模型</strong>（hierarchical model），其将所有数据表示为嵌套在记录中的记录（树），与 JSON 模型较为相似。IMS 可以较好地支持一对多关系，但是支持多对多关系较为困难，且不支持联结。</p>
+<p>为了解决层次模型的局限性，之后又提出了多种解决方案。其中最著名的是<strong>关系模型</strong>（后来演变为 SQL）和<strong>网络模型</strong>（network model）。网络模型由一个称为数据系统语言会议（CODASYL）的委员会进行标准化，也被称为 CODASYL 模型。网络模型是对层次模型的推广，其支持对多对一与多对多的关系进行建模，在联结操作上，网络模型通过类似于编程语言中的指针方式进行实现。访问记录的唯一方法是选择一条始于根记录的路径，并沿着相关链接一次访问，这条链接被称为<strong>访问路径</strong>（access path）。在存在多对多关系的模型中，访问路径需要由应用程序代码进行跟踪，使得数据库的查询与更新变得异常复杂而没有灵活性。</p>
+<p>相比之下，关系模型则是定义了所有数据的格式：关系（表）只是元组（行）的集合。没有复杂的嵌套结构，也没有复杂的访问路径。在关系数据库中，由查询优化器自动决定以何种顺序执行查询，以及使用哪些索引。这些选择而实际上等价于访问路径，但它们是由查询优化器自动生成的，而不是由应用开发人员所维护。</p>
+<p>对于文档模型来说，从其父记录保存了嵌套记录（一对多关系）而非存储在单独的表中这一角度来看，其可以理解为某种方式的层次模型。但是在表示多对一与多对多关系时，关系数据库与文档数据库中的相关项都是由唯一的标识符引用，该标识符在关系模型中被称为<strong>外键</strong>，而在文档模型中则被称为<strong>文档引用</strong>。标识符可以在读取时通过联结操作或相关后续查询进行解析。</p>
+<h2 id="关系模型与文档模型对比">关系模型与文档模型对比</h2>
+<p>概括来说，从数据模型本身来看，<strong>文档模型</strong>的主要优势在于模式灵活性与数据局部性，且对于某些应用来说，其更接近于应用程序所使用的数据结构；而<strong>关系模型</strong>的主要优势在于联结操作，以及多对一与多对多关系更简洁的表达上。</p>
+<p>具体来说，在<strong>应用代码</strong>层面，如果应用模型具有类似文档的结构（一对多关系树），那么使用文档模型更为合适；而关系模型则倾向于某种数据分解，把文档结构分解为多个表，可能使得模式更为笨重。如果应用程序确实使用了多对多关系，则对联结支持不足的文档模型就显得不太吸引人，虽然可以通过反规范化（复制内容）减少对联结的需求，但是这会增加程序的复杂性。PS：对于高度关联的数据，实际上图模型最为适合。</p>
+<p>在<strong>模式灵活性</strong>层面，大部分文档模型允许将任意的键-值添加到文档中，仅在读数据的代码中加以限制，这种模式可以称为<strong>读时模式</strong>（数据结构隐形，只有在读取时才解释），与关系模型的<strong>写时模式</strong>（模式是显式地，数据写入时必须遵循）相对应。不同的模式各有优劣，读时模式可能更适合于可能需要频繁更改数据格式的应用程序，而写时模式更适合于需要记录与确保某种特定数据结构的应用程序。</p>
+<p>在<strong>数据局部性</strong>层面，由于文档通常存储为编码为 JSON、XML等形式的连续字符串，如果应用程序需要频繁访问整个文档，则存储局部性具有性能优势；而如果数据被划分在多个表中（关系模型），则需要进行多次索引查找来检索所有数据，可能需要更多的磁盘 I/O 并花费更多的时间。需要注意，局部性优势仅适用需要同时访问文档大部分内容的场景。</p>
+<p>随着时间的推移，关系数据库与文档数据库变得越来越相近。大多数关系数据库系统都支持 XML，还有一些关系数据库系统支持了 JSON（说的就是你，MySQL）；在文档数据库方面，RethinkDB 的查询接口支持和关系型类似的联结，而一些 MongoDB 驱动程序可以自动解析数据库的引用关系（在客户端执行高效联结）。</p>
+<h1 id="数据查询语言">数据查询语言</h1>
+<h2 id="声明式查询与命令式查询">声明式查询与命令式查询</h2>
+<p>对于关系模型来说，其所包含的数据查询方法 SQL 是一种<strong>声明式</strong>（declarative）查询语言，而文档模型的前身 IMS 和 CODASYL 则是<strong>命令式</strong>（imperative）。</p>
+<p>很多常用编程语言都是命令式的，其会告诉计算机以特定顺序执行某些操作，我们可以完全推理出整个过程，例如如下查询代码：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">function <span class="title function_">getSharks</span><span class="params">()</span> &#123;</span><br><span class="line">    var sharks = [];</span><br><span class="line">    <span class="keyword">for</span> (var i = <span class="number">0</span>; i &lt; animals.length; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (animals[i].family === <span class="string">&quot;Sharks&quot;</span>) &#123;</span><br><span class="line">            sharks.push(animals[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> sharks;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>而对于声明式查询，则只需指定所需的数据模式，结果需要满足什么条件，以及如何转换数据（例如排序、分类），而不需指明如何实现这一目标。例如，上述例子对应的 SQL 查询代码如下：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> animals <span class="keyword">WHERE</span> family <span class="operator">=</span> <span class="string">&#x27;Sharks&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p>和命令式查询相比，声明式查询的优势包括：</p>
+<ul>
+<li>比命令式更加简洁和容易使用</li>
+<li>对外隐藏了数据库引擎的实现细节，便于优化性能</li>
+<li>对并行执行更为友好</li>
+</ul>
+<h2 id="web-上的声明式查询">Web 上的声明式查询</h2>
+<p>本节将以 Web 浏览器为例，对声明式查询语言的优点进行进一步描述。假设有一个关于海洋动物的网站，用户正在查看有关鲨鱼的页面，因此导航项<strong>鲨鱼</strong>被标记为当前网页，如下所示：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">&quot;selected&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span>&gt;</span>Sharks<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">li</span>&gt;</span>Great White Shark<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">li</span>&gt;</span>Tiger Shark<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">li</span>&gt;</span>Hammerhead Shark<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">ul</span>&gt;</span> <span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span>&gt;</span>Whales<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">li</span>&gt;</span>Blue Whale<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">li</span>&gt;</span>Humpback Whale<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">li</span>&gt;</span>Fin Whale<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>现在我们需要将当前页面的标题设置为蓝色背景，以在视觉上突出，通过 CSS 样式表可以较容易地实现：</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">li</span><span class="selector-class">.selected</span> &gt; <span class="selector-tag">p</span> &#123;</span><br><span class="line">  <span class="attribute">background-color</span>: blue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述 CSS 可以精准匹配到 <code>&lt;p&gt;Sharks&lt;/p&gt;</code> 元素，其属于一种声明式语言。而如果需要采用命令式方法，例如 JavaScript 的文档对象模型（DOM）API，则结果可能是这样：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> liElements = <span class="variable language_">document</span>.<span class="title function_">getElementsByTagName</span>(<span class="string">&quot;li&quot;</span>);</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; liElements.<span class="property">length</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (liElements[i].<span class="property">className</span> === <span class="string">&quot;selected&quot;</span>) &#123;</span><br><span class="line">        <span class="keyword">var</span> children = liElements[i].<span class="property">childNodes</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> j = <span class="number">0</span>; j &lt; children.<span class="property">length</span>; j++) &#123;</span><br><span class="line">            <span class="keyword">var</span> child = children[j];</span><br><span class="line">            <span class="keyword">if</span> (child.<span class="property">nodeType</span> === <span class="title class_">Node</span>.<span class="property">ELEMENT_NODE</span> &amp;&amp; child.<span class="property">tagName</span> === <span class="string">&quot;P&quot;</span>) &#123;</span><br><span class="line">                child.<span class="title function_">setAttribute</span>(<span class="string">&quot;style&quot;</span>, <span class="string">&quot;background-color: blue&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述代码比 CSS 更长，更难理解，同时存在一些严重的问题：</p>
+<ul>
+<li>如果 <code>selected</code> 类被删除，即使代码重新允许，蓝色也不会移出，直到整个页面并重新加载；而 CSS 将在类被删除后立即清楚蓝色背景</li>
+<li>如果想利用新的 API，可能会提高效能，但是必须重写代码；而浏览器厂商可以在不破坏兼容性的情况下提高 CSS 的性能</li>
+</ul>
+<p>综上所述，在 Web 浏览器中，使用声明式 CSS 样式表比用 JavaScript 命令式地操作样式要好得多。</p>
+<h2 id="mapreduce-查询">MapReduce 查询</h2>
+<p><strong>MapReduce</strong> 是一种由 Google 提出的编程模型，用于在许多机器上批量处理海量数据。一些 NoSQL 存储系统（例如 MongoDB 和 CouchDB）支持有限的 MapReduce 方式在大量文档上执行只读查询。本节将简要介绍 MongoDB 对该模型的使用。</p>
+<p>MapReduce 既不是声明式查询语言，也不是一个完全命令式的查询 API，而是介于两者之间：查询的逻辑用代码片段表示，这些代码片段可以被处理框架重复进行调用。其主要基于在许多函数式编程语言中存在的 <code>map</code> 和 <code>reduce</code> 函数实现。</p>
+<p>下面将通过一个例子对 MapReduce 进行说明：假设你是一名海洋生物学家，每当看到海洋中的动物时，就会在数据库中添加观察记录。现在需要生成一份报告，来说明每个月看到了多少鲨鱼。</p>
+<p>在 PostgreSQL（一种关系型数据库）中，该查询可以表达为：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> date_trunc(<span class="string">&#x27;month&#x27;</span>, observation_timestamp) <span class="keyword">AS</span> observation_month,</span><br><span class="line">       <span class="built_in">sum</span>(num_animals) <span class="keyword">AS</span> total_animals</span><br><span class="line"><span class="keyword">FROM</span> observations</span><br><span class="line"><span class="keyword">WHERE</span> family <span class="operator">=</span> <span class="string">&#x27;Sharks&#x27;</span></span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> observation_month;</span><br></pre></td></tr></table></figure>
+<p>其中 <code>date_trunc</code> 函数用来将时间戳向下舍入到最近的月份。该查询首先对观察结果进行过滤，仅显示鲨鱼物种，然后按照他们发生的月份对观察结果进行分组，最后将该月所有观察的动物数量求和汇总。</p>
+<p>在 MongoDB 中，可以通过 MapReduce 功能实现类似的目的：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">db.<span class="property">observations</span>.<span class="title function_">mapReduce</span>(</span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">map</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">var</span> year = <span class="variable language_">this</span>.<span class="property">observationTimestamp</span>.<span class="title function_">getFullYear</span>();</span><br><span class="line">        <span class="keyword">var</span> month = <span class="variable language_">this</span>.<span class="property">observationTimestamp</span>.<span class="title function_">getMonth</span>() + <span class="number">1</span>;</span><br><span class="line">        <span class="title function_">emit</span>(year + <span class="string">&quot;-&quot;</span> + month, <span class="variable language_">this</span>.<span class="property">numAnimals</span>);</span><br><span class="line">    &#125;, </span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">reduce</span>(<span class="params">key, values</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title class_">Array</span>.<span class="title function_">sum</span>(values);</span><br><span class="line">    &#125;, </span><br><span class="line">    &#123;</span><br><span class="line">        <span class="attr">query</span>: &#123; <span class="attr">family</span>: <span class="string">&quot;Sharks&quot;</span> &#125;,</span><br><span class="line">        <span class="attr">out</span>: <span class="string">&quot;monthlySharkReport&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>过滤器声明式地制定鲨鱼种类（这是 MongoDB 对 MapReduce 的特有扩展）</li>
+<li>对于每个匹配查询的文档，JavaScript 的 <code>map</code> 函数会被调用，将 <code>this</code> 设定为文档对象</li>
+<li><code>map</code> 函数发射一个键值对，其中键是由年份和月份组成的字符串，值代表观察的动物数量</li>
+<li><code>map</code> 函数发射的键值对按键分组，对于相同键的所有键值对，调用 <code>reduce</code> 函数</li>
+<li>最终的输出写入到 <code>monthlySharksReport</code> 集合中</li>
+</ul>
+<p>例如，假定观察集合中包含如下两个文档：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">observationTimestamp</span>: <span class="title class_">Date</span>.<span class="title function_">parse</span>(<span class="string">&quot;Mon, 25 Dec 1995 12:34:56 GMT&quot;</span>),</span><br><span class="line">    <span class="attr">family</span>: <span class="string">&quot;Sharks&quot;</span>,</span><br><span class="line">    <span class="attr">species</span>: <span class="string">&quot;Carcharodon carcharias&quot;</span>,</span><br><span class="line">    <span class="attr">numAnimals</span>: <span class="number">3</span></span><br><span class="line">&#125;</span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">observationTimestamp</span>: <span class="title class_">Date</span>.<span class="title function_">parse</span>(<span class="string">&quot;Tue, 12 Dec 1995 16:17:18 GMT&quot;</span>),</span><br><span class="line">    <span class="attr">family</span>: <span class="string">&quot;Sharks&quot;</span>,</span><br><span class="line">    <span class="attr">species</span>: <span class="string">&quot;Carcharias taurus&quot;</span>,</span><br><span class="line">    <span class="attr">numAnimals</span>: <span class="number">4</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>每个文档都会调用一次 <code>map</code> 函数，从而产生 <code>emit("1995-12", 3)</code> 和 <code>emit("1995-12", 3)</code> ；随后，<code>reduce</code> 函数将被调用，<code>reduce("1995-12", [3,4])</code>，返回 <strong>7</strong>。</p>
+<p><code>map</code> 和 <code>reduce</code> 函数对于可执行的操作有所限制，其必须为<strong>纯</strong>函数，只能使用传递进去的数据作为输入，而不能执行额外的数据库查询，也不能有任何的副作用。这些限制使得数据库能够在任何位置，以任意顺序来运行函数，并在失败时重新运行这些函数，从而实现解析字符串、调用库函数、执行计算等功能。</p>
+<p>MapReduce 的一个可用性问题是，必须编写两个密切协调的 JaveScript 函数，这通常比编写单个查询更难。此外，声明式查询语言为查询优化器提供了更多提高查询性能的机会。基于上述原因，MongoDB 2.2 增加了被称为<strong>聚合管道</strong>的声明式查询语言支持。在该语言中，鲨鱼计数查询可以实现如下：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">db.observations.aggregate(<span class="punctuation">[</span></span><br><span class="line">  <span class="punctuation">&#123;</span> $match<span class="punctuation">:</span> <span class="punctuation">&#123;</span> family<span class="punctuation">:</span> <span class="string">&quot;Sharks&quot;</span> <span class="punctuation">&#125;</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span> $group<span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      _id<span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">          year<span class="punctuation">:</span> <span class="punctuation">&#123;</span> $year<span class="punctuation">:</span> <span class="string">&quot;$observationTimestamp&quot;</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">          month<span class="punctuation">:</span> <span class="punctuation">&#123;</span> $month<span class="punctuation">:</span> <span class="string">&quot;$observationTimestamp&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      totalAnimals<span class="punctuation">:</span> <span class="punctuation">&#123;</span> $sum<span class="punctuation">:</span> <span class="string">&quot;$numAnimals&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span> <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">]</span>);</span><br></pre></td></tr></table></figure>
+<p>聚合管道在表达能力上类似于 SQL 的子集，不过其使用了基于 JSON 的语法，而非 SQL 的英语句式语法。</p>
+<p>总的来看，MapReduce 是一个相当底层的编程模型，用于在计算集群上分布执行。高层次的查询语言（例如 SQL）可以通过 MapReduce 操作的 pipeline 来实现，但需要注意，分布式查询并不是一定要借助于 MapReduce。同时，在查询中使用 JavaScript 代码是一种高级特性，也不限于 MapReduce。</p>
+<h1 id="图状数据模型">图状数据模型</h1>
+<p>根据之前的描述，多对多关系是不同数据模型之间的重要区别特征。如果应用大部分是一对多关系（树结构数据）或者记录之间没有关系，那么<strong>文档模型</strong>是最合适的；而如果数据中多对多关系很常见，那么可以使用<strong>关系模型</strong>来处理较简单的多对多情况，但随着数据之间的关联越来越复杂，将数据建模为<strong>图模型</strong>会更加自然。</p>
+<p>图由两种对象组成：<strong>顶点</strong>（也称为节点或实体）和<strong>边</strong>（也称为关系或弧）。很多数据可以建模为图，例如：</p>
+<ul>
+<li>社交网络：顶点是人，边表示哪些人彼此认识</li>
+<li>Web 图：顶点是网页，边表示与其他界面的 HTML 链接</li>
+<li>公路或铁路网：顶点是交叉路口，边表示它们之间的公路或铁路</li>
+</ul>
+<p>除了上述表示相同类型事物外，图还可以表示不同类型的异构数据。本节将使用如下图所示的图，其显示了一对夫妻与其居住地和出生地的情况：</p>
+<p><img src="http://media.zjubiomedit.com/2021-08-17-100508.png" width=75%/></p>
+<p>构建和查询图中数据的方法有很多，本节将讨论<strong>属性图</strong>模型（以 Neo4j、Titan 和 InfiniteGraph 为代表）和<strong>三元存储</strong>模型（以 Datomic、AllegroGraph 为代表），并介绍三种声明式图查询语言：Cypher、SPARQL 和 Datalog。</p>
+<h2 id="属性图">属性图</h2>
+<p>在属性图（property graph）模型中，每个顶点包括：</p>
+<ul>
+<li>唯一的标识符</li>
+<li>出边的集合</li>
+<li>入边的集合</li>
+<li>属性的集合（键值对）</li>
+</ul>
+<p>每条边包括：</p>
+<ul>
+<li>唯一的标识符</li>
+<li>边开始的顶点（尾部顶点）</li>
+<li>边结束的顶点（头部顶点）</li>
+<li>描述两个顶点间关系类型的标签</li>
+<li>属性的集合（键值对）</li>
+</ul>
+<p>我们可以将图存储看作由两个关系表组成，一个用于顶点，一个用于边，如下例所示：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> vertices (</span><br><span class="line">    vertex_id <span class="type">integer</span> <span class="keyword">PRIMARY</span> KEY,</span><br><span class="line">    properties json</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> edges (</span><br><span class="line">    edge_id <span class="type">integer</span> <span class="keyword">PRIMARY</span> KEY,</span><br><span class="line">    tail_vertex <span class="type">integer</span> <span class="keyword">REFERENCES</span> vertices (vertex_id),</span><br><span class="line">    head_vertex <span class="type">integer</span> <span class="keyword">REFERENCES</span> vertices (vertex_id),</span><br><span class="line">    label text,</span><br><span class="line">    properties json</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> INDEX edges_tails <span class="keyword">ON</span> edges (tail_vertex);</span><br><span class="line"><span class="keyword">CREATE</span> INDEX edges_heads <span class="keyword">ON</span> edges (head_vertex);</span><br></pre></td></tr></table></figure>
+<p>该例子使用了 Postgre SQL 的 json 数据类型来存储每个顶点或边的属性。除了两张表外，还新建了两个索引来查询顶点的入边或出边的集合（<code>head_vertex</code> 和 <code>tail_vertex</code>）。此外，还需要明确以下特征：</p>
+<ol type="1">
+<li>任何顶点都可以连接到其他任何顶点，没有模式限制哪种事物可以或不可以关联</li>
+<li>给定某个顶点，可以高效地得到它的所有入边和出边，从而实现图的遍历</li>
+<li>通过对不同类型的关系使用不同的标签，可以在单个图中存储多种不同类型的信息，同时保持数据模型的整洁性</li>
+</ol>
+<h2 id="cypher-查询语言">Cypher 查询语言</h2>
+<p>Cypher 是一种用于属性图的<strong>声明式</strong>查询语言，最早为 Neo4j 图数据库创建。下面的例子展示了将上述属性图示例的左侧插入图数据库的 Cypher 查询。每一个顶点都需指定一个像 <code>USA</code> 或 <code>Idaho</code> 这样的符号名称，同时指明其类型（这里类型应该是预先定义好的，且对于 Person 类其可以直接关联到 <code>type</code> 属性），查询可以使用这些名称创建顶点之间的边，使用箭头符号：<code>(Idaho) -[:WITHIN]-&gt; (USA)</code> 创建了一个标签为 <code>WITHIN</code> 的边，其中 <code>Idaho</code> 为尾结点，<code>USA</code> 为头结点。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">CREATE</span><br><span class="line">  (NAmerica:Location &#123;name:&#x27;North America&#x27;, type:&#x27;continent&#x27;&#125;),</span><br><span class="line">  (USA:Location &#123;name:&#x27;United States&#x27;, type:&#x27;country&#x27; &#125;),</span><br><span class="line">  (Idaho:Location &#123;name:&#x27;Idaho&#x27;, type:&#x27;state&#x27; &#125;),</span><br><span class="line">  (Lucy:Person &#123;name:&#x27;Lucy&#x27; &#125;),</span><br><span class="line">  (Idaho) -[:WITHIN]-&gt; (USA) -[:WITHIN]-&gt; (NAmerica),</span><br><span class="line">  (Lucy) -[:BORN_IN]-&gt; (Idaho)</span><br></pre></td></tr></table></figure>
+<p>通过这种查询插入所有的顶点和边后，我们可以继续进行一些高阶查询，例如查找所有从美国移民到欧洲的人员名单，即查找 <code>BORN_IN</code> 边指向美国，而 <code>LIVING_IN</code> 边指向欧洲的所有顶点，然后返回每个这样顶点的 <code>name</code> 属性。我们可以通过如下查询语句实现这一需求：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MATCH</span><br><span class="line">  (person) -[:BORN_IN]-&gt; () -[:WITHIN*0..]-&gt; (us:Location &#123;name:&#x27;United States&#x27;&#125;),</span><br><span class="line">  (person) -[:LIVES_IN]-&gt; () -[:WITHIN*0..]-&gt; (eu:Location &#123;name:&#x27;Europe&#x27;&#125;)</span><br><span class="line">RETURN person.name</span><br></pre></td></tr></table></figure>
+<p>该查询中的 <code>MATCH</code> 语句采用了相同的箭头语义 <code>(person) -[:BORN_IN]-&gt; ()</code> 来匹配任意两个通过 <code>BORN_IN</code> 标签的边所关联的节点，其中尾部顶点绑定至变量 <code>person</code>，头部顶点则没有要求。该查询的具体解读如下：</p>
+<ol type="1">
+<li><code>person</code> 有一个连接到其他顶点的出边 <code>BORN_IN</code>。从该顶点开始，可以沿着一系列出边 <code>WITH_IN</code>，直到最终到达类型为 Location 的顶点，其 <code>name</code> 属性对应的值为 "United States"</li>
+<li>同一个 <code>person</code> 顶点也有一个出边 <code>LIVES_IN</code>。沿着这条边，然后是一系列的出边 <code>WITH_IN</code>，最终到达类型为 Location 的顶点，<code>name</code> 属性为 "Europe"</li>
+</ol>
+<p>对于每个这样的 <code>person</code> 顶点，返回其 <code>name</code> 属性。</p>
+<p>如之前所述，对于声明式查询语言，在编写语句时不需要指定执行细节，查询优化器会自动选择效率最高的执行策略，因此开发者可以专注于应用的其他部分。</p>
+<h3 id="sql-中的图查询">SQL 中的图查询</h3>
+<p>对于上述查询，如果把图数据放在关系结构中，我们也可以通过 SQL 来实现这种查询。由于需要遍历未知数量的边，因此 join 操作数量是不确定的。Cypher 可以用 <code>:WITHIN*0..</code> 来简洁地表达这个情况，而 SQL 则可以使用<strong>递归共用表表达式</strong>（<code>WITH RECURSIVE</code> 语法）来表示，具体查询如下所示：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">WITH</span> <span class="keyword">RECURSIVE</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">-- in_usa is the set of vertex IDs of all locations within the United States</span></span><br><span class="line">  in_usa(vertex_id) <span class="keyword">AS</span> (</span><br><span class="line">      <span class="keyword">SELECT</span> vertex_id <span class="keyword">FROM</span> vertices <span class="keyword">WHERE</span> properties<span class="operator">-</span><span class="operator">&gt;&gt;</span><span class="string">&#x27;name&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;United States&#x27;</span></span><br><span class="line">    <span class="keyword">UNION</span></span><br><span class="line">      <span class="keyword">SELECT</span> edges.tail_vertex <span class="keyword">FROM</span> edges</span><br><span class="line">        <span class="keyword">JOIN</span> in_usa <span class="keyword">ON</span> edges.head_vertex <span class="operator">=</span> in_usa.vertex_id</span><br><span class="line">        <span class="keyword">WHERE</span> edges.label <span class="operator">=</span> <span class="string">&#x27;within&#x27;</span></span><br><span class="line">  ),</span><br><span class="line"></span><br><span class="line">  <span class="comment">-- in_europe is the set of vertex IDs of all locations within Europe</span></span><br><span class="line">  in_europe(vertex_id) <span class="keyword">AS</span> (</span><br><span class="line">      <span class="keyword">SELECT</span> vertex_id <span class="keyword">FROM</span> vertices <span class="keyword">WHERE</span> properties<span class="operator">-</span><span class="operator">&gt;&gt;</span><span class="string">&#x27;name&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;Europe&#x27;</span></span><br><span class="line">    <span class="keyword">UNION</span></span><br><span class="line">      <span class="keyword">SELECT</span> edges.tail_vertex <span class="keyword">FROM</span> edges</span><br><span class="line">        <span class="keyword">JOIN</span> in_europe <span class="keyword">ON</span> edges.head_vertex <span class="operator">=</span> in_europe.vertex_id</span><br><span class="line">        <span class="keyword">WHERE</span> edges.label <span class="operator">=</span> <span class="string">&#x27;within&#x27;</span></span><br><span class="line">  ),</span><br><span class="line"></span><br><span class="line">  <span class="comment">-- born_in_usa is the set of vertex IDs of all people born in the US</span></span><br><span class="line">  born_in_usa(vertex_id) <span class="keyword">AS</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> edges.tail_vertex <span class="keyword">FROM</span> edges</span><br><span class="line">      <span class="keyword">JOIN</span> in_usa <span class="keyword">ON</span> edges.head_vertex <span class="operator">=</span> in_usa.vertex_id</span><br><span class="line">      <span class="keyword">WHERE</span> edges.label <span class="operator">=</span> <span class="string">&#x27;born_in&#x27;</span></span><br><span class="line">  ),</span><br><span class="line"></span><br><span class="line">  <span class="comment">-- lives_in_europe is the set of vertex IDs of all people living in Europe </span></span><br><span class="line">  lives_in_europe(vertex_id) <span class="keyword">AS</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> edges.tail_vertex <span class="keyword">FROM</span> edges</span><br><span class="line">      <span class="keyword">JOIN</span> in_europe <span class="keyword">ON</span> edges.head_vertex <span class="operator">=</span> in_europe.vertex_id</span><br><span class="line">      <span class="keyword">WHERE</span> edges.label <span class="operator">=</span> <span class="string">&#x27;lives_in&#x27;</span></span><br><span class="line">  )</span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> vertices.properties<span class="operator">-</span><span class="operator">&gt;&gt;</span><span class="string">&#x27;name&#x27;</span></span><br><span class="line"><span class="keyword">FROM</span> vertices</span><br><span class="line"><span class="comment">-- join to find those people who were both born in the US *and* live in Europe</span></span><br><span class="line"><span class="keyword">JOIN</span> born_in_usa <span class="keyword">ON</span> vertices.vertex_id <span class="operator">=</span> born_in_usa.vertex_id</span><br><span class="line"><span class="keyword">JOIN</span> lives_in_europe <span class="keyword">ON</span> vertices.vertex_id <span class="operator">=</span> lives_in_europe.vertex_id;</span><br></pre></td></tr></table></figure>
+<p>概括来看，该查询比 Cypher 查询的行数多很多，足以说明不同的数据模型适用于不同的场景。选择适合应用的数据模型是非常重要的。</p>
+<h2 id="三元存储和-sparql">三元存储和 SPARQL</h2>
+<h3 id="三元存储模型">三元存储模型</h3>
+<p>三元存储模型几乎等同于属性图模型，只是使用不同的名词描述了相同的思想。在三元存储中，所有的信息都以非常简单的三部分形式存储：（<strong>主体</strong>、<strong>谓语</strong>、<strong>客体</strong>），其中主体相当于图中的顶点，而客体则是以下两种之一：</p>
+<ol type="1">
+<li>原始数据类型中的值，如字符串或数字。在这种情况下，三元组的谓语和客体分别相当于主体（顶点）的一个属性的键和值。例如，<em>(lucy, age, 33)</em> 就好比是顶点 <em>lucy</em> 具有属性 <code>&#123;"age":33&#125;</code></li>
+<li>图中的另一个顶点。在这种情况下，主体是尾部顶点，而客体是头部顶点。例如，<em>(lucy, marriedTo, alain)</em> 中主体 <em>lucy</em> 和客体 <em>alian</em> 都是顶点，并且谓语 <em>marriedTo</em> 是连接二者的边的标签</li>
+</ol>
+<p>下面的语句以三元组的方式展示了与之前相同的图数据，具体的形式为 <em>Turtle</em>，其属于 <em>Notation3</em>（N3）的一个子集：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@prefix : &lt;urn:example:&gt;.</span><br><span class="line">_:lucy a :Person; :name &quot;Lucy&quot;; :bornIn _:idaho.</span><br><span class="line">_:idaho a :Location; :name &quot;Idaho&quot;; :type &quot;state&quot;; :within _:usa.</span><br><span class="line">_:usa a :Location; :name &quot;United States&quot;; :type &quot;country&quot;; :within _:namerica.</span><br><span class="line">_:namerica a :Location; :name &quot;North America&quot;; :type &quot;continent&quot;.</span><br></pre></td></tr></table></figure>
+<p>在上述示例中，图的顶点被写作 <code>_:someName</code>，这一名字在定义文件以外没有任何意义，只是为了区分三元组的不同顶点。当谓语表示边时，客体是另一个顶点，如 <code>_:idaho :within _:usa</code>；而当谓语表示一个属性时，客体是一个字符串，如 <code>_:usa :name "United States"</code>。对于定义相同主体的多个三元组，可以使用分号来说明同一主体的多个对象信息。</p>
+<h3 id="语义网与-rdf-数据模型">语义网与 RDF 数据模型</h3>
+<p>当深入了解三元存储相关信息后，通常会将其与<strong>语义网</strong>（semantic web）关联起来，实际上，三元存储数据模型是完全独立于语义网的。语义网的初衷是将信息发布为机器可读的数据以供计算机阅读，<strong>资源描述框架</strong>（RDF）就是这样一种机制，它让不同网站以一致的格式发布数据，这样来自不同网站的数据可以自动合并为一个数据网络，形成一种互联网级别的包含万物的数据库。</p>
+<p>上面例子使用的 Turtle 语言就是 RDF 数据的一种人类可读格式。有时，RDF 也用 XML 格式来编写，相对来说会冗长一些，如下所示。人眼更容易阅读 Turtle/N3 格式的数据，而 Apache Jena 等工具则可以快速转换不同的 RDF 格式。</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">rdf:RDF</span> <span class="attr">xmlns</span>=<span class="string">&quot;urn:example:&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns:rdf</span>=<span class="string">&quot;http://www.w3.org/1999/02/22-rdf-syntax-ns#&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">Location</span> <span class="attr">rdf:nodeID</span>=<span class="string">&quot;idaho&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>Idaho<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">type</span>&gt;</span>state<span class="tag">&lt;/<span class="name">type</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">within</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">Location</span> <span class="attr">rdf:nodeID</span>=<span class="string">&quot;usa&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>United States<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">type</span>&gt;</span>country<span class="tag">&lt;/<span class="name">type</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">within</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">Location</span> <span class="attr">rdf:nodeID</span>=<span class="string">&quot;namerica&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">name</span>&gt;</span>North America<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">type</span>&gt;</span>continent<span class="tag">&lt;/<span class="name">type</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;/<span class="name">Location</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">within</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">Location</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">within</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">Location</span>&gt;</span></span><br><span class="line">  </span><br><span class="line">  <span class="tag">&lt;<span class="name">Person</span> <span class="attr">rdf:nodeID</span>=<span class="string">&quot;lucy&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>Lucy<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bornIn</span> <span class="attr">rdf:nodeID</span>=<span class="string">&quot;idaho&quot;</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">Person</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:RDF</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>因为旨在为全网数据交换而设计，RDF 存在一些特殊的约定。三元组的主体、谓语和客体通常是 URI。例如，一个谓语可以是一个诸如 <code>&lt;http://my-company.com/namespace#within&gt;</code> 或 <code>&lt;http://my-company.com/namespace#lives_in&gt;</code> 的 URI，而不仅仅是 <code>WITHIN</code> 或 <code>LIVES_IN</code>。这种设计的考量在于，假设你的数据需要和其他人的数据相结合，万一不同人给单词 <code>within</code> 或 <code>lives_in</code> 赋予了不同的含义，采用 URI 就可以避免冲突，因为别人的谓语会是 <code>&lt;http://other.org/foo#within&gt;</code> 和 <code>&lt;http://other.org/foo#lives_in&gt;</code>。</p>
+<p>从 RDF 的角度来看，URL <code>&lt;http://my-company.com/namespace&gt;</code> 不一定需要解析出特定的内容，其只是一个命名空间（前缀），可以在文件头部指定一次，然后即可忽略它。本文的例子使用了不可解析的 URI，如 <code>urn:example:within</code>。PS：<strong>URI</strong>（统一资源标识符）包含了 <strong>URL</strong>（统一资源定位符，定位信息资源）与 <strong>URN</strong>（统一资源名称，命名非信息资源）。</p>
+<h3 id="sparql-查询语言">SPARQL 查询语言</h3>
+<p><strong>SPARQL</strong> 是一种采用 RDF 数据模型的三元存储查询语言，其是 <em>SPARQL Protocol and RDF Query Language</em> 的缩写（好一个套娃），发音为 ”sparkle“。其出现时间早于 Cypher，并且 Cypher 的模式匹配是借鉴自 SPARQL 的，因此二者看上去十分相似。</p>
+<p>对于之前的查询（从美国移民到欧洲的人员），SPARQL 比 Cypher 要更加简洁，具体如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">PREFIX : &lt;urn:example:&gt;</span><br><span class="line"></span><br><span class="line">SELECT ?personName WHERE &#123;</span><br><span class="line">  ?person :name ?personName.</span><br><span class="line">  ?person :bornIn / :within* / :name &quot;United States&quot;.</span><br><span class="line">  ?person :livesIn / :within* / :name &quot;Europe&quot;.</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>由于 RDF 不区分属性和边，可以同时对两者执行谓语操作，采用相同的语法来匹配属性上的条件。总的来说，SPARQL 是一种非常优秀的查询语言，可以成为应用程序内部使用的强大查询工具。</p>
+<h2 id="datalog-语言">Datalog 语言</h2>
+<p><strong>Datalog</strong> 是比 SPARQL 或 Cypher 更为古老的语言，其出现于 20 世纪 80 年代，为之后的查询语言奠定了基础。在实践中，Datalog 语言被应用在多个数据系统中，例如 Datomic 系统将其作为查询语言；Hadoop 则基于 Datalog 实现了 Cascalog 用于大数据集的查询。</p>
+<p>Datalog 的数据模型类似于三元组存储模型，但更为通用一些。其采用<strong>谓语（主体，客体）</strong>，而不是三元组的 （主体，谓语、客体），如下所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">name(namerica, &#x27;North America&#x27;).</span><br><span class="line">type(namerica, continent).</span><br><span class="line"></span><br><span class="line">name(usa, &#x27;United States&#x27;).</span><br><span class="line">type(usa, country).</span><br><span class="line">within(usa, namerica).</span><br><span class="line"></span><br><span class="line">name(idaho, &#x27;Idaho&#x27;).</span><br><span class="line">type(idaho, state).</span><br><span class="line">within(idaho, usa).</span><br><span class="line"></span><br><span class="line">name(lucy, &#x27;Lucy&#x27;).</span><br><span class="line">born_in(lucy, idaho).</span><br></pre></td></tr></table></figure>
+<p>基于上述模型，我们可以实现与之前相同的查询，其看上去与 Cypher 或 SPARQL 有较大差别：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">within_recursive(Location, Name) :- name(Location, Name). /* Rule 1 */ within_recursive(Location, Name) :- within(Location, Via), /* Rule 2 */                  </span><br><span class="line">                                    within_recursive(Via, Name).</span><br><span class="line">migrated(Name, BornIn, LivingIn) :- name(Person, Name), /* Rule 3 */</span><br><span class="line">                                    born_in(Person, BornLoc),</span><br><span class="line">                                    within_recursive(BornLoc, BornIn),</span><br><span class="line">                                    lives_in(Person, LivingLoc),</span><br><span class="line">                                    within_recursive(LivingLoc, LivingIn).</span><br><span class="line">?- migrated(Who, &#x27;United States&#x27;, &#x27;Europe&#x27;).</span><br><span class="line">/* Who = &#x27;Lucy&#x27;. */</span><br></pre></td></tr></table></figure>
+<p>Datalog 将查询拆解为多个规则，通过对新谓语的定义与引用来实现递归查询。在规则中，以大写字母开头的单词是变量，谓词的匹配则与 Cypher 和 SPARQL 一样。如果系统可以在操作符 <code>:-</code> 的右侧找到与所有谓词的匹配项，则规则适用。当规则适用时，就将操作符左侧的变量替换为它们匹配的值。</p>
+<p>通过反复应用上述查询中的规则 1 和规则 2，<code>within_recursive</code> 谓词可以返回数据库中包含的所有位于 North America 的地点（或任何其他地点名称），如下图所示：</p>
+<p><img src="http://media.zjubiomedit.com/2021-08-24-115550.png" width=85%/></p>
+<p>基于规则 1 和规则 2， 规则 3 可以找到出生在某个地方 <code>BornIn</code> 且居住在某个地方 <code>LivingIn</code> 的所有人，并将此人作为变量 <code>Who</code>，最终得到和之前相同的查询结果。</p>
+<h1 id="小结">小结</h1>
+<p>本章节对几种主要的数据模型进行了概括性的介绍。历史上，数据最初被表示为一棵大树（层次模型），但是这不利于表示多对多的关系，所以发明了<strong>关系模型</strong>来解决这个问题；而最近，开发人员发现一些应用也不太适合关系模型，于是又出现了新的非关系 NoSQL 数据存储，其主要分为两个方向：</p>
+<ol type="1">
+<li><strong>文档数据库</strong>的目标用例是产生于自包含文档中的数据，其中一个文档与其他文档之间的关联较少</li>
+<li><strong>图数据库</strong>针对相反的场景，其目标用例是所有数据都可能会相互关联</li>
+</ol>
+<p>上述三种模型如今都有着广泛的应用，并且在各自的目标领域表现优异。三者之间并不是完全独立的：一个模型可以用另外一个模型来模拟，但是结果通常是比较繁琐的，这也解释了为什么针对不同的目的需要应用不同的数据模型。此外，每种数据模型都有自己的<strong>查询语言</strong>或框架，本章讨论了几个例子：SQL、MapReduce、MongoDB 的聚合管道、Cypher、SPARQL 和 Datalog。</p>
+<p>当然，还有一些数据模型尚未提及，例如基因组数据库、超大规模数据分析定制模型、全文搜索数据模型等。在下一章中，我们将讨论在实现本章所描述的数据模型的过程中有哪些重要的权衡设计。</p>
+<h1 id="思维导图">思维导图</h1>
+<p><img src="http://media.zjubiomedit.com/2023-08-07-073149.png" width=65%/></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+
+
+
+<div class="license">
+  <div class="license-title">《数据密集型应用系统设计》读书笔记（二）</div>
+  <div class="license-link">
+    <a href="https://xxwywzy.github.io/2021/08/24/dda-2/">https://xxwywzy.github.io/2021/08/24/dda-2/</a>
+  </div>
+  <div class="license-meta">
+    <div class="license-meta-item">
+      <div class="license-meta-title">本文作者</div>
+      <div class="license-meta-text">
+          Zheyu Wang
+      </div>
+    </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">发布于</div>
+        <div class="license-meta-text">
+          2021-08-24
+        </div>
+      </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">更新于</div>
+        <div class="license-meta-text">
+          2023-08-07
+        </div>
+      </div>
+    <div class="license-meta-item">
+      <div class="license-meta-title">许可协议</div>
+      <div class="license-meta-text">
+          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank">CC BY-NC-SA 4.0</a>
+      </div>
+    </div>
+  </div>
+  <div class="license-statement">
+      转载或引用本文时，请遵守上述许可协议，注明出处、不得用于商业用途！
+  </div>
+</div>
+          <div class="post-tags">
+              <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag"># 大数据</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/08/22/offer-8/" rel="prev" title="《剑指 offer》刷题记录之八：位运算">
+                  <i class="fa fa-angle-left"></i> 《剑指 offer》刷题记录之八：位运算
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/08/25/deep-1/" rel="next" title="deeplearning.ai 第一部分：神经网络与深度学习">
+                  deeplearning.ai 第一部分：神经网络与深度学习 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81ODgyNi8zNTI4OA=="></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">332k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">18:26</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+
+
+  <style>
+    #taboola-livere { display: none;}
+  </style>
+
+
+
+<script type="text/javascript">
+var linkLists = document.querySelectorAll(".link-list");
+
+linkLists.forEach(function(linkList) {
+  var listPath = linkList.getAttribute('json-src');
+  var iconPath = linkList.getAttribute('icon-src');
+  
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', listPath, true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      var data = JSON.parse(xhr.responseText);
+      
+      var li = "";
+      linkList.innerHTML = '';
+
+      for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+        var info = data[infoIndex];
+        var labelWarn = info['warn'] ? '<span class="label warn">' + info['warn'] + '</span>' : '';
+        var labelInfo = info['info'] ? '<span class="label info">' + info['info'] + '</span>' : '';
+
+        li += '<div class="link-list-container">';
+        li += '<img class="link-list-image" src="' + iconPath + info['logo'] + '">';
+        li += '<p>' + info['title'] + labelInfo + labelWarn + '</p>';
+        li += '<p>' + info['intro'] + '</p>';
+        li += '<a href="' + info['url'] + '" rel="noopener" target="_blank" data-pjax-state=""></a>';
+        li += '</div>';
+      }
+      
+      linkList.innerHTML = li;
+    }
+  };
+  xhr.send();
+});
+</script>
+
+
+<script type="text/javascript">
+var cultureList = document.querySelectorAll(".culture-list");
+if (cultureList.length !== 0) {
+  var j = -1;
+  for (var i = 0; i < cultureList.length; i++) {
+    const listPath = cultureList[i].getAttribute('json-src');
+    const coverPath = cultureList[i].getAttribute('cover-src');
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', listPath, true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        j++;
+        var data = JSON.parse(xhr.responseText);
+        var li = "";
+        
+        cultureList[j].innerHTML = '';
+
+        for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+          var info = data[infoIndex];
+          
+          var title = info['title'];
+          if (info['link']) {
+            title = '<a href="' + info['link'] + '">' + info['title'] + '</a>';
+          }
+
+          var author = info['author'] ? '<span class="author">' + info['author'] + '</span>' : '';
+
+          var intro = info['intro'] ? info['intro'] : '';
+
+          var star = '';
+          if (info['score'] == null) {
+            star = '';
+          } else {
+            var colorStar = '';
+            var greyStar = '';
+            var int = Math.floor(info['score']); //整数部分
+            var fract = 0;
+            if (info['score'] % 1 !== 0) {
+              fract = 1;
+            }
+            for (var m = 0; m < int; m++) {
+              colorStar += '★';
+            }
+            if (fract !== 0) {
+              colorStar += '☆';
+            }
+            for (var m = 0; m < (5 - fract - int); m++) {
+              greyStar += '☆';
+            }
+            if (info['score'] !== 5) {
+              star = '<span class="star-score">' + colorStar + '<span class="grey-star">' + greyStar + '</span></span>';
+            } else {
+              star = '<span class="star-score">' + colorStar + '</span>';
+            }
+          }
+
+          li += '<div class="media">';
+          li += '<div class="media-cover" style="background-image:url(' + coverPath + info['cover'] + ')"></div>';
+          li += '<div class="media-meta">';
+          li += '<div class="media-meta-item title">' + title + '</div>';
+          li += '<div class="media-meta-item">' + author + star + '</div>';
+          li += '<div class="media-meta-item intro">' + intro + '</div>';
+          li += '</div></div>';
+        }
+        
+        cultureList[j].innerHTML = li;
+      }
+    };
+    xhr.send();
+  }
+}
+</script>
+
+
+
+
+<script src="/resources/minigrid.min.js"></script>
+<script type="text/javascript">
+var album = document.querySelector(".album");
+if (album) {
+  // 相册列表 JSON 数据
+  var imgDataPath = album.getAttribute('json-src');
+  // 照片存储路径
+  var imgPath = album.getAttribute('photo-src');
+  // 最多显示数量
+  var imgMaxNum = 50;
+  // 获取窗口大小以决定图片宽度
+  var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  var imageWidth;
+
+  if (windowWidth < 768) {
+    imageWidth = 145; // 移动端图片宽度
+  } else {
+    imageWidth = 235;
+  }
+
+  // 腾讯云自定义样式 (数据万象外网流量需要付费)
+  //var imgStyle = '!' + imageWidth + 'x';
+  //var imgStyle = '!300x';
+
+  // 生成相册
+  var linkDataPath = imgDataPath;
+  var photo = {
+    page: 1,
+    offset: imgMaxNum,
+    init: function () {
+      var that = this;
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", linkDataPath, true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var data = JSON.parse(xhr.responseText);
+          that.render(that.page, data);
+        }
+      };
+      xhr.send();
+    },
+    render: function (page, data) {
+      var begin = (page - 1) * this.offset;
+      var end = page * this.offset;
+      if (begin >= data.length) return;
+      var imgNameWithPattern, imgName, imageSize, imageX, imageY, li = "";
+      for (var i = begin; i < end && i < data.length; i++) {
+        imgNameWithPattern = data[i].split(' ')[1];
+        imgName = imgNameWithPattern.split('.')[0];
+        imageSize = data[i].split(' ')[0];
+        imageX = imageSize.split('.')[0];
+        imageY = imageSize.split('.')[1];
+        li += '<div class="card" style="width:' + imageWidth + 'px" >';
+        li += '<div class="album-photo" style="height:'+ imageWidth * imageY / imageX + 'px">';
+        li += '<a class="fancybox fancybox.image" href="' + imgPath + imgNameWithPattern + '" itemscope="" itemtype="http://schema.org/ImageObject" itemprop="url" data-fancybox="group" rel="group" data-caption="' + imgName + '" title="' +  imgName + '">';
+        li += '<img data-src="' + imgPath + imgNameWithPattern + '" src="' + imgPath + imgNameWithPattern + '" alt="' +  imgName + '" data-loaded="true">';
+        li += '</a>';
+        li += '</div>';
+        li += '</div>';
+      }
+      album.insertAdjacentHTML('beforeend', li);
+      this.minigrid();
+    },
+    minigrid: function () {
+      var grid = new Minigrid({
+        container: '.album',
+        item: '.card',
+        gutter: 12
+      });
+      grid.mount();
+      window.addEventListener('resize', function () {
+        grid.mount();
+      });
+    }
+  };
+  photo.init();
+}
+</script>
+</body>
+</html>

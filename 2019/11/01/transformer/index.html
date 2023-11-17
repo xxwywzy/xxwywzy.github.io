@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/resources/favicon/favicon.png">
+  <link rel="mask-icon" href="/resources/favicon/favicon.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"xxwywzy.github.io","root":"/","images":"/resources/img/","scheme":"Gemini","darkmode":true,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"livere","storage":true,"lazyload":false,"nav":null,"activeClass":"livere"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本篇博客为对 Transformer 原始论文（ Attention Is All You Need ）的解读。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Transformer 原理解析">
+<meta property="og:url" content="https://xxwywzy.github.io/2019/11/01/transformer/">
+<meta property="og:site_name" content="口仆">
+<meta property="og:description" content="本篇博客为对 Transformer 原始论文（ Attention Is All You Need ）的解读。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-10-29-122616.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-11-01-013208.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-11-01-020727.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-11-01-021450.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-11-01-112737.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-11-01-113649.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-11-01-114616.png">
+<meta property="og:image" content="https://jalammar.github.io/images/t/transformer_multi-headed_self-attention-recap.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-11-03-103653.png">
+<meta property="article:published_time" content="2019-11-01T02:22:19.000Z">
+<meta property="article:modified_time" content="2023-08-05T08:52:05.000Z">
+<meta property="article:author" content="Zheyu Wang">
+<meta property="article:tag" content="Transformer">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2019-10-29-122616.png">
+
+
+<link rel="canonical" href="https://xxwywzy.github.io/2019/11/01/transformer/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://xxwywzy.github.io/2019/11/01/transformer/","path":"2019/11/01/transformer/","title":"Transformer 原理解析"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Transformer 原理解析 | 口仆</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/resources/fonts/longcang/longcang-regular.css" >
+<link rel="stylesheet" href="/resources/fonts/lxgw/lxgwwenkailite-regular.css" >
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">口仆</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Long may the sunshine</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-culture"><a href="/culture/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>MEME</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#model-architecture"><span class="nav-number">1.</span> <span class="nav-text">Model Architecture</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#encoder-and-decoder-stacks"><span class="nav-number">1.1.</span> <span class="nav-text">Encoder and Decoder Stacks</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#encoder"><span class="nav-number">1.1.1.</span> <span class="nav-text">Encoder</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#decoder"><span class="nav-number">1.1.2.</span> <span class="nav-text">Decoder</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#linear-and-softmax-layer"><span class="nav-number">1.1.3.</span> <span class="nav-text">Linear and Softmax Layer</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#attention"><span class="nav-number">1.2.</span> <span class="nav-text">Attention</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#scaled-dot-product-attention"><span class="nav-number">1.2.1.</span> <span class="nav-text">Scaled Dot-Product Attention</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#multi-head-attention"><span class="nav-number">1.2.2.</span> <span class="nav-text">Multi-Head Attention</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#applications-of-attention-in-transformer"><span class="nav-number">1.2.3.</span> <span class="nav-text">Applications of Attention in Transformer</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#position-wise-feed-forward-networks"><span class="nav-number">1.3.</span> <span class="nav-text">Position-wise Feed-Forward Networks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#embeddings-and-softmax"><span class="nav-number">1.4.</span> <span class="nav-text">Embeddings and Softmax</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#positional-encoding"><span class="nav-number">1.5.</span> <span class="nav-text">Positional Encoding</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#why-self-attention"><span class="nav-number">2.</span> <span class="nav-text">Why Self-Attention</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#training"><span class="nav-number">3.</span> <span class="nav-text">Training</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#training-data-and-batching"><span class="nav-number">3.1.</span> <span class="nav-text">Training Data and Batching</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hardware-and-schedule"><span class="nav-number">3.2.</span> <span class="nav-text">Hardware and Schedule</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#optimizer"><span class="nav-number">3.3.</span> <span class="nav-text">Optimizer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#regularization"><span class="nav-number">3.4.</span> <span class="nav-text">Regularization</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="nav-number">4.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zheyu Wang"
+      src="/resources/favicon/avatar.png">
+  <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+  <div class="site-description" itemprop="description">相信过程</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">85</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xxwywzy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/xxwywzy" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/xxwywzy" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/xxwywzy" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2019/11/01/transformer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resources/favicon/avatar.png">
+      <meta itemprop="name" content="Zheyu Wang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="口仆">
+      <meta itemprop="description" content="相信过程">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Transformer 原理解析 | 口仆">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Transformer 原理解析
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-11-01 10:22:19" itemprop="dateCreated datePublished" datetime="2019-11-01T10:22:19+08:00">2019-11-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/%E6%96%87%E7%AB%A0%E7%B2%BE%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">文章精读</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.9k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>10 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><div class="note info"><p>本篇博客为对 Transformer 原始论文（ Attention Is All You Need ）的解读。</p>
+</div>
+<span id="more"></span>
+<p>对于序列模型，传统的神经网络结构存在着<strong>难以处理长期依赖</strong>和<strong>计算效率低</strong>等问题。尽管研究者们提出了 LSTM、注意力机制、CNN 结合 RNN 等手段，但仍无法有效解决这些问题。<strong>Transformer</strong> 是一种新的神经网络结构，其仅基于注意力机制，抛弃了传统的循环或卷积神经网络结构。</p>
+<h1 id="model-architecture">Model Architecture</h1>
+<p>Transformer 基于现有的序列-序列模型，使用 <strong>encoder-decoder</strong> 架构。在 encoder-decoder 架构中，编码器（encoder）将输入序列 <span class="math inline">\((x_1, \ldots,x_n)\)</span> 转换为一个连续的表达 <span class="math inline">\(\mathbf{z}=\left(z_{1}, \dots, z_{n}\right)\)</span> ，然后解码器再基于该表达生成输出序列 <span class="math inline">\((y_1, \ldots, y_m)\)</span>。</p>
+<p>基于该架构，模型的整体结构如下图所示：</p>
+<p><img src="http://media.zjubiomedit.com/2019-10-29-122616.png" width=45%></p>
+<h2 id="encoder-and-decoder-stacks">Encoder and Decoder Stacks</h2>
+<p>模型由 encoder 和 decoder 堆叠而成，每一层的具有相同的结构，如下图所示：</p>
+<p><img src="http://media.zjubiomedit.com/2019-11-01-013208.png" width=60%></p>
+<h3 id="encoder">Encoder</h3>
+<p>由 6 层组成，每一层包括两个子层：<strong>第一层</strong>是 multi-head self-attention 层，<strong>第二层</strong>是一个简单的全连接前馈网络。在每个子层后，都接了一个<strong>残差连接以及归一化</strong>，即每个子层的输出为 <span class="math inline">\(\text { LayerNorm }(x+\text { Sublayer }(x))\)</span>. 为了方便残差连接，模型中的所有子层，包括 embedding 层（初始词嵌入），输出向量维度均为 <span class="math inline">\(d_{\text{model}} = 512\)</span>.</p>
+<h3 id="decoder">Decoder</h3>
+<p>同样由 6 层组成，每一层包括三个子层：<strong>第一层</strong>是 masked multi-head self-attention 层，注意其输入仅包含<strong>当前位置之前的词语信息</strong>，这样设计的目的是解码器是按顺序解码的，其当前输出只能基于已输出的部分。<strong>第二层</strong>是 multi-head self-attention 层，其输入包含编码器的输出信息（矩阵 K 和矩阵 V ），<strong>第三层</strong>是全连接前馈网络。每个子层后同样加入了<strong>残差连接和归一化</strong>。下图给出了编码器和解码器的内部结构，注意前馈神经网络对于序列每个位置的独立性。</p>
+<p><img src="http://media.zjubiomedit.com/2019-11-01-020727.png" width=80%></p>
+<h3 id="linear-and-softmax-layer">Linear and Softmax Layer</h3>
+<p>解码器的输出被输入到一个线性层中，转化为一个超长向量（词典长度），再输入到 softmax 层中转化为概率，最后运用适当策略（如贪婪搜索或束搜索）选择输出的词语，注意<strong>一次只输出一个词语</strong>。已输出的序列会作为解码器的输入。下图给出了贪婪搜索策略下的运行流程。</p>
+<p><img src="http://media.zjubiomedit.com/2019-11-01-021450.png" width=60%></p>
+<h2 id="attention">Attention</h2>
+<p>下面对模型中使用的 attention 机制进行解读。</p>
+<h3 id="scaled-dot-product-attention">Scaled Dot-Product Attention</h3>
+<p>Transformer 中使用的注意力机制被称为 ”Scaled Dot-Product Attention“。该机制的示意图如下所示。该模块的输入包括三个向量：查询向量 <strong>Q</strong>、键向量 <strong>K</strong> 和值向量 <strong>V</strong>。三个向量均基于输入向量计算得出（最初的输入向量为词嵌入），查询向量和键向量的维数为 <span class="math inline">\(d_k\)</span>，值向量的维数为 <span class="math inline">\(d_v\)</span>。我们先计算单个查询向量和所有键向量的点积，然后将其除以 <span class="math inline">\(\sqrt{d_k}\)</span>，最后通过一个 softmax 函数得到对应的权重，再与值向量进行加权。</p>
+<p><img src="http://media.zjubiomedit.com/2019-11-01-112737.png" width=25%></p>
+<p>上述过程可以通过下图进行理解。其中除以 <span class="math inline">\(\sqrt{d_k}\)</span> 进行的缩放操作的目的是提供更稳定的梯度，便于之后的训练。简单来说，该模块将<strong>一个输入向量转化为了一个包含其他位置权重的向量</strong>。</p>
+<p><img src="http://media.zjubiomedit.com/2019-11-01-113649.png" width=60%></p>
+<p>在实际应用中，我们会基于矩阵来进行并行计算，该过程可以表达为如下公式： <span class="math display">\[
+\text { Attention }(Q, K, V)=\operatorname{softmax}\left(\frac{Q K^{T}}{\sqrt{d_{k}}}\right) V \tag{1}
+\]</span></p>
+<h3 id="multi-head-attention">Multi-Head Attention</h3>
+<p>研究人员发现，比起使用一个注意力函数得到 <span class="math inline">\(d_{\text{model}}\)</span> 维数的值向量，并行地训练多个值向量，再将它们拼接在一起得到输出效果更好。上述思想即 Transformer 中的 Multi-Head Attention，如下图所示。</p>
+<p><img src="http://media.zjubiomedit.com/2019-11-01-114616.png" width=30%></p>
+<p>具体来说，给定一个输入矩阵，我们基于不同的参数矩阵计算得到多组 V、K、Q 矩阵，然后通过多个注意力函数计算得出多个加权后的 V 矩阵，最后将这些矩阵拼接起来，通过一个权重矩阵 <span class="math inline">\(W^{O}\)</span> 得到最终的输出。下图描绘出了整个流程。</p>
+<figure>
+<img src="https://jalammar.github.io/images/t/transformer_multi-headed_self-attention-recap.png" alt="img" /><figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>上述过程用公式可以表达如下： <span class="math display">\[
+\begin{aligned} \text { MultiHead }(Q, K, V) &amp;\left.=\text { Concat (head }_{1}, \ldots, \text { head }_{\mathrm{h}}\right) W^{O} \\ \text { where head }_{\mathrm{i}} &amp;=\text { Attention }\left(Q W_{i}^{Q}, K W_{i}^{K}, V W_{i}^{V}\right) \end{aligned}
+\]</span> 注意参数矩阵的维数 <span class="math inline">\(W_{i}^{Q} \in \mathbb{R}^{d_{\text {model }} \times d_{k}}, W_{i}^{K} \in \mathbb{R}^{d_{\text {model }} \times d_{k}}, W_{i}^{V} \in \mathbb{R}^{d_{\text {model }} \times d_{v}}, W^{O} \in \mathbb{R}^{h d_{v} \times d_{\text {model }}}\)</span>，注意公式中 <span class="math inline">\(QW_i^Q\)</span> 并不是矩阵相乘。</p>
+<p>在本研究中，我们取 <span class="math inline">\(h = 8\)</span>，即 8 个并行的注意力层。对于每个注意力层，我们取 <span class="math inline">\(d_{k}=d_{v}=d_{\text {model }} / h=64\)</span>. 由于每个注意力层中向量的维数被均分了，所以该方法与使用单个头部的注意力相比计算成本相差并不大。</p>
+<h3 id="applications-of-attention-in-transformer">Applications of Attention in Transformer</h3>
+<p>在 Transformer 中，多头部注意力以三种不同的方式进行了应用：</p>
+<ul>
+<li>编码器中的使用了自我注意力层，即三个矩阵均来源于同一个地方（上一个解码器的输出或初始输入）</li>
+<li>在解码器的第一层中，为了保证只基于当前位置之前的信息（解码器按顺序解码），在缩放点积操作之后新增了一个 mask 操作，将所有当前位置之后的数值设为 <span class="math inline">\(-\infty\)</span></li>
+<li>在解码器的第二层中，查询矩阵 Q 来自于上一个解码器的输出，而值矩阵 V 和键矩阵 K 则来自于编码器的输出</li>
+</ul>
+<h2 id="position-wise-feed-forward-networks">Position-wise Feed-Forward Networks</h2>
+<p>在 Transformer 中，编码器和解码器的每一层都包含了一个相同结构的全连接前馈网络，独立地应用于序列的每一个位置。该网络由两层线性连接组成，中间接了一个 ReLU 激活函数，如下式所示： <span class="math display">\[
+\operatorname{FFN}(x)=\max \left(0, x W_{1}+b_{1}\right) W_{2}+b_{2} \tag{2}
+\]</span> 每一层的参数不共享。网络中输入和输出的维度均为 <span class="math inline">\(d_{\text{model}} = 512\)</span>，中间层额维度为 <span class="math inline">\(d_{ff} = 2048\)</span>.</p>
+<h2 id="embeddings-and-softmax">Embeddings and Softmax</h2>
+<p>在 Transformer 中，编码器输入与解码器输入（即最终输出）使用的词嵌入来源于同一权重矩阵，且该矩阵会随着训练不断迭代更新。最终输出 softmax 层前的线性转换层也使用了该矩阵。在 Embedding 层中，我们将权重乘上了 <span class="math inline">\(\sqrt{d_\text{model}}\)</span>.</p>
+<h2 id="positional-encoding">Positional Encoding</h2>
+<p>为了让模型中序列的特征能够体现，我们需要将序列的位置信息编码到输入中。将位置编码和嵌入编码相加（保证维数相同），即可得到最终的输入向量。总的来说，编码位置信息有两种方式：一种是基于公式的编码，另一种是通过训练动态学习的编码。原文作者经过测试，两种方法的效果基本相同，而基于公式的编码不需要额外训练，且能够处理训练集中未出现过的长度的序列，因此 Transformer 中使用了基于公式的位置编码： <span class="math display">\[
+\begin{array}{c}{P E_{(pos, 2 i)}=\sin (pos / 10000^{2 i / d_{\text {model}}})} \\ {P E_{(pos,2i+1)}=\cos (pos / 10000^{2 i / d_{\text {model }}})}\end{array}
+\]</span> 其中 <span class="math inline">\(pos\)</span> 表示当前 item 在序列中的位置，<span class="math inline">\(i\)</span> 表示该 item 向量中的具体维数。</p>
+<h1 id="why-self-attention">Why Self-Attention</h1>
+<p>下表给出了自我注意力机制与传统卷积神经网络或循环神经网络的对比。这里假设输入和输出序列长度均为 <span class="math inline">\(n\)</span>，向量维数为 <span class="math inline">\(d\)</span>。总的来看，自我注意力机制在层内复杂度、序列操作复杂度与最大路径长度上都有一定的优势。</p>
+<p>具体来说，自我注意力机制的序列操作复杂度和最大路径长度均为 <span class="math inline">\(O(1)\)</span>，路径长度越短，模型越容易学习到长期依赖。对于每一层的计算复杂度（时间）在序列长度小于向量维数（常见情况）时，自我注意力的优势更大。如果序列很长，可以将注意力限制在当前位置的大小为 <span class="math inline">\(r\)</span> 的窗口内，这时相对应的最大路径长度会有所提升。</p>
+<p><img src="http://media.zjubiomedit.com/2019-11-03-103653.png" width=80%></p>
+<h1 id="training">Training</h1>
+<p>下面对 Transformer 的训练策略进行简介。</p>
+<h2 id="training-data-and-batching">Training Data and Batching</h2>
+<p>原文作者使用了两套数据集：一套是 WMT 2014 English-German dataset，包含约 4.5 million 个句子对，编码方式为 byte-pair 编码；另一套是 WMT 2014 English-French dataset，包含约 36M 个句子，编码方式为 word-piece 编码。关于具体的编码方式可以参考引文 3-4。每一个训练 batch 包含大约 25000 个句子对。</p>
+<h2 id="hardware-and-schedule">Hardware and Schedule</h2>
+<p>模型的训练环境是一个包含 8 个 NIVIDIA P1000 GPU 的计算机。原文中共训练了两种模型，一种是基于上文所描述参数的基础模型，训练时长 12 小时（每一次完整的训练约 0.4 秒）。另一种是参数量提升的 big 模型，训练时长 3.5 天，每次训练约 1 秒。关于大模型的具体参数可以参考原论文。</p>
+<h2 id="optimizer">Optimizer</h2>
+<p>原文使用了 Adam 优化器 [5]，参数设置为 <span class="math inline">\(\beta_{1}=0.9, \beta_{2}=0.98, \epsilon=10^{-9}\)</span>。学习率随训练过程动态变化，基于下列公式： <span class="math display">\[
+lrate=d_{\text {model }}^{-0.5} \cdot \min \left(step\_num^{-0.5}, step\_num\cdot warmup\_steps^{-1.5}\right) \tag{3}
+\]</span> 学习率会先线性增大，再逐渐减小。原文中使用 <span class="math inline">\(warm\_steps =4000\)</span>.</p>
+<h2 id="regularization">Regularization</h2>
+<p>在训练过程中，使用了两种正则化手段：</p>
+<p>第一种是 <strong>Residual Dropout</strong>。在每一层进行残差连接和归一化之前，先执行 dropout [6]。此外，编码器与解码器中嵌入编码与位置编码之和也应用了 dropout。对于基础模型，原文使用 <span class="math inline">\(P_{drop} = 0.1\)</span>.</p>
+<p>第二种是 <strong>Label Smoothing</strong>。在训练过程中，使用了标签平滑策略 [7]，参数设置 <span class="math inline">\(\epsilon_{ls} = 0.1\)</span>。这种策略会增加模型的不确定性，影响困惑度（perplexity），但会提升准确率与 BLEU 得分。</p>
+<p><strong>PS</strong>：以上就是论文主要内容的解读，训练章节中对于具体的方法没有展开介绍，详细内容可以查阅参考文献。论文的结果部分主要描述了模型在机器翻译任务中的表现以及不同参数设置下模型的表现，这里不作赘述，一句话概括就是比其他模型都牛批。</p>
+<h1 id="参考文献">参考文献</h1>
+<ol type="1">
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1706.03762">Attention is all you need</a></li>
+<li><a target="_blank" rel="noopener" href="https://jalammar.github.io/illustrated-transformer/">The Illustrated Transformer</a></li>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1703.03906">Massive exploration of neural machine translation architectures</a></li>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1609.08144">Google’s neural machine translation system: Bridging the gap between human and machine translation</a></li>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1412.6980">Adam: A method for stochastic optimization</a></li>
+<li><a target="_blank" rel="noopener" href="http://jmlr.org/papers/v15/srivastava14a.html">Dropout: a simple way to prevent neural networks from overﬁtting</a></li>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1512.00567">Rethinking the inception architecture for computer vision</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+
+
+
+<div class="license">
+  <div class="license-title">Transformer 原理解析</div>
+  <div class="license-link">
+    <a href="https://xxwywzy.github.io/2019/11/01/transformer/">https://xxwywzy.github.io/2019/11/01/transformer/</a>
+  </div>
+  <div class="license-meta">
+    <div class="license-meta-item">
+      <div class="license-meta-title">本文作者</div>
+      <div class="license-meta-text">
+          Zheyu Wang
+      </div>
+    </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">发布于</div>
+        <div class="license-meta-text">
+          2019-11-01
+        </div>
+      </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">更新于</div>
+        <div class="license-meta-text">
+          2023-08-05
+        </div>
+      </div>
+    <div class="license-meta-item">
+      <div class="license-meta-title">许可协议</div>
+      <div class="license-meta-text">
+          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank">CC BY-NC-SA 4.0</a>
+      </div>
+    </div>
+  </div>
+  <div class="license-statement">
+      转载或引用本文时，请遵守上述许可协议，注明出处、不得用于商业用途！
+  </div>
+</div>
+          <div class="post-tags">
+              <a href="/tags/Transformer/" rel="tag"># Transformer</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/10/26/lda-2-2/" rel="prev" title="LDA 原理第二部分：文本分析的参数估计（下）">
+                  <i class="fa fa-angle-left"></i> LDA 原理第二部分：文本分析的参数估计（下）
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/11/11/bert/" rel="next" title="BERT 原理解析">
+                  BERT 原理解析 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81ODgyNi8zNTI4OA=="></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">332k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">18:26</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+
+
+  <style>
+    #taboola-livere { display: none;}
+  </style>
+
+
+
+<script type="text/javascript">
+var linkLists = document.querySelectorAll(".link-list");
+
+linkLists.forEach(function(linkList) {
+  var listPath = linkList.getAttribute('json-src');
+  var iconPath = linkList.getAttribute('icon-src');
+  
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', listPath, true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      var data = JSON.parse(xhr.responseText);
+      
+      var li = "";
+      linkList.innerHTML = '';
+
+      for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+        var info = data[infoIndex];
+        var labelWarn = info['warn'] ? '<span class="label warn">' + info['warn'] + '</span>' : '';
+        var labelInfo = info['info'] ? '<span class="label info">' + info['info'] + '</span>' : '';
+
+        li += '<div class="link-list-container">';
+        li += '<img class="link-list-image" src="' + iconPath + info['logo'] + '">';
+        li += '<p>' + info['title'] + labelInfo + labelWarn + '</p>';
+        li += '<p>' + info['intro'] + '</p>';
+        li += '<a href="' + info['url'] + '" rel="noopener" target="_blank" data-pjax-state=""></a>';
+        li += '</div>';
+      }
+      
+      linkList.innerHTML = li;
+    }
+  };
+  xhr.send();
+});
+</script>
+
+
+<script type="text/javascript">
+var cultureList = document.querySelectorAll(".culture-list");
+if (cultureList.length !== 0) {
+  var j = -1;
+  for (var i = 0; i < cultureList.length; i++) {
+    const listPath = cultureList[i].getAttribute('json-src');
+    const coverPath = cultureList[i].getAttribute('cover-src');
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', listPath, true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        j++;
+        var data = JSON.parse(xhr.responseText);
+        var li = "";
+        
+        cultureList[j].innerHTML = '';
+
+        for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+          var info = data[infoIndex];
+          
+          var title = info['title'];
+          if (info['link']) {
+            title = '<a href="' + info['link'] + '">' + info['title'] + '</a>';
+          }
+
+          var author = info['author'] ? '<span class="author">' + info['author'] + '</span>' : '';
+
+          var intro = info['intro'] ? info['intro'] : '';
+
+          var star = '';
+          if (info['score'] == null) {
+            star = '';
+          } else {
+            var colorStar = '';
+            var greyStar = '';
+            var int = Math.floor(info['score']); //整数部分
+            var fract = 0;
+            if (info['score'] % 1 !== 0) {
+              fract = 1;
+            }
+            for (var m = 0; m < int; m++) {
+              colorStar += '★';
+            }
+            if (fract !== 0) {
+              colorStar += '☆';
+            }
+            for (var m = 0; m < (5 - fract - int); m++) {
+              greyStar += '☆';
+            }
+            if (info['score'] !== 5) {
+              star = '<span class="star-score">' + colorStar + '<span class="grey-star">' + greyStar + '</span></span>';
+            } else {
+              star = '<span class="star-score">' + colorStar + '</span>';
+            }
+          }
+
+          li += '<div class="media">';
+          li += '<div class="media-cover" style="background-image:url(' + coverPath + info['cover'] + ')"></div>';
+          li += '<div class="media-meta">';
+          li += '<div class="media-meta-item title">' + title + '</div>';
+          li += '<div class="media-meta-item">' + author + star + '</div>';
+          li += '<div class="media-meta-item intro">' + intro + '</div>';
+          li += '</div></div>';
+        }
+        
+        cultureList[j].innerHTML = li;
+      }
+    };
+    xhr.send();
+  }
+}
+</script>
+
+
+
+
+<script src="/resources/minigrid.min.js"></script>
+<script type="text/javascript">
+var album = document.querySelector(".album");
+if (album) {
+  // 相册列表 JSON 数据
+  var imgDataPath = album.getAttribute('json-src');
+  // 照片存储路径
+  var imgPath = album.getAttribute('photo-src');
+  // 最多显示数量
+  var imgMaxNum = 50;
+  // 获取窗口大小以决定图片宽度
+  var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  var imageWidth;
+
+  if (windowWidth < 768) {
+    imageWidth = 145; // 移动端图片宽度
+  } else {
+    imageWidth = 235;
+  }
+
+  // 腾讯云自定义样式 (数据万象外网流量需要付费)
+  //var imgStyle = '!' + imageWidth + 'x';
+  //var imgStyle = '!300x';
+
+  // 生成相册
+  var linkDataPath = imgDataPath;
+  var photo = {
+    page: 1,
+    offset: imgMaxNum,
+    init: function () {
+      var that = this;
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", linkDataPath, true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var data = JSON.parse(xhr.responseText);
+          that.render(that.page, data);
+        }
+      };
+      xhr.send();
+    },
+    render: function (page, data) {
+      var begin = (page - 1) * this.offset;
+      var end = page * this.offset;
+      if (begin >= data.length) return;
+      var imgNameWithPattern, imgName, imageSize, imageX, imageY, li = "";
+      for (var i = begin; i < end && i < data.length; i++) {
+        imgNameWithPattern = data[i].split(' ')[1];
+        imgName = imgNameWithPattern.split('.')[0];
+        imageSize = data[i].split(' ')[0];
+        imageX = imageSize.split('.')[0];
+        imageY = imageSize.split('.')[1];
+        li += '<div class="card" style="width:' + imageWidth + 'px" >';
+        li += '<div class="album-photo" style="height:'+ imageWidth * imageY / imageX + 'px">';
+        li += '<a class="fancybox fancybox.image" href="' + imgPath + imgNameWithPattern + '" itemscope="" itemtype="http://schema.org/ImageObject" itemprop="url" data-fancybox="group" rel="group" data-caption="' + imgName + '" title="' +  imgName + '">';
+        li += '<img data-src="' + imgPath + imgNameWithPattern + '" src="' + imgPath + imgNameWithPattern + '" alt="' +  imgName + '" data-loaded="true">';
+        li += '</a>';
+        li += '</div>';
+        li += '</div>';
+      }
+      album.insertAdjacentHTML('beforeend', li);
+      this.minigrid();
+    },
+    minigrid: function () {
+      var grid = new Minigrid({
+        container: '.album',
+        item: '.card',
+        gutter: 12
+      });
+      grid.mount();
+      window.addEventListener('resize', function () {
+        grid.mount();
+      });
+    }
+  };
+  photo.init();
+}
+</script>
+</body>
+</html>

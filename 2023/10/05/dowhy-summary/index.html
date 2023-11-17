@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/resources/favicon/favicon.png">
+  <link rel="mask-icon" href="/resources/favicon/favicon.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"xxwywzy.github.io","root":"/","images":"/resources/img/","scheme":"Gemini","darkmode":true,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"livere","storage":true,"lazyload":false,"nav":null,"activeClass":"livere"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本篇博客对常用因果推断框架 DoWhy 进行了系统总结。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="因果推断框架 DoWhy 入门">
+<meta property="og:url" content="https://xxwywzy.github.io/2023/10/05/dowhy-summary/">
+<meta property="og:site_name" content="口仆">
+<meta property="og:description" content="本篇博客对常用因果推断框架 DoWhy 进行了系统总结。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-11-25-031618.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-11-25-092846.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-11-25-100937.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-11-26-113820.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-11-27-021827.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2020-11-30-072432.png">
+<meta property="article:published_time" content="2023-10-05T11:07:06.000Z">
+<meta property="article:modified_time" content="2023-10-22T07:15:50.000Z">
+<meta property="article:author" content="Zheyu Wang">
+<meta property="article:tag" content="因果推断">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2020-11-25-031618.png">
+
+
+<link rel="canonical" href="https://xxwywzy.github.io/2023/10/05/dowhy-summary/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://xxwywzy.github.io/2023/10/05/dowhy-summary/","path":"2023/10/05/dowhy-summary/","title":"因果推断框架 DoWhy 入门"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>因果推断框架 DoWhy 入门 | 口仆</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/resources/fonts/longcang/longcang-regular.css" >
+<link rel="stylesheet" href="/resources/fonts/lxgw/lxgwwenkailite-regular.css" >
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">口仆</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Long may the sunshine</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-culture"><a href="/culture/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>MEME</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%BA%E6%A8%A1"><span class="nav-number">1.1.</span> <span class="nav-text">建模</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%86%E5%88%AB"><span class="nav-number">1.2.</span> <span class="nav-text">识别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%B0%E8%AE%A1"><span class="nav-number">1.3.</span> <span class="nav-text">估计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8D%E9%A9%B3"><span class="nav-number">1.4.</span> <span class="nav-text">反驳</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%A5%E9%97%A8%E6%A1%88%E4%BE%8B"><span class="nav-number">2.</span> <span class="nav-text">入门案例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number">2.1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8C%85%E5%AF%BC%E5%85%A5%E4%B8%8E%E6%95%B0%E6%8D%AE%E8%BD%BD%E5%85%A5"><span class="nav-number">2.2.</span> <span class="nav-text">包导入与数据载入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%A7%E8%A1%8C%E5%9B%A0%E6%9E%9C%E6%8E%A8%E6%96%AD"><span class="nav-number">2.3.</span> <span class="nav-text">执行因果推断</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%BA%E6%A8%A1-1"><span class="nav-number">2.3.1.</span> <span class="nav-text">建模</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%86%E5%88%AB-1"><span class="nav-number">2.3.2.</span> <span class="nav-text">识别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%B0%E8%AE%A1-1"><span class="nav-number">2.3.3.</span> <span class="nav-text">估计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8D%E9%A9%B3-1"><span class="nav-number">2.3.4.</span> <span class="nav-text">反驳</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E4%B8%80%E4%B8%AA%E9%9A%8F%E6%9C%BA%E7%9A%84%E6%B7%B7%E6%9D%82%E5%9B%A0%E5%AD%90%E5%8F%98%E9%87%8F"><span class="nav-number">2.3.4.1.</span> <span class="nav-text">添加一个随机的混杂因子变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E4%B8%80%E4%B8%AA%E6%9C%AA%E8%A7%82%E6%B5%8B%E7%9A%84%E6%B7%B7%E6%9D%82%E5%9B%A0%E5%AD%90%E5%8F%98%E9%87%8F"><span class="nav-number">2.3.4.2.</span> <span class="nav-text">添加一个未观测的混杂因子变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%94%A8%E9%9A%8F%E6%9C%BA%E5%8F%98%E9%87%8F%E4%BB%A3%E6%9B%BF%E5%B9%B2%E9%A2%84"><span class="nav-number">2.3.4.3.</span> <span class="nav-text">用随机变量代替干预</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A7%BB%E9%99%A4%E6%95%B0%E6%8D%AE%E7%9A%84%E4%B8%80%E4%B8%AA%E9%9A%8F%E6%9C%BA%E5%AD%90%E9%9B%86"><span class="nav-number">2.3.4.4.</span> <span class="nav-text">移除数据的一个随机子集</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%9B%E9%98%B6%E6%A1%88%E4%BE%8B"><span class="nav-number">3.</span> <span class="nav-text">进阶案例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0"><span class="nav-number">3.1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86"><span class="nav-number">3.2.</span> <span class="nav-text">数据预处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E5%8F%96%E5%81%87%E8%AE%BE"><span class="nav-number">3.3.</span> <span class="nav-text">提取假设</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%A0%E6%9E%9C%E6%8E%A8%E6%96%AD"><span class="nav-number">3.4.</span> <span class="nav-text">因果推断</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E5%9B%A0%E6%9E%9C%E5%9B%BE"><span class="nav-number">3.4.1.</span> <span class="nav-text">创建因果图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%86%E5%88%AB%E5%9B%A0%E6%9E%9C%E6%95%88%E5%BA%94"><span class="nav-number">3.4.2.</span> <span class="nav-text">识别因果效应</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%B0%E8%AE%A1%E5%9B%A0%E6%9E%9C%E6%95%88%E5%BA%94"><span class="nav-number">3.4.3.</span> <span class="nav-text">估计因果效应</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8D%E9%A9%B3%E7%BB%93%E6%9E%9C"><span class="nav-number">3.4.4.</span> <span class="nav-text">反驳结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C%E6%AF%94%E8%BE%83"><span class="nav-number">3.5.</span> <span class="nav-text">结果比较</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zheyu Wang"
+      src="/resources/favicon/avatar.png">
+  <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+  <div class="site-description" itemprop="description">相信过程</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">85</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xxwywzy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/xxwywzy" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/xxwywzy" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/xxwywzy" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2023/10/05/dowhy-summary/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resources/favicon/avatar.png">
+      <meta itemprop="name" content="Zheyu Wang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="口仆">
+      <meta itemprop="description" content="相信过程">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="因果推断框架 DoWhy 入门 | 口仆">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          因果推断框架 DoWhy 入门
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-10-05 19:07:06" itemprop="dateCreated datePublished" datetime="2023-10-05T19:07:06+08:00">2023-10-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93/" itemprop="url" rel="index"><span itemprop="name">实践总结</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>5.5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>18 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><div class="note info"><p>本篇博客对常用因果推断框架 DoWhy 进行了系统总结。</p>
+</div>
+<span id="more"></span>
+<h1 id="概述">概述</h1>
+<p><strong>因果推断</strong>（causal inference）是基于观察数据进行反事实估计，分析干预与结果之间的因果关系的一门科学。虽然在因果推断领域已经有许多的框架与方法，但大部分方法缺乏稳定的实现。DoWhy 是微软发布的一个用于进行端到端因果推断的 Python 库，其特点在于：</p>
+<ul>
+<li>提供了一种原则性的方法将给定的问题转化为一张因果图，保证所有假设的明确性</li>
+<li>提供了一种面向多种常用因果推断方法的统一接口，并结合了两种主要的因果推断框架</li>
+<li>自动化测试假设的正确性及估计的鲁棒性</li>
+</ul>
+<p>如上所述，DoWhy 基于因果推断的两大框架构建：<strong>图模型</strong>与<strong>潜在结果模型</strong>。具体来说，其使用基于图的准则与 do-积分来对假设进行建模并识别出非参数化的因果效应；而在估计阶段则主要基于潜在结果框架中的方法进行估计。DoWhy 的整个因果推断过程可以划分为四大步骤：</p>
+<ul>
+<li><strong>建模</strong>（model）：利用假设（先验知识）对因果推断问题建模</li>
+<li><strong>识别</strong>（identify）：在假设（模型）下识别因果效应的表达式（因果估计量）</li>
+<li><strong>估计</strong>（estimate）：使用统计方法对表达式进行估计</li>
+<li><strong>反驳</strong>（refute）：使用各种鲁棒性检查来验证估计的正确性</li>
+</ul>
+<p>下图总结了 DoWhy 的整体流程：</p>
+<p><img src="http://media.zjubiomedit.com/2020-11-25-031618.png" width='80%' /></p>
+<p>下面将分别对这四个步骤及其所涉及的方法进行简要介绍。</p>
+<h2 id="建模">建模</h2>
+<p>DoWhy 会为每个问题创建一个因果图模型，以保证因果假设的明确性。该因果图不需要是完整的，你可以只提供部分图，来表示某些变量的先验知识（即指定其类型），DoWhy 支持自动将剩余的变量视为潜在的混杂因子。</p>
+<p>目前，DoWhy 支持如下形式的因果假设：</p>
+<ul>
+<li><strong>图</strong>（Graph）：提供 gml 或 dot 形式的因果图，具体可以是文件或字符串格式</li>
+<li><strong>命名变量集合</strong>（Named variable sets）：直接提供变量的类型，包括<strong>混杂因子</strong>（common causes / cofounders）、<strong>工具变量</strong>（instrumental variables）、<strong>结果修改变量</strong>（effect modifiers）、<strong>前门变量</strong>（front-door variables）等</li>
+</ul>
+<h2 id="识别">识别</h2>
+<p>基于构建的因果图，DoWhy 会基于所有可能的方式来识别因果效应。具体来说，会使用基于图的准则与 do-积分 来找出可以识别因果效应的表达式，支持的识别准则有：</p>
+<ul>
+<li><strong>后门准则</strong>（Back-door criterion）</li>
+<li><strong>前门准则</strong>（Front-door criterion）</li>
+<li><strong>工具变量</strong>（Instrumental Variables）</li>
+<li><strong>中介-直接或间接结果识别</strong>（Mediation-Direct and indirect effect identification）</li>
+</ul>
+<h2 id="估计">估计</h2>
+<p>DoWhy 支持一系列基于上述识别准则的估计方法，此外还提供了非参数置信空间与排列测试来检验得到的估计的统计显著性。具体支持的估计方法列表如下：</p>
+<ul>
+<li><strong>基于估计干预分配的方法</strong>
+<ul>
+<li>基于倾向的分层（Propensity-based Stratification）</li>
+<li>倾向得分匹配（Propensity Score Matching）</li>
+<li>逆向倾向加权（Inverse Propensity Weighting）</li>
+</ul></li>
+<li><strong>基于估计结果模型的方法</strong>
+<ul>
+<li>线性回归（Linear Regression）</li>
+<li>广义线性模型（Generalized Linear Models）</li>
+</ul></li>
+<li><strong>基于工具变量等式的方法</strong>
+<ul>
+<li>二元工具/Wald 估计器（Binary Instrument/Wald Estimator）</li>
+<li>两阶段最小二乘法（Two-stage least squares）</li>
+<li>非连续回归（Regression discontinuity）</li>
+</ul></li>
+<li><strong>基于前门准则和一般中介的方法</strong>
+<ul>
+<li>两层线性回归（Two-stage linear regression）</li>
+</ul></li>
+</ul>
+<p>此外，DoWhy 还支持调用外部的估计方法，例如 EconML 与 CausalML。</p>
+<h2 id="反驳">反驳</h2>
+<p>DoWhy 支持多种反驳方法来验证估计的正确性，具体列表如下：</p>
+<ul>
+<li><strong>添加随机混杂因子</strong>：添加一个随机变量作为混杂因子后估计因果效应是否会改变（期望结果：不会）</li>
+<li><strong>安慰剂干预</strong>：将真实干预变量替换为独立随机变量后因果效应是否会改变（期望结果：因果效应归零）</li>
+<li><strong>虚拟结果</strong>：将真实结果变量替换为独立随机变量后因果效应是否会改变（期望结果：因果效应归零）</li>
+<li><strong>模拟结果</strong>：将数据集替换为基于接近给定数据集数据生成过程的方式模拟生成的数据集后因果效应是否会改变（期望结果：与数据生成过程的效应参数相匹配）</li>
+<li><strong>添加未观测混杂因子</strong>：添加一个额外的与干预和结果相关的混杂因子后因果效应的敏感性（期望结果：不过度敏感）</li>
+<li><strong>数据子集验证</strong>：将给定数据集替换为一个随机子集后因果效应是否会改变（期望结果：不会）</li>
+<li><strong>自助验证</strong>：将给定数据集替换为同一数据集的自助样本后因果效应是否会改变（期望结果：不会）</li>
+</ul>
+<h1 id="入门案例">入门案例</h1>
+<p>下面将通过一个简单的例子说明 DoWhy 的工作流程。我们将读取一个样本数据集并估计一个干预变量对一个结果变量的因果效应。</p>
+<h2 id="安装">安装</h2>
+<p>DoWhy 的安装很简单，直接基于 pip 安装发行版即可：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pip install dowhy</span><br></pre></td></tr></table></figure>
+<p>其他安装选项与注意事项请自行查阅官方说明。为了更好地展示图，推荐安装 <code>pygraphviz</code>，Mac OS 下安装方法如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">brew install graphviz</span><br><span class="line">pip install pygraphviz</span><br><span class="line"><span class="comment"># M1 系统需要基于 conda-forge 安装</span></span><br></pre></td></tr></table></figure>
+<h2 id="包导入与数据载入">包导入与数据载入</h2>
+<p>安装完成后，导入相关的包并配置路径：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> os, sys</span><br><span class="line">sys.path.append(os.path.abspath(<span class="string">&quot;../../../&quot;</span>)) <span class="comment"># 添加一个读取路径</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> dowhy</span><br><span class="line"><span class="keyword">from</span> dowhy <span class="keyword">import</span> CausalModel</span><br><span class="line"><span class="keyword">import</span> dowhy.datasets</span><br></pre></td></tr></table></figure>
+<p>然后导入数据集。本例中为了简单我们模拟了不同变量之间的<strong>线性</strong>关系。具体代码如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data = dowhy.datasets.linear_dataset(beta=<span class="number">10</span>, <span class="comment"># beta 表示真实的因果效应</span></span><br><span class="line">        num_common_causes=<span class="number">5</span>, <span class="comment"># 混杂因子，用 W 表示，作用于干预变量和结果变量</span></span><br><span class="line">        num_instruments=<span class="number">2</span>, <span class="comment"># 工具变量，用 Z 表示，作用于干预变量（间接影响结果）</span></span><br><span class="line">        num_effect_modifiers=<span class="number">1</span>, <span class="comment"># 效果修改变量，用 X 表示，作用于结果变量</span></span><br><span class="line">        num_samples=<span class="number">10000</span>, <span class="comment"># 样本数量</span></span><br><span class="line">        treatment_is_binary=<span class="literal">True</span>, <span class="comment"># 干预为二元变量，用 v 表示</span></span><br><span class="line">        num_discrete_common_causes=<span class="number">1</span>)</span><br><span class="line">df = data[<span class="string">&quot;df&quot;</span>] <span class="comment"># DoWhy 使用 pandas 的 dataframe 来载入数据</span></span><br><span class="line"><span class="built_in">print</span>(df.head())</span><br><span class="line"><span class="built_in">print</span>(data[<span class="string">&quot;dot_graph&quot;</span>]) <span class="comment"># 还可以输出 gml_graph，内容一致只是表达形式不同</span></span><br></pre></td></tr></table></figure>
+<p>代码的输出如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">         X0   Z0        Z1        W0        W1        W2        W3 W4     v0  \</span><br><span class="line"><span class="number">0</span>  <span class="number">1.418641</span>  <span class="number">0.0</span>  <span class="number">0.251127</span>  <span class="number">0.237823</span>  <span class="number">1.294957</span> -<span class="number">2.197657</span>  <span class="number">0.671354</span>  <span class="number">1</span>   <span class="literal">True</span></span><br><span class="line"><span class="number">1</span>  <span class="number">0.050088</span>  <span class="number">0.0</span>  <span class="number">0.041706</span> -<span class="number">1.199278</span>  <span class="number">3.143332</span> -<span class="number">1.738985</span> -<span class="number">2.766051</span>  <span class="number">1</span>  <span class="literal">False</span></span><br><span class="line"><span class="number">2</span> -<span class="number">0.480051</span>  <span class="number">0.0</span>  <span class="number">0.974275</span> -<span class="number">1.957273</span> -<span class="number">0.065116</span>  <span class="number">0.175567</span> -<span class="number">1.829176</span>  <span class="number">1</span>   <span class="literal">True</span></span><br><span class="line"><span class="number">3</span>  <span class="number">0.338169</span>  <span class="number">1.0</span>  <span class="number">0.727792</span> -<span class="number">0.245409</span>  <span class="number">0.099252</span>  <span class="number">0.998839</span> -<span class="number">0.870295</span>  <span class="number">0</span>   <span class="literal">True</span></span><br><span class="line"><span class="number">4</span> -<span class="number">1.026205</span>  <span class="number">0.0</span>  <span class="number">0.983040</span> -<span class="number">0.147827</span>  <span class="number">1.538178</span>  <span class="number">0.441017</span>  <span class="number">0.343857</span>  <span class="number">2</span>   <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">           y</span><br><span class="line"><span class="number">0</span>  <span class="number">19.477585</span></span><br><span class="line"><span class="number">1</span>  -<span class="number">5.857091</span></span><br><span class="line"><span class="number">2</span>   <span class="number">2.179680</span></span><br><span class="line"><span class="number">3</span>   <span class="number">7.307447</span></span><br><span class="line"><span class="number">4</span>  <span class="number">15.688496</span>  </span><br><span class="line"></span><br><span class="line">digraph &#123; U[label=<span class="string">&quot;Unobserved Confounders&quot;</span>]; U-&gt;y;v0-&gt;y; U-&gt;v0;W0-&gt; v0; W1-&gt; v0; W2-&gt; v0; W3-&gt; v0; W4-&gt; v0;Z0-&gt; v0; Z1-&gt; v0;W0-&gt; y; W1-&gt; y; W2-&gt; y; W3-&gt; y; W4-&gt; y;X0-&gt; y;&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="执行因果推断">执行因果推断</h2>
+<h3 id="建模-1">建模</h3>
+<p>现在我们以 GML 图的形式构建因果图（<strong>建模阶段</strong>），代码如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># With graph</span></span><br><span class="line">model=CausalModel(</span><br><span class="line">        data = df,</span><br><span class="line">        treatment=data[<span class="string">&quot;treatment_name&quot;</span>],</span><br><span class="line">        outcome=data[<span class="string">&quot;outcome_name&quot;</span>],</span><br><span class="line">        graph=data[<span class="string">&quot;gml_graph&quot;</span>]</span><br><span class="line">        )</span><br><span class="line"><span class="comment"># INFO:dowhy.causal_model:Model to find the causal effect of treatment [&#x27;v0&#x27;] on outcome [&#x27;y&#x27;]</span></span><br><span class="line">model.view_model()</span><br><span class="line"><span class="keyword">from</span> IPython.display <span class="keyword">import</span> Image, display</span><br><span class="line">display(Image(filename=<span class="string">&quot;causal_model.png&quot;</span>))</span><br></pre></td></tr></table></figure>
+<p>执行代码可以得到如下的因果图：</p>
+<p><img src="http://media.zjubiomedit.com/2020-11-25-092846.png" width="70%"/></p>
+<p>我们也可以通过指定具体变量的方式来生成图（本例中由于数据是模拟的，所以各种方式均可以生成），代码如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Without graph</span></span><br><span class="line">model= CausalModel(</span><br><span class="line">        data=df,</span><br><span class="line">        treatment=data[<span class="string">&quot;treatment_name&quot;</span>],</span><br><span class="line">        outcome=data[<span class="string">&quot;outcome_name&quot;</span>],</span><br><span class="line">        instruments=data[<span class="string">&quot;instrument_names&quot;</span>], <span class="comment"># 官网漏了这一行</span></span><br><span class="line">        common_causes=data[<span class="string">&quot;common_causes_names&quot;</span>],</span><br><span class="line">        effect_modifiers=data[<span class="string">&quot;effect_modifier_names&quot;</span>])</span><br></pre></td></tr></table></figure>
+<p>得到的图与上一张实际上是等价的：</p>
+<p><img src="http://media.zjubiomedit.com/2020-11-25-100937.png"  width="70%"/></p>
+<p>上图包含了数据中给定的先验知识（变量分类），我们可以利用这张图来识别因果效应（从因果估计量到概率表达式）并进行估计。</p>
+<h3 id="识别-1">识别</h3>
+<p><strong>识别阶段</strong>可以脱离于数据，仅根据图进行识别，其给出的结果是一个用于计算的<strong>表达式</strong>。具体的代码如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">identified_estimand = model.identify_effect()</span><br><span class="line"><span class="built_in">print</span>(identified_estimand)</span><br></pre></td></tr></table></figure>
+<p>输出结果为：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">Estimand <span class="built_in">type</span>: nonparametric-ate</span><br><span class="line"></span><br><span class="line"><span class="comment">### Estimand : 1</span></span><br><span class="line">Estimand name: backdoor1</span><br><span class="line">Estimand expression:</span><br><span class="line">  d</span><br><span class="line">─────(Expectation(y|W1,W2,W3,W0,W4))</span><br><span class="line">d[v₀]</span><br><span class="line">Estimand assumption <span class="number">1</span>, Unconfoundedness: If U→&#123;v0&#125; <span class="keyword">and</span> U→y then P(y|v0,W1,W2,W3,W0,W4,U) = P(y|v0,W1,W2,W3,W0,W4)</span><br><span class="line"></span><br><span class="line"><span class="comment">### Estimand : 2</span></span><br><span class="line">Estimand name: backdoor2 (Default)</span><br><span class="line">Estimand expression:</span><br><span class="line">  d</span><br><span class="line">─────(Expectation(y|W1,W2,W3,W0,W4,X0))</span><br><span class="line">d[v₀]</span><br><span class="line">Estimand assumption <span class="number">1</span>, Unconfoundedness: If U→&#123;v0&#125; <span class="keyword">and</span> U→y then P(y|v0,W1,W2,W3,W0,W4,X0,U) = P(y|v0,W1,W2,W3,W0,W4,X0)</span><br><span class="line"></span><br><span class="line"><span class="comment">### Estimand : 3</span></span><br><span class="line">Estimand name: iv</span><br><span class="line">Estimand expression:</span><br><span class="line">Expectation(Derivative(y, [Z0, Z1])*Derivative([v0], [Z0, Z1])**(-<span class="number">1</span>))</span><br><span class="line">Estimand assumption <span class="number">1</span>, As-<span class="keyword">if</span>-random: If U→→y then ¬(U →→&#123;Z0,Z1&#125;)</span><br><span class="line">Estimand assumption <span class="number">2</span>, Exclusion: If we remove &#123;Z0,Z1&#125;→&#123;v0&#125;, then ¬(&#123;Z0,Z1&#125;→y)</span><br></pre></td></tr></table></figure>
+<p>可以通过 <code>proceed_when_unidentifiable=True</code> 参数来忽略观察性数据中未观测混杂因子的 warning。</p>
+<h3 id="估计-1">估计</h3>
+<p>识别阶段得到的表达式将在<strong>估计阶段</strong>基于实际数据进行计算，注意这两个阶段是独立开来的。估计的代码如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">causal_estimate = model.estimate_effect(identified_estimand,</span><br><span class="line">        method_name=<span class="string">&quot;backdoor.propensity_score_stratification&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(causal_estimate)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Causal Estimate is &quot;</span> + <span class="built_in">str</span>(causal_estimate.value))</span><br></pre></td></tr></table></figure>
+<p>输出的结果为：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">*** Causal Estimate ***</span><br><span class="line"></span><br><span class="line"><span class="comment">## Identified estimand</span></span><br><span class="line">Estimand <span class="built_in">type</span>: nonparametric-ate</span><br><span class="line"></span><br><span class="line"><span class="comment">## Realized estimand</span></span><br><span class="line">b: y~v0+W1+W2+W3+W0+W4+X0</span><br><span class="line">Target units: ate</span><br><span class="line"></span><br><span class="line"><span class="comment">## Estimate</span></span><br><span class="line">Mean value: <span class="number">8.937706276657458</span></span><br><span class="line"></span><br><span class="line">Causal Estimate <span class="keyword">is</span> <span class="number">8.937706276657458</span></span><br></pre></td></tr></table></figure>
+<p>我们可以通过 <code>target_units</code> 参数来选择因果效应分析的群体，如 <code>ate</code>（群体层面）、<code>att</code>（干预组）、<code>ate</code>（对照组）。也可以指定结果修改变量来分析不同变量对结果的影响。</p>
+<h3 id="反驳-1">反驳</h3>
+<p>下面给出一些对得到的估计进行反驳的方式：</p>
+<h4 id="添加一个随机的混杂因子变量">添加一个随机的混杂因子变量</h4>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">res_random=model.refute_estimate(identified_estimand, causal_estimate, method_name=<span class="string">&quot;random_common_cause&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(res_random)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">Refute: Add a Random Common Cause</span><br><span class="line">Estimated effect:<span class="number">9.124260741049653</span></span><br><span class="line">New effect:<span class="number">9.13487620983324</span></span><br></pre></td></tr></table></figure>
+<h4 id="添加一个未观测的混杂因子变量">添加一个未观测的混杂因子变量</h4>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">res_unobserved=model.refute_estimate(identified_estimand, causal_estimate, method_name=<span class="string">&quot;add_unobserved_common_cause&quot;</span>,</span><br><span class="line">                                     confounders_effect_on_treatment=<span class="string">&quot;binary_flip&quot;</span>, confounders_effect_on_outcome=<span class="string">&quot;linear&quot;</span>,</span><br><span class="line">                                    effect_strength_on_treatment=<span class="number">0.01</span>, effect_strength_on_outcome=<span class="number">0.02</span>)</span><br><span class="line"><span class="built_in">print</span>(res_unobserved)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">Refute: Add an Unobserved Common Cause</span><br><span class="line">Estimated effect:<span class="number">9.124260741049653</span></span><br><span class="line">New effect:<span class="number">8.129085846396725</span></span><br></pre></td></tr></table></figure>
+<h4 id="用随机变量代替干预">用随机变量代替干预</h4>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">res_placebo=model.refute_estimate(identified_estimand, causal_estimate,</span><br><span class="line">        method_name=<span class="string">&quot;placebo_treatment_refuter&quot;</span>, placebo_type=<span class="string">&quot;permute&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(res_placebo)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">Refute: Use a Placebo Treatment</span><br><span class="line">Estimated effect:<span class="number">9.124260741049653</span></span><br><span class="line">New effect:-<span class="number">0.010832019791737903</span></span><br><span class="line">p value:<span class="number">0.48</span></span><br></pre></td></tr></table></figure>
+<h4 id="移除数据的一个随机子集">移除数据的一个随机子集</h4>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">res_subset=model.refute_estimate(identified_estimand, estimate,</span><br><span class="line">        method_name=<span class="string">&quot;data_subset_refuter&quot;</span>, subset_fraction=<span class="number">0.9</span>)</span><br><span class="line"><span class="built_in">print</span>(res_subset)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">Refute: Use a subset of data</span><br><span class="line">Estimated effect:<span class="number">9.124260741049653</span></span><br><span class="line">New effect:<span class="number">9.090515505813006</span></span><br><span class="line">p value:<span class="number">0.37</span></span><br></pre></td></tr></table></figure>
+<p>我们可以通过 <code>random_seed</code> 参数来保证结果的可重现性。</p>
+<h1 id="进阶案例">进阶案例</h1>
+<h2 id="问题描述">问题描述</h2>
+<p>下面将通过一个基于真实世界数据的案例对 DoWhy 的工作流程进行进一步说明。在本例中，我们的研究问题是估计当消费者在预定酒店时，为其分配一间与之前预定过的房间不同的房间对消费者取消当前预定的影响。分析此类问题的金标准是<strong>随机对照试验</strong>（Randomized Controlled Trials），即每位消费者被随机分配到两类干预中的一类：为其分配与之前预定过的房间相同或不同的房间。</p>
+<p><img src="http://media.zjubiomedit.com/2020-11-26-113820.png" width="70%" /></p>
+<p>然而，实际上对于酒店来说其不可能进行这样的试验，只能使用历史数据（观察性数据）来进行评估。我们首先导入相关包与数据集：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> dowhy</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> logging</span><br><span class="line">logging.getLogger(<span class="string">&quot;dowhy&quot;</span>).setLevel(logging.INFO)</span><br><span class="line"></span><br><span class="line">dataset = pd.read_csv(<span class="string">&#x27;https://raw.githubusercontent.com/Sid-darthvader/DoWhy-The-Causal-Story-Behind-Hotel-Booking-Cancellations/master/hotel_bookings.csv&#x27;</span>)</span><br><span class="line">dataset.columns</span><br></pre></td></tr></table></figure>
+<p>该数据集包含如下参数：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">Index([<span class="string">&#x27;hotel&#x27;</span>, <span class="string">&#x27;is_canceled&#x27;</span>, <span class="string">&#x27;lead_time&#x27;</span>, <span class="string">&#x27;arrival_date_year&#x27;</span>,</span><br><span class="line">       <span class="string">&#x27;arrival_date_month&#x27;</span>, <span class="string">&#x27;arrival_date_week_number&#x27;</span>,</span><br><span class="line">       <span class="string">&#x27;arrival_date_day_of_month&#x27;</span>, <span class="string">&#x27;stays_in_weekend_nights&#x27;</span>,</span><br><span class="line">       <span class="string">&#x27;stays_in_week_nights&#x27;</span>, <span class="string">&#x27;adults&#x27;</span>, <span class="string">&#x27;children&#x27;</span>, <span class="string">&#x27;babies&#x27;</span>, <span class="string">&#x27;meal&#x27;</span>,</span><br><span class="line">       <span class="string">&#x27;country&#x27;</span>, <span class="string">&#x27;market_segment&#x27;</span>, <span class="string">&#x27;distribution_channel&#x27;</span>,</span><br><span class="line">       <span class="string">&#x27;is_repeated_guest&#x27;</span>, <span class="string">&#x27;previous_cancellations&#x27;</span>,</span><br><span class="line">       <span class="string">&#x27;previous_bookings_not_canceled&#x27;</span>, <span class="string">&#x27;reserved_room_type&#x27;</span>,</span><br><span class="line">       <span class="string">&#x27;assigned_room_type&#x27;</span>, <span class="string">&#x27;booking_changes&#x27;</span>, <span class="string">&#x27;deposit_type&#x27;</span>, <span class="string">&#x27;agent&#x27;</span>,</span><br><span class="line">       <span class="string">&#x27;company&#x27;</span>, <span class="string">&#x27;days_in_waiting_list&#x27;</span>, <span class="string">&#x27;customer_type&#x27;</span>, <span class="string">&#x27;adr&#x27;</span>,</span><br><span class="line">       <span class="string">&#x27;required_car_parking_spaces&#x27;</span>, <span class="string">&#x27;total_of_special_requests&#x27;</span>,</span><br><span class="line">       <span class="string">&#x27;reservation_status&#x27;</span>, <span class="string">&#x27;reservation_status_date&#x27;</span>],</span><br><span class="line">      dtype=<span class="string">&#x27;object&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>关于数据的详细描述可以参考此<a target="_blank" rel="noopener" href="https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-02-11/readme.md" title="Hotel Data Dicitionary">链接</a>。</p>
+<h2 id="数据预处理">数据预处理</h2>
+<p>下面我们将创建一些有用的特征，来减少原始数据的维度。具体来说，我们将创建如下三个特征：</p>
+<ul>
+<li><strong>Total Stay</strong> = <code>stays_in_weekend_nights</code> + <code>stays_in_week_nights</code></li>
+<li><strong>Guests</strong> = <code>adults</code> + <code>children</code> + <code>babies</code></li>
+<li><strong>Different_room_assigned</strong> = 1 if <code>reserved_room_type</code> &amp; <code>assigned_room_type</code> are different, 0 otherwise</li>
+</ul>
+<p>具体创建过程如下（很基础的 pandas 操作，不过多赘述）：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Total stay in nights</span></span><br><span class="line">dataset[<span class="string">&#x27;total_stay&#x27;</span>] = dataset[<span class="string">&#x27;stays_in_week_nights&#x27;</span>]+dataset[<span class="string">&#x27;stays_in_weekend_nights&#x27;</span>]</span><br><span class="line"><span class="comment"># Total number of guests</span></span><br><span class="line">dataset[<span class="string">&#x27;guests&#x27;</span>] = dataset[<span class="string">&#x27;adults&#x27;</span>]+dataset[<span class="string">&#x27;children&#x27;</span>] +dataset[<span class="string">&#x27;babies&#x27;</span>]</span><br><span class="line"><span class="comment"># Creating the different_room_assigned feature</span></span><br><span class="line">dataset[<span class="string">&#x27;different_room_assigned&#x27;</span>]=<span class="number">0</span></span><br><span class="line">slice_indices =dataset[<span class="string">&#x27;reserved_room_type&#x27;</span>]!=dataset[<span class="string">&#x27;assigned_room_type&#x27;</span>]</span><br><span class="line">dataset.loc[slice_indices,<span class="string">&#x27;different_room_assigned&#x27;</span>]=<span class="number">1</span></span><br><span class="line"><span class="comment"># Deleting older features</span></span><br><span class="line">dataset = dataset.drop([<span class="string">&#x27;stays_in_week_nights&#x27;</span>,<span class="string">&#x27;stays_in_weekend_nights&#x27;</span>,<span class="string">&#x27;adults&#x27;</span>,<span class="string">&#x27;children&#x27;</span>,<span class="string">&#x27;babies&#x27;</span></span><br><span class="line">                        ,<span class="string">&#x27;reserved_room_type&#x27;</span>,<span class="string">&#x27;assigned_room_type&#x27;</span>],axis=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<p>之后再对缺失值与布尔值进行预处理，并去除部分特征：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">dataset.isnull().<span class="built_in">sum</span>() <span class="comment"># Country,Agent,Company contain 488,16340,112593 missing entries</span></span><br><span class="line">dataset = dataset.drop([<span class="string">&#x27;agent&#x27;</span>,<span class="string">&#x27;company&#x27;</span>],axis=<span class="number">1</span>)</span><br><span class="line"><span class="comment"># Replacing missing countries with most freqently occuring countries</span></span><br><span class="line">dataset[<span class="string">&#x27;country&#x27;</span>]= dataset[<span class="string">&#x27;country&#x27;</span>].fillna(dataset[<span class="string">&#x27;country&#x27;</span>].mode()[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">dataset = dataset.drop([<span class="string">&#x27;reservation_status&#x27;</span>,<span class="string">&#x27;reservation_status_date&#x27;</span>,<span class="string">&#x27;arrival_date_day_of_month&#x27;</span>],axis=<span class="number">1</span>)</span><br><span class="line">dataset = dataset.drop([<span class="string">&#x27;arrival_date_year&#x27;</span>],axis=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Replacing 1 by True and 0 by False for the experiment and outcome variables</span></span><br><span class="line">dataset[<span class="string">&#x27;different_room_assigned&#x27;</span>]= dataset[<span class="string">&#x27;different_room_assigned&#x27;</span>].replace(<span class="number">1</span>,<span class="literal">True</span>)</span><br><span class="line">dataset[<span class="string">&#x27;different_room_assigned&#x27;</span>]= dataset[<span class="string">&#x27;different_room_assigned&#x27;</span>].replace(<span class="number">0</span>,<span class="literal">False</span>)</span><br><span class="line">dataset[<span class="string">&#x27;is_canceled&#x27;</span>]= dataset[<span class="string">&#x27;is_canceled&#x27;</span>].replace(<span class="number">1</span>,<span class="literal">True</span>)</span><br><span class="line">dataset[<span class="string">&#x27;is_canceled&#x27;</span>]= dataset[<span class="string">&#x27;is_canceled&#x27;</span>].replace(<span class="number">0</span>,<span class="literal">False</span>)</span><br><span class="line">dataset.dropna(inplace=<span class="literal">True</span>) <span class="comment"># 新增对NA值的处理</span></span><br><span class="line">dataset.columns</span><br></pre></td></tr></table></figure>
+<p>处理完成后的参数有：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">Index([<span class="string">&#x27;hotel&#x27;</span>, <span class="string">&#x27;is_canceled&#x27;</span>, <span class="string">&#x27;lead_time&#x27;</span>, <span class="string">&#x27;arrival_date_month&#x27;</span>,</span><br><span class="line">       <span class="string">&#x27;arrival_date_week_number&#x27;</span>, <span class="string">&#x27;meal&#x27;</span>, <span class="string">&#x27;country&#x27;</span>, <span class="string">&#x27;market_segment&#x27;</span>,</span><br><span class="line">       <span class="string">&#x27;distribution_channel&#x27;</span>, <span class="string">&#x27;is_repeated_guest&#x27;</span>, <span class="string">&#x27;previous_cancellations&#x27;</span>,</span><br><span class="line">       <span class="string">&#x27;previous_bookings_not_canceled&#x27;</span>, <span class="string">&#x27;booking_changes&#x27;</span>, <span class="string">&#x27;deposit_type&#x27;</span>,</span><br><span class="line">       <span class="string">&#x27;days_in_waiting_list&#x27;</span>, <span class="string">&#x27;customer_type&#x27;</span>, <span class="string">&#x27;adr&#x27;</span>,</span><br><span class="line">       <span class="string">&#x27;required_car_parking_spaces&#x27;</span>, <span class="string">&#x27;total_of_special_requests&#x27;</span>,</span><br><span class="line">       <span class="string">&#x27;total_stay&#x27;</span>, <span class="string">&#x27;guests&#x27;</span>, <span class="string">&#x27;different_room_assigned&#x27;</span>],</span><br><span class="line">      dtype=<span class="string">&#x27;object&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="提取假设">提取假设</h2>
+<p>数据预处理完成后，我们首先针对数据进行一定的分析，考察变量之间的关系。针对目标变量 <code>is_cancelled</code> 与 <code>different_room_assigned</code> ，我们随机选取 1000 次观测查看有多少次上述两个变量的值相同（即可能存在因果关系），重复上述过程 10000 次取平均，代码如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">counts_sum=<span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="number">10000</span>):</span><br><span class="line">        counts_i = <span class="number">0</span></span><br><span class="line">        rdf = dataset.sample(<span class="number">1000</span>)</span><br><span class="line">        counts_i = rdf[rdf[<span class="string">&quot;is_canceled&quot;</span>]== rdf[<span class="string">&quot;different_room_assigned&quot;</span>]].shape[<span class="number">0</span>]</span><br><span class="line">        counts_sum+= counts_i</span><br><span class="line">counts_sum/<span class="number">10000</span></span><br></pre></td></tr></table></figure>
+<p>最终得出的期望频数是 <strong>518</strong>，即两个变量有约 50% 的时间是不同的，我们还无法判断其中的因果关系。下面我们进一步分析预约过程中没有发生调整时（即变量 <code>booking_changes</code> 为 0） 两个变量相等的期望频数：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Expected Count when there are no booking changes = 49.2%</span></span><br><span class="line">counts_sum=<span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="number">10000</span>):</span><br><span class="line">        counts_i = <span class="number">0</span></span><br><span class="line">        rdf = dataset[dataset[<span class="string">&quot;booking_changes&quot;</span>]==<span class="number">0</span>].sample(<span class="number">1000</span>)</span><br><span class="line">        counts_i = rdf[rdf[<span class="string">&quot;is_canceled&quot;</span>]== rdf[<span class="string">&quot;different_room_assigned&quot;</span>]].shape[<span class="number">0</span>]</span><br><span class="line">        counts_sum+= counts_i</span><br><span class="line">counts_sum/<span class="number">10000</span></span><br></pre></td></tr></table></figure>
+<p>得出的结果为 <strong>492</strong>。随后我们再分析预约过程中发生调整时的期望频数：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Expected Count when there are booking changes = 66.4%</span></span><br><span class="line">counts_sum=<span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="number">10000</span>):</span><br><span class="line">        counts_i = <span class="number">0</span></span><br><span class="line">        rdf = dataset[dataset[<span class="string">&quot;booking_changes&quot;</span>]&gt;<span class="number">0</span>].sample(<span class="number">1000</span>)</span><br><span class="line">        counts_i = rdf[rdf[<span class="string">&quot;is_canceled&quot;</span>]== rdf[<span class="string">&quot;different_room_assigned&quot;</span>]].shape[<span class="number">0</span>]</span><br><span class="line">        counts_sum+= counts_i</span><br><span class="line">counts_sum/<span class="number">10000</span></span><br></pre></td></tr></table></figure>
+<p>结果变成了 <strong>663</strong>，与之前产生了明显的差异。我们可以不严谨地认为预约调整这一变量是一个<strong>混杂因子</strong>。类似地，我们对其他变量进行分析，并作出一些假设，作为因果推断的先验知识。DoWhy 并不需要完整的先验知识，未指明的变量将作为潜在的混杂因子进行推断。在本例中，我们将给出如下的假设：</p>
+<ul>
+<li><code>market_segment</code> 参数有两种取值：TA 指旅行者，TO 指旅游公司，该参数会影响 <code>lead_time</code>（即预约和到达之间的时间间隔）</li>
+<li><code>country</code> 参数会决定一个人是否会提早预订（即影响 <code>lead_time</code> ）以及其喜爱的食物（即影响 <code>meal</code> ）</li>
+<li><code>lead_time</code> 会影响预订的等待时间（ <code>days_in_waiting_list</code> ）</li>
+<li>预订的等待时间 <code>days_in_waiting_list</code>、总停留时间 <code>total_stay</code> 以及客人数量 <code>guests</code> 会影响预订是否被取消</li>
+<li>之前预订的取消情况 <code>previous_bookings_not_canceled</code> 会影响该顾客是否为 <code>is_repeated_guest</code>；这两个变量也会影响预订是否被取消</li>
+<li><code>booking_changes</code> 会影响顾客是否被分配到不同的房间，也会影响预订取消情况</li>
+<li>除了 <code>booking_changes</code> 这一混杂因子外，一定还存在着其他混杂因子，同时影响干预和结果</li>
+</ul>
+<h2 id="因果推断">因果推断</h2>
+<h3 id="创建因果图">创建因果图</h3>
+<p>基于上述假设，我们通过 gml 形式来描述上述因果图：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pygraphviz</span><br><span class="line">causal_graph = <span class="string">&quot;&quot;&quot;digraph &#123;</span></span><br><span class="line"><span class="string">different_room_assigned[label=&quot;Different Room Assigned&quot;];</span></span><br><span class="line"><span class="string">is_canceled[label=&quot;Booking Cancelled&quot;];</span></span><br><span class="line"><span class="string">booking_changes[label=&quot;Booking Changes&quot;];</span></span><br><span class="line"><span class="string">previous_bookings_not_canceled[label=&quot;Previous Booking Retentions&quot;];</span></span><br><span class="line"><span class="string">days_in_waiting_list[label=&quot;Days in Waitlist&quot;];</span></span><br><span class="line"><span class="string">lead_time[label=&quot;Lead Time&quot;];</span></span><br><span class="line"><span class="string">market_segment[label=&quot;Market Segment&quot;];</span></span><br><span class="line"><span class="string">country[label=&quot;Country&quot;];</span></span><br><span class="line"><span class="string">U[label=&quot;Unobserved Confounders&quot;];</span></span><br><span class="line"><span class="string">is_repeated_guest;</span></span><br><span class="line"><span class="string">total_stay;</span></span><br><span class="line"><span class="string">guests;</span></span><br><span class="line"><span class="string">meal;</span></span><br><span class="line"><span class="string">market_segment -&gt; lead_time;</span></span><br><span class="line"><span class="string">lead_time-&gt;is_canceled; country -&gt; lead_time;</span></span><br><span class="line"><span class="string">different_room_assigned -&gt; is_canceled;</span></span><br><span class="line"><span class="string">U -&gt; different_room_assigned; U -&gt; lead_time; U -&gt; is_canceled;</span></span><br><span class="line"><span class="string">country-&gt;meal;</span></span><br><span class="line"><span class="string">lead_time -&gt; days_in_waiting_list;</span></span><br><span class="line"><span class="string">days_in_waiting_list -&gt;is_canceled;</span></span><br><span class="line"><span class="string">previous_bookings_not_canceled -&gt; is_canceled;</span></span><br><span class="line"><span class="string">previous_bookings_not_canceled -&gt; is_repeated_guest;</span></span><br><span class="line"><span class="string">is_repeated_guest -&gt; is_canceled;</span></span><br><span class="line"><span class="string">total_stay -&gt; is_canceled;</span></span><br><span class="line"><span class="string">guests -&gt; is_canceled;</span></span><br><span class="line"><span class="string">booking_changes -&gt; different_room_assigned; booking_changes -&gt; is_canceled;</span></span><br><span class="line"><span class="string">&#125;&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+<p>基于上述图，可以构建出如下的因果模型：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">model= dowhy.CausalModel(</span><br><span class="line">        data = dataset,</span><br><span class="line">        graph=causal_graph.replace(<span class="string">&quot;\n&quot;</span>, <span class="string">&quot; &quot;</span>),</span><br><span class="line">        treatment=<span class="string">&#x27;different_room_assigned&#x27;</span>,</span><br><span class="line">        outcome=<span class="string">&#x27;is_canceled&#x27;</span>)</span><br><span class="line">model.view_model()</span><br><span class="line"><span class="keyword">from</span> IPython.display <span class="keyword">import</span> Image, display</span><br><span class="line">display(Image(filename=<span class="string">&quot;causal_model.png&quot;</span>))</span><br></pre></td></tr></table></figure>
+<p><img src="http://media.zjubiomedit.com/2020-11-27-021827.png" width="80%"/></p>
+<h3 id="识别因果效应">识别因果效应</h3>
+<p>我们称<strong>干预</strong>（Treatment）导致了<strong>结果</strong>（Outcome）当且仅当在其他所有状况不变的情况下，干预的改变引起了结果的改变。因果效应即干预发生一个单位的改变时，结果变化的程度。下面我们将使用因果图的属性来识别因果效应的估计量。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#Identify the causal effect</span></span><br><span class="line">identified_estimand = model.identify_effect()</span><br><span class="line"><span class="built_in">print</span>(identified_estimand)</span><br></pre></td></tr></table></figure>
+<p>注意，在最新版本的 dowhy 中，修改了识别阶段后门变量的筛选准则，从原来的选择最小集改为了选择所有合法的变量，因此最终会返回 258 个估计量（此处参见 <a target="_blank" rel="noopener" href="https://github.com/microsoft/dowhy/issues/198" title="Errors of Notebook: The Causal Story Behind Hotel Booking Cancellations">issue-198</a> ）。如下所示为返回的估计量示例：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">Estimand <span class="built_in">type</span>: nonparametric-ate</span><br><span class="line"></span><br><span class="line"><span class="comment">### Estimand : 1</span></span><br><span class="line">Estimand name: backdoor1</span><br><span class="line">Estimand expression:</span><br><span class="line">            d                                                                 </span><br><span class="line">──────────────────────────(Expectation(is_canceled|lead_time,booking_changes))</span><br><span class="line">d[different_room_assigned]                                                    </span><br><span class="line">Estimand assumption <span class="number">1</span>, Unconfoundedness: If U→&#123;different_room_assigned&#125; <span class="keyword">and</span> U→is_canceled then P(is_canceled|different_room_assigned,lead_time,booking_changes,U) = P(is_canceled|different_room_assigned,lead_time,booking_changes)</span><br></pre></td></tr></table></figure>
+<h3 id="估计因果效应">估计因果效应</h3>
+<p>基于估计量，下面我们就可以根据实际数据进行因果效应的估计了。如之前所述，因果效应即干预进行单位改变时结果的变化程度。DoWhy 支持采用各种各样的方法计算因果效应估计量，并最终返回单个平均值。代码如下所示：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">estimate = model.estimate_effect(identified_estimand,</span><br><span class="line">                                 method_name=<span class="string">&quot;backdoor.propensity_score_stratification&quot;</span>,target_units=<span class="string">&quot;ate&quot;</span>)</span><br><span class="line"><span class="comment"># ATE = Average Treatment Effect</span></span><br><span class="line"><span class="comment"># ATT = Average Treatment Effect on Treated (i.e. those who were assigned a different room)</span></span><br><span class="line"><span class="comment"># ATC = Average Treatment Effect on Control (i.e. those who were not assigned a different room)</span></span><br><span class="line"><span class="built_in">print</span>(estimate)</span><br></pre></td></tr></table></figure>
+<p>这里我们选择估计平均干预效应（ATE），也可以选择估计干预组（ATT）或对照组（ATC）的因果效应。估计方法选择的是<strong>倾向得分匹配</strong>，具体的原理这里不做介绍。最终得到的结果如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">*** Causal Estimate ***</span><br><span class="line"></span><br><span class="line"><span class="comment">## Identified estimand</span></span><br><span class="line">Estimand <span class="built_in">type</span>: nonparametric-ate</span><br><span class="line"></span><br><span class="line"><span class="comment">## Realized estimand</span></span><br><span class="line">b: is_canceled~different_room_assigned+country+total_stay+meal+lead_time+guests+days_in_waiting_list+booking_changes+market_segment+is_repeated_guest+previous_bookings_not_canceled</span><br><span class="line">Target units: ate</span><br><span class="line"></span><br><span class="line"><span class="comment">## Estimate</span></span><br><span class="line">Mean value: -<span class="number">0.3359905635051836</span></span><br></pre></td></tr></table></figure>
+<h3 id="反驳结果">反驳结果</h3>
+<p>实际上，上述因果并不是基于数据，而是基于我们所做的假设（即提供的因果图），数据只是用于进行统计学的估计。因此，我们需要验证假设的正确性。DoWhy 支持通过各种各样的鲁棒性检查方法来测试假设的正确性。下面进行其中几项测试：</p>
+<ul>
+<li><strong>添加随机混杂因子</strong>。如果假设正确，则添加随机的混杂因子后，因果效应不会变化太多。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">refute1_results=model.refute_estimate(identified_estimand, estimate,</span><br><span class="line">        method_name=<span class="string">&quot;random_common_cause&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(refute1_results)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">Refute: Add a Random Common Cause</span><br><span class="line">Estimated effect:-<span class="number">0.3359905635051836</span></span><br><span class="line">New effect:-<span class="number">0.3365742386420179</span> <span class="comment"># 基本保持稳定</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>安慰剂干预</strong>。将干预替换为随机变量，如果假设正确，因果效应应该接近 0。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">refute2_results=model.refute_estimate(identified_estimand, estimate,</span><br><span class="line">        method_name=<span class="string">&quot;placebo_treatment_refuter&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(refute2_results)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">Refute: Use a Placebo Treatment</span><br><span class="line">Estimated effect:-<span class="number">0.3359905635051836</span></span><br><span class="line">New effect:-<span class="number">0.00028277666065981027</span> <span class="comment"># 因果效应归零</span></span><br><span class="line">p value:<span class="number">0.43999999999999995</span></span><br></pre></td></tr></table></figure>
+<p>注意：这里的 p value 对比的是新的估计量与 0 之间的显著性差异（如果假设正确，则预期为无差异），源代码如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">dummy_estimator = CausalEstimate(</span><br><span class="line">    estimate = <span class="number">0</span>,</span><br><span class="line">    target_estimand =self._estimate.target_estimand,</span><br><span class="line">    realized_estimand_expr=self._estimate.realized_estimand_expr)</span><br><span class="line">refute.add_significance_test_results(</span><br><span class="line">    self.test_significance(dummy_estimator, sample_estimates)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>数据子集验证</strong>。在数据子集上估计因果效应，如果假设正确，因果效应应该变化不大。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">refute3_results=model.refute_estimate(identified_estimand, estimate,</span><br><span class="line">        method_name=<span class="string">&quot;data_subset_refuter&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(refute3_results)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">Refute: Use a subset of data</span><br><span class="line">Estimated effect:-<span class="number">0.3359905635051836</span></span><br><span class="line">New effect:-<span class="number">0.33647521997465524</span></span><br><span class="line">p value:<span class="number">0.35</span></span><br></pre></td></tr></table></figure>
+<p>可以看到，我们的因果模型基本可以通过上述几个测试（即取得预期的结果）。因此，根据估计阶段的结果，我们得出结论：当消费者在预定房间时，为其分配之前预定过的房间（ <code>different_room_assigned = 0</code> ）所导致的平均预定取消概率（ <code>is_canceled</code> ）要比为其分配不同的房间（ <code>different_room_assigned = 1</code> ）低 <strong>33%</strong>（感觉应该是正值？好像是有问题，已提 <a target="_blank" rel="noopener" href="https://github.com/py-why/dowhy/issues/198">issue</a>）。</p>
+<p>在实际的操作中，我们可以基于不同的假设（即不同的因果图）应用多种估计方法，以找出接近真实的因果关系。</p>
+<h2 id="结果比较">结果比较</h2>
+<p>综上所述，我们已经知道了分配不同的房间的因果效应约为 33%，下面我们将使用一个预测模型对数据进行训练，并分析不同特征的特征重要性。这里选择 XGBoost 作为预测模型，其训练过程及结果如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># plot feature importance using built-in function</span></span><br><span class="line"><span class="keyword">from</span> xgboost <span class="keyword">import</span> XGBClassifier</span><br><span class="line"><span class="keyword">from</span> xgboost <span class="keyword">import</span> plot_importance</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score, classification_report</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot</span><br><span class="line"><span class="comment"># split data into X and y</span></span><br><span class="line">X = dataset_copy <span class="comment"># 这里使用的是copy，请自行复制（处理完后的数据）</span></span><br><span class="line">y = dataset_copy[<span class="string">&#x27;is_canceled&#x27;</span>]</span><br><span class="line">X = X.drop([<span class="string">&#x27;is_canceled&#x27;</span>],axis=<span class="number">1</span>)</span><br><span class="line"><span class="comment"># One-Hot Encode the dataset</span></span><br><span class="line">X = pd.get_dummies(X)</span><br><span class="line"><span class="comment"># split data into train and test sets</span></span><br><span class="line">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.2</span>, random_state=<span class="number">26</span>)</span><br><span class="line"><span class="comment"># fit model no training data</span></span><br><span class="line">model = XGBClassifier()</span><br><span class="line">model.fit(X_train, y_train)</span><br><span class="line"><span class="comment"># make predictions for test data and evaluate</span></span><br><span class="line">y_pred = model.predict(X_test)</span><br><span class="line">predictions = [<span class="built_in">int</span>(value) <span class="keyword">for</span> value <span class="keyword">in</span> y_pred] <span class="comment"># 注意这里之前用的是round，会报错（因为结果是bool）</span></span><br><span class="line">accuracy = accuracy_score(y_test, predictions)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Accuracy: %.2f%%&quot;</span> % (accuracy * <span class="number">100.0</span>))</span><br><span class="line"><span class="built_in">print</span>(classification_report(y_test, predictions))</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Accuracy: 86.40%</span><br><span class="line">              precision    recall  f1-score   support</span><br><span class="line"></span><br><span class="line">       False       0.88      0.92      0.90     15001</span><br><span class="line">        True       0.85      0.79      0.82      8877</span><br><span class="line"></span><br><span class="line">    accuracy                           0.87     23878</span><br><span class="line">   macro avg       0.86      0.85      0.86     23878</span><br><span class="line">weighted avg       0.867     0.87      0.87     23878</span><br></pre></td></tr></table></figure>
+<p>利用 <code>plot_importance</code> 函数，可以得出如下的特征重要性排行（这里权重值为特征在树中出现的次数）：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># plot feature importance</span></span><br><span class="line">plot_importance(model,max_num_features=<span class="number">20</span>)</span><br><span class="line">pyplot.show()</span><br></pre></td></tr></table></figure>
+<p><img src="http://media.zjubiomedit.com/2020-11-30-072432.png" width=60%/></p>
+<p>可以看出，<code>different_room_assigned</code> 变量的特征权重并不是非常高，这与我们的因果推断结果有一定的差异性，这也体现了因果推断模型和传统机器学习模型在原理上的差异性，我们需要根据实际的需要来选择最合适的方法。</p>
+<p>以上就是 DoWhy 入门的全部内容，总的来看， DoWhy 为因果推断研究提供了一个非常方便的工具，研究人员需要做的就是先对数据进行分析并给出适当的假设（可以是多个），然后将数据输入到 DoWhy 提供的框架中进行自动化估计（需要指定估计方法与估计目标），最后对估计的结果进行鲁棒性测试以验证假设的正确性，即可得出较为合理的因果关系推论。</p>
+<p>注：本文参考自 DoWhy 的<a target="_blank" rel="noopener" href="https://microsoft.github.io/dowhy/index.html" title="DoWhy | An end-to-end library for causal inference">官方文档</a>。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+
+
+
+<div class="license">
+  <div class="license-title">因果推断框架 DoWhy 入门</div>
+  <div class="license-link">
+    <a href="https://xxwywzy.github.io/2023/10/05/dowhy-summary/">https://xxwywzy.github.io/2023/10/05/dowhy-summary/</a>
+  </div>
+  <div class="license-meta">
+    <div class="license-meta-item">
+      <div class="license-meta-title">本文作者</div>
+      <div class="license-meta-text">
+          Zheyu Wang
+      </div>
+    </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">发布于</div>
+        <div class="license-meta-text">
+          2023-10-05
+        </div>
+      </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">更新于</div>
+        <div class="license-meta-text">
+          2023-10-22
+        </div>
+      </div>
+    <div class="license-meta-item">
+      <div class="license-meta-title">许可协议</div>
+      <div class="license-meta-text">
+          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank">CC BY-NC-SA 4.0</a>
+      </div>
+    </div>
+  </div>
+  <div class="license-statement">
+      转载或引用本文时，请遵守上述许可协议，注明出处、不得用于商业用途！
+  </div>
+</div>
+          <div class="post-tags">
+              <a href="/tags/%E5%9B%A0%E6%9E%9C%E6%8E%A8%E6%96%AD/" rel="tag"># 因果推断</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/10/05/pandas/" rel="prev" title="pandas 实践手册">
+                  <i class="fa fa-angle-left"></i> pandas 实践手册
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/10/06/causal-summary/" rel="next" title="基于潜在结果框架的因果推断入门">
+                  基于潜在结果框架的因果推断入门 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81ODgyNi8zNTI4OA=="></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">332k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">18:26</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+
+
+  <style>
+    #taboola-livere { display: none;}
+  </style>
+
+
+
+<script type="text/javascript">
+var linkLists = document.querySelectorAll(".link-list");
+
+linkLists.forEach(function(linkList) {
+  var listPath = linkList.getAttribute('json-src');
+  var iconPath = linkList.getAttribute('icon-src');
+  
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', listPath, true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      var data = JSON.parse(xhr.responseText);
+      
+      var li = "";
+      linkList.innerHTML = '';
+
+      for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+        var info = data[infoIndex];
+        var labelWarn = info['warn'] ? '<span class="label warn">' + info['warn'] + '</span>' : '';
+        var labelInfo = info['info'] ? '<span class="label info">' + info['info'] + '</span>' : '';
+
+        li += '<div class="link-list-container">';
+        li += '<img class="link-list-image" src="' + iconPath + info['logo'] + '">';
+        li += '<p>' + info['title'] + labelInfo + labelWarn + '</p>';
+        li += '<p>' + info['intro'] + '</p>';
+        li += '<a href="' + info['url'] + '" rel="noopener" target="_blank" data-pjax-state=""></a>';
+        li += '</div>';
+      }
+      
+      linkList.innerHTML = li;
+    }
+  };
+  xhr.send();
+});
+</script>
+
+
+<script type="text/javascript">
+var cultureList = document.querySelectorAll(".culture-list");
+if (cultureList.length !== 0) {
+  var j = -1;
+  for (var i = 0; i < cultureList.length; i++) {
+    const listPath = cultureList[i].getAttribute('json-src');
+    const coverPath = cultureList[i].getAttribute('cover-src');
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', listPath, true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        j++;
+        var data = JSON.parse(xhr.responseText);
+        var li = "";
+        
+        cultureList[j].innerHTML = '';
+
+        for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+          var info = data[infoIndex];
+          
+          var title = info['title'];
+          if (info['link']) {
+            title = '<a href="' + info['link'] + '">' + info['title'] + '</a>';
+          }
+
+          var author = info['author'] ? '<span class="author">' + info['author'] + '</span>' : '';
+
+          var intro = info['intro'] ? info['intro'] : '';
+
+          var star = '';
+          if (info['score'] == null) {
+            star = '';
+          } else {
+            var colorStar = '';
+            var greyStar = '';
+            var int = Math.floor(info['score']); //整数部分
+            var fract = 0;
+            if (info['score'] % 1 !== 0) {
+              fract = 1;
+            }
+            for (var m = 0; m < int; m++) {
+              colorStar += '★';
+            }
+            if (fract !== 0) {
+              colorStar += '☆';
+            }
+            for (var m = 0; m < (5 - fract - int); m++) {
+              greyStar += '☆';
+            }
+            if (info['score'] !== 5) {
+              star = '<span class="star-score">' + colorStar + '<span class="grey-star">' + greyStar + '</span></span>';
+            } else {
+              star = '<span class="star-score">' + colorStar + '</span>';
+            }
+          }
+
+          li += '<div class="media">';
+          li += '<div class="media-cover" style="background-image:url(' + coverPath + info['cover'] + ')"></div>';
+          li += '<div class="media-meta">';
+          li += '<div class="media-meta-item title">' + title + '</div>';
+          li += '<div class="media-meta-item">' + author + star + '</div>';
+          li += '<div class="media-meta-item intro">' + intro + '</div>';
+          li += '</div></div>';
+        }
+        
+        cultureList[j].innerHTML = li;
+      }
+    };
+    xhr.send();
+  }
+}
+</script>
+
+
+
+
+<script src="/resources/minigrid.min.js"></script>
+<script type="text/javascript">
+var album = document.querySelector(".album");
+if (album) {
+  // 相册列表 JSON 数据
+  var imgDataPath = album.getAttribute('json-src');
+  // 照片存储路径
+  var imgPath = album.getAttribute('photo-src');
+  // 最多显示数量
+  var imgMaxNum = 50;
+  // 获取窗口大小以决定图片宽度
+  var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  var imageWidth;
+
+  if (windowWidth < 768) {
+    imageWidth = 145; // 移动端图片宽度
+  } else {
+    imageWidth = 235;
+  }
+
+  // 腾讯云自定义样式 (数据万象外网流量需要付费)
+  //var imgStyle = '!' + imageWidth + 'x';
+  //var imgStyle = '!300x';
+
+  // 生成相册
+  var linkDataPath = imgDataPath;
+  var photo = {
+    page: 1,
+    offset: imgMaxNum,
+    init: function () {
+      var that = this;
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", linkDataPath, true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var data = JSON.parse(xhr.responseText);
+          that.render(that.page, data);
+        }
+      };
+      xhr.send();
+    },
+    render: function (page, data) {
+      var begin = (page - 1) * this.offset;
+      var end = page * this.offset;
+      if (begin >= data.length) return;
+      var imgNameWithPattern, imgName, imageSize, imageX, imageY, li = "";
+      for (var i = begin; i < end && i < data.length; i++) {
+        imgNameWithPattern = data[i].split(' ')[1];
+        imgName = imgNameWithPattern.split('.')[0];
+        imageSize = data[i].split(' ')[0];
+        imageX = imageSize.split('.')[0];
+        imageY = imageSize.split('.')[1];
+        li += '<div class="card" style="width:' + imageWidth + 'px" >';
+        li += '<div class="album-photo" style="height:'+ imageWidth * imageY / imageX + 'px">';
+        li += '<a class="fancybox fancybox.image" href="' + imgPath + imgNameWithPattern + '" itemscope="" itemtype="http://schema.org/ImageObject" itemprop="url" data-fancybox="group" rel="group" data-caption="' + imgName + '" title="' +  imgName + '">';
+        li += '<img data-src="' + imgPath + imgNameWithPattern + '" src="' + imgPath + imgNameWithPattern + '" alt="' +  imgName + '" data-loaded="true">';
+        li += '</a>';
+        li += '</div>';
+        li += '</div>';
+      }
+      album.insertAdjacentHTML('beforeend', li);
+      this.minigrid();
+    },
+    minigrid: function () {
+      var grid = new Minigrid({
+        container: '.album',
+        item: '.card',
+        gutter: 12
+      });
+      grid.mount();
+      window.addEventListener('resize', function () {
+        grid.mount();
+      });
+    }
+  };
+  photo.init();
+}
+</script>
+</body>
+</html>

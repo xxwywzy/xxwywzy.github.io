@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/resources/favicon/favicon.png">
+  <link rel="mask-icon" href="/resources/favicon/favicon.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"xxwywzy.github.io","root":"/","images":"/resources/img/","scheme":"Gemini","darkmode":true,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"livere","storage":true,"lazyload":false,"nav":null,"activeClass":"livere"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本篇博客为 Coursera-Kaggle 公开课的第二周学习笔记。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Coursera-Kaggle Week2 学习笔记">
+<meta property="og:url" content="https://xxwywzy.github.io/2019/06/05/kaggle-2/">
+<meta property="og:site_name" content="口仆">
+<meta property="og:description" content="本篇博客为 Coursera-Kaggle 公开课的第二周学习笔记。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-22-073916.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-25-014419.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-25-014557.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-25-015818.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-25-020111.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-25-020345.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-25-020454.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-25-020558.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-26-020713.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-04-26-023355.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-05-09-040311.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-05-09-042153.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-05-09-042925.png">
+<meta property="article:published_time" content="2019-06-05T01:43:18.000Z">
+<meta property="article:modified_time" content="2023-08-05T07:56:47.000Z">
+<meta property="article:author" content="Zheyu Wang">
+<meta property="article:tag" content="Kaggle">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2019-04-22-073916.png">
+
+
+<link rel="canonical" href="https://xxwywzy.github.io/2019/06/05/kaggle-2/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://xxwywzy.github.io/2019/06/05/kaggle-2/","path":"2019/06/05/kaggle-2/","title":"Coursera-Kaggle Week2 学习笔记"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Coursera-Kaggle Week2 学习笔记 | 口仆</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/resources/fonts/longcang/longcang-regular.css" >
+<link rel="stylesheet" href="/resources/fonts/lxgw/lxgwwenkailite-regular.css" >
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">口仆</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Long may the sunshine</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-culture"><a href="/culture/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>MEME</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8E%A2%E7%B4%A2%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90"><span class="nav-number">1.</span> <span class="nav-text">探索式数据分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#eda-%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.1.</span> <span class="nav-text">EDA 介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8C%BF%E5%90%8D%E6%95%B0%E6%8D%AE"><span class="nav-number">1.2.</span> <span class="nav-text">匿名数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96"><span class="nav-number">1.3.</span> <span class="nav-text">数据可视化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%9B%86%E6%B8%85%E7%90%86%E4%B8%8E%E6%A3%80%E6%9F%A5"><span class="nav-number">1.4.</span> <span class="nav-text">数据集清理与检查</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%BF%87%E6%8B%9F%E5%90%88"><span class="nav-number">2.</span> <span class="nav-text">验证与过拟合</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-number">2.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81%E7%AD%96%E7%95%A5"><span class="nav-number">2.2.</span> <span class="nav-text">验证策略</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%88%92%E5%88%86%E7%AD%96%E7%95%A5"><span class="nav-number">3.</span> <span class="nav-text">数据划分策略</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81%E7%9A%84%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="nav-number">4.</span> <span class="nav-text">验证的常见问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%B3%84%E9%9C%B2"><span class="nav-number">5.</span> <span class="nav-text">数据泄露</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%9C%E4%B8%9A%E6%95%B0%E6%8D%AE%E6%B3%84%E9%9C%B2"><span class="nav-number">5.0.1.</span> <span class="nav-text">作业：数据泄露</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zheyu Wang"
+      src="/resources/favicon/avatar.png">
+  <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+  <div class="site-description" itemprop="description">相信过程</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">85</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xxwywzy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/xxwywzy" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/xxwywzy" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/xxwywzy" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2019/06/05/kaggle-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resources/favicon/avatar.png">
+      <meta itemprop="name" content="Zheyu Wang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="口仆">
+      <meta itemprop="description" content="相信过程">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Coursera-Kaggle Week2 学习笔记 | 口仆">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Coursera-Kaggle Week2 学习笔记
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-06-05 09:43:18" itemprop="dateCreated datePublished" datetime="2019-06-05T09:43:18+08:00">2019-06-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">课程笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.7k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><div class="note info"><p>本篇博客为 Coursera-Kaggle 公开课的第二周学习笔记。</p>
+</div>
+<span id="more"></span>
+<h1 id="探索式数据分析">探索式数据分析</h1>
+<h2 id="eda-介绍">EDA 介绍</h2>
+<ul>
+<li>EDA 的作用：
+<ul>
+<li>更加了解数据</li>
+<li>找到一些 magic 特征</li>
+</ul></li>
+<li>在探究模型（比如进行 stacking）之前，先进行 EDA
+<ul>
+<li>附：stacking 是一种集成学习方法</li>
+</ul></li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-04-22-073916.png" width=80%></p>
+<ul>
+<li>在具体进行 EDA 之前，先要建立对数据的直觉：
+<ul>
+<li>首先需要了解相关的领域知识
+<ul>
+<li>可以帮助更深层次地理解问题</li>
+</ul></li>
+<li>检查数据是否符合直觉
+<ul>
+<li>是否和领域知识相契合</li>
+</ul></li>
+<li>了解数据是如何生成的
+<ul>
+<li>这对建立正确的验证方式非常重要</li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="匿名数据">匿名数据</h2>
+<ul>
+<li>关于匿名数据：
+<ul>
+<li>我们需要尝试去解码这些特征
+<ul>
+<li>即猜测该特征的真实含义</li>
+</ul></li>
+<li>我们需要猜测特征的类型
+<ul>
+<li>每种类型对应的预处理方式不同</li>
+</ul></li>
+<li>可能有用的函数： <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df.dtypes <span class="comment"># dataframe各列数据类型</span></span><br><span class="line">df.info() <span class="comment"># dataframe信息(index和各列数据类型)</span></span><br><span class="line">x.value_counts() <span class="comment"># 某个特征项中各数值数量统计</span></span><br><span class="line">x.isnull() <span class="comment"># 某个特征项是否包含NA(such as None or numpy.NaN) pandas基于numpy构建</span></span><br></pre></td></tr></table></figure></li>
+</ul></li>
+</ul>
+<h2 id="数据可视化">数据可视化</h2>
+<p>数据可视化可以分为两类：</p>
+<p>第一类：<strong>探索单个特征</strong></p>
+<ul>
+<li>直方图：<code>plt.hist(x)</code></li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-04-25-014419.png" width=40%></p>
+<ul>
+<li>索引与值：<code>plt.plot(x, ‘.’)</code></li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-04-25-014557.png" width=60%></p>
+<ul>
+<li><p>统计量分析：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df.describe()</span><br><span class="line">x.mean()</span><br><span class="line">x.var()</span><br></pre></td></tr></table></figure></li>
+<li><p>其他统计：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x.value_counts()</span><br><span class="line">x.isnull()</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>第二类：探索特征间的关联性</p>
+<ul>
+<li><strong>特征对</strong>
+<ul>
+<li><p>散点图：<code>plt.scatter(x1, x2)</code></p>
+<p><img src="http://media.zjubiomedit.com/2019-04-25-015818.png" width=50%></p></li>
+<li><p>散点矩阵：<code>pd.scatter_matrix(df)</code></p>
+<p><img src="http://media.zjubiomedit.com/2019-04-25-020111.png" width=50%></p></li>
+<li><p>相关系数图：<code>df.corr(), plt.matshow( … )</code></p>
+<p><img src="http://media.zjubiomedit.com/2019-04-25-020345.png" width=50%></p></li>
+</ul></li>
+<li><strong>特征组</strong>
+<ul>
+<li><p>相关系数图 + 聚类</p>
+<p><img src="http://media.zjubiomedit.com/2019-04-25-020454.png" width=50%></p></li>
+<li><p>索引与值（基于统计量）：<code>df.mean().sort_values().plot(style=’.’)</code></p>
+<p><img src="http://media.zjubiomedit.com/2019-04-25-020558.png" width=50%></p></li>
+</ul></li>
+</ul>
+<h2 id="数据集清理与检查">数据集清理与检查</h2>
+<ul>
+<li>数据集清理包括：
+<ul>
+<li>常数特征的清理：<code>traintest.nunique(axis=1) == 1</code></li>
+<li>重复特征的清理：<code>traintest.T.drop_duplicates()</code>
+<ul>
+<li><p>如果对于一些分类特征，其实际上是重复的（只要把名字替换）</p>
+<p><img src="http://media.zjubiomedit.com/2019-04-26-020713.png" width=60%></p>
+<ul>
+<li><p>这种情况可以先给分类变量重新命名（自顶向下，第一个变量为 1，第二个为 2，以此类推）</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> f <span class="keyword">in</span> categorical_feats:</span><br><span class="line">  traintest[f] = traintest[f].factorize()</span><br><span class="line">traintest.T.drop_duplicates()</span><br></pre></td></tr></table></figure></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>其他检查包括：
+<ul>
+<li>检查是否有重复的数据行
+<ul>
+<li>如果有，理解其为什么重复（并不一定要删除）</li>
+</ul></li>
+<li>检查是否有打乱数据
+<ul>
+<li><p>可以通过画图来确认</p>
+<p><img src="http://media.zjubiomedit.com/2019-04-26-023355.png" width=60%></p></li>
+<li><p>如果没有打乱数据，则可能存在数据泄露</p></li>
+</ul></li>
+</ul></li>
+</ul>
+<h1 id="验证与过拟合">验证与过拟合</h1>
+<h2 id="简介">简介</h2>
+<ul>
+<li>验证帮助我们评估一个模型的质量
+<ul>
+<li>选择在未知数据（验证集）上表现最好的模型</li>
+</ul></li>
+<li>欠拟合指模型未捕获数据足够的模式</li>
+<li>一般来说，过拟合指模型在验证集上的表现明显低于训练集，原因在于：
+<ul>
+<li>捕获了噪声</li>
+<li>捕获了无法推广到测试数据的模式</li>
+</ul></li>
+<li>在竞赛中，过拟合指模型在测试（公开/私有）集上的表现比验证集的表现要差</li>
+</ul>
+<h2 id="验证策略">验证策略</h2>
+<ul>
+<li>有三种主要的验证策略：
+<ul>
+<li>保留验证（Hold-out）<code>sklearn.model_selection.ShuffleSplit</code> <img src="http://media.zjubiomedit.com/2019-05-09-040311.png" width=35%></li>
+<li>K 保留验证（K-fold）<code>sklearn.model_selection.Kfold</code> <img src="http://media.zjubiomedit.com/2019-05-09-042153.png" width=45%></li>
+<li>留一验证（Leave-one-out）<code>sklearn.model_selection.LeaveOneOut</code></li>
+</ul></li>
+<li>对于某些情况，上述验证方法可能会存在偏差： <img src="http://media.zjubiomedit.com/2019-05-09-042925.png" width=40%>
+<ul>
+<li>例如上面这个小数据集，如果分割不当，可能会导致训练结果产生偏差</li>
+<li>这时我们需要采用<strong>分层</strong>的方法，来保证各 fold 之间类别的比例与总比例相同</li>
+<li>分层方法主要针对：
+<ul>
+<li>小样本数据</li>
+<li>不平衡数据</li>
+<li>多分类数据</li>
+</ul></li>
+</ul></li>
+</ul>
+<h1 id="数据划分策略">数据划分策略</h1>
+<ul>
+<li>在大部分情况下，数据划分的方式有以下三种（单独使用或结合起来）：
+<ul>
+<li>根据 row number（随机分）</li>
+<li>根据时间</li>
+<li>根据数据的 id</li>
+</ul></li>
+<li>特征生成的逻辑需要基于数据划分的策略</li>
+<li>基本原则：验证集的划分应该模仿竞赛中训练/测试集的划分</li>
+</ul>
+<h1 id="验证的常见问题">验证的常见问题</h1>
+<ul>
+<li>验证时出现的问题可以分为两个阶段：
+<ul>
+<li>本地验证阶段</li>
+<li>提交阶段</li>
+</ul></li>
+<li>在本地验证阶段，如果得到了低于期望的分数，我们应该进行进一步的验证：
+<ul>
+<li>进行不同的 K 保留验证，并求得分均值</li>
+<li>在一个分割上调试模型，在另一个分割上分析得分（对于 K 保留）</li>
+</ul></li>
+<li>在提交阶段，如果分数不如本地验证的得分，我们应该：
+<ul>
+<li>检查公开排行榜的数据是否过少（无需处理）</li>
+<li>检查是否存在过拟合（需要处理）</li>
+<li>检查是否选择了正确的划分策略（需要处理）</li>
+<li>检查训练集和测试集是否属于不同的分布（需要处理）
+<ul>
+<li>可以考虑对输出进行批量处理</li>
+</ul></li>
+</ul></li>
+<li>有时候，不用过分在意公开排行榜的得分，因为存在以下情况：
+<ul>
+<li>随机化处理
+<ul>
+<li>例如所有参赛者的得分过于接近，因此平台做了随机处理来区分得分</li>
+</ul></li>
+<li>数据量过小</li>
+<li>公开榜与私有榜的分布不同</li>
+</ul></li>
+</ul>
+<h1 id="数据泄露">数据泄露</h1>
+<ul>
+<li>数据泄露是在竞赛中特有的一种现象
+<ul>
+<li>本质上是一种因果关系的纰漏（倒因为果）</li>
+<li>有时候利用数据泄露可以拿到非常好的成绩</li>
+</ul></li>
+<li>常见的数据泄露包括：
+<ul>
+<li>时间序列上的泄露</li>
+<li>ID 信息</li>
+<li>元数据</li>
+<li>行的顺序</li>
+</ul></li>
+<li>与数据泄露相关的一项技术是排行榜探索（leaderboard probing）
+<ul>
+<li>该技术是利用排行榜的得分来计算 id 与输出类别之间的关系
+<ul>
+<li>对于二元分类的对数损失函数，其测试数据的均值可以用如下公式求出： <span class="math display">\[
+\frac{N_{1}}{N}=\frac{-L-\ln (1-C)}{\ln C-\ln (1-C)}
+\]</span>
+<ul>
+<li>L：排行榜得分</li>
+<li>C：预测的常数</li>
+</ul></li>
+</ul></li>
+<li>个人感想：不一定有用</li>
+</ul></li>
+</ul>
+<h3 id="作业数据泄露">作业：数据泄露</h3>
+<p><a target="_blank" rel="noopener" href="https://necromuralist.github.io/kaggle-competitions/posts/data-leakages/">参考地址</a></p>
+<p>整体思路：</p>
+<ul>
+<li>先提交全为 1 的预测，得到评分为 0.5
+<ul>
+<li>说明测试集中正负样本各一半</li>
+</ul></li>
+<li>基于两个特征 id 的共现矩阵，计算每一组 id 对的相似性
+<ul>
+<li>共现矩阵对称，通过向量点积计算</li>
+</ul></li>
+<li>发现相似性得分以 20 为分界，各占 50%</li>
+<li>基于该分界，预测正负样本，准确率接近 99%</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+
+
+
+<div class="license">
+  <div class="license-title">Coursera-Kaggle Week2 学习笔记</div>
+  <div class="license-link">
+    <a href="https://xxwywzy.github.io/2019/06/05/kaggle-2/">https://xxwywzy.github.io/2019/06/05/kaggle-2/</a>
+  </div>
+  <div class="license-meta">
+    <div class="license-meta-item">
+      <div class="license-meta-title">本文作者</div>
+      <div class="license-meta-text">
+          Zheyu Wang
+      </div>
+    </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">发布于</div>
+        <div class="license-meta-text">
+          2019-06-05
+        </div>
+      </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">更新于</div>
+        <div class="license-meta-text">
+          2023-08-05
+        </div>
+      </div>
+    <div class="license-meta-item">
+      <div class="license-meta-title">许可协议</div>
+      <div class="license-meta-text">
+          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank">CC BY-NC-SA 4.0</a>
+      </div>
+    </div>
+  </div>
+  <div class="license-statement">
+      转载或引用本文时，请遵守上述许可协议，注明出处、不得用于商业用途！
+  </div>
+</div>
+          <div class="post-tags">
+              <a href="/tags/Kaggle/" rel="tag"># Kaggle</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/05/28/cs229-15/" rel="prev" title="CS229 学习笔记之十五：强化学习与控制">
+                  <i class="fa fa-angle-left"></i> CS229 学习笔记之十五：强化学习与控制
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/06/05/writing-stu-1/" rel="next" title="Writing in the Sciences Week1 学习笔记">
+                  Writing in the Sciences Week1 学习笔记 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81ODgyNi8zNTI4OA=="></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">332k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">18:26</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+
+
+  <style>
+    #taboola-livere { display: none;}
+  </style>
+
+
+
+<script type="text/javascript">
+var linkLists = document.querySelectorAll(".link-list");
+
+linkLists.forEach(function(linkList) {
+  var listPath = linkList.getAttribute('json-src');
+  var iconPath = linkList.getAttribute('icon-src');
+  
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', listPath, true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      var data = JSON.parse(xhr.responseText);
+      
+      var li = "";
+      linkList.innerHTML = '';
+
+      for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+        var info = data[infoIndex];
+        var labelWarn = info['warn'] ? '<span class="label warn">' + info['warn'] + '</span>' : '';
+        var labelInfo = info['info'] ? '<span class="label info">' + info['info'] + '</span>' : '';
+
+        li += '<div class="link-list-container">';
+        li += '<img class="link-list-image" src="' + iconPath + info['logo'] + '">';
+        li += '<p>' + info['title'] + labelInfo + labelWarn + '</p>';
+        li += '<p>' + info['intro'] + '</p>';
+        li += '<a href="' + info['url'] + '" rel="noopener" target="_blank" data-pjax-state=""></a>';
+        li += '</div>';
+      }
+      
+      linkList.innerHTML = li;
+    }
+  };
+  xhr.send();
+});
+</script>
+
+
+<script type="text/javascript">
+var cultureList = document.querySelectorAll(".culture-list");
+if (cultureList.length !== 0) {
+  var j = -1;
+  for (var i = 0; i < cultureList.length; i++) {
+    const listPath = cultureList[i].getAttribute('json-src');
+    const coverPath = cultureList[i].getAttribute('cover-src');
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', listPath, true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        j++;
+        var data = JSON.parse(xhr.responseText);
+        var li = "";
+        
+        cultureList[j].innerHTML = '';
+
+        for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+          var info = data[infoIndex];
+          
+          var title = info['title'];
+          if (info['link']) {
+            title = '<a href="' + info['link'] + '">' + info['title'] + '</a>';
+          }
+
+          var author = info['author'] ? '<span class="author">' + info['author'] + '</span>' : '';
+
+          var intro = info['intro'] ? info['intro'] : '';
+
+          var star = '';
+          if (info['score'] == null) {
+            star = '';
+          } else {
+            var colorStar = '';
+            var greyStar = '';
+            var int = Math.floor(info['score']); //整数部分
+            var fract = 0;
+            if (info['score'] % 1 !== 0) {
+              fract = 1;
+            }
+            for (var m = 0; m < int; m++) {
+              colorStar += '★';
+            }
+            if (fract !== 0) {
+              colorStar += '☆';
+            }
+            for (var m = 0; m < (5 - fract - int); m++) {
+              greyStar += '☆';
+            }
+            if (info['score'] !== 5) {
+              star = '<span class="star-score">' + colorStar + '<span class="grey-star">' + greyStar + '</span></span>';
+            } else {
+              star = '<span class="star-score">' + colorStar + '</span>';
+            }
+          }
+
+          li += '<div class="media">';
+          li += '<div class="media-cover" style="background-image:url(' + coverPath + info['cover'] + ')"></div>';
+          li += '<div class="media-meta">';
+          li += '<div class="media-meta-item title">' + title + '</div>';
+          li += '<div class="media-meta-item">' + author + star + '</div>';
+          li += '<div class="media-meta-item intro">' + intro + '</div>';
+          li += '</div></div>';
+        }
+        
+        cultureList[j].innerHTML = li;
+      }
+    };
+    xhr.send();
+  }
+}
+</script>
+
+
+
+
+<script src="/resources/minigrid.min.js"></script>
+<script type="text/javascript">
+var album = document.querySelector(".album");
+if (album) {
+  // 相册列表 JSON 数据
+  var imgDataPath = album.getAttribute('json-src');
+  // 照片存储路径
+  var imgPath = album.getAttribute('photo-src');
+  // 最多显示数量
+  var imgMaxNum = 50;
+  // 获取窗口大小以决定图片宽度
+  var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  var imageWidth;
+
+  if (windowWidth < 768) {
+    imageWidth = 145; // 移动端图片宽度
+  } else {
+    imageWidth = 235;
+  }
+
+  // 腾讯云自定义样式 (数据万象外网流量需要付费)
+  //var imgStyle = '!' + imageWidth + 'x';
+  //var imgStyle = '!300x';
+
+  // 生成相册
+  var linkDataPath = imgDataPath;
+  var photo = {
+    page: 1,
+    offset: imgMaxNum,
+    init: function () {
+      var that = this;
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", linkDataPath, true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var data = JSON.parse(xhr.responseText);
+          that.render(that.page, data);
+        }
+      };
+      xhr.send();
+    },
+    render: function (page, data) {
+      var begin = (page - 1) * this.offset;
+      var end = page * this.offset;
+      if (begin >= data.length) return;
+      var imgNameWithPattern, imgName, imageSize, imageX, imageY, li = "";
+      for (var i = begin; i < end && i < data.length; i++) {
+        imgNameWithPattern = data[i].split(' ')[1];
+        imgName = imgNameWithPattern.split('.')[0];
+        imageSize = data[i].split(' ')[0];
+        imageX = imageSize.split('.')[0];
+        imageY = imageSize.split('.')[1];
+        li += '<div class="card" style="width:' + imageWidth + 'px" >';
+        li += '<div class="album-photo" style="height:'+ imageWidth * imageY / imageX + 'px">';
+        li += '<a class="fancybox fancybox.image" href="' + imgPath + imgNameWithPattern + '" itemscope="" itemtype="http://schema.org/ImageObject" itemprop="url" data-fancybox="group" rel="group" data-caption="' + imgName + '" title="' +  imgName + '">';
+        li += '<img data-src="' + imgPath + imgNameWithPattern + '" src="' + imgPath + imgNameWithPattern + '" alt="' +  imgName + '" data-loaded="true">';
+        li += '</a>';
+        li += '</div>';
+        li += '</div>';
+      }
+      album.insertAdjacentHTML('beforeend', li);
+      this.minigrid();
+    },
+    minigrid: function () {
+      var grid = new Minigrid({
+        container: '.album',
+        item: '.card',
+        gutter: 12
+      });
+      grid.mount();
+      window.addEventListener('resize', function () {
+        grid.mount();
+      });
+    }
+  };
+  photo.init();
+}
+</script>
+</body>
+</html>

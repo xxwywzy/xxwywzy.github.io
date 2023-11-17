@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/resources/favicon/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/resources/favicon/favicon.png">
+  <link rel="mask-icon" href="/resources/favicon/favicon.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"xxwywzy.github.io","root":"/","images":"/resources/img/","scheme":"Gemini","darkmode":true,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"livere","storage":true,"lazyload":false,"nav":null,"activeClass":"livere"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本篇博客对游戏开发中的垂直同步技术进行了简单总结。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="垂直同步技术简介">
+<meta property="og:url" content="https://xxwywzy.github.io/2019/02/19/veritical-hold/">
+<meta property="og:site_name" content="口仆">
+<meta property="og:description" content="本篇博客对游戏开发中的垂直同步技术进行了简单总结。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-02-19-005749.gif">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-02-19-005934.gif">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-02-19-010007.png">
+<meta property="og:image" content="http://media.zjubiomedit.com/2019-02-19-010049.png">
+<meta property="article:published_time" content="2019-02-19T02:02:50.000Z">
+<meta property="article:modified_time" content="2023-08-05T08:46:12.000Z">
+<meta property="article:author" content="Zheyu Wang">
+<meta property="article:tag" content="垂直同步">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://media.zjubiomedit.com/2019-02-19-005749.gif">
+
+
+<link rel="canonical" href="https://xxwywzy.github.io/2019/02/19/veritical-hold/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://xxwywzy.github.io/2019/02/19/veritical-hold/","path":"2019/02/19/veritical-hold/","title":"垂直同步技术简介"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>垂直同步技术简介 | 口仆</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/resources/fonts/longcang/longcang-regular.css" >
+<link rel="stylesheet" href="/resources/fonts/lxgw/lxgwwenkailite-regular.css" >
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">口仆</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Long may the sunshine</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-culture"><a href="/culture/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>MEME</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">基础概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%98%BE%E7%A4%BA%E5%99%A8%E4%B8%8E%E5%B8%A7"><span class="nav-number">1.1.</span> <span class="nav-text">显示器与帧</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%98%BE%E5%8D%A1%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="nav-number">1.2.</span> <span class="nav-text">显卡的作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%90%E8%A1%8C%E6%89%AB%E6%8F%8F"><span class="nav-number">1.3.</span> <span class="nav-text">逐行扫描</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%98%BE%E7%A4%BA%E5%99%A8%E7%9A%84%E5%89%8D%E7%BC%93%E5%AD%98%E4%B8%8E%E5%90%8E%E7%BC%93%E5%AD%98"><span class="nav-number">1.4.</span> <span class="nav-text">显示器的前缓存与后缓存</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9E%82%E7%9B%B4%E5%90%8C%E6%AD%A5%E7%AE%80%E4%BB%8B"><span class="nav-number">2.</span> <span class="nav-text">垂直同步简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%BB%E9%9D%A2%E6%92%95%E8%A3%82"><span class="nav-number">2.1.</span> <span class="nav-text">画面撕裂</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%94%99%E5%B8%A7"><span class="nav-number">2.2.</span> <span class="nav-text">错帧</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9E%82%E7%9B%B4%E5%90%8C%E6%AD%A5%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="nav-number">2.3.</span> <span class="nav-text">垂直同步的作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9E%82%E7%9B%B4%E5%90%8C%E6%AD%A5%E7%9A%84%E5%BC%8A%E7%AB%AF"><span class="nav-number">2.4.</span> <span class="nav-text">垂直同步的弊端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E9%87%8D%E7%BC%93%E5%86%B2"><span class="nav-number">2.5.</span> <span class="nav-text">三重缓冲</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#g-sync-%E4%B8%8E-freesync"><span class="nav-number">2.6.</span> <span class="nav-text">G-sync 与 freesync</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B8%B8%E6%88%8F%E6%B5%8B%E8%AF%95"><span class="nav-number">2.7.</span> <span class="nav-text">游戏测试</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zheyu Wang"
+      src="/resources/favicon/avatar.png">
+  <p class="site-author-name" itemprop="name">Zheyu Wang</p>
+  <div class="site-description" itemprop="description">相信过程</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">85</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xxwywzy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/xxwywzy" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/xxwywzy" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/xxwywzy" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;xxwywzy" rel="noopener me" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xxwywzy.github.io/2019/02/19/veritical-hold/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resources/favicon/avatar.png">
+      <meta itemprop="name" content="Zheyu Wang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="口仆">
+      <meta itemprop="description" content="相信过程">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="垂直同步技术简介 | 口仆">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          垂直同步技术简介
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-02-19 10:02:50" itemprop="dateCreated datePublished" datetime="2019-02-19T10:02:50+08:00">2019-02-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%B8%B8%E6%88%8F/" itemprop="url" rel="index"><span itemprop="name">游戏</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%B8%B8%E6%88%8F/%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/" itemprop="url" rel="index"><span itemprop="name">技术总结</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>7 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><div class="note primary"><p>本篇博客对游戏开发中的垂直同步技术进行了简单总结。</p>
+</div>
+<span id="more"></span>
+<h1 id="基础概念">基础概念</h1>
+<h2 id="显示器与帧">显示器与帧</h2>
+<ul>
+<li>显示器是靠连续播放无数张静态画面来达到一个视觉上的错觉，通过人眼的视觉暂留达到动画的效果</li>
+<li>每个显示器都有自己的刷新频率
+<ul>
+<li>60Hz的显示器一秒钟刷新60张画面</li>
+<li>每一张画面都称之为<strong>一帧</strong></li>
+<li>显示器的刷新率是固定的</li>
+</ul></li>
+</ul>
+<h2 id="显卡的作用">显卡的作用</h2>
+<ul>
+<li>显卡的作用是绘制“帧”，然后把帧发给显示器</li>
+<li>显示器收到帧后，开始往显示器上显示</li>
+</ul>
+<h2 id="逐行扫描">逐行扫描</h2>
+<ul>
+<li>显示器刷新一帧的时候并不是一次性把整个画面全部刷新出来</li>
+<li>而是从上到下一行一行逐渐把图片绘制出来的</li>
+<li>扫描分为逐行扫描和隔行扫描
+<ul>
+<li>目前大多数显示器采用的都是逐行扫描</li>
+<li>60Hz的显示器是指一秒可以逐行扫描 60 次</li>
+</ul></li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-02-19-005749.gif" width=60%></p>
+<h2 id="显示器的前缓存与后缓存">显示器的前缓存与后缓存</h2>
+<ul>
+<li>显示器的刷新率是固定的，但是显卡渲染画面（输出帧）是有波动的</li>
+<li>由于显卡的性能不变，因此可能会出现简单场景显卡输出帧数高，复杂场景输出帧数低
+<ul>
+<li>显卡输出的帧数间隔也可能会不一样（例如前半秒 1 帧，后半秒 59 帧）</li>
+</ul></li>
+<li>一个固定输出的显示器和一个波动的显卡搭配，为了避免冲突，需要添加一个缓存</li>
+<li>默认情况下，显示器是有两个缓存的，即前缓存与后缓存
+<ul>
+<li>显示器会读取前缓存内的图片，并逐行扫描显示到显示器面板上</li>
+<li>显卡会绘制后缓存里的画面，然后显示器绘制完前缓存的画面，就会去读取后缓存里的画面</li>
+<li>然后显卡再去绘制前缓存里的画面，即两者交替进行</li>
+</ul></li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-02-19-005934.gif"  width=60%></p>
+<h1 id="垂直同步简介">垂直同步简介</h1>
+<h2 id="画面撕裂">画面撕裂</h2>
+<ul>
+<li><p>由于逐行扫描的时间固定，而显卡的刷新不固定，那么显卡的绘图速度可能会超过显示器</p>
+<p><img src="http://media.zjubiomedit.com/2019-02-19-010007.png"  width=70%></p></li>
+<li><p>上图展示了可能会出现的情况：</p>
+<ul>
+<li>显示器还没有显示完前缓冲的画面【1】，还在逐行扫描进行中只画了一半，而显卡已经画好了后缓冲的画面【2】</li>
+<li>这时显示器正在画前缓存的画面【画了一半的1】，显卡不会停下来，他画完后缓存【2】会直接过来覆写前缓存【开始往前缓存写3】</li>
+<li>此时显示器上半部分是第一帧【半个1】因为还没逐行扫描完，第二帧【2】在后缓存里显示器还没有读取到，而显卡开始往前缓存里写第三帧【3】，那么显示器的下边就会显示第三帧的画面【半个3】</li>
+</ul></li>
+<li><p>这就是所谓的<strong>画面撕裂</strong>现象</p></li>
+</ul>
+<h2 id="错帧">错帧</h2>
+<ul>
+<li>对于之前的例子，显示器第一 Hz 的时候，上面有半个 1，下面半个 3，第二 Hz 是个完整的 2，第三 Hz 是完整的3，所以实际上你并没有看见完整的 3 帧，虽然你的电脑显示是 3 fps，但你的肉眼只看见了 2.5 帧，即<strong>错帧</strong>现象的出现</li>
+<li>我们将帧与帧之间的间隔称为帧生成时间
+<ul>
+<li>帧生成时间的不平滑也会导致错帧现象的出现，从而引起流畅度的下降</li>
+</ul></li>
+<li>对于显卡刷新率高于显示器（60 Hz）的错帧，一般不会有感觉，而只会有画面撕裂的感觉
+<ul>
+<li>真正影响流畅度的是显卡刷新率较低时帧生成时间不平滑引起的错帧现象</li>
+</ul></li>
+<li>因此虽然很多人对于游戏画面流畅的定义是 60 fps，但是因为不能保证显卡输出的帧和显示器刷新率完美契合，那么显卡输出 60 fps实际上是不流畅的，因为你的显示器一直会发生错帧现象，你可能就会看到 50 帧的画面
+<ul>
+<li>这就是为什么保证游戏画面流畅的帧数需要高于 60 而不是等于 60</li>
+</ul></li>
+</ul>
+<h2 id="垂直同步的作用">垂直同步的作用</h2>
+<ul>
+<li>为了避免显卡“抢跑”这种事情发生，<strong>垂直同步</strong>技术出现了</li>
+<li>垂直同步的作用就是<strong>强制显卡和显示器同步</strong>
+<ul>
+<li>如果显示器还在显示前缓冲，显卡画好了后缓冲，那这时候禁止显卡进行绘图，直到显示器把前缓冲的画面显示完整了，显示器跳后缓冲后，才允许显卡去绘制前缓冲</li>
+</ul></li>
+<li><strong>简单理解就是强制显卡的刷新率和显示器刷新率完美契合</strong>
+<ul>
+<li>如果你是 60 Hz 显示器，开了垂直同步就会被锁 60 了</li>
+</ul></li>
+<li>垂直同步一方面可以解决画面撕裂现象，另一方面也可以解决错帧现象
+<ul>
+<li>由于垂直同步的开启，强制每帧间隔完全一样，帧生成时间不平滑的问题也会解决</li>
+</ul></li>
+</ul>
+<h2 id="垂直同步的弊端">垂直同步的弊端</h2>
+<ol type="1">
+<li><strong>帧数下降</strong>
+<ul>
+<li>如果显卡性能并不足以保证每秒 60 帧的渲染速度，那么就会出现在一个垂直同步信号周期内，渲染不出一帧画面的情况</li>
+<li>那么显卡就会将上一帧画面输出，而延迟1个周期才输出下一帧画面</li>
+<li>如果不开垂直同步你的帧数有 50 帧的话，开了垂直同步，可能就会只有 40 帧左右，甚至更少</li>
+<li>这个问题可以通过动态垂直同步来解决</li>
+</ul></li>
+<li><strong>操作延迟</strong>
+<ul>
+<li>当你发出一个操作指令，在开启垂直同步的状态下，显卡绘制完成后缓冲后，显示器还没显示完前缓冲，显卡只能在这里等着，那么这个指令会和显卡一块在这里等着，直到显示器绘制完成前缓冲，这个画面才会被写入，因此连续的操作就会产生延迟</li>
+<li>和帧数下降问题不同，即便你显卡速度很快，能够在开启垂直同步的情况下依然保持 60 fps，这个操作延迟问题也依然存在</li>
+<li>这就是为什么不推荐第一人称射击类游戏和 MOBA 游戏打开垂直同步</li>
+</ul></li>
+</ol>
+<ul>
+<li>总结：如果显卡可以保持 60 Hz 及以上的刷新率，那么建议开启垂直同步，否则不建议开启（或开启动态垂直同步）</li>
+</ul>
+<h2 id="三重缓冲">三重缓冲</h2>
+<ul>
+<li>默认情况下显示器只有 2 个缓冲区，而打开三重缓冲后，显示器就有了3个缓冲区</li>
+<li>这样你的操作指令的滞后会被提前，但是治标不治本，与关闭垂直同步相比，延迟依然会存在。所以打开三重缓冲后，只能缓解操作延迟，但是不能根治</li>
+</ul>
+<p><img src="http://media.zjubiomedit.com/2019-02-19-010049.png" width=70%></p>
+<h2 id="g-sync-与-freesync">G-sync 与 freesync</h2>
+<ul>
+<li>既然垂直同步存在操作延迟的问题，那么我们可以想另一个办法来解决画面撕裂和错帧，</li>
+<li>这个方法就是让显示器的刷新率也发生波动，即<strong>显示器刷新率变频技术</strong>
+<ul>
+<li>搭载该技术的显示器可以动态调整他们的刷新率而不是固定的1/60秒或者1/144秒扫描完一张画面</li>
+<li><strong>显示器会去适应显卡的输出帧，而不是等待显卡</strong></li>
+</ul></li>
+<li>这样的话不仅可以解决画面撕裂，解决错帧，还可以保证几乎没有的操作延迟</li>
+<li>当前有两种显示器刷新率变频技术：<strong>G-sync</strong> 与 <strong>freesync</strong>
+<ul>
+<li>G-sync 技术是 N 卡专用的，你必须要用 N 卡，配合 G-sync 显示器才能激活这项功能</li>
+<li>Freesync 技术是 A 卡专用，你必须要使用 ATI（AMD）的显卡才能激活这项功能</li>
+</ul></li>
+</ul>
+<h2 id="游戏测试">游戏测试</h2>
+<ul>
+<li>NBA2K19：2070 显卡需开启垂直同步，但不能同时开启动态垂直同步（会有卡顿感）</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/41848908">参考文章</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+
+
+
+<div class="license">
+  <div class="license-title">垂直同步技术简介</div>
+  <div class="license-link">
+    <a href="https://xxwywzy.github.io/2019/02/19/veritical-hold/">https://xxwywzy.github.io/2019/02/19/veritical-hold/</a>
+  </div>
+  <div class="license-meta">
+    <div class="license-meta-item">
+      <div class="license-meta-title">本文作者</div>
+      <div class="license-meta-text">
+          Zheyu Wang
+      </div>
+    </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">发布于</div>
+        <div class="license-meta-text">
+          2019-02-19
+        </div>
+      </div>
+      <div class="license-meta-item">
+        <div class="license-meta-title">更新于</div>
+        <div class="license-meta-text">
+          2023-08-05
+        </div>
+      </div>
+    <div class="license-meta-item">
+      <div class="license-meta-title">许可协议</div>
+      <div class="license-meta-text">
+          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank">CC BY-NC-SA 4.0</a>
+      </div>
+    </div>
+  </div>
+  <div class="license-statement">
+      转载或引用本文时，请遵守上述许可协议，注明出处、不得用于商业用途！
+  </div>
+</div>
+          <div class="post-tags">
+              <a href="/tags/%E5%9E%82%E7%9B%B4%E5%90%8C%E6%AD%A5/" rel="tag"># 垂直同步</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/02/12/cs229-9/" rel="prev" title="CS229 学习笔记之九：聚类问题与 EM 算法">
+                  <i class="fa fa-angle-left"></i> CS229 学习笔记之九：聚类问题与 EM 算法
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/02/19/cs229-10/" rel="next" title="CS229 学习笔记之十：因子分析">
+                  CS229 学习笔记之十：因子分析 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81ODgyNi8zNTI4OA=="></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Zheyu Wang</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">332k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">18:26</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+
+
+  <style>
+    #taboola-livere { display: none;}
+  </style>
+
+
+
+<script type="text/javascript">
+var linkLists = document.querySelectorAll(".link-list");
+
+linkLists.forEach(function(linkList) {
+  var listPath = linkList.getAttribute('json-src');
+  var iconPath = linkList.getAttribute('icon-src');
+  
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', listPath, true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      var data = JSON.parse(xhr.responseText);
+      
+      var li = "";
+      linkList.innerHTML = '';
+
+      for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+        var info = data[infoIndex];
+        var labelWarn = info['warn'] ? '<span class="label warn">' + info['warn'] + '</span>' : '';
+        var labelInfo = info['info'] ? '<span class="label info">' + info['info'] + '</span>' : '';
+
+        li += '<div class="link-list-container">';
+        li += '<img class="link-list-image" src="' + iconPath + info['logo'] + '">';
+        li += '<p>' + info['title'] + labelInfo + labelWarn + '</p>';
+        li += '<p>' + info['intro'] + '</p>';
+        li += '<a href="' + info['url'] + '" rel="noopener" target="_blank" data-pjax-state=""></a>';
+        li += '</div>';
+      }
+      
+      linkList.innerHTML = li;
+    }
+  };
+  xhr.send();
+});
+</script>
+
+
+<script type="text/javascript">
+var cultureList = document.querySelectorAll(".culture-list");
+if (cultureList.length !== 0) {
+  var j = -1;
+  for (var i = 0; i < cultureList.length; i++) {
+    const listPath = cultureList[i].getAttribute('json-src');
+    const coverPath = cultureList[i].getAttribute('cover-src');
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', listPath, true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        j++;
+        var data = JSON.parse(xhr.responseText);
+        var li = "";
+        
+        cultureList[j].innerHTML = '';
+
+        for (var infoIndex = 0; infoIndex < data.length; infoIndex++) {
+          var info = data[infoIndex];
+          
+          var title = info['title'];
+          if (info['link']) {
+            title = '<a href="' + info['link'] + '">' + info['title'] + '</a>';
+          }
+
+          var author = info['author'] ? '<span class="author">' + info['author'] + '</span>' : '';
+
+          var intro = info['intro'] ? info['intro'] : '';
+
+          var star = '';
+          if (info['score'] == null) {
+            star = '';
+          } else {
+            var colorStar = '';
+            var greyStar = '';
+            var int = Math.floor(info['score']); //整数部分
+            var fract = 0;
+            if (info['score'] % 1 !== 0) {
+              fract = 1;
+            }
+            for (var m = 0; m < int; m++) {
+              colorStar += '★';
+            }
+            if (fract !== 0) {
+              colorStar += '☆';
+            }
+            for (var m = 0; m < (5 - fract - int); m++) {
+              greyStar += '☆';
+            }
+            if (info['score'] !== 5) {
+              star = '<span class="star-score">' + colorStar + '<span class="grey-star">' + greyStar + '</span></span>';
+            } else {
+              star = '<span class="star-score">' + colorStar + '</span>';
+            }
+          }
+
+          li += '<div class="media">';
+          li += '<div class="media-cover" style="background-image:url(' + coverPath + info['cover'] + ')"></div>';
+          li += '<div class="media-meta">';
+          li += '<div class="media-meta-item title">' + title + '</div>';
+          li += '<div class="media-meta-item">' + author + star + '</div>';
+          li += '<div class="media-meta-item intro">' + intro + '</div>';
+          li += '</div></div>';
+        }
+        
+        cultureList[j].innerHTML = li;
+      }
+    };
+    xhr.send();
+  }
+}
+</script>
+
+
+
+
+<script src="/resources/minigrid.min.js"></script>
+<script type="text/javascript">
+var album = document.querySelector(".album");
+if (album) {
+  // 相册列表 JSON 数据
+  var imgDataPath = album.getAttribute('json-src');
+  // 照片存储路径
+  var imgPath = album.getAttribute('photo-src');
+  // 最多显示数量
+  var imgMaxNum = 50;
+  // 获取窗口大小以决定图片宽度
+  var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  var imageWidth;
+
+  if (windowWidth < 768) {
+    imageWidth = 145; // 移动端图片宽度
+  } else {
+    imageWidth = 235;
+  }
+
+  // 腾讯云自定义样式 (数据万象外网流量需要付费)
+  //var imgStyle = '!' + imageWidth + 'x';
+  //var imgStyle = '!300x';
+
+  // 生成相册
+  var linkDataPath = imgDataPath;
+  var photo = {
+    page: 1,
+    offset: imgMaxNum,
+    init: function () {
+      var that = this;
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", linkDataPath, true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var data = JSON.parse(xhr.responseText);
+          that.render(that.page, data);
+        }
+      };
+      xhr.send();
+    },
+    render: function (page, data) {
+      var begin = (page - 1) * this.offset;
+      var end = page * this.offset;
+      if (begin >= data.length) return;
+      var imgNameWithPattern, imgName, imageSize, imageX, imageY, li = "";
+      for (var i = begin; i < end && i < data.length; i++) {
+        imgNameWithPattern = data[i].split(' ')[1];
+        imgName = imgNameWithPattern.split('.')[0];
+        imageSize = data[i].split(' ')[0];
+        imageX = imageSize.split('.')[0];
+        imageY = imageSize.split('.')[1];
+        li += '<div class="card" style="width:' + imageWidth + 'px" >';
+        li += '<div class="album-photo" style="height:'+ imageWidth * imageY / imageX + 'px">';
+        li += '<a class="fancybox fancybox.image" href="' + imgPath + imgNameWithPattern + '" itemscope="" itemtype="http://schema.org/ImageObject" itemprop="url" data-fancybox="group" rel="group" data-caption="' + imgName + '" title="' +  imgName + '">';
+        li += '<img data-src="' + imgPath + imgNameWithPattern + '" src="' + imgPath + imgNameWithPattern + '" alt="' +  imgName + '" data-loaded="true">';
+        li += '</a>';
+        li += '</div>';
+        li += '</div>';
+      }
+      album.insertAdjacentHTML('beforeend', li);
+      this.minigrid();
+    },
+    minigrid: function () {
+      var grid = new Minigrid({
+        container: '.album',
+        item: '.card',
+        gutter: 12
+      });
+      grid.mount();
+      window.addEventListener('resize', function () {
+        grid.mount();
+      });
+    }
+  };
+  photo.init();
+}
+</script>
+</body>
+</html>
